@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:wght@600&display=swap");
+
+:root {
+  font-family: "Geist", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #ffffff;
+  background-color: #150d17;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --mdai-background-default: #150d17;
+  --mdai-background-top: #2b1631;
+  --mdai-background-bottom: #150d17;
+  --mdai-background-header: linear-gradient(
+    180deg,
+    #150d17 79.97%,
+    rgba(21, 13, 23, 0) 100.2%
+  );
+  --mdai-background-footer: linear-gradient(
+    180deg,
+    rgba(21, 13, 23, 0) 0%,
+    rgba(21, 13, 23, 1) 10%
+  );
+  --mdai-purple: #8e24aa;
+  --mdai-vibrant-purple: #d800fc;
+  --mdai-light-purple: #d865f2;
+  --mdai-dark-purple: #65406d;
+  --mdai-dark-purple-2: #29192d;
+  --mdai-soft-purple: #ddb7e6;
+  --mdai-deep-purple: #d1c4e9;
+  --mdai-darkest-purple: #311f35;
+  --mdai-branded-purple: #6d3b78;
+  --mdai-light-grey: #ededed;
+  --mdai-dark-grey: #323232;
+  --mui-palette-primary-_states-outlinedBorder: #d800fc;
+  --mdai-divider: rgba(255, 255, 255, 0.12);
+
+  --mdai-primary-main: #9c27b0;
+  --mdai-primary-dark: #6a1b9a;
+  --mdai-primary-light: #ede7f6;
+  --mdai-primary-contrast: rgba(255, 255, 255, 0.95);
+  --mdai-secondary-main: #d500f9;
+  --mdai-secondary-dark: #e040fb;
+  --mdai-secondary-light: #ea80fc;
+  --mdai-secondary-contrast: rgba(0, 0, 0, 0.87);
+  --mdai-error-main: #f44336;
+  --mdai-error-contrast: #ffffff;
+  --mdai-warning-main: #ffa726;
+  --mdai-warning-dark: #f57c00;
+  --mdai-warning-contrast: rgba(0, 0, 0, 0.87);
+  --mdai-info-main: #29b6f6;
+  --mdai-info-contrast: rgba(0, 0, 0, 0.87);
+  --mdai-success-main: #66bb6a;
+  --mdai-success-contrast: rgba(0, 0, 0, 0.87);
+  --mdai-action-disabled: rgba(255, 255, 255, 0.38);
+  --mdai-action-disabled-bg: rgba(255, 255, 255, 0.12);
+  --mdai-text-primary: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(
+      circle at top left,
+      rgba(216, 0, 252, 0.2),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(106, 27, 154, 0.35),
+      transparent 50%
+    ),
+    var(--mdai-background-default);
+  color: var(--mdai-text-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
