@@ -2,7 +2,7 @@ export const navSteps = [
   // User has installed the hub via Helm
   {
     id: 1,
-    title: "Your SmartHub is installed. ",
+    title: "Configure your vendor agent",
     subtitle: "Activate your hub to get started.",
     status: "Hub installed",
     button: "Activate",
