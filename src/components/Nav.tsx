@@ -1,30 +1,38 @@
-import { useContext } from "react";
-import { navSteps } from "../constants";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Stepper from "@mui/material/Stepper";
+import React, { useContext } from "react";
+import { StepDefinitions } from "../constants";
 import { NavContext } from "../context/Context";
-import type { StepProps } from "../types";
 
 export function Nav() {
   const { activeStep, handleSetActiveStep } = useContext(NavContext);
+
+  const handleReset = () => {
+    handleSetActiveStep(StepDefinitions[0]);
+  };
+
   return (
-    <aside className="wizard-nav">
-      <div className="nav-title">Setup flow</div>
-      <div className="nav-items">
-        {navSteps.map((step: StepProps) => (
-          <button
-            key={step.id}
-            className={`nav-item ${step.id === activeStep.id ? "active" : ""}`}
-            type="button"
-            onClick={() => handleSetActiveStep(step)}
-            disabled={step.id < activeStep.id}
-          >
-            <span className="step-index">{step.id}</span>
-            <span className="step-text">
-              <span className="step-title">{step.title}</span>
-              <span className="step-subtitle">{step.subtitle}</span>
-            </span>
-          </button>
-        ))}
-      </div>
-    </aside>
+    <Box sx={{ width: "100%" }}>
+      <Button onClick={handleReset}>Reset</Button>
+      <Stepper
+        activeStep={StepDefinitions.indexOf(activeStep)}
+        orientation="vertical"
+      >
+        {StepDefinitions.map(({ id, title }) => {
+          const stepProps: { completed?: boolean } = {};
+          const labelProps: {
+            optional?: React.ReactNode;
+          } = {};
+          return (
+            <Step key={id} {...stepProps}>
+              <StepLabel {...labelProps}>{title}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+    </Box>
   );
 }

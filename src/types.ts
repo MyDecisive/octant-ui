@@ -1,13 +1,21 @@
-export interface StepProps {
+export interface FormFieldProps {
   id: number;
-  title: string;
-  subtitle: string;
-  status: string;
-  button?: string;
+  formType: string;
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  options?: { label: string; value: string }[];
+  infoText?: { title: string; description: string };
+  helperText?: string;
+  optional?: boolean;
 }
 
-export interface FormProps {
-  [key: string]: any;
+export interface StepProps {
+  id: number;
+  key: string;
+  title: string;
+  description?: string;
+  formFields?: FormFieldProps[];
 }
 
 export interface ConnectionPayloadProps {
@@ -20,7 +28,3 @@ export interface ConnectionPayloadProps {
   exportLocation?: string;
   dataTypes?: string[];
 }
-
-// export interface ControlPayloadProps {
-
-// }

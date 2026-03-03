@@ -1,3 +1,8 @@
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
+
 type IntegrationOption = {
   label: string;
   value: string;
@@ -16,21 +21,30 @@ export function IntegrationSelect({
   options,
   onChange,
 }: IntegrationSelectProps) {
+  const handleChange = (event: SelectChangeEvent) => {
+    onChange(event.target.value);
+  };
+
   return (
-    <label className="field">
-      <span className="field-label">{label}</span>
-      <div className="select">
-        <select value={value} onChange={(event) => onChange(event.target.value)}>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <span className="select-icon" aria-hidden="true">
-          ▾
-        </span>
-      </div>
-    </label>
+    <FormControl fullWidth size="small">
+      <InputLabel sx={{ color: "#616161" }}>{label}</InputLabel>
+      <Select
+        value={value}
+        label={label}
+        onChange={handleChange}
+        sx={{
+          backgroundColor: "#ffffff",
+          color: "#171717",
+          "& .MuiOutlinedInput-notchedOutline": { borderColor: "#cfcfcf" },
+          "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#9e9e9e" },
+        }}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }

@@ -1,16 +1,19 @@
-import "./styles/app.css";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import { Forms } from "./components/Forms";
 import { Header } from "./components/Header";
-import { Wizard } from "./components/Wizard";
 import { NavProvider } from "./context/Provider";
+import { theme } from "./styles/theme";
 
 function App() {
   return (
-    <div className="app-shell">
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <NavProvider>
         <Header />
-        <Wizard />
+        <Forms />
       </NavProvider>
-    </div>
+    </ThemeProvider>
   );
 }
 

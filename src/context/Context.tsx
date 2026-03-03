@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { navSteps } from "../constants";
+import { StepDefinitions } from "../constants";
 import type { FormProps, StepProps } from "../types";
 
 export interface NavContextValueProps {
@@ -13,7 +13,7 @@ export interface FormContextValueProps {
 }
 
 export const NavContext = createContext<NavContextValueProps>({
-  activeStep: navSteps[0],
+  activeStep: StepDefinitions[0],
   handleSetActiveStep: () => {},
 });
 

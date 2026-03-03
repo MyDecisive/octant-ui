@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { StepDefinitions } from "../constants";
 import type { StepProps } from "../types";
-import { navSteps } from "../constants";
 import { NavContext } from "./Context";
 
 export function NavProvider({ children }: { children: React.ReactNode }) {
-  const [activeStep, setActiveStep] = useState(navSteps[0]);
+  const [activeStep, setActiveStep] = useState(StepDefinitions[0]);
 
   function handleSetActiveStep(step: StepProps) {
     setActiveStep(step);
@@ -12,12 +12,6 @@ export function NavProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <NavContext.Provider value={{ activeStep, handleSetActiveStep }}>
-      <button
-        className="nav-item active"
-        onClick={() => setActiveStep(navSteps[0])}
-      >
-        Reset
-      </button>
       {children}
     </NavContext.Provider>
   );
