@@ -6,17 +6,55 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useContext, useState } from "react";
+import { use, useCallback, useMemo, useState } from "react";
 import { StepDefinitions } from "../constants";
-import { FormContext, NavContext } from "../context/Context";
+import { AppState } from "../context/Context";
+import { ACTION_TYPES } from "../context/store";
 import { Nav } from "./Nav";
 
 export function Forms() {
-  const { activeStep, handleSetActiveStep } = useContext(NavContext);
+  const [state, dispatch] = use(AppState);
 
-  const { formData, setFormData, resetFormData } = useContext(FormContext);
-  const nextStep = StepDefinitions.find(
-    (step) => step.id === activeStep.id + 1,
+  const { nav, form } = state;
+  const { activeStep } = nav;
+
+  const handleSetActiveStep = useCallback(
+    (newActiveStep: number) => {
+      dispatch({
+        type: ACTION_TYPES.SET_ACTIVE_STEP,
+        payload: newActiveStep,
+      });
+    },
+    [dispatch],
+  );
+
+  const handleSetFieldValue = useCallback(
+    (fieldName: string, value: unknown) => {
+      dispatch({
+        type: ACTION_TYPES.SET_FORM_FIELD,
+        payload: {
+          fieldName,
+          value,
+        },
+      });
+    },
+    [dispatch],
+  );
+
+  const currentStep = useMemo(
+    () => StepDefinitions.find((step) => step.id === activeStep),
+    [activeStep],
+  );
+
+  const handleResetFormData = useCallback(() => {
+    dispatch({
+      type: ACTION_TYPES.RESET_FORM_DATA,
+    });
+  }, [dispatch]);
+
+  const nextStep = useMemo(
+    () => StepDefinitions.find((step) => step.id === activeStep + 1),
+    [activeStep],
   );
   const [connectionStatus, setConnectionStatus] = useState<
     "idle" | "loading" | "success" | "error"
@@ -37,8 +75,8 @@ export function Forms() {
 
   const handleNextStep = () => {
     if (nextStep) {
-      handleSetActiveStep(nextStep);
-      console.log("Form data:", formData);
+      handleSetActiveStep(nextStep.id);
+      console.log("Form data:", form);
     }
   };
 
@@ -69,26 +107,26 @@ export function Forms() {
 
           <Box sx={{ maxWidth: 620 }}>
             <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              {activeStep.title}
+              {currentStep.title}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              {activeStep.description}
+              {currentStep.description}
             </Typography>
 
             <Stack spacing={2} sx={{ mt: 3 }}>
-              {activeStep.id === 1 && (
+              {activeStep === 1 && (
                 <>
                   <TextField
                     label="Target branch"
                     placeholder="main"
                     size="small"
                     sx={{ maxWidth: 360 }}
-                    value={formData.targetRevisionBranch || ""}
+                    value={form.targetRevisionBranch || ""}
                     onChange={(event) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        targetRevisionBranch: event.target.value,
-                      }))
+                      handleSetFieldValue(
+                        "targetRevisionBranch",
+                        event.target.value,
+                      )
                     }
                   />
                   <Button
@@ -102,7 +140,7 @@ export function Forms() {
                 </>
               )}
 
-              {activeStep.id === 2 && (
+              {activeStep === 2 && (
                 <>
                   <Typography variant="subtitle2" sx={{ color: "#171717" }}>
                     Select integration
@@ -119,7 +157,7 @@ export function Forms() {
                 </>
               )}
 
-              {activeStep.id === 3 && (
+              {activeStep === 3 && (
                 <Box
                   component="form"
                   onSubmit={handleConnect}
@@ -127,12 +165,9 @@ export function Forms() {
                 >
                   <TextField
                     label="Datadog API key"
-                    value={formData.apiKey || ""}
+                    value={form.apiKey || ""}
                     onChange={(event) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        apiKey: event.target.value,
-                      }))
+                      handleSetFieldValue("apiKey", event.target.value)
                     }
                     placeholder="dd123..."
                     size="small"
@@ -141,9 +176,7 @@ export function Forms() {
                     variant="contained"
                     type="submit"
                     size="small"
-                    disabled={
-                      connectionStatus === "loading" || !formData.apiKey
-                    }
+                    disabled={connectionStatus === "loading" || !form.apiKey}
                     sx={{ alignSelf: "flex-start", textTransform: "none" }}
                   >
                     {connectionStatus === "loading"
@@ -181,7 +214,7 @@ export function Forms() {
                 </Box>
               )}
 
-              {activeStep.id === 4 && (
+              {activeStep === 4 && (
                 <>
                   <Typography variant="body2" sx={{ color: "#616161" }}>
                     Final configuration step. Connect options and control
@@ -191,8 +224,8 @@ export function Forms() {
                     variant="outlined"
                     size="small"
                     onClick={() => {
-                      handleSetActiveStep(StepDefinitions[0]);
-                      resetFormData();
+                      handleSetActiveStep(0);
+                      handleResetFormData();
                     }}
                     sx={{ alignSelf: "flex-start", textTransform: "none" }}
                   >
