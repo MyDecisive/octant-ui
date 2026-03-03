@@ -8,6 +8,7 @@ export interface FormFieldProps {
   infoText?: { title: string; description: string };
   helperText?: string;
   optional?: boolean;
+  validation?: (value: string) => string | undefined;
 }
 
 export interface StepProps {
@@ -15,7 +16,6 @@ export interface StepProps {
   key: string;
   title: string;
   description?: string;
-  formFields?: FormFieldProps[];
 }
 
 export interface ConnectionPayloadProps {

@@ -5,13 +5,16 @@ import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import React, { useContext } from "react";
 import { StepDefinitions } from "../constants";
-import { NavContext } from "../context/Context";
+import { FormContext, NavContext } from "../context/Context";
 
 export function Nav() {
   const { activeStep, handleSetActiveStep } = useContext(NavContext);
+  const { formData, resetFormData } = useContext(FormContext);
 
   const handleReset = () => {
     handleSetActiveStep(StepDefinitions[0]);
+    resetFormData();
+    console.log("Form data reset", formData);
   };
 
   return (

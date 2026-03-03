@@ -7,19 +7,17 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useContext, useState } from "react";
-import { integrationOptions, StepDefinitions } from "../constants";
-import { NavContext } from "../context/Context";
-import { IntegrationSelect } from "./IntegrationSelect";
+import { StepDefinitions } from "../constants";
+import { FormContext, NavContext } from "../context/Context";
 import { Nav } from "./Nav";
 
 export function Forms() {
   const { activeStep, handleSetActiveStep } = useContext(NavContext);
+
+  const { formData, setFormData, resetFormData } = useContext(FormContext);
   const nextStep = StepDefinitions.find(
     (step) => step.id === activeStep.id + 1,
   );
-
-  const [integration, setIntegration] = useState("datadog");
-  const [apiKey, setApiKey] = useState("");
   const [connectionStatus, setConnectionStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -40,6 +38,7 @@ export function Forms() {
   const handleNextStep = () => {
     if (nextStep) {
       handleSetActiveStep(nextStep);
+      console.log("Form data:", formData);
     }
   };
 
@@ -84,6 +83,13 @@ export function Forms() {
                     placeholder="main"
                     size="small"
                     sx={{ maxWidth: 360 }}
+                    value={formData.targetRevisionBranch || ""}
+                    onChange={(event) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        targetRevisionBranch: event.target.value,
+                      }))
+                    }
                   />
                   <Button
                     variant="contained"
@@ -101,13 +107,7 @@ export function Forms() {
                   <Typography variant="subtitle2" sx={{ color: "#171717" }}>
                     Select integration
                   </Typography>
-                  <Box sx={{ maxWidth: 360 }}>
-                    <IntegrationSelect
-                      value={integration}
-                      options={integrationOptions}
-                      onChange={setIntegration}
-                    />
-                  </Box>
+
                   <Button
                     variant="contained"
                     size="small"
@@ -127,8 +127,13 @@ export function Forms() {
                 >
                   <TextField
                     label="Datadog API key"
-                    value={apiKey}
-                    onChange={(event) => setApiKey(event.target.value)}
+                    value={formData.apiKey || ""}
+                    onChange={(event) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        apiKey: event.target.value,
+                      }))
+                    }
                     placeholder="dd123..."
                     size="small"
                   />
@@ -136,7 +141,9 @@ export function Forms() {
                     variant="contained"
                     type="submit"
                     size="small"
-                    disabled={connectionStatus === "loading" || !apiKey}
+                    disabled={
+                      connectionStatus === "loading" || !formData.apiKey
+                    }
                     sx={{ alignSelf: "flex-start", textTransform: "none" }}
                   >
                     {connectionStatus === "loading"
@@ -163,6 +170,14 @@ export function Forms() {
                       </Typography>
                     )}
                   </Box>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={handleNextStep}
+                    sx={{ alignSelf: "flex-start", textTransform: "none" }}
+                  >
+                    Next
+                  </Button>
                 </Box>
               )}
 
@@ -175,7 +190,10 @@ export function Forms() {
                   <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => handleSetActiveStep(StepDefinitions[0])}
+                    onClick={() => {
+                      handleSetActiveStep(StepDefinitions[0]);
+                      resetFormData();
+                    }}
                     sx={{ alignSelf: "flex-start", textTransform: "none" }}
                   >
                     Start over

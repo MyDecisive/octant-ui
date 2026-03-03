@@ -43,9 +43,6 @@ export const theme = createTheme({
   typography: {
     fontFamily: '"Geist", "Space Grotesk", "IBM Plex Sans", sans-serif',
   },
-  shape: {
-    borderRadius: 16,
-  },
   components: {
     MuiCssBaseline: {
       styleOverrides: {

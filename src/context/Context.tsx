@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { StepDefinitions } from "../constants";
-import type { FormProps, StepProps } from "../types";
+import type { ConnectionPayloadProps, StepProps } from "../types";
 
 export interface NavContextValueProps {
   activeStep: StepProps;
@@ -8,8 +8,9 @@ export interface NavContextValueProps {
 }
 
 export interface FormContextValueProps {
-  activeForm: FormProps;
-  handleSetActiveForm: (form: FormProps) => void;
+  formData: ConnectionPayloadProps;
+  setFormData: React.Dispatch<React.SetStateAction<ConnectionPayloadProps>>;
+  resetFormData: () => void;
 }
 
 export const NavContext = createContext<NavContextValueProps>({
@@ -18,6 +19,7 @@ export const NavContext = createContext<NavContextValueProps>({
 });
 
 export const FormContext = createContext<FormContextValueProps>({
-  activeForm: {},
-  handleSetActiveForm: () => {},
+  formData: {},
+  setFormData: () => {},
+  resetFormData: () => {},
 });
