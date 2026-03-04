@@ -32,7 +32,7 @@ export const FormContext = createContext<FormContextValueProps>({
 export function createDefaultAppState(): Store {
   return {
     nav: {
-      activeStep: 0,
+      activeStep: 1,
     },
     form: {},
   };
