@@ -55,6 +55,12 @@ kubectl apply -n mdai -f k8s/deployment.yaml
 kubectl apply -n mdai -f k8s/service.yaml
 ```
 
+Load New Image:
+
+```bash
+kubectl delete pod -n mdai -l app=inkops-ui
+```
+
 Access locally:
 
 ```bash

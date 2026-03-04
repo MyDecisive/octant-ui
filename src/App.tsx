@@ -1,18 +1,19 @@
-import { useState } from "react";
-import "./App.css";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import { Forms } from "./components/Forms/Forms";
+import { Header } from "./components/Header";
+import { AppStateProvider } from "./context/Provider";
+import { theme } from "./styles/theme";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <h1>MyDecisive InkOps UI</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AppStateProvider>
+        <Header />
+        <Forms />
+      </AppStateProvider>
+    </ThemeProvider>
   );
 }
 
