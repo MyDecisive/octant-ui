@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { StepDefinitions } from "../constants";
 import type { ConnectionPayloadProps, StepProps } from "../types";
-import { FormContext, NavContext } from "./Context";
+import {
+  AppState,
+  createDefaultAppState,
+  FormContext,
+  NavContext,
+} from "./Context";
+import { appReducer } from "./store";
 
 const initialFormData: ConnectionPayloadProps = {
   targetRevisionBranch: "",
@@ -33,5 +39,13 @@ export function NavProvider({ children }: { children: React.ReactNode }) {
         {children}
       </FormContext.Provider>
     </NavContext.Provider>
+  );
+}
+
+export function AppStateProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(appReducer, createDefaultAppState());
+
+  return (
+    <AppState.Provider value={[state, dispatch]}>{children}</AppState.Provider>
   );
 }

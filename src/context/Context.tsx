@@ -1,6 +1,11 @@
 import { createContext } from "react";
 import { StepDefinitions } from "../constants";
-import type { ConnectionPayloadProps, StepProps } from "../types";
+import {
+  type Action,
+  type ConnectionPayloadProps,
+  type StepProps,
+  type Store,
+} from "../types";
 
 export interface NavContextValueProps {
   activeStep: StepProps;
@@ -23,3 +28,17 @@ export const FormContext = createContext<FormContextValueProps>({
   setFormData: () => {},
   resetFormData: () => {},
 });
+
+export function createDefaultAppState(): Store {
+  return {
+    nav: {
+      activeStep: 0,
+    },
+    form: {},
+  };
+}
+
+export const AppState = createContext<[Store, (arg: Action) => void]>([
+  createDefaultAppState(),
+  () => {},
+]);

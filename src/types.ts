@@ -27,3 +27,24 @@ export interface ConnectionPayloadProps {
   exportLocation?: string;
   dataTypes?: string[];
 }
+
+export interface StepDefinition {
+  id: number;
+  key: string;
+  title: string;
+  description?: string;
+}
+
+interface Nav {
+  activeStep: StepDefinition["id"];
+}
+
+export interface Store {
+  nav: Nav;
+  form: ConnectionPayloadProps;
+}
+
+export interface Action {
+  type: string;
+  payload?: unknown;
+}
