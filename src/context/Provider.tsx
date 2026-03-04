@@ -7,9 +7,8 @@ const initialFormData: ConnectionPayloadProps = {
   targetRevisionBranch: "",
   collectorName: "",
   namespace: "",
-  integration: "",
   apiKey: "",
-  exportLocationType: "",
+  exportLocationType: "datadog",
   exportLocation: "",
   dataTypes: [],
 };
