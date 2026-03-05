@@ -5,10 +5,11 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { type SubmitEvent, use, useCallback, useMemo } from "react";
+import { type SubmitEvent, use, useCallback, useMemo, useState } from "react";
 import { StepDefinitions } from "../../constants";
 import { AppState } from "../../context/Context";
 import { ACTION_TYPES } from "../../context/store";
+import { connections, integrations } from "../../services/api";
 import { Nav } from "../Nav";
 import CheckboxGroup from "./CheckboxGroup";
 import RadioButtonsGroup from "./RadioButtonsGroup";
@@ -26,6 +27,8 @@ const telemetryOptions = [
 ];
 
 export function Forms() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<null | Error>(null);
   const [state, dispatch] = use(AppState);
 
   const { nav, form } = state;
@@ -87,6 +90,50 @@ export function Forms() {
       return;
     }
 
+    setLoading(true);
+    void integrations
+      .upsert(
+        form.exportLocationType!,
+        form.collectorName!,
+        form.exportLocationType === "datadog"
+          ? {
+              apiKey: form.apiKey!,
+              ddUrl: form.exportLocation!,
+            }
+          : {
+              url: form.exportLocation!,
+            },
+      )
+      .then(() => {
+        void connections.upsert(form.collectorName!, {
+          receives: [
+            {
+              type: form.exportLocationType!,
+              dataTypes: form.dataTypes!,
+            },
+          ],
+          exports: [
+            {
+              type: form.exportLocationType!,
+              integrations: [
+                {
+                  type: form.exportLocationType!,
+                  name: form.collectorName!,
+                },
+              ],
+            },
+          ],
+          deployment: {
+            type: "argocd",
+            data: {
+              branch: form.targetRevisionBranch!,
+            },
+          },
+        });
+      })
+      .catch((e: Error) => setError(e))
+      .finally(() => setLoading(false));
+
     console.log("Submitting final payload:", form);
   };
 
@@ -122,6 +169,11 @@ export function Forms() {
             <Typography variant="body2" sx={{ mt: 1 }}>
               {currentStep.description}
             </Typography>
+            {error && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {`Something went wrong: ${error}`}
+              </Typography>
+            )}
 
             <Stack spacing={2} sx={{ mt: 3 }}>
               {activeStep === 1 && (
@@ -222,6 +274,7 @@ export function Forms() {
                 onClick={isLastStep ? undefined : handleNextStep}
                 sx={{ alignSelf: "flex-start", textTransform: "none" }}
                 disabled={isRequiredNotProvided}
+                loading={isLastStep && loading}
               >
                 {isLastStep ? "Submit" : "Next"}
               </Button>
