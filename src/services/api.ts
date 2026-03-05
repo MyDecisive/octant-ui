@@ -1,6 +1,5 @@
+import type { IntegrationType } from "../types";
 import { apiFetch } from "../utils/apiFetch";
-
-type IntegrationType = "datadog" | "otlphttp" | "otlpgrpc";
 
 interface Integration {
   name: string;
@@ -48,25 +47,60 @@ interface ConnectionBody {
   deployment: ConnectionDeployment;
 }
 
+const devDelay = <T>(value: T, ms = 800): Promise<T> =>
+  new Promise((resolve) => setTimeout(() => resolve(value), ms));
+
 export const integrations = {
-  getAll: (): Promise<Integration[]> => apiFetch.get("/integrations"),
+  getAll: (): Promise<Integration[]> => {
+    if (import.meta.env.DEV) {
+      return devDelay<Integration[]>([
+        {
+          name: "dd-one",
+          type: "datadog",
+        },
+        {
+          name: "otlp-http-one",
+          type: "otlphttp",
+        },
+        {
+          name: "otlp-grpc-one",
+          type: "otlpgrpc",
+        },
+      ]);
+    }
+    return apiFetch.get("/integrations");
+  },
 
   upsert: (
     type: IntegrationType,
     name: string,
     body: IntegrationBody,
-  ): Promise<void> => apiFetch.put(`/integrations/${type}/${name}`, { body }),
+  ): Promise<void> => {
+    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    return apiFetch.put(`/integrations/${type}/${name}`, { body });
+  },
 
-  delete: (type: IntegrationType, name: string): Promise<void> =>
-    apiFetch.delete(`/integrations/${type}/${name}`),
+  delete: (type: IntegrationType, name: string): Promise<void> => {
+    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    return apiFetch.delete(`/integrations/${type}/${name}`);
+  },
 };
 
 export const connections = {
-  getAll: (): Promise<Connection[]> => apiFetch.get("/connections"),
+  getAll: (): Promise<Connection[]> => {
+    if (import.meta.env.DEV) {
+      return devDelay<Connection[]>([{ name: "datadog-connection-1" }]);
+    }
+    return apiFetch.get("/connections");
+  },
 
-  upsert: (name: string, body: ConnectionBody): Promise<void> =>
-    apiFetch.put(`/connections/${name}`, { body }),
+  upsert: (name: string, body: ConnectionBody): Promise<void> => {
+    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    return apiFetch.put(`/connections/${name}`, { body });
+  },
 
-  delete: (name: string): Promise<void> =>
-    apiFetch.delete(`/connections/${name}`),
+  delete: (name: string): Promise<void> => {
+    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    return apiFetch.delete(`/connections/${name}`);
+  },
 };
