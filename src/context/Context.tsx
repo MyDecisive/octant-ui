@@ -34,7 +34,9 @@ export function createDefaultAppState(): Store {
     nav: {
       activeStep: 1,
     },
-    form: {},
+    form: {
+      exportLocationType: "datadog",
+    },
   };
 }
 

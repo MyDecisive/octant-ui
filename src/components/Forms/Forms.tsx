@@ -9,6 +9,7 @@ import { type SubmitEvent, use, useCallback, useMemo } from "react";
 import { StepDefinitions } from "../../constants";
 import { AppState } from "../../context/Context";
 import { ACTION_TYPES } from "../../context/store";
+import { connections, integrations } from "../../services/api";
 import { Nav } from "../Nav";
 import CheckboxGroup from "./CheckboxGroup";
 import RadioButtonsGroup from "./RadioButtonsGroup";
@@ -86,6 +87,47 @@ export function Forms() {
       handleNextStep();
       return;
     }
+
+    void integrations
+      .upsert(
+        form.exportLocationType!,
+        form.collectorName!,
+        form.exportLocationType === "datadog"
+          ? {
+              apiKey: form.apiKey!,
+              ddUrl: form.exportLocation!,
+            }
+          : {
+              url: form.exportLocation!,
+            },
+      )
+      .then(() => {
+        void connections.upsert(form.collectorName!, {
+          receives: [
+            {
+              type: form.exportLocationType!,
+              dataTypes: form.dataTypes!,
+            },
+          ],
+          exports: [
+            {
+              type: form.exportLocationType!,
+              integrations: [
+                {
+                  type: form.exportLocationType!,
+                  name: form.collectorName!,
+                },
+              ],
+            },
+          ],
+          deployment: {
+            type: "argocd",
+            data: {
+              branch: form.targetRevisionBranch!,
+            },
+          },
+        });
+      });
 
     console.log("Submitting final payload:", form);
   };

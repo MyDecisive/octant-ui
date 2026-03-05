@@ -18,12 +18,14 @@ export interface StepProps {
   description?: string;
 }
 
+export type IntegrationType = "datadog" | "otlphttp" | "otlpgrpc";
+
 export interface ConnectionPayloadProps {
   targetRevisionBranch?: string;
   collectorName?: string;
   namespace?: string;
   apiKey?: string;
-  exportLocationType?: string;
+  exportLocationType?: IntegrationType;
   exportLocation?: string;
   dataTypes?: string[];
 }
