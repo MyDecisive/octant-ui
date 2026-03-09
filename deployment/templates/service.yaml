@@ -12,19 +12,3 @@ spec:
       targetPort: {{ .Values.service.targetPort }}
   type: {{ .Values.service.type }}
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: inkops-ui
-#   labels:
-#     app: inkops-ui
-# spec:
-#   type: ClusterIP
-#   selector:
-#     app: inkops-ui
-#   ports:
-#     - port: 80
-#       targetPort: 8080
-#       protocol: TCP
-#       name: http
