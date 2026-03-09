@@ -36,29 +36,10 @@ At a minimum, you need:
 
 ### kind (cluster: `mdai-labs`, namespace: `mdai`)
 
-Build the image:
+Build image, load into kind, deploy manifests:
 
-```bash
-docker build --pull -t inkops-ui:local .
-```
-
-Load into kind:
-
-```bash
-kind load docker-image inkops-ui:local --name mdai-labs
-```
-
-Apply manifests:
-
-```bash
-kubectl apply -n mdai -f k8s/deployment.yaml
-kubectl apply -n mdai -f k8s/service.yaml
-```
-
-Load New Image:
-
-```bash
-kubectl delete pod -n mdai -l app=inkops-ui
+```sh
+npm run local-all
 ```
 
 Access locally:

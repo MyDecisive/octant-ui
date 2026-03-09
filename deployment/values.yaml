@@ -1,0 +1,20 @@
+deployment:
+  name: inkops-ui
+  replicas: 1
+  containerPort: 8080
+  tolerations: []
+  nodeSelector: {}
+  affinity: {}
+  annotations: {}
+  gateway_host: http://mdai-gateway.mdai.svc.cluster.local:8081
+
+image:
+  repository: public.ecr.aws/decisiveai/inkops-ui
+  # tag: 0.0.1
+
+service:
+  name: inkops-ui
+  replicas: 1
+  port: 8080
+  targetPort: 8080
+  type: ClusterIP
