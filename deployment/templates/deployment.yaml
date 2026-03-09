@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.name }}
+      {{- with .Values.deployment.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Values.deployment.name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        ports:
+        - containerPort: {{ .Values.deployment.containerPort }}
+        env:
+        - name: GATEWAY_HOST
+          value: "{{ .Values.deployment.gateway_host }}"
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: inkops-ui
+#   labels:
+#     app: inkops-ui
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: inkops-ui
+#   template:
+#     metadata:
+#       labels:
+#         app: inkops-ui
+#     spec:
+#       containers:
+#         - name: inkops-ui
+#           image: public.ecr.aws/decisiveai/inkops-ui:0.1.0
+#           imagePullPolicy: IfNotPresent
+#           ports:
+#             - containerPort: 8080
+#               name: http
+#           env:
+#             - name: GATEWAY_HOST
+#               value: "http://mdai-gateway.mdai.svc.cluster.local:80"
