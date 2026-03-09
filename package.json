@@ -1,13 +1,15 @@
 {
   "name": "inkops-ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker-build": "docker build -t  public.ecr.aws/decisiveai/inkops-ui:$npm_package_version .",
+    "build-to-kind": "npm run docker-build && kind load docker-image public.ecr.aws/decisiveai/inkops-ui:$npm_package_version -n mdai-labs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
