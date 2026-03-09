@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "docker-build": "docker build -t  public.ecr.aws/decisiveai/inkops-ui:$npm_package_version .",
+    "docker-build": "docker build -t public.ecr.aws/decisiveai/inkops-ui:$npm_package_version .",
     "build-to-kind": "npm run docker-build && kind load docker-image public.ecr.aws/decisiveai/inkops-ui:$npm_package_version -n mdai-labs",
     "local-deploy": "helm template inkops-ui ./deployment -f ./deployment/values.yaml -n mdai | kubectl apply -n mdai -f -",
     "local-all": "npm run build-to-kind && npm run local-deploy"
