@@ -1,0 +1,14 @@
+name: Docker push for main branch
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  docker-push:
+    uses: DecisiveAI/ci/.github/workflows/docker-push-to-ecr.yml@main
+    secrets:
+      SLACK_NOTIFY_URL: ${{ secrets.SLACK_NOTIFY_URL }}
+      AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
