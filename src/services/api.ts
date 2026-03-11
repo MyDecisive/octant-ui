@@ -3,7 +3,6 @@ import { apiFetch } from "../utils/apiFetch";
 
 interface Integration {
   name: string;
-  type: IntegrationType;
 }
 
 interface DatadogIntegrationBody {
@@ -51,24 +50,21 @@ const devDelay = <T>(value: T, ms = 800): Promise<T> =>
   new Promise((resolve) => setTimeout(() => resolve(value), ms));
 
 export const integrations = {
-  getAll: (): Promise<Integration[]> => {
+  getAll: (type: IntegrationType): Promise<Integration[]> => {
     if (import.meta.env.DEV) {
       return devDelay<Integration[]>([
         {
           name: "dd-one",
-          type: "datadog",
         },
         {
           name: "otlp-http-one",
-          type: "otlphttp",
         },
         {
           name: "otlp-grpc-one",
-          type: "otlpgrpc",
         },
       ]);
     }
-    return apiFetch.get("/integrations");
+    return apiFetch.get(`/integrations/${type}`);
   },
 
   upsert: (
