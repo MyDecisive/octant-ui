@@ -1,0 +1,10 @@
+name: Publish Helm Chart to GHCR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stub:
+      runs-on: ubuntu-latest
+      steps:
+      - run: echo "I am a dummy flow that exists to get around Github Actions limitations around testing workflows not on main from the gh cli"
