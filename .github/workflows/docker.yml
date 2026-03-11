@@ -8,5 +8,5 @@ on:
 
 jobs:
   docker-push:
-    uses: DecisiveAI/ci/.github/workflows/docker-push-to-ecr.yml@main
+    uses: DecisiveAI/ci/.github/workflows/docker-ghcr.yaml@rlaw/docker-image-to-ghcr
     secrets: inherit # pass all secrets
