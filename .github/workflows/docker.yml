@@ -8,5 +8,5 @@ on:
 
 jobs:
   docker-push:
-    uses: MyDecisive/ci/.github/workflows/docker-ghcr.yaml@rlaw/docker-image-to-ghcr
+    uses: MyDecisive/ci/.github/workflows/docker-ghcr.yaml@main
     secrets: inherit # pass all secrets
