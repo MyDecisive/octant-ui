@@ -1,6 +1,6 @@
 apiVersion: v2
-name: inkops-ui
-description: MyDecisive InkOps UI Helm Chart
+name: octant-ui
+description: MyDecisive Octant UI Helm Chart
 
 # A chart can be either an 'application' or a 'library' chart.
 #

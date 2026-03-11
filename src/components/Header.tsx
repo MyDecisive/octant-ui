@@ -25,7 +25,7 @@ export function Header() {
           <Box component={"img"} src="/logo.svg" alt="logo" />
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              MyDecisive InkOps
+              MyDecisive Octant
             </Typography>
             <Typography variant="body2" color="text.secondary">
               SmartHub setup wizard
