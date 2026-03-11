@@ -5,11 +5,10 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { type SubmitEvent, use, useCallback, useMemo, useState } from "react";
+import { type SubmitEvent, useMemo, useState } from "react";
 import { StepDefinitions } from "../../constants";
-import { AppState } from "../../context/Context";
-import { ACTION_TYPES } from "../../context/store";
 import { connections, integrations } from "../../services/api";
+import { useOctantConnectStore } from "../../store/store";
 import { Nav } from "../Nav";
 import CheckboxGroup from "./CheckboxGroup";
 import RadioButtonsGroup from "./RadioButtonsGroup";
@@ -29,21 +28,10 @@ const telemetryOptions = [
 export function Forms() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | Error>(null);
-  const [state, dispatch] = use(AppState);
-
-  const { nav, form } = state;
-
-  const { activeStep } = nav;
-
-  const handleSetActiveStep = useCallback(
-    (stepId: number) => {
-      dispatch({
-        type: ACTION_TYPES.SET_ACTIVE_STEP,
-        payload: stepId,
-      });
-    },
-    [dispatch],
-  );
+  const activeStep = useOctantConnectStore((state) => state.activeStep);
+  const form = useOctantConnectStore((state) => state.form);
+  const setActiveStep = useOctantConnectStore((state) => state.setActiveStep);
+  const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const currentStep = useMemo(() => {
     return (
@@ -52,20 +40,6 @@ export function Forms() {
     );
   }, [activeStep]);
 
-  const handleSetFormField = useCallback(
-    (fieldName: string, value: unknown) => {
-      dispatch({
-        type: ACTION_TYPES.SET_FORM_FIELD,
-        payload: {
-          fieldName,
-          value,
-        },
-      });
-    },
-    [dispatch],
-  );
-
-  const nextStep = StepDefinitions.find((step) => step.id === activeStep + 1);
   const isLastStep = activeStep === StepDefinitions.length;
 
   // TODO: Better validation handling, add format validation
@@ -76,8 +50,13 @@ export function Forms() {
     (activeStep === 4 && (!form.dataTypes || form.dataTypes.length === 0));
 
   const handleNextStep = () => {
-    if (nextStep) {
-      handleSetActiveStep(nextStep.id);
+    if (!isLastStep) {
+      const currStepIdx = StepDefinitions.findIndex(
+        (step) => step.id === activeStep,
+      );
+      const nextActiveStep = StepDefinitions[currStepIdx + 1].id;
+
+      setActiveStep(nextActiveStep);
       console.log("Form data:", form);
     }
   };
@@ -183,10 +162,7 @@ export function Forms() {
                   sx={{ maxWidth: 360 }}
                   value={form.targetRevisionBranch || ""}
                   onChange={(event) =>
-                    handleSetFormField(
-                      "targetRevisionBranch",
-                      event.target.value,
-                    )
+                    setFormField("targetRevisionBranch", event.target.value)
                   }
                   required
                 />
@@ -198,7 +174,7 @@ export function Forms() {
                     label="Name your collector"
                     value={form.collectorName || ""}
                     onChange={(event) =>
-                      handleSetFormField("collectorName", event.target.value)
+                      setFormField("collectorName", event.target.value)
                     }
                     size="small"
                     required
@@ -208,7 +184,7 @@ export function Forms() {
                     helperText="The collector will default to the MDAI namespace if you do not provide one."
                     value={form.namespace || ""}
                     onChange={(event) =>
-                      handleSetFormField("namespace", event.target.value)
+                      setFormField("namespace", event.target.value)
                     }
                     size="small"
                   />
@@ -216,7 +192,7 @@ export function Forms() {
                     label="Datadog API key"
                     value={form.apiKey || ""}
                     onChange={(event) =>
-                      handleSetFormField("apiKey", event.target.value)
+                      setFormField("apiKey", event.target.value)
                     }
                     placeholder="dd123..."
                     size="small"
@@ -234,10 +210,7 @@ export function Forms() {
                     }))}
                     selected={form.exportLocationType || "datadog"}
                     onChange={(event) =>
-                      handleSetFormField(
-                        "exportLocationType",
-                        event.target.value,
-                      )
+                      setFormField("exportLocationType", event.target.value)
                     }
                   />
                   <TextField
@@ -250,7 +223,7 @@ export function Forms() {
                     sx={{ maxWidth: 360 }}
                     value={form.exportLocation || ""}
                     onChange={(event) =>
-                      handleSetFormField("exportLocation", event.target.value)
+                      setFormField("exportLocation", event.target.value)
                     }
                     required
                   />
@@ -262,7 +235,7 @@ export function Forms() {
                   values={telemetryOptions}
                   selected={form.dataTypes || []}
                   onChange={(selectedValues) =>
-                    handleSetFormField("dataTypes", selectedValues)
+                    setFormField("dataTypes", selectedValues)
                   }
                 />
               )}

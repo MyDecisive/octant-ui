@@ -3,36 +3,19 @@ import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
-import React, { use, useCallback } from "react";
+import React from "react";
 import { StepDefinitions } from "../constants";
-import { AppState } from "../context/Context";
-import { ACTION_TYPES } from "../context/store";
+import { useOctantConnectStore } from "../store/store";
 
 export function Nav() {
-  const [state, dispatch] = use(AppState);
-
-  const { form, nav } = state;
-  const { activeStep } = nav;
-
-  const handleSetActiveStep = useCallback(
-    (stepId: number) => {
-      dispatch({
-        type: ACTION_TYPES.SET_ACTIVE_STEP,
-        payload: stepId,
-      });
-    },
-    [dispatch],
-  );
-
-  const handleResetFormData = useCallback(() => {
-    dispatch({
-      type: ACTION_TYPES.RESET_FORM_DATA,
-    });
-  }, [dispatch]);
+  const activeStep = useOctantConnectStore((state) => state.activeStep);
+  const form = useOctantConnectStore((state) => state.form);
+  const setActiveStep = useOctantConnectStore((state) => state.setActiveStep);
+  const resetForm = useOctantConnectStore((state) => state.resetForm);
 
   const handleReset = () => {
-    handleSetActiveStep(0);
-    handleResetFormData();
+    setActiveStep(0);
+    resetForm();
     console.log("Form data reset", form);
   };
 
