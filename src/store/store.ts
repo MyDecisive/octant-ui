@@ -15,9 +15,9 @@ interface Actions {
   resetForm: () => void;
 }
 
-type ConnectStore = Values & Actions;
+type OctantConnectStore = Values & Actions;
 
-export const useConnect = create<ConnectStore>()((set) => ({
+export const useOctantConnectStore = create<OctantConnectStore>()((set) => ({
   activeStep: 1,
   form: {},
   setActiveStep: (newStep) =>

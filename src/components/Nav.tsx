@@ -5,13 +5,13 @@ import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import React from "react";
 import { StepDefinitions } from "../constants";
-import { useConnect } from "../store/store";
+import { useOctantConnectStore } from "../store/store";
 
 export function Nav() {
-  const activeStep = useConnect((state) => state.activeStep);
-  const form = useConnect((state) => state.form);
-  const setActiveStep = useConnect((state) => state.setActiveStep);
-  const resetForm = useConnect((state) => state.resetForm);
+  const activeStep = useOctantConnectStore((state) => state.activeStep);
+  const form = useOctantConnectStore((state) => state.form);
+  const setActiveStep = useOctantConnectStore((state) => state.setActiveStep);
+  const resetForm = useOctantConnectStore((state) => state.resetForm);
 
   const handleReset = () => {
     setActiveStep(0);

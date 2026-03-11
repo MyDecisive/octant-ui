@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { type SubmitEvent, useMemo, useState } from "react";
 import { StepDefinitions } from "../../constants";
 import { connections, integrations } from "../../services/api";
-import { useConnect } from "../../store/store";
+import { useOctantConnectStore } from "../../store/store";
 import { Nav } from "../Nav";
 import CheckboxGroup from "./CheckboxGroup";
 import RadioButtonsGroup from "./RadioButtonsGroup";
@@ -28,10 +28,10 @@ const telemetryOptions = [
 export function Forms() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | Error>(null);
-  const activeStep = useConnect((state) => state.activeStep);
-  const form = useConnect((state) => state.form);
-  const setActiveStep = useConnect((state) => state.setActiveStep);
-  const setFormField = useConnect((state) => state.setFormField);
+  const activeStep = useOctantConnectStore((state) => state.activeStep);
+  const form = useOctantConnectStore((state) => state.form);
+  const setActiveStep = useOctantConnectStore((state) => state.setActiveStep);
+  const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const currentStep = useMemo(() => {
     return (
