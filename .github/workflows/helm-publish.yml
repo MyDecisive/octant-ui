@@ -8,5 +8,5 @@ on:
 
 jobs:
   helm-publish:
-    uses: DecisiveAI/ci/.github/workflows/helm-publish.yml@rlaw/docker-image-to-ghcr
+    uses: MyDecisive/ci/.github/workflows/helm-publish.yml@rlaw/docker-image-to-ghcr
     secrets: inherit # pass all secrets
