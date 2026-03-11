@@ -2,9 +2,11 @@ name: Docker push for main branch
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
 
 jobs:
-  stub:
-      runs-on: ubuntu-latest
-      steps:
-      - run: echo "I am a dummy flow that exists to get around Github Actions limitations around testing workflows not on main from the gh cli"
+  docker-push:
+    uses: MyDecisive/ci/.github/workflows/docker-ghcr.yaml@main
+    secrets: inherit # pass all secrets

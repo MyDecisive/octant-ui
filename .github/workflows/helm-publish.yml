@@ -2,9 +2,11 @@ name: Publish Helm Chart to GHCR
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
 
 jobs:
-  stub:
-      runs-on: ubuntu-latest
-      steps:
-      - run: echo "I am a dummy flow that exists to get around Github Actions limitations around testing workflows not on main from the gh cli"
+  helm-publish:
+    uses: MyDecisive/ci/.github/workflows/helm-publish.yml@main
+    secrets: inherit # pass all secrets
