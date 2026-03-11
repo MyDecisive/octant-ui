@@ -9,6 +9,4 @@ on:
 jobs:
   docker-push:
     uses: DecisiveAI/ci/.github/workflows/docker-push-to-ecr.yml@main
-    secrets:
-      SLACK_NOTIFY_URL: ${{ secrets.SLACK_NOTIFY_URL }}
-      AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+    secrets: inherit # pass all secrets
