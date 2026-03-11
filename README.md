@@ -1,6 +1,6 @@
-# MyDecisive InkOps UI
+# MyDecisive Octant UI
 
-React + TypeScript + Vite frontend for InkOps.
+React + TypeScript + Vite frontend for Octant.
 
 ## Local Development
 
@@ -31,7 +31,7 @@ npm run preview -- --host 0.0.0.0
 
 At a minimum, you need:
 
-- A `Deployment` running the `inkops-ui` image
+- A `Deployment` running the `octant-ui` image
 - A `Service` exposing port `8080`
 
 ### kind (cluster: `mdai-labs`, namespace: `mdai`)
@@ -45,7 +45,7 @@ npm run local-all
 Access locally:
 
 ```bash
-kubectl port-forward -n mdai service/inkops-ui 8080:8080
+kubectl port-forward -n mdai service/octant-ui 8080:8080
 ```
 
 ## Troubleshooting
