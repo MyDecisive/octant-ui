@@ -9,7 +9,7 @@ deployment:
   gateway_host: http://mdai-gateway.mdai.svc.cluster.local:8081
 
 image:
-  repository: public.ecr.aws/decisiveai/octant-ui
+  repository: ghcr.io/mydecisive/octant-ui
   # tag: 0.0.1
 
 service:
