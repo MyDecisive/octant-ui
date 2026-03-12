@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 export interface FormFieldProps {
   id: number;
   formType: string;
@@ -50,3 +52,13 @@ export interface Action {
   type: string;
   payload?: unknown;
 }
+
+export type ViewKey = string;
+
+export type ViewMap = Record<
+  ViewKey,
+  (props: { onClickProgress: () => void }) => JSX.Element
+>;
+export type ViewLabelMap = Record<ViewKey, string>;
+
+export type ViewOrder = ViewKey[];

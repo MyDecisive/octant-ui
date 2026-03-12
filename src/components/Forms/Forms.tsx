@@ -28,9 +28,9 @@ const telemetryOptions = [
 export function Forms() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | Error>(null);
-  const activeStep = useOctantConnectStore((state) => state.activeStep);
+  const activeStep = useOctantConnectStore((state) => state.activeView);
   const form = useOctantConnectStore((state) => state.form);
-  const setActiveStep = useOctantConnectStore((state) => state.setActiveStep);
+  const setActiveStep = useOctantConnectStore((state) => state.setActiveView);
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const currentStep = useMemo(() => {

@@ -8,9 +8,9 @@ import { StepDefinitions } from "../constants";
 import { useOctantConnectStore } from "../store/store";
 
 export function Nav() {
-  const activeStep = useOctantConnectStore((state) => state.activeStep);
+  const activeStep = useOctantConnectStore((state) => state.activeView);
   const form = useOctantConnectStore((state) => state.form);
-  const setActiveStep = useOctantConnectStore((state) => state.setActiveStep);
+  const setActiveStep = useOctantConnectStore((state) => state.setActiveView);
   const resetForm = useOctantConnectStore((state) => state.resetForm);
 
   const handleReset = () => {
