@@ -1,6 +1,6 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { Forms } from "./components/Forms/Forms";
+import { Forms } from "./components/Forms";
 import { Header } from "./components/Header";
 import { theme } from "./styles/theme";
 
