@@ -53,12 +53,13 @@ export interface Action {
   payload?: unknown;
 }
 
-export type ViewKey = string;
-
 export type ViewMap = Record<
-  ViewKey,
+  string,
   (props: { onClickProgress: () => void }) => JSX.Element
 >;
+
+export type ViewKey = keyof ViewMap;
+
 export type ViewLabelMap = Record<ViewKey, string>;
 
 export type ViewOrder = ViewKey[];
