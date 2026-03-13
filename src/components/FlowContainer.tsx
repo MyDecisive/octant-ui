@@ -19,6 +19,13 @@ export function FlowContainer() {
   const { Component, label } = VIEW_MAP[activeView];
 
   if (label) {
+    const flowStepKeys = VIEW_ORDER.filter((step) => VIEW_MAP[step].label);
+    const flowSteps = flowStepKeys.map((key) => ({
+      title: VIEW_MAP[key].label!,
+      id: key,
+    }));
+    const activeStepIndex = flowStepKeys.indexOf(activeView);
+
     return (
       <Box sx={{ maxWidth: 1200, mx: "auto", px: 3, pb: 8, mt: 2 }}>
         <Paper
@@ -38,7 +45,11 @@ export function FlowContainer() {
               gap: 3,
             }}
           >
-            <Nav />
+            <Nav
+              activeStepIndex={activeStepIndex}
+              steps={flowSteps}
+              onStepClick={setActiveView}
+            />
             <Divider
               orientation="vertical"
               flexItem
