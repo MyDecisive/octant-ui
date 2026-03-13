@@ -118,12 +118,12 @@ export function Forms() {
   };
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: "auto", px: 3, pb: 8, mt: 1.5 }}>
+    <Box sx={{ maxWidth: 1200, mx: "auto", px: 3, pb: 8, mt: 2 }}>
       <Paper
         elevation={0}
         sx={{
           p: { xs: 2.5, md: 4 },
-          borderRadius: 2.5,
+          borderRadius: 3,
           border: "1px solid #CFCFD4",
           backgroundColor: "background.paper",
           minHeight: 620,
@@ -147,7 +147,7 @@ export function Forms() {
           />
 
           <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 650 }}>
-            <Typography variant="h5" sx={{ fontWeight: 600, fontSize: "2rem" }}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               {currentStep.title}
             </Typography>
             <Typography
@@ -156,7 +156,6 @@ export function Forms() {
                 mt: 1,
                 color: "text.secondary",
                 lineHeight: 1.5,
-                maxWidth: 620,
               }}
             >
               {currentStep.description}
@@ -189,7 +188,6 @@ export function Forms() {
                       setFormField("collectorName", event.target.value)
                     }
                     size="small"
-                    sx={{ maxWidth: 360 }}
                     required
                   />
                   <TextField
@@ -200,7 +198,6 @@ export function Forms() {
                       setFormField("namespace", event.target.value)
                     }
                     size="small"
-                    sx={{ maxWidth: 420 }}
                   />
                   <TextField
                     label="Datadog API key"
@@ -210,7 +207,6 @@ export function Forms() {
                     }
                     placeholder="dd123..."
                     size="small"
-                    sx={{ maxWidth: 360 }}
                     required
                   />
                 </>
@@ -235,7 +231,6 @@ export function Forms() {
                       )?.inputLabel || exportOptions[0].inputLabel
                     }
                     size="small"
-                    sx={{ maxWidth: 360 }}
                     value={form.exportLocation || ""}
                     onChange={(event) =>
                       setFormField("exportLocation", event.target.value)
@@ -260,7 +255,7 @@ export function Forms() {
                 size="small"
                 type={isLastStep ? "submit" : "button"}
                 onClick={isLastStep ? undefined : handleNextStep}
-                sx={{ alignSelf: "flex-start", minWidth: 84 }}
+                sx={{ alignSelf: "flex-start" }}
                 disabled={isRequiredNotProvided}
                 loading={isLastStep && loading}
               >

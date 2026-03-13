@@ -18,31 +18,19 @@ export default function RadioButtonsGroup({
 }: RowRadioButtonsGroupProps) {
   return (
     <FormControl>
-      <FormLabel
-        id="demo-row-radio-buttons-group-label"
-        sx={{ color: "text.secondary", mb: 0.5 }}
-      >
-        Export Type
-      </FormLabel>
+      <FormLabel id="demo-row-radio-buttons-group-label">Export Type</FormLabel>
       <RadioGroup
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
         value={selected}
         onChange={onChange}
-        sx={{
-          columnGap: 1.5,
-          "& .MuiFormControlLabel-label": {
-            fontSize: "0.95rem",
-            color: "text.primary",
-          },
-        }}
       >
         {values.map(({ label, value }) => (
           <FormControlLabel
             key={value}
             value={value}
-            control={<Radio size="small" />}
+            control={<Radio />}
             label={label}
           />
         ))}

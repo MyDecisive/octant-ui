@@ -27,24 +27,17 @@ export default function CheckboxGroup({
   };
 
   return (
-    <FormGroup sx={{ rowGap: 0.5 }}>
+    <FormGroup>
       {values.map(({ label, value }) => (
         <FormControlLabel
           key={value}
           control={
             <Checkbox
-              size="small"
               checked={selected.includes(value)}
               onChange={handleCheckedChange}
               value={value}
             />
           }
-          sx={{
-            "& .MuiFormControlLabel-label": {
-              fontSize: "0.95rem",
-              color: "text.primary",
-            },
-          }}
           label={label}
         />
       ))}

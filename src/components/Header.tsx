@@ -7,10 +7,10 @@ export function Header() {
   return (
     <Box sx={{ maxWidth: 1200, mx: "auto", px: 3, pt: 3 }}>
       <Paper
-        elevation={0}
+        elevation={3}
         sx={{
           px: 3,
-          py: 1.5,
+          py: 2.5,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
