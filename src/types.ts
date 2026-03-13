@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 export interface FormFieldProps {
   id: number;
   formType: string;
@@ -27,7 +29,9 @@ export interface ConnectionPayloadProps {
   apiKey?: string;
   exportLocationType?: IntegrationType;
   exportLocation?: string;
+  argoAccountToken?: string;
   dataTypes?: string[];
+  deployMethod: "argo" | "self";
 }
 
 export interface StepDefinition {
@@ -50,3 +54,20 @@ export interface Action {
   type: string;
   payload?: unknown;
 }
+
+export type ViewMap = Record<
+  string,
+  {
+    Component: (props: {
+      viewKey?: string;
+      onClickProgress: () => void;
+    }) => JSX.Element;
+    label?: string;
+  }
+>;
+
+export type ViewKey = keyof ViewMap;
+
+export type ViewLabelMap = Record<ViewKey, string>;
+
+export type ViewOrder = ViewKey[];

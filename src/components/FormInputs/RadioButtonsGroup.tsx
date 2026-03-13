@@ -6,19 +6,23 @@ import RadioGroup from "@mui/material/RadioGroup";
 import type { ChangeEvent } from "react";
 
 interface RowRadioButtonsGroupProps {
+  label?: string;
   values: { label: string; value: string }[];
   selected: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function RadioButtonsGroup({
+  label,
   values,
   selected,
   onChange,
 }: RowRadioButtonsGroupProps) {
   return (
     <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">Export Type</FormLabel>
+      {label && (
+        <FormLabel id="demo-row-radio-buttons-group-label">{label}</FormLabel>
+      )}
       <RadioGroup
         row
         aria-labelledby="demo-row-radio-buttons-group-label"

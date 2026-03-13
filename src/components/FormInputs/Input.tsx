@@ -5,6 +5,7 @@ import type { ChangeEvent } from "react";
 
 interface InputProps {
   label?: string;
+  placeholder?: string;
   value?: string;
   onChange: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -19,12 +20,14 @@ export function Input({
   onChange,
   required = false,
   tooltip,
+  placeholder,
 }: InputProps) {
   return (
     <Stack sx={{ maxWidth: 360 }}>
       <TextField
         label={label}
         value={value}
+        placeholder={placeholder}
         onChange={onChange}
         size="small"
         required={required}

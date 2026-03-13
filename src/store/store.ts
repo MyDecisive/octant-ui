@@ -1,13 +1,13 @@
 import { create } from "zustand";
-import type { ConnectionPayloadProps } from "../types";
+import type { ConnectionPayloadProps, ViewKey } from "../types";
 
 interface Values {
-  activeStep: number;
+  activeView: ViewKey;
   form: ConnectionPayloadProps;
 }
 
 interface Actions {
-  setActiveStep: (newStep: number) => void;
+  setActiveView: (newView: ViewKey) => void;
   setFormField: (
     key: keyof ConnectionPayloadProps,
     value: ConnectionPayloadProps[keyof ConnectionPayloadProps],
@@ -17,12 +17,25 @@ interface Actions {
 
 type OctantConnectStore = Values & Actions;
 
+function createDefaultOctantConnectForm(): ConnectionPayloadProps {
+  return {
+    deployMethod: "argo",
+  };
+}
+
+function createDefaultOctantConnectState() {
+  return {
+    activeView: "splash",
+    form: createDefaultOctantConnectForm(),
+  };
+}
+
 export const useOctantConnectStore = create<OctantConnectStore>()((set) => ({
-  activeStep: 1,
-  form: {},
-  setActiveStep: (newStep) =>
-    set((state) => ({ ...state, activeStep: newStep })),
+  ...createDefaultOctantConnectState(),
+  setActiveView: (newView) =>
+    set((state) => ({ ...state, activeView: newView })),
   setFormField: (key, value) =>
     set((state) => ({ ...state, form: { ...state.form, [key]: value } })),
-  resetForm: () => set((state) => ({ ...state, form: {} })),
+  resetForm: () =>
+    set((state) => ({ ...state, form: createDefaultOctantConnectForm() })),
 }));
