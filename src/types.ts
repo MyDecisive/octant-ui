@@ -29,7 +29,9 @@ export interface ConnectionPayloadProps {
   apiKey?: string;
   exportLocationType?: IntegrationType;
   exportLocation?: string;
+  argoAccountToken?: string;
   dataTypes?: string[];
+  deployMethod: "argo" | "self";
 }
 
 export interface StepDefinition {
@@ -53,12 +55,19 @@ export interface Action {
   payload?: unknown;
 }
 
-export type ViewKey = string;
-
 export type ViewMap = Record<
-  ViewKey,
-  (props: { onClickProgress: () => void }) => JSX.Element
+  string,
+  {
+    Component: (props: {
+      viewKey?: string;
+      onClickProgress: () => void;
+    }) => JSX.Element;
+    label?: string;
+  }
 >;
+
+export type ViewKey = keyof ViewMap;
+
 export type ViewLabelMap = Record<ViewKey, string>;
 
 export type ViewOrder = ViewKey[];

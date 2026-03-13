@@ -6,20 +6,21 @@ import Typography from "@mui/material/Typography";
 
 export function Splash({ onClickProgress }: { onClickProgress: () => void }) {
   return (
-    <Box sx={{ maxWidth: 1200, mx: "auto", px: 3, pb: 8, mt: 2 }}>
+    <Box sx={{ maxWidth: 1200, mx: "auto" }}>
       <Paper
         elevation={0}
         sx={{
-          p: { xs: 2.5, md: 4 },
           borderRadius: 3,
-          border: "1px solid #e5e5e5",
+          border: "1px solid #CFCFD4",
+          backgroundColor: "background.paper",
           minHeight: 620,
         }}
       >
         <Box
           sx={{
+            height: "100%",
             display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "465px 1px 1fr" },
+            gridTemplateColumns: { xs: "1fr", md: "230px 1px 1fr" },
             gap: 3,
           }}
         >
@@ -27,14 +28,18 @@ export function Splash({ onClickProgress }: { onClickProgress: () => void }) {
             sx={{
               backgroundColor: "#D9D9D9",
               width: { xs: "none", md: "100%" },
+              height: { xs: "none", md: "100%" },
             }}
           />
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ display: { xs: "none", md: "block" } }}
+            sx={{
+              display: { xs: "none", md: "block" },
+              borderColor: "#D5D5DA",
+            }}
           />
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "100%", height: "100%" }}>
             <Typography variant="h5">Setup a DataDog connection</Typography>
             <Typography variant="body2">
               This guided setup will help you accomplish the following:

@@ -5,6 +5,7 @@ import type { ChangeEvent } from "react";
 
 interface InputProps {
   label?: string;
+  placeholder?: string;
   value?: string;
   onChange: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

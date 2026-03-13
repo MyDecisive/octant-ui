@@ -17,12 +17,25 @@ interface Actions {
 
 type OctantConnectStore = Values & Actions;
 
+function createDefaultOctantConnectForm(): ConnectionPayloadProps {
+  return {
+    deployMethod: "argo",
+  };
+}
+
+function createDefaultOctantConnectState() {
+  return {
+    activeView: "splash",
+    form: createDefaultOctantConnectForm(),
+  };
+}
+
 export const useOctantConnectStore = create<OctantConnectStore>()((set) => ({
-  activeView: "splash",
-  form: {},
+  ...createDefaultOctantConnectState(),
   setActiveView: (newView) =>
     set((state) => ({ ...state, activeView: newView })),
   setFormField: (key, value) =>
     set((state) => ({ ...state, form: { ...state.form, [key]: value } })),
-  resetForm: () => set((state) => ({ ...state, form: {} })),
+  resetForm: () =>
+    set((state) => ({ ...state, form: createDefaultOctantConnectForm() })),
 }));
