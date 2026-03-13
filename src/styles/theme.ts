@@ -2,18 +2,18 @@ import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: "light",
     primary: {
       main: "#9C27B0",
-      dark: "#6A1B9A",
-      light: "#EDE7F6",
-      contrastText: "rgba(255, 255, 255, 0.95)",
+      dark: "#7B1FA2",
+      light: "#F3E5F5",
+      contrastText: "#FFFFFF",
     },
     secondary: {
-      main: "#D500F9",
-      dark: "#E040FB",
-      light: "#EA80FC",
-      contrastText: "rgba(0, 0, 0, 0.87)",
+      main: "#6D6D75",
+      dark: "#51515A",
+      light: "#E6E6EB",
+      contrastText: "#FFFFFF",
     },
     error: {
       main: "#F44336",
@@ -33,22 +33,47 @@ export const theme = createTheme({
       contrastText: "rgba(0, 0, 0, 0.87)",
     },
     text: {
-      primary: "#FFFFFF",
+      primary: "#1D1D21",
+      secondary: "#66666F",
     },
     background: {
-      default: "#150D17",
-      paper: "#1B0F1F",
+      default: "#CFCFD4",
+      paper: "#F3F3F6",
     },
+    divider: "#D0D0D6",
   },
   typography: {
-    fontFamily: '"Geist", "Space Grotesk", "IBM Plex Sans", sans-serif',
+    fontFamily: '"Geist", sans-serif',
   },
   components: {
-    MuiCssBaseline: {
+    MuiOutlinedInput: {
       styleOverrides: {
-        body: {
-          background:
-            "radial-gradient(circle at top left, rgba(216, 0, 252, 0.2), transparent 45%), radial-gradient(circle at 20% 80%, rgba(106, 27, 154, 0.35), transparent 50%), #150D17",
+        root: {
+          backgroundColor: "#ECECEF",
+          borderRadius: 4,
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#C9C9CF",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#AEAEB5",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#9C27B0",
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "#66666F",
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
         },
       },
     },

@@ -2,9 +2,9 @@ export const StepDefinitions = [
   {
     id: 1,
     key: "connect-1",
-    title: "Pick a branch",
+    title: "Deploy Directly to Your Argo CD Server?",
     description:
-      "Provide targetRevision branch for your Argo CD or Datadog Connect app",
+      "We are about to create some Argo apps. Let us know if you’re comfortable with us directly pushing those apps to your Argo CD server on your behalf. \n\n Note: Do not deploy to a branch that is actively in development (ex. production environment).",
   },
   {
     id: 2,

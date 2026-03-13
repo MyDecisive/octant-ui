@@ -6,12 +6,13 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { type SubmitEvent, useMemo, useState } from "react";
-import { StepDefinitions } from "../../constants";
-import { connections, integrations } from "../../services/api";
-import { useOctantConnectStore } from "../../store/store";
-import { Nav } from "../Nav";
-import CheckboxGroup from "./CheckboxGroup";
-import RadioButtonsGroup from "./RadioButtonsGroup";
+import { StepDefinitions } from "../constants";
+import { connections, integrations } from "../services/api";
+import { useOctantConnectStore } from "../store/store";
+import CheckboxGroup from "./FormInputs/CheckboxGroup";
+import { Input } from "./FormInputs/Input";
+import RadioButtonsGroup from "./FormInputs/RadioButtonsGroup";
+import { Nav } from "./Nav";
 
 const exportOptions = [
   { label: "Datadog", value: "datadog", inputLabel: "Datadog site URL" },
@@ -123,7 +124,8 @@ export function Forms() {
         sx={{
           p: { xs: 2.5, md: 4 },
           borderRadius: 3,
-          border: "1px solid #e5e5e5",
+          border: "1px solid #CFCFD4",
+          backgroundColor: "background.paper",
           minHeight: 620,
         }}
       >
@@ -138,32 +140,41 @@ export function Forms() {
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ display: { xs: "none", md: "block" } }}
+            sx={{
+              display: { xs: "none", md: "block" },
+              borderColor: "#D5D5DA",
+            }}
           />
 
-          <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 620 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 650 }}>
             <Typography variant="h5" sx={{ fontWeight: 700 }}>
               {currentStep.title}
             </Typography>
-            <Typography variant="body2" sx={{ mt: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                mt: 1,
+                color: "text.secondary",
+                lineHeight: 1.5,
+              }}
+            >
               {currentStep.description}
             </Typography>
             {error && (
-              <Typography variant="body2" sx={{ mt: 1 }}>
+              <Typography variant="body2" sx={{ mt: 1, color: "error.main" }}>
                 {`Something went wrong: ${error}`}
               </Typography>
             )}
 
             <Stack spacing={2} sx={{ mt: 3 }}>
               {activeStep === 1 && (
-                <TextField
+                <Input
                   label="Target branch"
-                  size="small"
-                  sx={{ maxWidth: 360 }}
                   value={form.targetRevisionBranch || ""}
                   onChange={(event) =>
                     setFormField("targetRevisionBranch", event.target.value)
                   }
+                  tooltip="Target branch where these changes should be committed."
                   required
                 />
               )}
@@ -220,7 +231,6 @@ export function Forms() {
                       )?.inputLabel || exportOptions[0].inputLabel
                     }
                     size="small"
-                    sx={{ maxWidth: 360 }}
                     value={form.exportLocation || ""}
                     onChange={(event) =>
                       setFormField("exportLocation", event.target.value)
@@ -245,7 +255,7 @@ export function Forms() {
                 size="small"
                 type={isLastStep ? "submit" : "button"}
                 onClick={isLastStep ? undefined : handleNextStep}
-                sx={{ alignSelf: "flex-start", textTransform: "none" }}
+                sx={{ alignSelf: "flex-start" }}
                 disabled={isRequiredNotProvided}
                 loading={isLastStep && loading}
               >
