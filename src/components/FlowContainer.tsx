@@ -1,10 +1,15 @@
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/connect";
 import { useOctantConnectStore } from "../store/store";
 import { Nav } from "./Nav";
+
+const flowStepKeys = VIEW_ORDER.filter((step) => VIEW_MAP[step].label);
+const flowSteps = flowStepKeys.map((key) => ({
+  title: VIEW_MAP[key].label!,
+  id: key,
+}));
 
 export function FlowContainer() {
   const activeView = useOctantConnectStore((state) => state.activeView);
@@ -18,30 +23,42 @@ export function FlowContainer() {
 
   const { Component, label } = VIEW_MAP[activeView];
 
-  if (label) {
-    const flowStepKeys = VIEW_ORDER.filter((step) => VIEW_MAP[step].label);
-    const flowSteps = flowStepKeys.map((key) => ({
-      title: VIEW_MAP[key].label!,
-      id: key,
-    }));
-    const activeStepIndex = flowStepKeys.indexOf(activeView);
-
-    return (
-      <Box sx={{ maxWidth: 1200, mx: "auto", px: 3, pb: 8, mt: 2 }}>
-        <Paper
-          elevation={0}
-          sx={{
-            p: { xs: 2.5, md: 4 },
-            borderRadius: 3,
-            border: "1px solid #CFCFD4",
-            backgroundColor: "background.paper",
-            minHeight: 620,
-          }}
-        >
+  const activeStepIndex = useMemo(() => {
+    return flowStepKeys.indexOf(activeView);
+  }, [activeView]);
+  return (
+    <Box
+      sx={{
+        maxWidth: 1200,
+        mx: "auto",
+        px: 3,
+        pb: 8,
+        pt: 2,
+      }}
+    >
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 3,
+          border: "1px solid #CFCFD4",
+          backgroundColor: "background.paper",
+          minHeight: 620,
+          py: 5,
+          px: 3,
+          ...(!label && {
+            height: "100%",
+            display: "flex",
+            justifyContent: "stretch",
+            alignItems: "stretch",
+            p: 0,
+          }),
+        }}
+      >
+        {label ? (
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "230px 1px 1fr" },
+              gridTemplateColumns: "3fr 9fr",
               gap: 3,
             }}
           >
@@ -50,21 +67,13 @@ export function FlowContainer() {
               steps={flowSteps}
               onStepClick={setActiveView}
             />
-            <Divider
-              orientation="vertical"
-              flexItem
-              sx={{
-                display: { xs: "none", md: "block" },
-                borderColor: "#D5D5DA",
-              }}
-            />
 
             <Component viewKey={activeView} onClickProgress={onClickProgress} />
           </Box>
-        </Paper>
-      </Box>
-    );
-  }
-
-  return <Component viewKey={activeView} onClickProgress={onClickProgress} />;
+        ) : (
+          <Component viewKey={activeView} onClickProgress={onClickProgress} />
+        )}
+      </Paper>
+    </Box>
+  );
 }
