@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { useOctantConnectStore } from "../store/store";
@@ -53,31 +52,20 @@ export function DeployMethod({
 
   return (
     <ViewContent
+      title="Deploy Directly to Your Argo CD Server?"
+      description={
+        <>
+          We are about to create some Argo apps. Let us know if you’re
+          comfortable with us directly pushing those apps to your Argo CD server
+          on your behalf.
+          <br />
+          <br />
+          Note: Do not deploy to a branch that is actively in development (ex.
+          production environment).
+        </>
+      }
       formContent={
         <>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 1,
-              alignItems: "flex-start",
-              alignSelf: "stretch",
-            }}
-          >
-            <Typography variant="h5">
-              Deploy Directly to Your Argo CD Server?
-            </Typography>
-            <Typography variant="body2">
-              We are about to create some Argo apps. Let us know if you’re
-              comfortable with us directly pushing those apps to your Argo CD
-              server on your behalf.
-              <br />
-              <br />
-              Note: Do not deploy to a branch that is actively in development
-              (ex. production environment).
-            </Typography>
-          </Box>
-
           <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
             <RadioButtonsGroup
               values={deployMethodOptions}

@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useMemo } from "react";
 import { useShallow } from "zustand/shallow";
@@ -66,27 +65,12 @@ export function PrepareCollector({
 
   return (
     <ViewContent
+      title="Get ready to deploy the collector"
+      description="Tell us how and where you would like to send your data from
+              Datadog. Don’t worry, you can always modify this configuration
+              later."
       formContent={
         <>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 1,
-              alignItems: "flex-start",
-              alignSelf: "stretch",
-            }}
-          >
-            <Typography variant="h5">
-              Get ready to deploy the collector
-            </Typography>
-            <Typography variant="body2">
-              Tell us how and where you would like to send your data from
-              Datadog. Don’t worry, you can always modify this configuration
-              later.
-            </Typography>
-          </Box>
-
           <Typography variant="h6">Source</Typography>
 
           <Select
