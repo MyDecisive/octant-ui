@@ -1,46 +1,56 @@
 import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import type { ChangeEvent } from "react";
+import FormLabel from "@mui/material/FormLabel";
+import { useCallback, type ChangeEvent } from "react";
 
 interface CheckBoxGroupProps {
-  values: { label: string; value: string }[];
+  options: { label: string; value: string }[];
   selected: string[];
   onChange: (selectedValues: string[]) => void;
+  label?: string;
 }
 
 export default function CheckboxGroup({
-  values,
+  options,
   selected,
   onChange,
+  label,
 }: CheckBoxGroupProps) {
-  const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
+  const handleCheckedChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { value, checked } = event.target;
 
-    const nextSelected = checked
-      ? selected.includes(value)
-        ? selected
-        : [...selected, value]
-      : selected.filter((item) => item !== value);
+      const nextSelected = checked
+        ? selected.includes(value)
+          ? selected
+          : [...selected, value]
+        : selected.filter((item) => item !== value);
 
-    onChange(nextSelected);
-  };
+      onChange(nextSelected);
+    },
+    [selected, onChange],
+  );
 
   return (
-    <FormGroup>
-      {values.map(({ label, value }) => (
-        <FormControlLabel
-          key={value}
-          control={
-            <Checkbox
-              checked={selected.includes(value)}
-              onChange={handleCheckedChange}
-              value={value}
-            />
-          }
-          label={label}
-        />
-      ))}
-    </FormGroup>
+    <FormControl>
+      {label && <FormLabel>{label}</FormLabel>}
+      <FormGroup>
+        {options.map(({ label, value }) => (
+          <FormControlLabel
+            key={value}
+            control={
+              <Checkbox
+                checked={selected.includes(value)}
+                onChange={handleCheckedChange}
+                value={value}
+              />
+            }
+            label={label}
+          />
+        ))}
+      </FormGroup>
+    </FormControl>
   );
 }
