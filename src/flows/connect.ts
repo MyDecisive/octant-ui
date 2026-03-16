@@ -1,6 +1,6 @@
-import { DeployMethod } from "../components/DeployMethod";
-import { PrepareCollector } from "../components/PrepareCollector";
-import { Splash } from "../components/Splash";
+import { DeployMethod } from "../components/connectFlow/DeployMethod";
+import { PrepareCollector } from "../components/connectFlow/PrepareCollector";
+import { Splash } from "../components/connectFlow/Splash";
 import type { ViewMap, ViewOrder } from "../types";
 
 export const VIEW_MAP: ViewMap = {

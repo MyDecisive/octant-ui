@@ -26,6 +26,7 @@ export function FlowContainer() {
   const activeStepIndex = useMemo(() => {
     return flowStepKeys.indexOf(activeView);
   }, [activeView]);
+
   return (
     <Box
       sx={{

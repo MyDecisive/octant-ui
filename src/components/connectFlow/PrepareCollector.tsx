@@ -1,13 +1,13 @@
 import Typography from "@mui/material/Typography";
 import { useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { useOctantConnectStore } from "../store/store";
-import type { TelemetryTypes } from "../types";
+import { useOctantConnectStore } from "../../store/store";
+import type { TelemetryTypes } from "../../types";
+import CheckboxGroup from "./../FormInputs/CheckboxGroup";
+import { Input } from "./../FormInputs/Input";
+import { Select } from "./../FormInputs/Select";
+import { ViewContent } from "./../ViewContent";
 import { ConfigDrawer } from "./ConfigDrawer";
-import CheckboxGroup from "./FormInputs/CheckboxGroup";
-import { Input } from "./FormInputs/Input";
-import { Select } from "./FormInputs/Select";
-import { ViewContent } from "./ViewContent";
 
 const dataSourceOptions: {
   label: string;

@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { useOctantConnectStore } from "../store/store";
-import { Input } from "./FormInputs/Input";
-import RadioButtonsGroup from "./FormInputs/RadioButtonsGroup";
-import { ViewContent } from "./ViewContent";
+import { useOctantConnectStore } from "../../store/store";
+import { Input } from "./../FormInputs/Input";
+import RadioButtonsGroup from "./../FormInputs/RadioButtonsGroup";
+import { ViewContent } from "./../ViewContent";
 
 const deployMethodOptions = [
   { label: "Yes, deploy on my behalf", value: "argo" },
