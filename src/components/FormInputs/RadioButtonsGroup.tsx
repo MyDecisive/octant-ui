@@ -36,6 +36,7 @@ export default function RadioButtonsGroup({
             value={value}
             control={<Radio />}
             label={label}
+            sx={{ m: 0 }}
           />
         ))}
       </RadioGroup>

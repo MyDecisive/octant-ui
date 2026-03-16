@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
@@ -62,9 +61,17 @@ export function DeployMethod({
   }, [deployMethod, targetRevisionBranch, argoAccountToken]);
 
   return (
-    <Box>
-      <Paper>
-        <Box>
+    <Box sx={{ display: "grid", gridTemplateColumns: "466px auto", gap: 3 }}>
+      <Box sx={{ display: "flex", gap: 3, flexDirection: "column" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            alignItems: "flex-start",
+            alignSelf: "stretch",
+          }}
+        >
           <Typography variant="h5">
             Deploy Directly to Your Argo CD Server?
           </Typography>
@@ -72,12 +79,14 @@ export function DeployMethod({
             We are about to create some Argo apps. Let us know if you’re
             comfortable with us directly pushing those apps to your Argo CD
             server on your behalf.
-          </Typography>
-          <Typography variant="body2">
+            <br />
+            <br />
             Note: Do not deploy to a branch that is actively in development (ex.
             production environment).
           </Typography>
+        </Box>
 
+        <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
           <RadioButtonsGroup
             values={deployMethodOptions}
             selected={deployMethod}
@@ -106,18 +115,18 @@ export function DeployMethod({
               />
             </>
           )}
-          <Button
-            variant="contained"
-            size="small"
-            type={"button"}
-            onClick={onClickProgress}
-            sx={{ alignSelf: "flex-start", textTransform: "none" }}
-            disabled={!canClickNextButton}
-          >
-            I'm ready
-          </Button>
         </Box>
-      </Paper>
+        <Button
+          variant="contained"
+          size="small"
+          type={"button"}
+          onClick={onClickProgress}
+          sx={{ alignSelf: "flex-start", textTransform: "none" }}
+          disabled={!canClickNextButton}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 }
