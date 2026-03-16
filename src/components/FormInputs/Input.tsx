@@ -12,6 +12,7 @@ interface InputProps {
   ) => void;
   required?: boolean;
   tooltip?: string;
+  helperText?: string;
 }
 
 export function Input({
@@ -21,6 +22,7 @@ export function Input({
   required = false,
   tooltip,
   placeholder,
+  helperText,
 }: InputProps) {
   return (
     <Stack sx={{ maxWidth: 360 }}>
@@ -31,6 +33,7 @@ export function Input({
         onChange={onChange}
         size="small"
         required={required}
+        helperText={helperText}
         fullWidth
         slotProps={{
           input: {
