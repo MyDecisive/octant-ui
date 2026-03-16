@@ -17,25 +17,16 @@ export function DeployMethod({
 }: {
   onClickProgress: () => void;
 }) {
-  const {
-    deployMethod,
-
-    targetRevisionBranch,
-    argoAccountToken,
-  } = useOctantConnectStore(
+  const { deployMethod, branch, accountToken } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
-      const {
-        deployMethod,
-        targetRevisionBranch = "",
-        argoAccountToken = "",
-      } = state.form;
+      const { deployMethod, branch = "", accountToken = "" } = state.form;
 
       return {
         deployMethod,
 
-        targetRevisionBranch,
-        argoAccountToken,
+        branch,
+        accountToken,
       };
     }),
   );
@@ -45,8 +36,8 @@ export function DeployMethod({
     (method: "argo" | "self") => {
       setFormField("deployMethod", method);
       if (method === "self") {
-        setFormField("argoAccountToken", undefined);
-        setFormField("targetRevisionBranch", undefined);
+        setFormField("accountToken", undefined);
+        setFormField("branch", undefined);
       }
     },
     [setFormField],
@@ -54,11 +45,11 @@ export function DeployMethod({
 
   const canClickNextButton = useMemo(() => {
     if (deployMethod === "argo") {
-      return !!(targetRevisionBranch.length && argoAccountToken.length);
+      return !!(branch.length && accountToken.length);
     }
 
     return true;
-  }, [deployMethod, targetRevisionBranch, argoAccountToken]);
+  }, [deployMethod, branch, accountToken]);
 
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: "466px auto", gap: 3 }}>
@@ -97,19 +88,15 @@ export function DeployMethod({
           {deployMethod === "argo" && (
             <>
               <Input
-                value={targetRevisionBranch}
-                onChange={(e) =>
-                  setFormField("targetRevisionBranch", e.target.value)
-                }
+                value={branch}
+                onChange={(e) => setFormField("branch", e.target.value)}
                 required
                 placeholder="Target branch"
                 tooltip="Target branch is where these changes will live in your version control platform. Please make sure this branch changes as your promote this change through your SDLC environments."
               />
               <Input
-                value={argoAccountToken}
-                onChange={(e) =>
-                  setFormField("argoAccountToken", e.target.value)
-                }
+                value={accountToken}
+                onChange={(e) => setFormField("accountToken", e.target.value)}
                 required
                 placeholder="Argo account token?"
               />

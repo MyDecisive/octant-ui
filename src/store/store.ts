@@ -1,25 +1,35 @@
 import { create } from "zustand";
-import type { ConnectionPayloadProps, ViewKey } from "../types";
+import type { TelemetryTypes, ViewKey } from "../types";
 
+interface AppStateForm {
+  deployMethod: "argo";
+  branch?: string;
+  accountToken?: string;
+  telemetryTypes: TelemetryTypes[];
+  url?: string;
+  apiKey?: string;
+  connectionName?: string;
+}
 interface Values {
   activeView: ViewKey;
-  form: ConnectionPayloadProps;
+  form: AppStateForm;
 }
 
 interface Actions {
   setActiveView: (newView: ViewKey) => void;
   setFormField: (
-    key: keyof ConnectionPayloadProps,
-    value: ConnectionPayloadProps[keyof ConnectionPayloadProps],
+    key: keyof AppStateForm,
+    value: AppStateForm[keyof AppStateForm],
   ) => void;
   resetForm: () => void;
 }
 
 type OctantConnectStore = Values & Actions;
 
-function createDefaultOctantConnectForm(): ConnectionPayloadProps {
+function createDefaultOctantConnectForm(): AppStateForm {
   return {
     deployMethod: "argo",
+    telemetryTypes: [],
   };
 }
 
