@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { useOctantConnectStore } from "../store/store";
 import type { TelemetryTypes } from "../types";
+import { ConfigDrawer } from "./ConfigDrawer";
 import CheckboxGroup from "./FormInputs/CheckboxGroup";
 import { Input } from "./FormInputs/Input";
 import { Select } from "./FormInputs/Select";
@@ -126,6 +127,7 @@ export function PrepareCollector({
       }
       onButtonClick={onClickProgress}
       buttonDisabled={!canClickNextButton}
+      sidebarContent={<ConfigDrawer />}
     />
   );
 }
