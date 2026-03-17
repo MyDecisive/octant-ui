@@ -11,6 +11,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  --mdai-spacing-unit: 8px;
+
   --mdai-background-default: #5b535d;
   --mdai-background-top: #5d3767;
   --mdai-background-bottom: #332b35;

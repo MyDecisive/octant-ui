@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
+import "./Nav.css";
 
 export function Nav({
   activeStepIndex,
@@ -13,7 +14,7 @@ export function Nav({
   onStepClick: (stepKey: string) => void;
 }) {
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box className="nav-container">
       <Stepper activeStep={activeStepIndex} orientation="vertical">
         {steps.map(({ id, title }, index) => {
           return (

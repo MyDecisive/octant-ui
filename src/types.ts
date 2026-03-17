@@ -21,17 +21,41 @@ export interface StepProps {
 }
 
 export type IntegrationType = "datadog" | "otlphttp" | "otlpgrpc";
+export type TelemetryTypes = "logs" | "metrics" | "traces";
 
+interface BasePayloadPart {
+  type: string;
+  fields?: Record<string, string>;
+}
+
+interface DatadogDestination extends BasePayloadPart {
+  type: "datadog";
+  fields: {
+    url: string;
+    apiKey: string;
+  };
+}
+
+interface ArgoDeployment extends BasePayloadPart {
+  type: "argocd";
+  fields: {
+    branch: string;
+    accountToken: string;
+  };
+}
+
+interface SelfDeployment extends BasePayloadPart {
+  type: "self";
+}
 export interface ConnectionPayloadProps {
-  targetRevisionBranch?: string;
-  collectorName?: string;
-  namespace?: string;
-  apiKey?: string;
-  exportLocationType?: IntegrationType;
-  exportLocation?: string;
-  argoAccountToken?: string;
-  dataTypes?: string[];
-  deployMethod: "argo" | "self";
+  // Deploy method
+  deployment: ArgoDeployment | SelfDeployment;
+  // Prepare Collector
+  sourceType: "datadog";
+  telemetryTypes?: TelemetryTypes[];
+  connectionName?: string;
+
+  destination: DatadogDestination;
 }
 
 export interface StepDefinition {

@@ -3,6 +3,7 @@ import Paper from "@mui/material/Paper";
 import { useCallback, useMemo } from "react";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/connect";
 import { useOctantConnectStore } from "../store/store";
+import "./FlowContainer.css";
 import { Nav } from "./Nav";
 
 const flowStepKeys = VIEW_ORDER.filter((step) => VIEW_MAP[step].label);
@@ -26,53 +27,21 @@ export function FlowContainer() {
   const activeStepIndex = useMemo(() => {
     return flowStepKeys.indexOf(activeView);
   }, [activeView]);
-  return (
-    <Box
-      sx={{
-        maxWidth: 1200,
-        mx: "auto",
-        px: 3,
-        pb: 8,
-        pt: 2,
-      }}
-    >
-      <Paper
-        elevation={0}
-        sx={{
-          borderRadius: 3,
-          border: "1px solid #CFCFD4",
-          backgroundColor: "background.paper",
-          minHeight: 620,
-          py: 5,
-          px: 3,
-          ...(!label && {
-            height: "100%",
-            display: "flex",
-            justifyContent: "stretch",
-            alignItems: "stretch",
-            p: 0,
-          }),
-        }}
-      >
-        {label ? (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "3fr 9fr",
-              gap: 3,
-            }}
-          >
-            <Nav
-              activeStepIndex={activeStepIndex}
-              steps={flowSteps}
-              onStepClick={setActiveView}
-            />
 
-            <Component viewKey={activeView} onClickProgress={onClickProgress} />
-          </Box>
-        ) : (
-          <Component viewKey={activeView} onClickProgress={onClickProgress} />
+  return (
+    <Box className="flow-container-box">
+      <Paper
+        className={`flow-container-paper${!label ? " splash" : ""}`}
+        elevation={0}
+      >
+        {label && (
+          <Nav
+            activeStepIndex={activeStepIndex}
+            steps={flowSteps}
+            onStepClick={setActiveView}
+          />
         )}
+        <Component viewKey={activeView} onClickProgress={onClickProgress} />
       </Paper>
     </Box>
   );

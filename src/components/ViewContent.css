@@ -1,0 +1,16 @@
+.view-content-container.MuiStack-root {
+  flex: 3 3 75%;
+}
+
+.view-content-main-column.MuiStack-root {
+  width: 466px;
+}
+
+.view-content-main-column.MuiStack-root button {
+  align-self: flex-start;
+  text-transform: none;
+}
+
+.view-content-sidebar-column.MuiStack-root {
+  flex: 1 0 auto;
+}

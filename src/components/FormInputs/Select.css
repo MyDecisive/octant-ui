@@ -1,0 +1,5 @@
+.select-custom-caret.MuiSvgIcon-root {
+  position: absolute;
+  top: calc(50% - 0.5em);
+  right: var(--mdai-spacing-unit);
+}

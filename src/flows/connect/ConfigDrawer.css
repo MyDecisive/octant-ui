@@ -1,0 +1,7 @@
+.config-drawer-container.MuiStack-root {
+  padding: calc(var(--mdai-spacing-unit) * 3)
+    calc(var(--mdai-spacing-unit) * 4.5);
+  width: 100%;
+  border-radius: calc(var(--mdai-spacing-unit) * 2);
+  background-color: #454545;
+}
