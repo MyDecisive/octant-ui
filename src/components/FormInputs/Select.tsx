@@ -3,6 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import MuiSelect, { type SelectChangeEvent } from "@mui/material/Select";
+import "./Select.css";
 
 interface SelectOption {
   label?: string;
@@ -17,7 +18,9 @@ interface SelectProps {
   onChange: (event: SelectChangeEvent) => void;
 }
 
-const TypeSafeIconComponent = () => <KeyboardArrowDown />;
+const TypeSafeIconComponent = () => (
+  <KeyboardArrowDown className="select-custom-caret" />
+);
 
 export function Select({
   disabled,
@@ -30,6 +33,7 @@ export function Select({
     <FormControl>
       {label && <InputLabel id={"select-label-id"}>{label}</InputLabel>}
       <MuiSelect
+        id="select-menu"
         labelId="select-label-id"
         value={value}
         label={label}
