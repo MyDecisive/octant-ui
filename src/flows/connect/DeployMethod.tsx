@@ -3,7 +3,6 @@ import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { Input } from "../../components/FormInputs/Input";
 import { RadioButtonsGroup } from "../../components/FormInputs/RadioButtonsGroup";
-import { InfoTooltip } from "../../components/InfoTooltip";
 import { ViewContent } from "../../components/ViewContent";
 import { useOctantConnectStore } from "../../store/store";
 
@@ -83,10 +82,7 @@ export function DeployMethod({
                   required
                   placeholder="Target branch"
                   tooltip={
-                    <InfoTooltip
-                      filled
-                      text="Target branch is where these changes will live in your version control platform. Please make sure this branch changes as your promote this change through your SDLC environments."
-                    />
+                    "Target branch is where these changes will live in your version control platform. Please make sure this branch changes as your promote this change through your SDLC environments."
                   }
                 />
                 <Input

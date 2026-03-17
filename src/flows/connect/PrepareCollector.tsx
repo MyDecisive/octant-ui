@@ -4,7 +4,6 @@ import { useShallow } from "zustand/shallow";
 import CheckboxGroup from "../../components/FormInputs/CheckboxGroup";
 import { Input } from "../../components/FormInputs/Input";
 import { Select } from "../../components/FormInputs/Select";
-import { InfoTooltip } from "../../components/InfoTooltip";
 import { ViewContent } from "../../components/ViewContent";
 import { useOctantConnectStore } from "../../store/store";
 import type { TelemetryTypes } from "../../types";
@@ -105,9 +104,7 @@ export function PrepareCollector({
             onChange={(e) => setFormField("url", e.target.value)}
             required
             placeholder="Destination URL"
-            tooltip={
-              <InfoTooltip text="Log into your Datadog account to acquire the API key" />
-            }
+            tooltip={"Log into your Datadog account to acquire the API key"}
           />
           <Input
             value={apiKey}
