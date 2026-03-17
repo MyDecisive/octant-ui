@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { useOctantConnectStore } from "../../store/store";
@@ -66,7 +66,7 @@ export function DeployMethod({
       }
       formContent={
         <>
-          <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
+          <Stack gap={1}>
             <RadioButtonsGroup
               values={deployMethodOptions}
               selected={deployMethod}
@@ -91,7 +91,7 @@ export function DeployMethod({
                 />
               </>
             )}
-          </Box>
+          </Stack>
         </>
       }
       onButtonClick={onClickProgress}

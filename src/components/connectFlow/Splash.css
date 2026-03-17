@@ -1,0 +1,33 @@
+.connect-splash-container.MuiBox-root {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.connect-splash-left-bar.MuiBox-root {
+  border-top-left-radius: calc(var(--mdai-spacing-unit) * 1.5);
+  border-bottom-left-radius: calc(var(--mdai-spacing-unit) * 1.5);
+  background-color: #d9d9d9;
+  width: 465px;
+  height: 100%;
+  display: none;
+}
+
+.connect-splash-content.MuiStack-root {
+  padding: calc(var(--mdai-spacing-unit) * 12)
+    calc(var(--mdai-spacing-unit) * 8);
+}
+
+.connect-splash-button.MuiButton-root {
+  align-self: flex-start;
+  margin-top: auto;
+  text-transform: none;
+}
+
+@media screen and (min-width: 800px) {
+  .connect-splash-left-bar.MuiBox-root {
+    display: block;
+  }
+}

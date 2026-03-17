@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { ReactNode } from "react";
 
@@ -9,17 +9,9 @@ interface ViewTitleProps {
 
 export function ViewTitle({ title, description }: ViewTitleProps) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 1,
-        alignItems: "flex-start",
-        alignSelf: "stretch",
-      }}
-    >
+    <Stack gap={1} alignItems={"flex-start"} alignSelf={"stretch"}>
       <Typography variant="h5">{title}</Typography>
       {description && <Typography variant="body2">{description}</Typography>}
-    </Box>
+    </Stack>
   );
 }

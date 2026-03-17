@@ -1,7 +1,9 @@
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import type { JSX, ReactNode } from "react";
 import { ViewTitle } from "./ViewTitle";
+
+import "./ViewContent.css";
 
 interface ViewContentProps {
   buttonText?: string;
@@ -23,8 +25,8 @@ export function ViewContent({
   sidebarContent,
 }: ViewContentProps) {
   return (
-    <Box sx={{ display: "grid", gridTemplateColumns: "466px auto", gap: 3 }}>
-      <Box sx={{ display: "flex", gap: 3, flexDirection: "column" }}>
+    <Stack gap={3} className="view-content-container" direction={"row"}>
+      <Stack gap={3} className="view-content-main-column">
         <ViewTitle title={title} description={description} />
         {formContent}
         <Button
@@ -32,17 +34,16 @@ export function ViewContent({
           size="small"
           type={"button"}
           onClick={onButtonClick}
-          sx={{ alignSelf: "flex-start", textTransform: "none" }}
           disabled={buttonDisabled}
         >
           {buttonText}
         </Button>
-      </Box>
+      </Stack>
       {sidebarContent && (
-        <Box sx={{ display: "flex", gap: 3, flexDirection: "column" }}>
+        <Stack className="view-content-sidebar-column" gap={3}>
           {sidebarContent}
-        </Box>
+        </Stack>
       )}
-    </Box>
+    </Stack>
   );
 }
