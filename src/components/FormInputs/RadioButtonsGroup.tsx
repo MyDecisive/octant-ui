@@ -14,7 +14,7 @@ interface RowRadioButtonsGroupProps {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function RadioButtonsGroup({
+export function RadioButtonsGroup({
   label,
   values,
   selected,
