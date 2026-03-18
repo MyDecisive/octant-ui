@@ -1,6 +1,8 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import type { ButtonProps } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
   DataGrid,
@@ -8,7 +10,6 @@ import {
   type GridRenderCellParams,
 } from "@mui/x-data-grid";
 import { useCallback, useState } from "react";
-import { AsyncButton } from "../../components/AsyncButton";
 import { ViewContent } from "../../components/ViewContent";
 import type { BaseFlowViewProps } from "../../types";
 
@@ -101,6 +102,35 @@ const columns: GridColDef<DataFidelityStatus>[] = [
   },
 ];
 
+function determineButtonProps(
+  loading: boolean,
+  hasTested: boolean,
+): {
+  text: string;
+  variant: ButtonProps["variant"];
+  color?: ButtonProps["color"];
+} {
+  if (loading) {
+    return {
+      text: "Connecting...",
+      variant: "secondary",
+    };
+  }
+
+  if (hasTested) {
+    return {
+      text: "Done",
+      variant: "contained",
+      color: "success",
+    };
+  }
+
+  return {
+    text: "Test and validate data",
+    variant: "secondary",
+  };
+}
+
 async function fakeTestDataFidelity() {
   return await new Promise((resolve) => setTimeout(resolve, 30000));
 }
@@ -111,7 +141,7 @@ function generateFidelityValue() {
 
 export function DataFidelity({ onClickProgress }: BaseFlowViewProps) {
   const [rows, setRows] = useState<DataFidelityStatus[]>(initialRows);
-  const [loading, setLoading] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [hasTestedAtLeastOnce, setHasTested] = useState(false);
 
   const handleTestButtonClick = useCallback(() => {
@@ -141,6 +171,11 @@ export function DataFidelity({ onClickProgress }: BaseFlowViewProps) {
       });
   }, []);
 
+  const { text, variant, color } = determineButtonProps(
+    loading,
+    hasTestedAtLeastOnce,
+  );
+
   return (
     <ViewContent
       title="Test Smarthub's connection and data fidelity"
@@ -164,13 +199,15 @@ export function DataFidelity({ onClickProgress }: BaseFlowViewProps) {
               columns={columns}
             />
           </Box>
-          <AsyncButton
+          <Button
             onClick={handleTestButtonClick}
             loading={loading}
-            disabled={!!loading}
+            disabled={loading}
+            variant={variant}
+            color={color}
           >
-            {loading ? "Connecting..." : "Test and validate data"}
-          </AsyncButton>
+            {text}
+          </Button>
         </>
       }
       buttonDisabled={!hasTestedAtLeastOnce}
