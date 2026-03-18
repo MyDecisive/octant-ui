@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 import { useId, useState } from "react";
 import "./ExpandedConfig.css";
 
-export default function ExpandConfig({
+export function ExpandConfig({
   title,
   content,
 }: {

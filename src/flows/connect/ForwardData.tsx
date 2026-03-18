@@ -1,7 +1,5 @@
 import { Typography } from "@mui/material";
-import Stack from "@mui/material/Stack";
 import CodeSnippet from "../../components/CodeSnippet";
-import InfoAlert from "../../components/InfoAlert";
 import { ViewContent } from "../../components/ViewContent";
 
 export function ForwardData({
@@ -19,7 +17,7 @@ export function ForwardData({
         </>
       }
       formContent={
-        <Stack gap={3}>
+        <>
           <CodeSnippet
             code={
               "COPY THE MYDECISIVE LOCATION: URL\n" +
@@ -33,17 +31,9 @@ export function ForwardData({
             When your Datadog agent is ready with the updated configuration
             changes to continue deployment.
           </Typography>
-        </Stack>
+        </>
       }
       onButtonClick={onClickProgress}
-      sidebarContent={
-        <InfoAlert
-          title={"Update URL in Datadog"}
-          message={
-            "Now that you’ve provided a name for the collector and namespace, you’ll need to go to your Datadog agent to update the URL."
-          }
-        />
-      }
     />
   );
 }
