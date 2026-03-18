@@ -7,6 +7,9 @@
   width: 466px;
   min-width: 0;
 }
+.view-content-main-column.wide.MuiStack-root {
+  width: 661px;
+}
 
 .view-content-main-column.MuiStack-root button {
   align-self: flex-start;

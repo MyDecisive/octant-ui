@@ -13,6 +13,7 @@ interface ViewContentProps {
   sidebarContent?: JSX.Element;
   title: string;
   description?: ReactNode;
+  wideMainColumn?: boolean;
 }
 
 export function ViewContent({
@@ -23,10 +24,14 @@ export function ViewContent({
   title,
   description,
   sidebarContent,
+  wideMainColumn,
 }: ViewContentProps) {
   return (
     <Stack gap={3} className="view-content-container" direction={"row"}>
-      <Stack gap={3} className="view-content-main-column">
+      <Stack
+        gap={3}
+        className={`view-content-main-column${wideMainColumn ? " wide" : ""}`}
+      >
         <ViewTitle title={title} description={description} />
         {mainContent}
         <Button
