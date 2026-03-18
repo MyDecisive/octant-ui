@@ -9,7 +9,7 @@ interface ViewContentProps {
   buttonText?: string;
   onButtonClick: () => void;
   buttonDisabled?: boolean;
-  formContent: JSX.Element;
+  mainContent: JSX.Element;
   sidebarContent?: JSX.Element;
   title: string;
   description?: ReactNode;
@@ -19,7 +19,7 @@ export function ViewContent({
   buttonText = "Next",
   onButtonClick,
   buttonDisabled,
-  formContent,
+  mainContent,
   title,
   description,
   sidebarContent,
@@ -28,7 +28,7 @@ export function ViewContent({
     <Stack gap={3} className="view-content-container" direction={"row"}>
       <Stack gap={3} className="view-content-main-column">
         <ViewTitle title={title} description={description} />
-        {formContent}
+        {mainContent}
         <Button
           variant="contained"
           size="small"

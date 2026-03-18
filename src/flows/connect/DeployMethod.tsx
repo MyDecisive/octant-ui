@@ -64,7 +64,7 @@ export function DeployMethod({
           production environment).
         </>
       }
-      formContent={
+      mainContent={
         <>
           <Stack gap={1}>
             <RadioButtonsGroup
