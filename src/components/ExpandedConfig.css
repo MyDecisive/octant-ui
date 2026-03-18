@@ -1,0 +1,15 @@
+.expanded-config-container .MuiAccordionSummary-root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  background-color: #454545;
+  color: var(--mdai-light-grey);
+}
+
+.expanded-config-container .MuiAccordionDetails-root {
+  background-color: #454545;
+}
+
+.expanded-config-summary .MuiAccordionSummary-expandIconWrapper {
+  color: var(--mdai-light-grey);
+}

@@ -1,9 +1,11 @@
 .view-content-container.MuiStack-root {
   flex: 3 3 75%;
+  min-width: 0;
 }
 
 .view-content-main-column.MuiStack-root {
   width: 466px;
+  min-width: 0;
 }
 
 .view-content-main-column.MuiStack-root button {
@@ -12,5 +14,7 @@
 }
 
 .view-content-sidebar-column.MuiStack-root {
-  flex: 1 0 auto;
+  flex: 1 1 320px;
+  min-width: 0;
+  max-width: 420px;
 }
