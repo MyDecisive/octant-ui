@@ -132,7 +132,7 @@ function determineButtonProps(
 }
 
 async function fakeTestDataFidelity() {
-  return await new Promise((resolve) => setTimeout(resolve, 30000));
+  return await new Promise((resolve) => setTimeout(resolve, 1500));
 }
 
 function generateFidelityValue() {
