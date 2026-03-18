@@ -1,6 +1,6 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { useState } from "react";
 import "./CodeSnippet.css";
