@@ -41,8 +41,8 @@ export const VIEW_ORDER: ViewOrder = [
   "splash",
   "deployMethod",
   "prepareCollector",
+  "executeDeploy",
   "forwardData",
   "dataFidelity",
   "nextSteps",
-  "executeDeploy",
 ];
