@@ -20,7 +20,7 @@ type TabValues = "argo" | "solo";
 const tabs = [
   {
     label: "Auto deploy",
-    value: "argo",
+    value: "argocd",
   },
   {
     label: "Manual deploy",
@@ -62,7 +62,7 @@ async function fakeTestDataFidelity() {
 }
 
 export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
-  const [activeTab, setActiveTab] = useState<TabValues>("argo");
+  const [activeTab, setActiveTab] = useState<TabValues>("argocd");
   const [loading, setLoading] = useState(false);
   const [hasDeployed, setHasDeployed] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
@@ -108,7 +108,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
               />
             ))}
           </Tabs>
-          <TabPanel activeValue={activeTab} value="argo">
+          <TabPanel activeValue={activeTab} value="argocd">
             <Stack gap={0.5}>
               <Stack
                 gap={0.5}

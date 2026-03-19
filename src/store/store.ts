@@ -1,8 +1,8 @@
 import type { TelemetryTypes, ViewKey } from "@types";
 import { create } from "zustand";
 
-interface AppStateForm {
-  deployMethod: "argo";
+export interface AppStateForm {
+  deployMethod: "argocd" | "self";
   branch?: string;
   accountToken?: string;
   telemetryTypes: TelemetryTypes[];
@@ -28,7 +28,7 @@ type OctantConnectStore = Values & Actions;
 
 function createDefaultOctantConnectForm(): AppStateForm {
   return {
-    deployMethod: "argo",
+    deployMethod: "argocd",
     telemetryTypes: [],
   };
 }

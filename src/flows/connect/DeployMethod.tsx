@@ -8,7 +8,7 @@ import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 
 const deployMethodOptions = [
-  { label: "Yes, deploy on my behalf", value: "argo" },
+  { label: "Yes, deploy on my behalf", value: "argocd" },
   { label: "No, I will deploy on my own", value: "self" },
 ];
 
@@ -29,7 +29,7 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const handleSetDeployMethod = useCallback(
-    (method: "argo" | "self") => {
+    (method: "argocd" | "self") => {
       setFormField("deployMethod", method);
       if (method === "self") {
         setFormField("accountToken", undefined);
@@ -40,7 +40,7 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   );
 
   const canClickNextButton = useMemo(() => {
-    if (deployMethod === "argo") {
+    if (deployMethod === "argocd") {
       return !!(branch.length && accountToken.length);
     }
 
@@ -68,10 +68,10 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
               values={deployMethodOptions}
               selected={deployMethod}
               onChange={(event) =>
-                handleSetDeployMethod(event.target.value as "argo" | "self")
+                handleSetDeployMethod(event.target.value as "argocd" | "self")
               }
             />
-            {deployMethod === "argo" && (
+            {deployMethod === "argocd" && (
               <>
                 <Input
                   value={branch}
