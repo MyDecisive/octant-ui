@@ -12,15 +12,7 @@ interface BasePayloadPart {
   fields?: Record<string, string>;
 }
 
-interface DatadogDestination extends BasePayloadPart {
-  type: "datadog";
-  fields: {
-    url: string;
-    apiKey: string;
-  };
-}
-
-interface ArgoDeployment extends BasePayloadPart {
+export interface ArgoDeployment extends BasePayloadPart {
   type: "argocd";
   fields: {
     branch: string;
@@ -28,18 +20,15 @@ interface ArgoDeployment extends BasePayloadPart {
   };
 }
 
-interface SelfDeployment extends BasePayloadPart {
+export interface SelfDeployment extends BasePayloadPart {
   type: "self";
 }
-export interface ConnectionPayloadProps {
+export interface ConnectionPayload {
   // Deploy method
   deployment: ArgoDeployment | SelfDeployment;
   // Prepare Collector
   sourceType: "datadog";
   telemetryTypes?: TelemetryTypes[];
-  connectionName?: string;
-
-  destination: DatadogDestination;
 }
 
 export type ViewMap = Record<

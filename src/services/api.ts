@@ -1,4 +1,4 @@
-import type { IntegrationType } from "@types";
+import type { ConnectionPayload, IntegrationType } from "@types";
 import { apiFetch } from "@utils/apiFetch";
 
 interface Integration {
@@ -18,32 +18,6 @@ type IntegrationBody = DatadogIntegrationBody | OtlpIntegrationBody;
 
 interface Connection {
   name: string;
-}
-
-interface ConnectionReceiver {
-  type: IntegrationType;
-  dataTypes: string[];
-}
-
-interface ConnectionExportIntegration {
-  type: IntegrationType;
-  name: string;
-}
-
-interface ConnectionExport {
-  type: IntegrationType;
-  integrations: ConnectionExportIntegration[];
-}
-
-interface ConnectionDeployment {
-  type: string;
-  data: Record<string, string>;
-}
-
-interface ConnectionBody {
-  receives: ConnectionReceiver[];
-  exports: ConnectionExport[];
-  deployment: ConnectionDeployment;
 }
 
 const devDelay = <T>(value: T, ms = 800): Promise<T> =>
@@ -90,7 +64,7 @@ export const connections = {
     return apiFetch.get("/connections");
   },
 
-  upsert: (name: string, body: ConnectionBody): Promise<void> => {
+  upsert: (name: string, body: ConnectionPayload): Promise<void> => {
     if (import.meta.env.DEV) return devDelay<void>(undefined);
     return apiFetch.put(`/connections/${name}`, { body });
   },

@@ -13,9 +13,12 @@ import Typography from "@mui/material/Typography";
 import type { BaseFlowViewProps } from "@types";
 import { useState } from "react";
 
+// import { useOctantConnectStore } from "@store";
+// import { appStateFormToConnectionPayload } from "@utils/appStateFormToConnectionPayload";
+// import { connections } from "../../services/api";
 import "./ExecuteDeploy.css";
 
-type TabValues = "argo" | "solo";
+type TabValues = "argocd" | "solo";
 
 const tabs = [
   {
@@ -66,6 +69,10 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
   const [loading, setLoading] = useState(false);
   const [hasDeployed, setHasDeployed] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
+  // const { connectionName, payload } = useOctantConnectStore((state) => ({
+  //   connectionName: state.form.connectionName,
+  //   payload: appStateFormToConnectionPayload(state.form),
+  // }));
 
   const handleTabChange = (_e: React.SyntheticEvent, tab: TabValues) => {
     setActiveTab(tab);
@@ -73,6 +80,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
 
   const handleDeployButtonClick = () => {
     setLoading(true);
+    // void connections.upsert(connectionName!, payload).then(() => {
     void fakeTestDataFidelity().then(() => {
       setLoading(false);
       setHasDeployed(true);
