@@ -7,7 +7,7 @@ import "./ViewContent.css";
 
 interface ViewContentProps {
   buttonText?: string;
-  onButtonClick: () => void;
+  onButtonClick?: () => void;
   buttonDisabled?: boolean;
   mainContent: JSX.Element;
   sidebarContent?: JSX.Element;
@@ -33,16 +33,19 @@ export function ViewContent({
         className={`view-content-main-column${wideMainColumn ? " wide" : ""}`}
       >
         <ViewTitle title={title} description={description} />
+
         {mainContent}
-        <Button
-          variant="contained"
-          size="small"
-          type={"button"}
-          onClick={onButtonClick}
-          disabled={buttonDisabled}
-        >
-          {buttonText}
-        </Button>
+        {onButtonClick && (
+          <Button
+            variant="contained"
+            size="small"
+            type={"button"}
+            onClick={onButtonClick}
+            disabled={buttonDisabled}
+          >
+            {buttonText}
+          </Button>
+        )}
       </Stack>
       {sidebarContent && (
         <Stack className="view-content-sidebar-column" gap={3}>

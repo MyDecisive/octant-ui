@@ -2,6 +2,7 @@ import type { ViewMap, ViewOrder } from "../types";
 import { DataFidelity } from "./connect/DataFidelity";
 import { DeployMethod } from "./connect/DeployMethod";
 import { ForwardData } from "./connect/ForwardData";
+import { NextSteps } from "./connect/NextSteps";
 import { PrepareCollector } from "./connect/PrepareCollector";
 import { Splash } from "./connect/Splash";
 
@@ -25,6 +26,10 @@ export const VIEW_MAP: ViewMap = {
     Component: DataFidelity,
     label: "Verify connection and data",
   },
+  nextSteps: {
+    Component: NextSteps,
+    label: "Next steps",
+  },
 };
 
 export const VIEW_ORDER: ViewOrder = [
@@ -33,4 +38,5 @@ export const VIEW_ORDER: ViewOrder = [
   "prepareCollector",
   "forwardData",
   "dataFidelity",
+  "nextSteps",
 ];
