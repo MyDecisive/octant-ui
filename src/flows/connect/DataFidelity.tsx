@@ -201,6 +201,7 @@ export function DataFidelity({ onClickProgress }: BaseFlowViewProps) {
           </Box>
           <Button
             onClick={handleTestButtonClick}
+            loadingPosition="start"
             loading={loading}
             disabled={loading}
             variant={variant}
