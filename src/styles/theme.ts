@@ -1,4 +1,3 @@
-import { grey } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 import type {} from "@mui/x-data-grid/themeAugmentation";
 
@@ -91,7 +90,7 @@ export const theme = createTheme({
             {
               props: { variant: "secondary" },
               style: {
-                background: grey["300"],
+                background: "#E0E0E0",
                 color: "text.primary",
               },
             },
