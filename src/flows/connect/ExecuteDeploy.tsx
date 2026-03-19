@@ -1,3 +1,4 @@
+import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import DownloadIcon from "@mui/icons-material/Download";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import { type ButtonProps } from "@mui/material";
@@ -6,8 +7,9 @@ import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import CodeSnippet from "../../components/CodeSnippet";
+import { TabPanel } from "../../components/TabPanel";
 import { ViewContent } from "../../components/ViewContent";
 import type { BaseFlowViewProps } from "../../types";
 
@@ -25,28 +27,6 @@ const tabs = [
     value: "solo",
   },
 ];
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  value: string;
-  active: string;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, active, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      id={`simple-tabpanel-${value}`}
-      aria-labelledby={`simple-tab-${value}`}
-      className={`execute-deploy-tab-panel${active === value ? " visible" : ""}`}
-      {...other}
-    >
-      {active === value && <Stack gap={2}>{children}</Stack>}
-    </div>
-  );
-}
 
 function determineDeployButtonProps(
   loading: boolean,
@@ -91,13 +71,13 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
     setActiveTab(tab);
   };
 
-  const handleDeployButtonClick = useCallback(() => {
+  const handleDeployButtonClick = () => {
     setLoading(true);
     void fakeTestDataFidelity().then(() => {
       setLoading(false);
       setHasDeployed(true);
     });
-  }, []);
+  };
 
   const { text, variant, color } = determineDeployButtonProps(
     loading,
@@ -128,7 +108,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
               />
             ))}
           </Tabs>
-          <CustomTabPanel active={activeTab} value="argo">
+          <TabPanel activeValue={activeTab} value="argo">
             <Stack gap={0.5}>
               <Stack
                 gap={0.5}
@@ -150,6 +130,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
             </Stack>
             <Button
               onClick={handleDeployButtonClick}
+              size="small"
               loadingPosition="start"
               loading={loading}
               disabled={loading}
@@ -158,20 +139,29 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
             >
               {text}
             </Button>
-          </CustomTabPanel>
-          <CustomTabPanel active={activeTab} value="solo">
+          </TabPanel>
+          <TabPanel activeValue={activeTab} value="solo">
             <Typography
               variant="body2"
               className="execute-deploy-self-tab-header-description"
             >
               First download your manifest. Then place the app and collector
               files in their respective directories to keep your setup
-              organized. For more help, check
+              organized. For more help, check{" "}
+              <Button
+                variant="text"
+                size="small"
+                endIcon={<ArrowOutwardRoundedIcon />}
+                // TODO: Add href, etc
+              >
+                Argo Docs
+              </Button>
             </Typography>
             <Button
               variant="secondary"
               startIcon={<DownloadIcon />}
               onClick={handleDownloadButtonClick}
+              size="small"
               loading={loading}
               disabled={loading}
               loadingPosition="start"
@@ -184,7 +174,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
               code={"dir. tree of Argo goes here"}
               copyButton={false}
             />
-          </CustomTabPanel>
+          </TabPanel>
         </Stack>
       }
       buttonDisabled={!(hasDeployed || hasDownloaded)}
