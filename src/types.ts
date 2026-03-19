@@ -1,5 +1,9 @@
 import type { JSX } from "react";
 
+export interface BaseFlowViewProps {
+  onClickProgress: () => void;
+}
+
 export interface FormFieldProps {
   id: number;
   formType: string;

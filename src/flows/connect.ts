@@ -1,4 +1,5 @@
 import type { ViewMap, ViewOrder } from "../types";
+import { DataFidelity } from "./connect/DataFidelity";
 import { DeployMethod } from "./connect/DeployMethod";
 import { ForwardData } from "./connect/ForwardData";
 import { PrepareCollector } from "./connect/PrepareCollector";
@@ -20,6 +21,10 @@ export const VIEW_MAP: ViewMap = {
     Component: ForwardData,
     label: "Route Datadog Telemetry to OTel",
   },
+  dataFidelity: {
+    Component: DataFidelity,
+    label: "Verify connection and data",
+  },
 };
 
 export const VIEW_ORDER: ViewOrder = [
@@ -27,4 +32,5 @@ export const VIEW_ORDER: ViewOrder = [
   "deployMethod",
   "prepareCollector",
   "forwardData",
+  "dataFidelity",
 ];

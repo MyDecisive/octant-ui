@@ -9,26 +9,31 @@ interface ViewContentProps {
   buttonText?: string;
   onButtonClick: () => void;
   buttonDisabled?: boolean;
-  formContent: JSX.Element;
+  mainContent: JSX.Element;
   sidebarContent?: JSX.Element;
   title: string;
   description?: ReactNode;
+  wideMainColumn?: boolean;
 }
 
 export function ViewContent({
   buttonText = "Next",
   onButtonClick,
   buttonDisabled,
-  formContent,
+  mainContent,
   title,
   description,
   sidebarContent,
+  wideMainColumn,
 }: ViewContentProps) {
   return (
     <Stack gap={3} className="view-content-container" direction={"row"}>
-      <Stack gap={3} className="view-content-main-column">
+      <Stack
+        gap={3}
+        className={`view-content-main-column${wideMainColumn ? " wide" : ""}`}
+      >
         <ViewTitle title={title} description={description} />
-        {formContent}
+        {mainContent}
         <Button
           variant="contained"
           size="small"

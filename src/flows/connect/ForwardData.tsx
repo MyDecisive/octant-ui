@@ -16,7 +16,7 @@ export function ForwardData({
           project and restart it with the updated manifest changes.
         </>
       }
-      formContent={
+      mainContent={
         <>
           <CodeSnippet
             code={

@@ -70,7 +70,7 @@ export function PrepareCollector({
       description="Tell us how and where you would like to send your data from
               Datadog. Don’t worry, you can always modify this configuration
               later."
-      formContent={
+      mainContent={
         <>
           <Typography variant="h6">Source</Typography>
 
