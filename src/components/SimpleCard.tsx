@@ -41,6 +41,9 @@ export function SimpleCard({
         </Stack>
         {linkText && linkHref && (
           <Button
+            variant="text"
+            target="_blank"
+            rel="noopener noreferrer"
             href={linkHref}
             size="small"
             className="simple-card-link"

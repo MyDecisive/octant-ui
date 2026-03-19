@@ -40,7 +40,6 @@ export function NextSteps() {
           />
         </>
       }
-      showButton={false}
     />
   );
 }

@@ -7,7 +7,6 @@ import "./ViewContent.css";
 
 interface ViewContentProps {
   buttonText?: string;
-  showButton?: boolean;
   onButtonClick?: () => void;
   buttonDisabled?: boolean;
   formContent: JSX.Element;
@@ -18,7 +17,6 @@ interface ViewContentProps {
 
 export function ViewContent({
   buttonText = "Next",
-  showButton = true,
   onButtonClick,
   buttonDisabled,
   formContent,
@@ -31,7 +29,7 @@ export function ViewContent({
       <Stack gap={3} className="view-content-main-column">
         <ViewTitle title={title} description={description} />
         {formContent}
-        {showButton && (
+        {onButtonClick && (
           <Button
             variant="contained"
             size="small"
