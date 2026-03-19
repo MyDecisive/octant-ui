@@ -1,6 +1,8 @@
 /** no focus state for row cells */
 .data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft:focus,
-.data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft:focus-within {
+.data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft:focus-within,
+.data-fidelity-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft:focus,
+.data-fidelity-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft:focus-within {
   outline: none;
 }
 /** no hover state for rows */
@@ -8,9 +10,14 @@
   background-color: #f3f3f6;
 }
 
-/** cell alignment */
+/** consistent cursor */
+.data-fidelity-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft,
 .data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft {
   cursor: default;
+}
+
+/** cell alignment */
+.data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft {
   display: flex;
   align-items: center;
 }

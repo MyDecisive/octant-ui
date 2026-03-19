@@ -205,6 +205,7 @@ export function DataFidelity({ onClickProgress }: BaseFlowViewProps) {
             disabled={loading}
             variant={variant}
             color={color}
+            size="small"
           >
             {text}
           </Button>
