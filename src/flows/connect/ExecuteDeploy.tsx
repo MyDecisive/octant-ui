@@ -15,7 +15,12 @@ import { useState } from "react";
 
 import { useOctantConnectStore } from "@store";
 import { appStateFormToConnectionPayload } from "@utils/appStateFormToConnectionPayload";
-import { connections } from "../../services/api";
+import {
+  connections,
+  integrations,
+  type ArgoCdIntegrationBody,
+  type DatadogIntegrationBody,
+} from "../../services/api";
 import "./ExecuteDeploy.css";
 
 type TabValues = "argocd" | "solo";
@@ -69,19 +74,22 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
   const [loading, setLoading] = useState(false);
   const [hasDeployed, setHasDeployed] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
-  const { connectionName, connectionPayload } = useOctantConnectStore(
-    (state) => ({
-      connectionName: state.form.connectionName,
-      connectionPayload: appStateFormToConnectionPayload(state.form),
-      ddIntegrationPayload: {
-        url: state.form.url,
-        apiKey: state.form.apiKey,
-      },
-      argoIntegrationPayload: {
-        accountToken: state.form.accountToken,
-      },
-    }),
-  );
+  const {
+    connectionName,
+    connectionPayload,
+    ddIntegrationPayload,
+    argoIntegrationPayload,
+  } = useOctantConnectStore((state) => ({
+    connectionName: state.form.connectionName,
+    connectionPayload: appStateFormToConnectionPayload(state.form),
+    ddIntegrationPayload: {
+      url: state.form.url,
+      apiKey: state.form.apiKey,
+    },
+    argoIntegrationPayload: {
+      accountToken: state.form.accountToken,
+    },
+  }));
 
   const handleTabChange = (_e: React.SyntheticEvent, tab: TabValues) => {
     setActiveTab(tab);
@@ -89,7 +97,19 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
 
   const handleDeployButtonClick = () => {
     setLoading(true);
-    void connections.upsert(connectionName!, connectionPayload).then(() => {
+    void Promise.all([
+      connections.upsert(connectionName!, connectionPayload),
+      integrations.upsert(
+        "datadog",
+        connectionName!,
+        ddIntegrationPayload as DatadogIntegrationBody,
+      ),
+      integrations.upsert(
+        "argocd",
+        connectionName!,
+        argoIntegrationPayload as ArgoCdIntegrationBody,
+      ),
+    ]).then(() => {
       // void fakeTestDataFidelity().then(() => {
       setLoading(false);
       setHasDeployed(true);

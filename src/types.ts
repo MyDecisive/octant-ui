@@ -4,7 +4,7 @@ export interface BaseFlowViewProps {
   onClickProgress: () => void;
 }
 
-export type IntegrationType = "datadog" | "otlphttp" | "otlpgrpc";
+export type IntegrationType = "datadog" | "argocd";
 export type TelemetryTypes = "logs" | "metrics" | "traces";
 
 interface BasePayloadPart {

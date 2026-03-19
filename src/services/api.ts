@@ -5,16 +5,16 @@ interface Integration {
   name: string;
 }
 
-interface DatadogIntegrationBody {
+export interface DatadogIntegrationBody {
   apiKey: string;
-  ddUrl: string;
-}
-
-interface OtlpIntegrationBody {
   url: string;
 }
 
-type IntegrationBody = DatadogIntegrationBody | OtlpIntegrationBody;
+export interface ArgoCdIntegrationBody {
+  accountToken: string;
+}
+
+type IntegrationBody = DatadogIntegrationBody | ArgoCdIntegrationBody;
 
 interface Connection {
   name: string;
