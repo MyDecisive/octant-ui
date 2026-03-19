@@ -1,6 +1,7 @@
 import type { ViewMap, ViewOrder } from "../types";
 import { DataFidelity } from "./connect/DataFidelity";
 import { DeployMethod } from "./connect/DeployMethod";
+import { ExecuteDeploy } from "./connect/ExecuteDeploy";
 import { ForwardData } from "./connect/ForwardData";
 import { NextSteps } from "./connect/NextSteps";
 import { PrepareCollector } from "./connect/PrepareCollector";
@@ -30,6 +31,10 @@ export const VIEW_MAP: ViewMap = {
     Component: NextSteps,
     label: "Next steps",
   },
+  executeDeploy: {
+    Component: ExecuteDeploy,
+    label: "Select deployment method",
+  },
 };
 
 export const VIEW_ORDER: ViewOrder = [
@@ -39,4 +44,5 @@ export const VIEW_ORDER: ViewOrder = [
   "forwardData",
   "dataFidelity",
   "nextSteps",
+  "executeDeploy",
 ];

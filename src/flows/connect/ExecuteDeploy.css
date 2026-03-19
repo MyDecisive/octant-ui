@@ -1,0 +1,19 @@
+.execute-deploy-argo-tab-header-title-container.MuiStack-root {
+  flex-direction: row;
+  align-items: center;
+  height: calc(var(--mdai-spacing-unit) * 5);
+}
+
+.execute-deploy-self-tab-header-description.MuiTypography-root {
+  color: #616161;
+}
+.execute-deploy-argo-tab-header-description.MuiTypography-root {
+  color: #663c00;
+}
+
+div.execute-deploy-tab-panel {
+  display: none;
+}
+div.execute-deploy-tab-panel.visible {
+  display: block;
+}
