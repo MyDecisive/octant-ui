@@ -1,4 +1,12 @@
+import { grey } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
+import type {} from "@mui/x-data-grid/themeAugmentation";
+
+declare module "@mui/material/Button" {
+  interface ButtonPropsVariantOverrides {
+    secondary: true;
+  }
+}
 
 export const theme = createTheme({
   palette: {
@@ -16,7 +24,7 @@ export const theme = createTheme({
       contrastText: "#FFFFFF",
     },
     error: {
-      main: "#F44336",
+      main: "#D32F2F",
       contrastText: "#FFFFFF",
     },
     warning: {
@@ -29,8 +37,8 @@ export const theme = createTheme({
       contrastText: "rgba(0, 0, 0, 0.87)",
     },
     success: {
-      main: "#66BB6A",
-      contrastText: "rgba(0, 0, 0, 0.87)",
+      main: "#2E7D32",
+      contrastText: "#FFFFFF",
     },
     text: {
       primary: "#1D1D21",
@@ -41,6 +49,11 @@ export const theme = createTheme({
       paper: "#F3F3F6",
     },
     divider: "#D0D0D6",
+    DataGrid: {
+      bg: "#F3F3F6",
+      pinnedBg: "#F3F3F6",
+      headerBg: "#F3F3F6",
+    },
   },
   typography: {
     fontFamily: '"Geist", sans-serif',
@@ -74,6 +87,15 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: "none",
+          variants: [
+            {
+              props: { variant: "secondary" },
+              style: {
+                background: grey["300"],
+                color: "text.primary",
+              },
+            },
+          ],
         },
       },
     },

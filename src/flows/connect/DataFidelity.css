@@ -1,0 +1,38 @@
+/** no focus state for row cells */
+.data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft:focus,
+.data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft:focus-within,
+.data-fidelity-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft:focus,
+.data-fidelity-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft:focus-within {
+  outline: none;
+}
+/** no hover state for rows */
+.data-fidelity-table.MuiDataGrid-root .MuiDataGrid-row:hover {
+  background-color: #f3f3f6;
+}
+
+/** consistent cursor */
+.data-fidelity-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft,
+.data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft {
+  cursor: default;
+}
+
+/** cell alignment */
+.data-fidelity-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft {
+  display: flex;
+  align-items: center;
+}
+
+/** border styles */
+.data-fidelity-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft
+  .MuiDataGrid-columnSeparator {
+  color: #f3f3f6;
+}
+
+.data-fidelity-table.MuiDataGrid-root.MuiDataGrid-withBorderColor {
+  --DataGrid-rowBorderColor: #d0d0d6;
+  border-color: #f3f3f6;
+}
+
+.data-fidelity-table.MuiDataGrid-root .MuiDataGrid-row {
+  border-bottom: 1px solid #d0d0d6;
+}
