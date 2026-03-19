@@ -1,5 +1,5 @@
 import Stack from "@mui/material/Stack";
-import CodeSnippet from "../../components/CodeSnippet";
+import { CodeSnippet } from "../../components/CodeSnippet";
 import { ExpandConfig } from "../../components/ExpandConfig";
 import "./ConfigDrawer.css";
 

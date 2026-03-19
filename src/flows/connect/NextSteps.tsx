@@ -1,4 +1,4 @@
-import CodeSnippet from "../../components/CodeSnippet";
+import { CodeSnippet } from "../../components/CodeSnippet";
 import { SimpleCard } from "../../components/SimpleCard";
 import { ViewContent } from "../../components/ViewContent";
 

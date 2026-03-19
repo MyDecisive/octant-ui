@@ -12,7 +12,7 @@ interface CheckBoxGroupProps {
   label?: string;
 }
 
-export default function CheckboxGroup({
+export function CheckboxGroup({
   options,
   selected,
   onChange,

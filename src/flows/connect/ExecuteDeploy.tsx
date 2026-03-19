@@ -8,7 +8,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import CodeSnippet from "../../components/CodeSnippet";
+import { CodeSnippet } from "../../components/CodeSnippet";
 import { TabPanel } from "../../components/TabPanel";
 import { ViewContent } from "../../components/ViewContent";
 import type { BaseFlowViewProps } from "../../types";

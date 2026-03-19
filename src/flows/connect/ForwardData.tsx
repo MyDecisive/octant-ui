@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import CodeSnippet from "../../components/CodeSnippet";
+import { CodeSnippet } from "../../components/CodeSnippet";
 import { ViewContent } from "../../components/ViewContent";
 import type { BaseFlowViewProps } from "../../types";
 
