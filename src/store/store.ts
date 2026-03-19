@@ -1,5 +1,5 @@
+import type { TelemetryTypes, ViewKey } from "@types";
 import { create } from "zustand";
-import type { TelemetryTypes, ViewKey } from "../types";
 
 interface AppStateForm {
   deployMethod: "argo";

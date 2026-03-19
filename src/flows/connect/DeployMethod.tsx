@@ -1,11 +1,11 @@
+import { Input } from "@components/FormInputs/Input";
+import { RadioButtonsGroup } from "@components/FormInputs/RadioButtonsGroup";
+import { ViewContent } from "@components/ViewContent";
 import Stack from "@mui/material/Stack";
+import { useOctantConnectStore } from "@store";
+import type { BaseFlowViewProps } from "@types";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { Input } from "../../components/FormInputs/Input";
-import { RadioButtonsGroup } from "../../components/FormInputs/RadioButtonsGroup";
-import { ViewContent } from "../../components/ViewContent";
-import { useOctantConnectStore } from "../../store/store";
-import type { BaseFlowViewProps } from "../../types";
 
 const deployMethodOptions = [
   { label: "Yes, deploy on my behalf", value: "argo" },

@@ -1,3 +1,4 @@
+import { ViewContent } from "@components/ViewContent";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import type { ButtonProps } from "@mui/material";
@@ -9,9 +10,8 @@ import {
   type GridColDef,
   type GridRenderCellParams,
 } from "@mui/x-data-grid";
+import type { BaseFlowViewProps } from "@types";
 import { useCallback, useState } from "react";
-import { ViewContent } from "../../components/ViewContent";
-import type { BaseFlowViewProps } from "../../types";
 
 import "./DataFidelity.css";
 

@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import { useOctantConnectStore } from "@store";
 import { useCallback } from "react";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/connect";
-import { useOctantConnectStore } from "../store/store";
 import "./FlowContainer.css";
 import { Nav } from "./Nav";
 

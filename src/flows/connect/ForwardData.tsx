@@ -1,7 +1,7 @@
+import { CodeSnippet } from "@components/CodeSnippet";
+import { ViewContent } from "@components/ViewContent";
 import { Typography } from "@mui/material";
-import { CodeSnippet } from "../../components/CodeSnippet";
-import { ViewContent } from "../../components/ViewContent";
-import type { BaseFlowViewProps } from "../../types";
+import type { BaseFlowViewProps } from "@types";
 
 export function ForwardData({ onClickProgress }: BaseFlowViewProps) {
   return (

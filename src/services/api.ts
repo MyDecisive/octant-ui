@@ -1,5 +1,5 @@
-import type { IntegrationType } from "../types";
-import { apiFetch } from "../utils/apiFetch";
+import type { IntegrationType } from "@types";
+import { apiFetch } from "@utils/apiFetch";
 
 interface Integration {
   name: string;

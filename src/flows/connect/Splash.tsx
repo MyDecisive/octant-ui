@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import type { BaseFlowViewProps } from "../../types";
+import type { BaseFlowViewProps } from "@types";
 import "./Splash.css";
 
 export function Splash({ onClickProgress }: BaseFlowViewProps) {

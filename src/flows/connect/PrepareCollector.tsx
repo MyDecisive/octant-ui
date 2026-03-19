@@ -1,12 +1,12 @@
+import { CheckboxGroup } from "@components/FormInputs/CheckboxGroup";
+import { Input } from "@components/FormInputs/Input";
+import { Select } from "@components/FormInputs/Select";
+import { ViewContent } from "@components/ViewContent";
 import Typography from "@mui/material/Typography";
+import { useOctantConnectStore } from "@store";
+import type { BaseFlowViewProps, TelemetryTypes } from "@types";
 import { useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { CheckboxGroup } from "../../components/FormInputs/CheckboxGroup";
-import { Input } from "../../components/FormInputs/Input";
-import { Select } from "../../components/FormInputs/Select";
-import { ViewContent } from "../../components/ViewContent";
-import { useOctantConnectStore } from "../../store/store";
-import type { BaseFlowViewProps, TelemetryTypes } from "../../types";
 import { ConfigDrawer } from "./ConfigDrawer";
 
 const dataSourceOptions: {

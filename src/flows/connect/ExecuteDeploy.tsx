@@ -1,3 +1,6 @@
+import { CodeSnippet } from "@components/CodeSnippet";
+import { TabPanel } from "@components/TabPanel";
+import { ViewContent } from "@components/ViewContent";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import DownloadIcon from "@mui/icons-material/Download";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
@@ -7,11 +10,8 @@ import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
+import type { BaseFlowViewProps } from "@types";
 import { useState } from "react";
-import { CodeSnippet } from "../../components/CodeSnippet";
-import { TabPanel } from "../../components/TabPanel";
-import { ViewContent } from "../../components/ViewContent";
-import type { BaseFlowViewProps } from "../../types";
 
 import "./ExecuteDeploy.css";
 

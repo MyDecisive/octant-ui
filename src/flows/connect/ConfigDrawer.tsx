@@ -1,6 +1,6 @@
+import { CodeSnippet } from "@components/CodeSnippet";
+import { ExpandConfig } from "@components/ExpandConfig";
 import Stack from "@mui/material/Stack";
-import { CodeSnippet } from "../../components/CodeSnippet";
-import { ExpandConfig } from "../../components/ExpandConfig";
 import "./ConfigDrawer.css";
 
 const DATADOG_PLACEHOLDER_YAML = `# Placeholder config for Datadog Agent
