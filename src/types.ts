@@ -4,26 +4,6 @@ export interface BaseFlowViewProps {
   onClickProgress: () => void;
 }
 
-export interface FormFieldProps {
-  id: number;
-  formType: string;
-  label?: string;
-  description?: string;
-  placeholder?: string;
-  options?: { label: string; value: string }[];
-  infoText?: { title: string; description: string };
-  helperText?: string;
-  optional?: boolean;
-  validation?: (value: string) => string | undefined;
-}
-
-export interface StepProps {
-  id: number;
-  key: string;
-  title: string;
-  description?: string;
-}
-
 export type IntegrationType = "datadog" | "otlphttp" | "otlpgrpc";
 export type TelemetryTypes = "logs" | "metrics" | "traces";
 
@@ -62,27 +42,6 @@ export interface ConnectionPayloadProps {
   destination: DatadogDestination;
 }
 
-export interface StepDefinition {
-  id: number;
-  key: string;
-  title: string;
-  description?: string;
-}
-
-interface Nav {
-  activeStep: StepDefinition["id"];
-}
-
-export interface Store {
-  nav: Nav;
-  form: ConnectionPayloadProps;
-}
-
-export interface Action {
-  type: string;
-  payload?: unknown;
-}
-
 export type ViewMap = Record<
   string,
   {
@@ -95,7 +54,5 @@ export type ViewMap = Record<
 >;
 
 export type ViewKey = keyof ViewMap;
-
-export type ViewLabelMap = Record<ViewKey, string>;
 
 export type ViewOrder = ViewKey[];
