@@ -1,0 +1,32 @@
+.simple-card-container.MuiCard-root {
+  width: 100%;
+  border: 1px solid var(--mdai-border);
+  border-radius: 4px;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.simple-card-title.MuiTypography-root {
+  font-weight: 700;
+}
+
+.simple-card-description.MuiTypography-root {
+  color: var(--mdai-grey-700);
+}
+
+.simple-card-link.MuiButton-root {
+  flex-shrink: 0;
+  padding: 0;
+  color: #8e24aa;
+}
+
+.simple-card-content.MuiCardContent-root {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.simple-card-main-content.MuiStack-root {
+  max-width: stretch;
+}

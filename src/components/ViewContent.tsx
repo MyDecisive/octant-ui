@@ -7,7 +7,8 @@ import "./ViewContent.css";
 
 interface ViewContentProps {
   buttonText?: string;
-  onButtonClick: () => void;
+  showButton?: boolean;
+  onButtonClick?: () => void;
   buttonDisabled?: boolean;
   formContent: JSX.Element;
   sidebarContent?: JSX.Element;
@@ -17,6 +18,7 @@ interface ViewContentProps {
 
 export function ViewContent({
   buttonText = "Next",
+  showButton = true,
   onButtonClick,
   buttonDisabled,
   formContent,
@@ -29,15 +31,17 @@ export function ViewContent({
       <Stack gap={3} className="view-content-main-column">
         <ViewTitle title={title} description={description} />
         {formContent}
-        <Button
-          variant="contained"
-          size="small"
-          type={"button"}
-          onClick={onButtonClick}
-          disabled={buttonDisabled}
-        >
-          {buttonText}
-        </Button>
+        {showButton && (
+          <Button
+            variant="contained"
+            size="small"
+            type={"button"}
+            onClick={onButtonClick}
+            disabled={buttonDisabled}
+          >
+            {buttonText}
+          </Button>
+        )}
       </Stack>
       {sidebarContent && (
         <Stack className="view-content-sidebar-column" gap={3}>
