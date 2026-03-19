@@ -104,11 +104,15 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
         connectionName!,
         ddIntegrationPayload as DatadogIntegrationBody,
       ),
-      integrations.upsert(
-        "argocd",
-        connectionName!,
-        argoIntegrationPayload as ArgoCdIntegrationBody,
-      ),
+      ...(connectionPayload.deployment.type == "argocd"
+        ? [
+            integrations.upsert(
+              "argocd",
+              connectionName!,
+              argoIntegrationPayload as ArgoCdIntegrationBody,
+            ),
+          ]
+        : []),
     ]).then(() => {
       // void fakeTestDataFidelity().then(() => {
       setLoading(false);
