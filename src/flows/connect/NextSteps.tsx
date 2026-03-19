@@ -12,7 +12,7 @@ export function NextSteps() {
           catalog or manage your Argo changes.
         </>
       }
-      formContent={
+      mainContent={
         <>
           <SimpleCard
             title="Try out one of our solutions"
