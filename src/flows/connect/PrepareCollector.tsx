@@ -6,7 +6,7 @@ import { Input } from "../../components/FormInputs/Input";
 import { Select } from "../../components/FormInputs/Select";
 import { ViewContent } from "../../components/ViewContent";
 import { useOctantConnectStore } from "../../store/store";
-import type { TelemetryTypes } from "../../types";
+import type { BaseFlowViewProps, TelemetryTypes } from "../../types";
 import { ConfigDrawer } from "./ConfigDrawer";
 
 const dataSourceOptions: {
@@ -32,11 +32,7 @@ const telemetryTypeOptions: {
   },
 ];
 
-export function PrepareCollector({
-  onClickProgress,
-}: {
-  onClickProgress: () => void;
-}) {
+export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
   const { telemetryTypes, url, apiKey, connectionName } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled

@@ -5,17 +5,14 @@ import { Input } from "../../components/FormInputs/Input";
 import { RadioButtonsGroup } from "../../components/FormInputs/RadioButtonsGroup";
 import { ViewContent } from "../../components/ViewContent";
 import { useOctantConnectStore } from "../../store/store";
+import type { BaseFlowViewProps } from "../../types";
 
 const deployMethodOptions = [
   { label: "Yes, deploy on my behalf", value: "argo" },
   { label: "No, I will deploy on my own", value: "self" },
 ];
 
-export function DeployMethod({
-  onClickProgress,
-}: {
-  onClickProgress: () => void;
-}) {
+export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   const { deployMethod, branch, accountToken } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled

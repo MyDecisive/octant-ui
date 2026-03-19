@@ -1,12 +1,9 @@
 import { Typography } from "@mui/material";
 import CodeSnippet from "../../components/CodeSnippet";
 import { ViewContent } from "../../components/ViewContent";
+import type { BaseFlowViewProps } from "../../types";
 
-export function ForwardData({
-  onClickProgress,
-}: {
-  onClickProgress: () => void;
-}) {
+export function ForwardData({ onClickProgress }: BaseFlowViewProps) {
   return (
     <ViewContent
       title="Forward your telemetry from Datadog agent to OTel collector"
