@@ -12,11 +12,11 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import type { BaseFlowViewProps } from "@types";
 import { useState } from "react";
+import { useShallow } from "zustand/shallow";
 
 import { useOctantConnectStore } from "@store";
-import { appStateFormToConnectionPayload } from "@utils/appStateFormToConnectionPayload";
+// import { appStateFormToConnectionPayload } from "@utils/appStateFormToConnectionPayload";
 import {
-  connections,
   integrations,
   type ArgoCdIntegrationBody,
   type DatadogIntegrationBody,
@@ -74,50 +74,57 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
   const [loading, setLoading] = useState(false);
   const [hasDeployed, setHasDeployed] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
-  const {
-    connectionName,
-    connectionPayload,
-    ddIntegrationPayload,
-    argoIntegrationPayload,
-  } = useOctantConnectStore((state) => ({
-    connectionName: state.form.connectionName,
-    connectionPayload: appStateFormToConnectionPayload(state.form),
-    ddIntegrationPayload: {
-      url: state.form.url,
-      apiKey: state.form.apiKey,
-    },
-    argoIntegrationPayload: {
-      accountToken: state.form.accountToken,
-    },
-  }));
+  const [deployError, setDeployError] = useState<string | null>(null);
+  const form = useOctantConnectStore(useShallow((state) => state.form));
 
   const handleTabChange = (_e: React.SyntheticEvent, tab: TabValues) => {
     setActiveTab(tab);
   };
 
   const handleDeployButtonClick = () => {
+    if (
+      !form.connectionName ||
+      !form.url ||
+      !form.apiKey ||
+      !form.accountToken
+    ) {
+      return;
+    }
+
+    // const connectionPayload = appStateFormToConnectionPayload(form);
+    const ddIntegrationPayload: DatadogIntegrationBody = {
+      url: form.url,
+      apiKey: form.apiKey,
+    };
+    const argoIntegrationPayload: ArgoCdIntegrationBody = {
+      accountToken: form.accountToken,
+    };
+
+    setDeployError(null);
     setLoading(true);
     void Promise.all([
-      connections.upsert(connectionName!, connectionPayload),
+      // connections.upsert(form.connectionName, connectionPayload),
+      integrations.upsert("datadog", form.connectionName, ddIntegrationPayload),
       integrations.upsert(
-        "datadog",
-        connectionName!,
-        ddIntegrationPayload as DatadogIntegrationBody,
+        "argocd",
+        form.connectionName,
+        argoIntegrationPayload,
       ),
-      ...(connectionPayload.deployment.type == "argocd"
-        ? [
-            integrations.upsert(
-              "argocd",
-              connectionName!,
-              argoIntegrationPayload as ArgoCdIntegrationBody,
-            ),
-          ]
-        : []),
-    ]).then(() => {
-      // void fakeTestDataFidelity().then(() => {
-      setLoading(false);
-      setHasDeployed(true);
-    });
+    ])
+      .then(() => {
+        setHasDeployed(true);
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to deploy collector", error);
+        setDeployError(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while deploying the collector.",
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const { text, variant, color } = determineDeployButtonProps(
@@ -180,6 +187,11 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
             >
               {text}
             </Button>
+            {deployError && (
+              <Typography variant="body2" color="error">
+                Deploy failed: {deployError}
+              </Typography>
+            )}
           </TabPanel>
           <TabPanel activeValue={activeTab} value="solo">
             <Typography
