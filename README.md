@@ -15,6 +15,18 @@ Install dependencies:
 npm i
 ```
 
+By default, the app talks to the API through `/api`.
+
+In the cluster, Nginx proxies `/api` to the gateway.
+
+In local Vite development, the dev server also proxies `/api` to `http://localhost:8081`.
+
+If you need a different backend URL, override `VITE_API_BASE_URL` in `.env`. Example:
+
+```bash
+VITE_API_BASE_URL=/api
+```
+
 Start the dev server:
 
 ```bash
