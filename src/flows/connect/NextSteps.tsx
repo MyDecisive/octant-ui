@@ -1,6 +1,6 @@
-import CodeSnippet from "../../components/CodeSnippet";
-import { SimpleCard } from "../../components/SimpleCard";
-import { ViewContent } from "../../components/ViewContent";
+import { CodeSnippet } from "@components/CodeSnippet";
+import { SimpleCard } from "@components/SimpleCard";
+import { ViewContent } from "@components/ViewContent";
 
 export function NextSteps() {
   return (

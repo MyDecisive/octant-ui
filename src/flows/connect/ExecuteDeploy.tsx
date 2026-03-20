@@ -1,3 +1,6 @@
+import { CodeSnippet } from "@components/CodeSnippet";
+import { TabPanel } from "@components/TabPanel";
+import { ViewContent } from "@components/ViewContent";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import DownloadIcon from "@mui/icons-material/Download";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
@@ -7,20 +10,25 @@ import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
+import type { BaseFlowViewProps } from "@types";
 import { useState } from "react";
-import CodeSnippet from "../../components/CodeSnippet";
-import { TabPanel } from "../../components/TabPanel";
-import { ViewContent } from "../../components/ViewContent";
-import type { BaseFlowViewProps } from "../../types";
+import { useShallow } from "zustand/shallow";
 
+import { useOctantConnectStore } from "@store";
+// import { appStateFormToConnectionPayload } from "@utils/appStateFormToConnectionPayload";
+import {
+  integrations,
+  type ArgoCdIntegrationBody,
+  type DatadogIntegrationBody,
+} from "../../services/api";
 import "./ExecuteDeploy.css";
 
-type TabValues = "argo" | "solo";
+type TabValues = "argocd" | "solo";
 
 const tabs = [
   {
     label: "Auto deploy",
-    value: "argo",
+    value: "argocd",
   },
   {
     label: "Manual deploy",
@@ -62,21 +70,61 @@ async function fakeTestDataFidelity() {
 }
 
 export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
-  const [activeTab, setActiveTab] = useState<TabValues>("argo");
+  const [activeTab, setActiveTab] = useState<TabValues>("argocd");
   const [loading, setLoading] = useState(false);
   const [hasDeployed, setHasDeployed] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
+  const [deployError, setDeployError] = useState<string | null>(null);
+  const form = useOctantConnectStore(useShallow((state) => state.form));
 
   const handleTabChange = (_e: React.SyntheticEvent, tab: TabValues) => {
     setActiveTab(tab);
   };
 
   const handleDeployButtonClick = () => {
+    if (
+      !form.connectionName ||
+      !form.url ||
+      !form.apiKey ||
+      !form.accountToken
+    ) {
+      return;
+    }
+
+    // const connectionPayload = appStateFormToConnectionPayload(form);
+    const ddIntegrationPayload: DatadogIntegrationBody = {
+      url: form.url,
+      apiKey: form.apiKey,
+    };
+    const argoIntegrationPayload: ArgoCdIntegrationBody = {
+      accountToken: form.accountToken,
+    };
+
+    setDeployError(null);
     setLoading(true);
-    void fakeTestDataFidelity().then(() => {
-      setLoading(false);
-      setHasDeployed(true);
-    });
+    void Promise.all([
+      // connections.upsert(form.connectionName, connectionPayload),
+      integrations.upsert("datadog", form.connectionName, ddIntegrationPayload),
+      integrations.upsert(
+        "argocd",
+        form.connectionName,
+        argoIntegrationPayload,
+      ),
+    ])
+      .then(() => {
+        setHasDeployed(true);
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to deploy collector", error);
+        setDeployError(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while deploying the collector.",
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const { text, variant, color } = determineDeployButtonProps(
@@ -108,7 +156,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
               />
             ))}
           </Tabs>
-          <TabPanel activeValue={activeTab} value="argo">
+          <TabPanel activeValue={activeTab} value="argocd">
             <Stack gap={0.5}>
               <Stack
                 gap={0.5}
@@ -139,6 +187,11 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
             >
               {text}
             </Button>
+            {deployError && (
+              <Typography variant="body2" color="error">
+                Deploy failed: {deployError}
+              </Typography>
+            )}
           </TabPanel>
           <TabPanel activeValue={activeTab} value="solo">
             <Typography

@@ -10,10 +10,7 @@ interface CodeSnippetProps {
   copyButton?: boolean;
 }
 
-export default function CodeSnippet({
-  code,
-  copyButton = true,
-}: CodeSnippetProps) {
+export function CodeSnippet({ code, copyButton = true }: CodeSnippetProps) {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyCodeToClipboard = async () => {

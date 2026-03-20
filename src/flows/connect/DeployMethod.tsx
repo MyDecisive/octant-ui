@@ -1,21 +1,18 @@
+import { Input } from "@components/FormInputs/Input";
+import { RadioButtonsGroup } from "@components/FormInputs/RadioButtonsGroup";
+import { ViewContent } from "@components/ViewContent";
 import Stack from "@mui/material/Stack";
+import { useOctantConnectStore } from "@store";
+import type { BaseFlowViewProps } from "@types";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { Input } from "../../components/FormInputs/Input";
-import { RadioButtonsGroup } from "../../components/FormInputs/RadioButtonsGroup";
-import { ViewContent } from "../../components/ViewContent";
-import { useOctantConnectStore } from "../../store/store";
 
 const deployMethodOptions = [
-  { label: "Yes, deploy on my behalf", value: "argo" },
+  { label: "Yes, deploy on my behalf", value: "argocd" },
   { label: "No, I will deploy on my own", value: "self" },
 ];
 
-export function DeployMethod({
-  onClickProgress,
-}: {
-  onClickProgress: () => void;
-}) {
+export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   const { deployMethod, branch, accountToken } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
@@ -32,7 +29,7 @@ export function DeployMethod({
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const handleSetDeployMethod = useCallback(
-    (method: "argo" | "self") => {
+    (method: "argocd" | "self") => {
       setFormField("deployMethod", method);
       if (method === "self") {
         setFormField("accountToken", undefined);
@@ -43,7 +40,7 @@ export function DeployMethod({
   );
 
   const canClickNextButton = useMemo(() => {
-    if (deployMethod === "argo") {
+    if (deployMethod === "argocd") {
       return !!(branch.length && accountToken.length);
     }
 
@@ -71,10 +68,10 @@ export function DeployMethod({
               values={deployMethodOptions}
               selected={deployMethod}
               onChange={(event) =>
-                handleSetDeployMethod(event.target.value as "argo" | "self")
+                handleSetDeployMethod(event.target.value as "argocd" | "self")
               }
             />
-            {deployMethod === "argo" && (
+            {deployMethod === "argocd" && (
               <>
                 <Input
                   value={branch}
