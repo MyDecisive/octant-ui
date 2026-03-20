@@ -17,3 +17,7 @@ div.execute-deploy-tab-panel {
 div.execute-deploy-tab-panel.visible {
   display: block;
 }
+
+.execute-deploy-self-link {
+  display: inline-flex;
+}

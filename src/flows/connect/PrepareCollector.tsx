@@ -1,3 +1,4 @@
+import { Link } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useMemo } from "react";
 import { useShallow } from "zustand/shallow";
@@ -92,6 +93,19 @@ export function PrepareCollector({
           />
 
           <Typography variant="h6">Destination</Typography>
+          <Typography variant="body1">
+            To get the API key you’ll need to log in to your Datadog account. To
+            identify which Datadog site you’re on, visit their{" "}
+            <Link
+              href={
+                "https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              docs
+            </Link>{" "}
+          </Typography>
           <Select
             label="Data destination"
             value="datadog"

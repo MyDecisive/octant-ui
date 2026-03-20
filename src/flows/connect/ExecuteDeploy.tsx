@@ -1,7 +1,7 @@
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import DownloadIcon from "@mui/icons-material/Download";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
-import { type ButtonProps } from "@mui/material";
+import { Link, type ButtonProps } from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
@@ -148,14 +148,17 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
               First download your manifest. Then place the app and collector
               files in their respective directories to keep your setup
               organized. For more help, check{" "}
-              <Button
-                variant="text"
-                size="small"
-                endIcon={<ArrowOutwardRoundedIcon />}
-                // TODO: Add href, etc
+              <Link
+                className="execute-deploy-self-link"
+                href={
+                  "https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern-alternative"
+                }
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Argo Docs
-              </Button>
+                <ArrowOutwardRoundedIcon />
+              </Link>
             </Typography>
             <Button
               variant="secondary"

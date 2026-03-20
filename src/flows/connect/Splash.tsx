@@ -16,7 +16,6 @@ export function Splash({ onClickProgress }: { onClickProgress: () => void }) {
             <ul>
               <li>Connect to Datadog source and preferred destination</li>
               <li>Configure your collector with ease</li>
-              <li>Ensure your data is...</li>
             </ul>
           </Typography>
         </Stack>
@@ -25,11 +24,12 @@ export function Splash({ onClickProgress }: { onClickProgress: () => void }) {
             Information you need to configure your collector
           </Typography>
           <Typography component="div" variant="body2">
-            These items are required to establish and verify your connection
+            These items are required to establish and verify your connection:
             <ul>
               <li>A target branch to test connection (Argo CD)</li>
-              <li>API key from Datadog</li>
-              <li>Destination URL (Datadog or OTLP)</li>
+              <li>API key from your Datadog account</li>
+              <li>Datadog site URL</li>
+              <li>Argo account token</li>
             </ul>
           </Typography>
         </Stack>
