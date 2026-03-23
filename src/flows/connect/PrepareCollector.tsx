@@ -2,6 +2,7 @@ import { CheckboxGroup } from "@components/FormInputs/CheckboxGroup";
 import { Input } from "@components/FormInputs/Input";
 import { Select } from "@components/FormInputs/Select";
 import { ViewContent } from "@components/ViewContent";
+import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps, TelemetryTypes } from "@types";
@@ -88,6 +89,19 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
           />
 
           <Typography variant="h6">Destination</Typography>
+          <Typography variant="body1">
+            To get the API key you’ll need to log in to your Datadog account. To
+            identify which Datadog site you’re on, visit their{" "}
+            <Link
+              href={
+                "https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              docs
+            </Link>{" "}
+          </Typography>
           <Select
             label="Data destination"
             value="datadog"
