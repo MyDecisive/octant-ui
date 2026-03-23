@@ -1,13 +1,13 @@
+import { CheckboxGroup } from "@components/FormInputs/CheckboxGroup";
+import { Input } from "@components/FormInputs/Input";
+import { Select } from "@components/FormInputs/Select";
+import { ViewContent } from "@components/ViewContent";
 import { Link } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import { useOctantConnectStore } from "@store";
+import type { BaseFlowViewProps, TelemetryTypes } from "@types";
 import { useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import CheckboxGroup from "../../components/FormInputs/CheckboxGroup";
-import { Input } from "../../components/FormInputs/Input";
-import { Select } from "../../components/FormInputs/Select";
-import { ViewContent } from "../../components/ViewContent";
-import { useOctantConnectStore } from "../../store/store";
-import type { TelemetryTypes } from "../../types";
 import { ConfigDrawer } from "./ConfigDrawer";
 
 const dataSourceOptions: {
@@ -33,11 +33,7 @@ const telemetryTypeOptions: {
   },
 ];
 
-export function PrepareCollector({
-  onClickProgress,
-}: {
-  onClickProgress: () => void;
-}) {
+export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
   const { telemetryTypes, url, apiKey, connectionName } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled

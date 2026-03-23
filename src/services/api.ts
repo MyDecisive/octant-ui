@@ -1,74 +1,44 @@
-import type { IntegrationType } from "../types";
-import { apiFetch } from "../utils/apiFetch";
+import type { ConnectionPayload, IntegrationType } from "@types";
+import { apiFetch } from "@utils/apiFetch";
 
 interface Integration {
   name: string;
-  type: IntegrationType;
 }
 
-interface DatadogIntegrationBody {
+export interface DatadogIntegrationBody {
   apiKey: string;
-  ddUrl: string;
-}
-
-interface OtlpIntegrationBody {
   url: string;
 }
 
-type IntegrationBody = DatadogIntegrationBody | OtlpIntegrationBody;
+export interface ArgoCdIntegrationBody {
+  accountToken: string;
+}
+
+type IntegrationBody = DatadogIntegrationBody | ArgoCdIntegrationBody;
 
 interface Connection {
   name: string;
-}
-
-interface ConnectionReceiver {
-  type: IntegrationType;
-  dataTypes: string[];
-}
-
-interface ConnectionExportIntegration {
-  type: IntegrationType;
-  name: string;
-}
-
-interface ConnectionExport {
-  type: IntegrationType;
-  integrations: ConnectionExportIntegration[];
-}
-
-interface ConnectionDeployment {
-  type: string;
-  data: Record<string, string>;
-}
-
-interface ConnectionBody {
-  receives: ConnectionReceiver[];
-  exports: ConnectionExport[];
-  deployment: ConnectionDeployment;
 }
 
 const devDelay = <T>(value: T, ms = 800): Promise<T> =>
   new Promise((resolve) => setTimeout(() => resolve(value), ms));
 
 export const integrations = {
-  getAll: (): Promise<Integration[]> => {
+  getAll: (type: IntegrationType): Promise<Integration[]> => {
     if (import.meta.env.DEV) {
       return devDelay<Integration[]>([
         {
           name: "dd-one",
-          type: "datadog",
         },
         {
           name: "otlp-http-one",
-          type: "otlphttp",
         },
         {
           name: "otlp-grpc-one",
-          type: "otlpgrpc",
         },
       ]);
     }
-    return apiFetch.get("/integrations");
+    return apiFetch.get(`/integrations/${type}`);
   },
 
   upsert: (
@@ -94,7 +64,7 @@ export const connections = {
     return apiFetch.get("/connections");
   },
 
-  upsert: (name: string, body: ConnectionBody): Promise<void> => {
+  upsert: (name: string, body: ConnectionPayload): Promise<void> => {
     if (import.meta.env.DEV) return devDelay<void>(undefined);
     return apiFetch.put(`/connections/${name}`, { body });
   },

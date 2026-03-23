@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import { useCallback, useMemo } from "react";
+import { useOctantConnectStore } from "@store";
+import { useCallback } from "react";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/connect";
-import { useOctantConnectStore } from "../store/store";
 import "./FlowContainer.css";
 import { Nav } from "./Nav";
 
@@ -18,15 +18,12 @@ export function FlowContainer() {
 
   const onClickProgress = useCallback(() => {
     const currentViewIdx = VIEW_ORDER.indexOf(activeView);
-    // This modulo is only here for local dev while the flow is being built out
-    setActiveView(VIEW_ORDER[(currentViewIdx + 1) % VIEW_ORDER.length]);
+    setActiveView(VIEW_ORDER[currentViewIdx + 1]);
   }, [activeView, setActiveView]);
 
   const { Component, label } = VIEW_MAP[activeView];
 
-  const activeStepIndex = useMemo(() => {
-    return flowStepKeys.indexOf(activeView);
-  }, [activeView]);
+  const activeStepIndex = flowStepKeys.indexOf(activeView);
 
   return (
     <Box className="flow-container-box">

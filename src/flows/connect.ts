@@ -1,4 +1,4 @@
-import type { ViewMap, ViewOrder } from "../types";
+import type { ViewMap, ViewOrder } from "@types";
 import { DataFidelity } from "./connect/DataFidelity";
 import { DeployMethod } from "./connect/DeployMethod";
 import { ExecuteDeploy } from "./connect/ExecuteDeploy";
