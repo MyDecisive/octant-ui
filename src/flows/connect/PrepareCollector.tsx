@@ -2,7 +2,7 @@ import { CheckboxGroup } from "@components/FormInputs/CheckboxGroup";
 import { Input } from "@components/FormInputs/Input";
 import { Select } from "@components/FormInputs/Select";
 import { ViewContent } from "@components/ViewContent";
-import { Link } from "@mui/material";
+import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps, TelemetryTypes } from "@types";
