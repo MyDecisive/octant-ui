@@ -14,7 +14,7 @@ interface ValidatedAppStateForm {
 export function appStateFormToConnectionPayload(
   formState: AppStateForm,
 ): ConnectionPayload {
-  const { telemetryTypes, deployMethod, branch, accountToken } =
+  const { telemetryTypes, deployMethod, branch } =
     formState as ValidatedAppStateForm;
 
   const initialPayload: Pick<
@@ -30,7 +30,6 @@ export function appStateFormToConnectionPayload(
       type: deployMethod,
       fields: {
         branch,
-        accountToken,
       },
     };
     return {

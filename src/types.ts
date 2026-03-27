@@ -16,7 +16,6 @@ export interface ArgoDeployment extends BasePayloadPart {
   type: "argocd";
   fields: {
     branch: string;
-    accountToken: string;
   };
 }
 

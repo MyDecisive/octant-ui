@@ -15,8 +15,9 @@ import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import { useOctantConnectStore } from "@store";
-// import { appStateFormToConnectionPayload } from "@utils/appStateFormToConnectionPayload";
+import { appStateFormToConnectionPayload } from "@utils/appStateFormToConnectionPayload";
 import {
+  connections,
   integrations,
   type ArgoCdIntegrationBody,
   type DatadogIntegrationBody,
@@ -91,7 +92,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
       return;
     }
 
-    // const connectionPayload = appStateFormToConnectionPayload(form);
+    const connectionPayload = appStateFormToConnectionPayload(form);
     const ddIntegrationPayload: DatadogIntegrationBody = {
       url: form.url,
       apiKey: form.apiKey,
@@ -103,7 +104,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
     setDeployError(null);
     setLoading(true);
     void Promise.all([
-      // connections.upsert(form.connectionName, connectionPayload),
+      connections.upsert(form.connectionName, connectionPayload),
       integrations.upsert("datadog", form.connectionName, ddIntegrationPayload),
       integrations.upsert(
         "argocd",
