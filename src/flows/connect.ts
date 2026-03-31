@@ -4,7 +4,7 @@ import { DeployMethod } from "./connect/DeployMethod";
 import { ExecuteDeploy } from "./connect/ExecuteDeploy";
 import { ForwardData } from "./connect/ForwardData";
 import { NextSteps } from "./connect/NextSteps";
-import { PrepareCollector } from "./connect/PrepareCollector";
+import { PrepareCollector } from "./connect/PrepareCollector/PrepareCollector";
 import { Splash } from "./connect/Splash";
 
 export const VIEW_MAP: ViewMap = {
