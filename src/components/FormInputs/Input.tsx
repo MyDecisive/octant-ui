@@ -3,7 +3,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import { type ChangeEvent } from "react";
+import { type ChangeEvent, type FocusEventHandler } from "react";
 
 interface InputProps {
   label?: string;
@@ -15,6 +15,8 @@ interface InputProps {
   required?: boolean;
   tooltip?: string;
   helperText?: string;
+  onFocus?: FocusEventHandler<HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
 export function Input({
@@ -25,6 +27,8 @@ export function Input({
   tooltip,
   placeholder,
   helperText,
+  onFocus,
+  onBlur,
 }: InputProps) {
   return (
     <Stack sx={{ maxWidth: 360 }}>
@@ -33,6 +37,8 @@ export function Input({
         value={value}
         placeholder={placeholder}
         onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
         size="small"
         required={required}
         helperText={helperText}

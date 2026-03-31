@@ -3,13 +3,15 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
-import { useCallback, type ChangeEvent } from "react";
+import { useCallback, type ChangeEvent, type FocusEventHandler } from "react";
 
 interface CheckBoxGroupProps {
   options: { label: string; value: string }[];
   selected: string[];
   onChange: (selectedValues: string[]) => void;
   label?: string;
+  onFocus?: FocusEventHandler<HTMLDivElement>;
+  onBlur?: FocusEventHandler<HTMLDivElement>;
 }
 
 export function CheckboxGroup({
@@ -17,6 +19,8 @@ export function CheckboxGroup({
   selected,
   onChange,
   label,
+  onFocus,
+  onBlur,
 }: CheckBoxGroupProps) {
   const handleCheckedChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +38,7 @@ export function CheckboxGroup({
   );
 
   return (
-    <FormControl>
+    <FormControl onFocus={onFocus} onBlur={onBlur}>
       {label && <FormLabel>{label}</FormLabel>}
       <FormGroup>
         {options.map(({ label, value }) => (
