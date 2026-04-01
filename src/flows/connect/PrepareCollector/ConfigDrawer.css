@@ -3,10 +3,19 @@
   width: 100%;
   min-width: 0;
   border-radius: calc(var(--mdai-spacing-unit) * 2);
+  height: 100%;
 }
 
 pre.config-drawer-line {
   margin: 0;
+  font-size: calc(var(--mdai-spacing-unit) * 1.5);
+  font-weight: 400;
+  font-feature-settings:
+    "liga" off,
+    "clig" off;
+  font-style: normal;
+  line-height: 166%; /* 19.92px */
+  letter-spacing: 0.4px;
 }
 
 pre.config-drawer-line.highlight {

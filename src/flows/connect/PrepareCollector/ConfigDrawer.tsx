@@ -36,10 +36,10 @@ export function ConfigDrawer({ focusedField }: ConfigDrawerProps) {
   return (
     <Stack className="config-drawer-container" gap={1} alignItems={"stretch"}>
       <ExpandConfig
-        title="Expand config view +"
+        title={<pre className="config-drawer-line">Expand config view +</pre>}
         content={
           <>
-            {linesForRender.map(([key, content]) => {
+            {linesForRender.map(([key, content], index) => {
               const highlight =
                 key != undefined &&
                 focusedField != undefined &&
@@ -49,7 +49,14 @@ export function ConfigDrawer({ focusedField }: ConfigDrawerProps) {
                   ];
 
               const className = `config-drawer-line${key != undefined ? ` ${key}` : ""}${highlight ? " highlight" : ""}`;
-              return <pre className={className}>{content}</pre>;
+              return (
+                <pre
+                  key={`${content?.trim()}${key?.trim()}${index.toLocaleString()}-config-line`}
+                  className={className}
+                >
+                  {content}
+                </pre>
+              );
             })}
           </>
         }

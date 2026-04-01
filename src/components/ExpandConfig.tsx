@@ -9,7 +9,7 @@ export function ExpandConfig({
   title,
   content,
 }: {
-  title: string;
+  title: ReactNode;
   content: ReactNode;
 }) {
   const panelId = useId();
@@ -17,7 +17,14 @@ export function ExpandConfig({
   const contentId = `${panelId}-content`;
 
   return (
-    <Accordion className="expanded-config-container">
+    <Accordion
+      className="expanded-config-container"
+      slotProps={{
+        transition: {
+          className: "expanded-config-contents-container",
+        },
+      }}
+    >
       <AccordionSummary
         expandIcon={null}
         aria-controls={contentId}
