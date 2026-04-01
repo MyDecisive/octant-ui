@@ -8,6 +8,7 @@
 
 .expanded-config-container .MuiAccordionDetails-root {
   background-color: #454545;
+  color: var(--mdai-light-grey);
 }
 
 .expanded-config-summary .MuiAccordionSummary-expandIconWrapper {

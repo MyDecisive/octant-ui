@@ -4,3 +4,11 @@
   min-width: 0;
   border-radius: calc(var(--mdai-spacing-unit) * 2);
 }
+
+pre.config-drawer-line {
+  margin: 0;
+}
+
+pre.config-drawer-line.highlight {
+  background: rgba(255, 255, 255, 0.12);
+}
