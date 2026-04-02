@@ -17,20 +17,26 @@ export function NextSteps() {
           <SimpleCard
             title="Try out one of our solutions"
             description="Play around with our installable labs."
-            linkText="See our docs"
-            linkHref="https://docs.mydecisive.ai/"
+            link={{
+              text: "See our docs",
+              href: "https://docs.mydecisive.ai/",
+            }}
           />
           <SimpleCard
             title="Migrate Smarthub into production"
             description="Ready to go live? Follow our step-by-step guide to safely migrate Smarthub from your current environment into production."
-            linkText="See our docs"
-            linkHref="https://docs.mydecisive.ai/"
+            link={{
+              text: "See our docs",
+              href: "https://docs.mydecisive.ai/",
+            }}
           />
           <SimpleCard
             title="Commit your changes to Source control"
             description="Your manifests are ready. Push them to your repository to make the configuration official and version-controlled."
-            linkText="Download .zip"
-            linkHref="/"
+            link={{
+              text: "Download .zip",
+              href: "/",
+            }}
           />
           <SimpleCard
             title="Revert your Argo CD & Datadog agent changes"
