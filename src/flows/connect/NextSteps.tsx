@@ -3,7 +3,7 @@ import { SimpleCard } from "@components/SimpleCard";
 import { ViewContent } from "@components/ViewContent";
 import { useOctantConnectStore } from "@store";
 import { useState } from "react";
-import { fetchManifests } from "./fetchManifests";
+import { fetchManifestsAndDownload } from "./fetchManifests";
 
 export function NextSteps() {
   const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ export function NextSteps() {
   );
 
   const onDownloadClick = () => {
-    fetchManifests(
+    fetchManifestsAndDownload(
       connectionName!,
       () => setLoading(true),
       () => setLoading(false),

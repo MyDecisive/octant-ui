@@ -23,7 +23,7 @@ import {
   type DatadogIntegrationBody,
 } from "../../services/api";
 import "./ExecuteDeploy.css";
-import { fetchManifests } from "./fetchManifests";
+import { fetchManifestsAndDownload } from "./fetchManifests";
 
 type TabValues = "argocd" | "solo";
 
@@ -131,7 +131,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
   );
 
   const handleDownloadButtonClick = () => {
-    fetchManifests(
+    fetchManifestsAndDownload(
       form.connectionName!,
       () => setLoading(true),
       () => {

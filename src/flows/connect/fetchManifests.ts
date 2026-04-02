@@ -1,7 +1,7 @@
 import { connections } from "../../services/api";
 
 // TODO: Handle error state
-export function fetchManifests(
+export function fetchManifestsAndDownload(
   connectionName: string,
   onStart?: () => void,
   onEnd?: () => void,
