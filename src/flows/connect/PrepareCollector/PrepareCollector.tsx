@@ -6,7 +6,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps, TelemetryTypes } from "@types";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { ConfigDrawer } from "./ConfigDrawer";
 
@@ -34,6 +34,7 @@ const telemetryTypeOptions: {
 ];
 
 export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
+  const [focusedField, setFocusedField] = useState<string>();
   const { telemetryTypes, url, apiKey, connectionName } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
@@ -46,7 +47,6 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
 
       return {
         telemetryTypes,
-
         url,
         apiKey,
         connectionName,
@@ -60,6 +60,8 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
       (thing) => !!thing && thing.length > 0,
     );
   }, [telemetryTypes, url, apiKey, connectionName]);
+
+  const handleBlur = () => setFocusedField(undefined);
 
   return (
     <ViewContent
@@ -86,6 +88,8 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
             onChange={(checked) =>
               setFormField("telemetryTypes", checked as TelemetryTypes[])
             }
+            onFocus={() => setFocusedField("telemetryTypes")}
+            onBlur={handleBlur}
           />
 
           <Typography variant="h6">Destination</Typography>
@@ -115,12 +119,16 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
             required
             placeholder="Destination URL"
             tooltip={"Log into your Datadog account to acquire the API key"}
+            onFocus={() => setFocusedField("url")}
+            onBlur={handleBlur}
           />
           <Input
             value={apiKey}
             onChange={(e) => setFormField("apiKey", e.target.value)}
             required
             placeholder="Datadog API key"
+            onFocus={() => setFocusedField("apiKey")}
+            onBlur={handleBlur}
           />
 
           <Typography variant="h6">Telemetry connection</Typography>
@@ -128,6 +136,8 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
           <Input
             value={connectionName}
             onChange={(e) => setFormField("connectionName", e.target.value)}
+            onFocus={() => setFocusedField("connectionName")}
+            onBlur={handleBlur}
             required
             placeholder="Name this connection"
             helperText="We recommend providing a name that can be easily referenced later, e.g., datadog-io"
@@ -136,7 +146,7 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
       }
       onButtonClick={onClickProgress}
       buttonDisabled={!canClickNextButton}
-      sidebarContent={<ConfigDrawer />}
+      sidebarContent={<ConfigDrawer focusedField={focusedField} />}
     />
   );
 }
