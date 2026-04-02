@@ -59,6 +59,17 @@ export const integrations = {
 };
 
 export const connections = {
+  getManifests: (connectionName: string): Promise<Blob> => {
+    if (import.meta.env.DEV) {
+      return devDelay<Blob>(
+        new Blob(["mock manifest content"], { type: "application/zip" }),
+      );
+    }
+    return apiFetch.get(`/connections/${connectionName}/manifests`, {
+      headers: { Accept: "application/zip" },
+      responseType: "blob",
+    });
+  },
   getAll: (): Promise<Connection[]> => {
     if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
       return devDelay<Connection[]>([{ name: "datadog-connection-1" }]);
