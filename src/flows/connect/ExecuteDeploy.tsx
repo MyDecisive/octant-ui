@@ -178,6 +178,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
               </Typography>
             </Stack>
             <Button
+              className="execute-deploy-action-button"
               onClick={handleDeployButtonClick}
               size="small"
               loadingPosition="start"
@@ -215,6 +216,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
               </Link>
             </Typography>
             <Button
+              className="execute-deploy-action-button"
               variant="secondary"
               startIcon={<DownloadIcon />}
               onClick={handleDownloadButtonClick}

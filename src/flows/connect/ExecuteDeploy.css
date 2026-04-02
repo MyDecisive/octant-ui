@@ -21,3 +21,7 @@ div.execute-deploy-tab-panel.visible {
 .execute-deploy-self-link {
   display: inline-flex;
 }
+
+.execute-deploy-action-button.MuiButton-root {
+  align-self: flex-start;
+}
