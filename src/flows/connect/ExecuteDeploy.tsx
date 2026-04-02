@@ -23,6 +23,7 @@ import {
   type DatadogIntegrationBody,
 } from "../../services/api";
 import "./ExecuteDeploy.css";
+import { fetchManifests } from "./fetchManifests";
 
 type TabValues = "argocd" | "solo";
 
@@ -64,10 +65,6 @@ function determineDeployButtonProps(
     text: "Deploy collector",
     variant: "secondary",
   };
-}
-
-async function fakeTestDataFidelity() {
-  return await new Promise((resolve) => setTimeout(resolve, 1500));
 }
 
 export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
@@ -134,11 +131,14 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
   );
 
   const handleDownloadButtonClick = () => {
-    setLoading(true);
-    void fakeTestDataFidelity().then(() => {
-      setLoading(false);
-      setHasDownloaded(true);
-    });
+    fetchManifests(
+      form.connectionName!,
+      () => setLoading(true),
+      () => {
+        setLoading(false);
+        setHasDownloaded(true);
+      },
+    );
   };
 
   return (

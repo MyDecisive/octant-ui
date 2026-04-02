@@ -1,8 +1,24 @@
 import { CodeSnippet } from "@components/CodeSnippet";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewContent } from "@components/ViewContent";
+import { useOctantConnectStore } from "@store";
+import { useState } from "react";
+import { fetchManifests } from "./fetchManifests";
 
 export function NextSteps() {
+  const [loading, setLoading] = useState(false);
+  const connectionName = useOctantConnectStore(
+    (state) => state.form.connectionName,
+  );
+
+  const onDownloadClick = () => {
+    fetchManifests(
+      connectionName!,
+      () => setLoading(true),
+      () => setLoading(false),
+    );
+  };
+
   return (
     <ViewContent
       title="Next steps"
@@ -33,9 +49,10 @@ export function NextSteps() {
           <SimpleCard
             title="Commit your changes to Source control"
             description="Your manifests are ready. Push them to your repository to make the configuration official and version-controlled."
-            link={{
+            button={{
               text: "Download .zip",
-              href: "/",
+              onClick: onDownloadClick,
+              loading,
             }}
           />
           <SimpleCard
