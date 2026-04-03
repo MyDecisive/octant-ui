@@ -13,9 +13,10 @@ interface BasePayloadPart {
 }
 
 export interface ArgoDeployment extends BasePayloadPart {
-  type: "argocd";
+  type: "argocd-sideload";
   fields: {
-    branch: string;
+    apiUrl: string;
+    accountToken: string;
   };
 }
 
@@ -24,11 +25,20 @@ export interface SelfDeployment extends BasePayloadPart {
 }
 export interface ConnectionPayload {
   // Deploy method
-  deployment: ArgoDeployment | SelfDeployment;
+  // deployment: ArgoDeployment | SelfDeployment;
   // Prepare Collector
   sourceType: "datadog";
   telemetryTypes?: TelemetryTypes[];
+  destinations: {
+    type: "datadog",
+    integrationName: string,
+  }[],
+  deployment: {
+    type: "argocd-sideload",
+    integrationName: string,
+  }
 }
+
 
 export type ViewMap = Record<
   string,

@@ -1,9 +1,9 @@
 import type { AppStateForm } from "@store";
-import type { ArgoDeployment, ConnectionPayload, TelemetryTypes } from "@types";
+import type { ConnectionPayload, TelemetryTypes } from "@types";
 
 interface ValidatedAppStateForm {
-  deployMethod: "argocd" | "self";
-  branch: string;
+  deployMethod: "argocd-sideload" | "self";
+  apiUrl: string;
   accountToken: string;
   telemetryTypes: TelemetryTypes[];
   url: string;
@@ -14,7 +14,7 @@ interface ValidatedAppStateForm {
 export function appStateFormToConnectionPayload(
   formState: AppStateForm,
 ): ConnectionPayload {
-  const { telemetryTypes, deployMethod, branch } =
+  const { telemetryTypes, deployMethod, connectionName } =
     formState as ValidatedAppStateForm;
 
   const initialPayload: Pick<
@@ -25,16 +25,24 @@ export function appStateFormToConnectionPayload(
     telemetryTypes: telemetryTypes,
   };
 
+  console.log(deployMethod)
   if (deployMethod === "argocd") {
-    const deployment: ArgoDeployment = {
-      type: deployMethod,
-      fields: {
-        branch,
-      },
+    const deployment = {
+      // type: deployMethod,
+      // fields: {
+      //   apiUrl,
+      //   accountToken
+      // },
+      type: "argocd-sideload",
+      integrationName: connectionName
     };
     return {
       ...initialPayload,
       deployment,
+      destinations: [{
+        integrationName: connectionName,
+        type: "datadog"
+      }]
     };
   }
 

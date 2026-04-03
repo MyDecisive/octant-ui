@@ -104,14 +104,13 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
     setDeployError(null);
     setLoading(true);
     void Promise.all([
-      connections.upsert(form.connectionName, connectionPayload),
       integrations.upsert("datadog", form.connectionName, ddIntegrationPayload),
       integrations.upsert(
         "argocd",
         form.connectionName,
         argoIntegrationPayload,
       ),
-    ])
+    ]).then(() => connections.upsert(form.connectionName, connectionPayload))
       .then(() => {
         setHasDeployed(true);
       })
