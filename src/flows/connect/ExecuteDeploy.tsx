@@ -99,6 +99,7 @@ export function ExecuteDeploy({ onClickProgress }: BaseFlowViewProps) {
     };
     const argoIntegrationPayload: ArgoCdIntegrationBody = {
       accountToken: form.accountToken,
+      apiUrl: form.apiUrl
     };
 
     setDeployError(null);
