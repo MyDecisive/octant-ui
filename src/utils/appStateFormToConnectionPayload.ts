@@ -3,7 +3,7 @@ import type { ArgoDeployment, ConnectionPayload, TelemetryTypes } from "@types";
 
 interface ValidatedAppStateForm {
   deployMethod: "argocd" | "self";
-  branch: string;
+  argoUrl: string;
   accountToken: string;
   telemetryTypes: TelemetryTypes[];
   url: string;
@@ -14,7 +14,7 @@ interface ValidatedAppStateForm {
 export function appStateFormToConnectionPayload(
   formState: AppStateForm,
 ): ConnectionPayload {
-  const { telemetryTypes, deployMethod, branch } =
+  const { telemetryTypes, deployMethod, argoUrl } =
     formState as ValidatedAppStateForm;
 
   const initialPayload: Pick<
@@ -29,7 +29,7 @@ export function appStateFormToConnectionPayload(
     const deployment: ArgoDeployment = {
       type: deployMethod,
       fields: {
-        branch,
+        url: argoUrl,
       },
     };
     return {

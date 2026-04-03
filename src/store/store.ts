@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 export interface AppStateForm {
   deployMethod: "argocd" | "self";
-  branch?: string;
+  argoUrl?: string;
   accountToken?: string;
   telemetryTypes: TelemetryTypes[];
   url?: string;

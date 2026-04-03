@@ -13,15 +13,14 @@ const deployMethodOptions = [
 ];
 
 export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
-  const { deployMethod, branch, accountToken } = useOctantConnectStore(
+  const { deployMethod, accountToken, argoUrl } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
-      const { deployMethod, branch = "", accountToken = "" } = state.form;
+      const { deployMethod, argoUrl = "", accountToken = "" } = state.form;
 
       return {
         deployMethod,
-
-        branch,
+        argoUrl,
         accountToken,
       };
     }),
@@ -33,7 +32,7 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
       setFormField("deployMethod", method);
       if (method === "self") {
         setFormField("accountToken", undefined);
-        setFormField("branch", undefined);
+        setFormField("argoUrl", undefined);
       }
     },
     [setFormField],
@@ -41,11 +40,11 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
 
   const canClickNextButton = useMemo(() => {
     if (deployMethod === "argocd") {
-      return !!(branch.length && accountToken.length);
+      return !!(accountToken.length && argoUrl.length);
     }
 
     return true;
-  }, [deployMethod, branch, accountToken]);
+  }, [deployMethod, accountToken, argoUrl]);
 
   return (
     <ViewContent
@@ -74,13 +73,10 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
             {deployMethod === "argocd" && (
               <>
                 <Input
-                  value={branch}
-                  onChange={(e) => setFormField("branch", e.target.value)}
+                  value={argoUrl}
+                  onChange={(e) => setFormField("argoUrl", e.target.value)}
                   required
-                  placeholder="Target branch"
-                  tooltip={
-                    "Target branch is where these changes will live in your version control platform. Please make sure this branch changes as your promote this change through your SDLC environments."
-                  }
+                  placeholder="Argo repository URL"
                 />
                 <Input
                   value={accountToken}
