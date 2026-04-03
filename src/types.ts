@@ -15,7 +15,7 @@ interface BasePayloadPart {
 export interface ArgoDeployment extends BasePayloadPart {
   type: "argocd";
   fields: {
-    branch: string;
+    url: string;
   };
 }
 
