@@ -72,3 +72,4 @@ If Docker security scans report vulnerabilities:
 
 - Run `npm install`
 - Run `npm run deploy`
+- Navigate to https://mydecisive.github.io/octant-ui/
