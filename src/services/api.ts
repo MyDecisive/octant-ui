@@ -25,7 +25,7 @@ const devDelay = <T>(value: T, ms = 800): Promise<T> =>
 
 export const integrations = {
   getAll: (type: IntegrationType): Promise<Integration[]> => {
-    if (import.meta.env.DEV) {
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
       return devDelay<Integration[]>([
         {
           name: "dd-one",
@@ -46,31 +46,35 @@ export const integrations = {
     name: string,
     body: IntegrationBody,
   ): Promise<void> => {
-    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true")
+      return devDelay<void>(undefined);
     return apiFetch.put(`/integrations/${type}/${name}`, { body });
   },
 
   delete: (type: IntegrationType, name: string): Promise<void> => {
-    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true")
+      return devDelay<void>(undefined);
     return apiFetch.delete(`/integrations/${type}/${name}`);
   },
 };
 
 export const connections = {
   getAll: (): Promise<Connection[]> => {
-    if (import.meta.env.DEV) {
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
       return devDelay<Connection[]>([{ name: "datadog-connection-1" }]);
     }
     return apiFetch.get("/connections");
   },
 
   upsert: (name: string, body: ConnectionPayload): Promise<void> => {
-    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true")
+      return devDelay<void>(undefined);
     return apiFetch.put(`/connections/${name}`, { body });
   },
 
   delete: (name: string): Promise<void> => {
-    if (import.meta.env.DEV) return devDelay<void>(undefined);
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true")
+      return devDelay<void>(undefined);
     return apiFetch.delete(`/connections/${name}`);
   },
 };

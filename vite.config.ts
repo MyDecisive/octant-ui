@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: "/octant-ui",
   // Added for dev to be able to access mdai-gateway
   server: {
     proxy: {

@@ -67,3 +67,9 @@ If Docker security scans report vulnerabilities:
 - Rebuild with `docker build --pull ...`
 - Keep the base images updated
 - Re-scan after rebuilding
+
+## Deploying to gh pages
+
+- Run `npm install`
+- Run `npm run deploy`
+- Navigate to https://mydecisive.github.io/octant-ui/
