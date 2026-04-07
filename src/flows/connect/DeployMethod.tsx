@@ -8,8 +8,8 @@ import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 
 const deployMethodOptions = [
-  { label: "Yes, deploy on my behalf", value: "argocd" },
-  { label: "No, I will deploy on my own", value: "self" },
+  { label: "Yes, deploy on my behalf", value: "argocd-sideload" },
+  { label: "No, I will deploy on my own", value: "argocd-manifests" },
 ];
 
 export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
@@ -28,9 +28,9 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const handleSetDeployMethod = useCallback(
-    (method: "argocd" | "self") => {
+    (method: "argocd-sideload" | "argocd-manifests") => {
       setFormField("deployMethod", method);
-      if (method === "self") {
+      if (method === "argocd-manifests") {
         setFormField("accountToken", undefined);
         setFormField("argoUrl", undefined);
       }
@@ -39,7 +39,7 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   );
 
   const canClickNextButton = useMemo(() => {
-    if (deployMethod === "argocd") {
+    if (deployMethod === "argocd-sideload") {
       return !!(argoUrl.length && accountToken.length);
     }
 
@@ -67,10 +67,12 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
               values={deployMethodOptions}
               selected={deployMethod}
               onChange={(event) =>
-                handleSetDeployMethod(event.target.value as "argocd" | "self")
+                handleSetDeployMethod(
+                  event.target.value as "argocd-sideload" | "argocd-manifests",
+                )
               }
             />
-            {deployMethod === "argocd" && (
+            {deployMethod === "argocd-sideload" && (
               <>
                 <Input
                   value={argoUrl}

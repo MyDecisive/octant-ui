@@ -3,7 +3,12 @@ import { useCallback, useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import { useOctantConnectStore } from "@store";
-import type { ArgoDeployment, ConnectionPayload, TelemetryTypes } from "@types";
+import type {
+  ArgoDeployment,
+  ConnectionPayload,
+  DeployMethod,
+  TelemetryTypes,
+} from "@types";
 import {
   connections,
   integrations,
@@ -13,7 +18,7 @@ import {
 import type { ArgoDeployProps } from "./types";
 
 interface ConnectionPayloadDatas {
-  deployMethod: "argocd" | "self";
+  deployMethod: DeployMethod;
   argoUrl: string;
   telemetryTypes: TelemetryTypes[];
 }
@@ -31,7 +36,7 @@ function appStateFormToConnectionPayload(
     telemetryTypes: telemetryTypes,
   };
 
-  if (deployMethod === "argocd") {
+  if (deployMethod === "argocd-sideload") {
     const deployment: ArgoDeployment = {
       type: deployMethod,
       fields: {
@@ -117,6 +122,7 @@ export function useArgoDeployHandlers({
     };
     const argoIntegrationPayload: ArgoCdIntegrationBody = {
       accountToken: accountToken,
+      url: argoUrl!,
     };
 
     setDeployError(null);

@@ -1,5 +1,7 @@
 import type { JSX } from "react";
 
+export type DeployMethod = "argocd-sideload" | "argocd-manifests";
+
 export interface BaseFlowViewProps {
   onClickProgress: () => void;
 }
@@ -13,14 +15,14 @@ interface BasePayloadPart {
 }
 
 export interface ArgoDeployment extends BasePayloadPart {
-  type: "argocd";
+  type: "argocd-sideload";
   fields: {
     url: string;
   };
 }
 
 export interface SelfDeployment extends BasePayloadPart {
-  type: "self";
+  type: "argocd-manifests";
 }
 export interface ConnectionPayload {
   // Deploy method
@@ -40,7 +42,7 @@ export interface ManifestPayload {
   telemetryTypes: TelemetryTypes[];
   deployment: {
     integrationName: string;
-    type: "argocd-sideload" | "argocd-manifests";
+    type: DeployMethod;
   };
   destinations: Destination[];
 }

@@ -16,6 +16,7 @@ export interface DatadogIntegrationBody {
 
 export interface ArgoCdIntegrationBody {
   accountToken: string;
+  url: string;
 }
 
 type IntegrationBody = DatadogIntegrationBody | ArgoCdIntegrationBody;
