@@ -127,25 +127,33 @@ export function useArgoDeployHandlers({
 
     setDeployError(null);
     setLoading(true);
-    void Promise.all([
-      connections.upsert(connectionName, connectionPayload),
-      integrations.upsert("datadog", connectionName, ddIntegrationPayload),
-      integrations.upsert("argocd", connectionName, argoIntegrationPayload),
-    ])
-      .then(() => {
+
+    async function makeTheCalls() {
+      try {
+        await Promise.all([
+          integrations.upsert("datadog", connectionName!, ddIntegrationPayload),
+          integrations.upsert(
+            "argocd",
+            connectionName!,
+            argoIntegrationPayload,
+          ),
+        ]);
+
+        await connections.upsert(connectionName!, connectionPayload);
         onDeployFinish();
-      })
-      .catch((error: unknown) => {
+      } catch (error: unknown) {
         console.error("Failed to deploy collector", error);
         setDeployError(
           error instanceof Error
             ? error.message
             : "Something went wrong while deploying the collector.",
         );
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+
+    void makeTheCalls();
   }, [
     connectionName,
     url,
