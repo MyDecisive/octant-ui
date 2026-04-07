@@ -1,5 +1,9 @@
-import type { ConnectionPayload, IntegrationType } from "@types";
-import { apiFetch } from "@utils/apiFetch";
+import type {
+  ConnectionPayload,
+  IntegrationType,
+  ManifestPayload,
+} from "@types";
+import { apiFetch, BASE_URL } from "@utils/apiFetch";
 
 interface Integration {
   name: string;
@@ -59,15 +63,17 @@ export const integrations = {
 };
 
 export const connections = {
-  getManifests: (connectionName: string): Promise<Blob> => {
-    if (import.meta.env.DEV) {
-      return devDelay<Blob>(
-        new Blob(["mock manifest content"], { type: "application/zip" }),
-      );
+  generateManifests: (
+    connectionName: string,
+    body: ManifestPayload,
+  ): Promise<Response> => {
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
+      return devDelay<Response>(new Response(null, { status: 200 }));
     }
-    return apiFetch.get(`/connections/${connectionName}/manifests`, {
-      headers: { Accept: "application/zip" },
-      responseType: "blob",
+    return fetch(`${BASE_URL}/connections/${connectionName}/manifests/yaml`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
     });
   },
   getAll: (): Promise<Connection[]> => {

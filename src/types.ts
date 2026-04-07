@@ -30,6 +30,21 @@ export interface ConnectionPayload {
   telemetryTypes?: TelemetryTypes[];
 }
 
+export interface Destination {
+  type: "datadog";
+  integrationName: string;
+}
+
+export interface ManifestPayload {
+  sourceType: "datadog";
+  telemetryTypes: TelemetryTypes[];
+  deployment: {
+    integrationName: string;
+    type: "argocd-sideload" | "argocd-manifests";
+  };
+  destinations: Destination[];
+}
+
 export type ViewMap = Record<
   string,
   {
