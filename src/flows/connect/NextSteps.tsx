@@ -1,23 +1,12 @@
 import { CodeSnippet } from "@components/CodeSnippet";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewContent } from "@components/ViewContent";
-import { useOctantConnectStore } from "@store";
-import { useState } from "react";
-import { fetchManifestsAndDownload } from "./fetchManifests";
+import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 
 export function NextSteps() {
-  const [loading, setLoading] = useState(false);
-  const connectionName = useOctantConnectStore(
-    (state) => state.form.connectionName,
-  );
+  const { loading, fetchAndDownload } = useFetchManifestsAndDownload();
 
-  const onDownloadClick = () => {
-    fetchManifestsAndDownload(
-      connectionName!,
-      () => setLoading(true),
-      () => setLoading(false),
-    );
-  };
+  const handleDownloadManifestsClick = () => fetchAndDownload();
 
   return (
     <ViewContent
@@ -51,7 +40,7 @@ export function NextSteps() {
             description="Your manifests are ready. Push them to your repository to make the configuration official and version-controlled."
             button={{
               text: "Download .zip",
-              onClick: onDownloadClick,
+              onClick: handleDownloadManifestsClick,
               loading,
             }}
           />
