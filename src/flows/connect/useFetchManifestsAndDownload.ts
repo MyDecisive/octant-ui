@@ -48,6 +48,7 @@ export function useFetchManifestsAndDownload(isSideload?: boolean) {
           a.download = filename;
           a.click();
           URL.revokeObjectURL(url);
+          document.body.removeChild(a);
         })
         .finally(() => {
           setLoading(false);
