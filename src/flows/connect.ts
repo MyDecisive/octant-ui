@@ -1,7 +1,7 @@
 import type { ViewMap, ViewOrder } from "@types";
 import { DataFidelity } from "./connect/DataFidelity";
 import { DeployMethod } from "./connect/DeployMethod";
-import { ExecuteDeploy } from "./connect/ExecuteDeploy";
+import { ExecuteDeploy } from "./connect/ExecuteDeploy/ExecuteDeploy";
 import { ForwardData } from "./connect/ForwardData";
 import { NextSteps } from "./connect/NextSteps";
 import { PrepareCollector } from "./connect/PrepareCollector/PrepareCollector";
