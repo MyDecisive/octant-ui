@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import { useOctantConnectStore } from "@store";
-import type { ManifestPayload } from "@types";
+import type { ConnectionPayload } from "@types";
 import { connections } from "../../services/api";
 
 // TODO: Handle error state
@@ -14,7 +14,7 @@ export function useFetchManifestsAndDownload(isSideload?: boolean) {
 
   const fetchAndDownload = useCallback(
     (onStart?: () => void, onEnd?: () => void) => {
-      const manifestBody: ManifestPayload = {
+      const manifestBody: ConnectionPayload = {
         sourceType: "datadog",
         telemetryTypes,
         destinations: [

@@ -1,7 +1,6 @@
 import type {
   ConnectionPayload,
   IntegrationType,
-  ManifestPayload,
 } from "@types";
 import { apiFetch, BASE_URL } from "@utils/apiFetch";
 
@@ -66,7 +65,7 @@ export const integrations = {
 export const connections = {
   generateManifests: (
     connectionName: string,
-    body: ManifestPayload,
+    body: ConnectionPayload,
   ): Promise<Response> => {
     if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
       return devDelay<Response>(new Response(null, { status: 200 }));

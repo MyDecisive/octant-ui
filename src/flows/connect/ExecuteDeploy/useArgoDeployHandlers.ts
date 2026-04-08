@@ -7,6 +7,7 @@ import type {
   ArgoDeployment,
   ConnectionPayload,
   DeployMethod,
+  Destination,
   TelemetryTypes,
 } from "@types";
 import {
@@ -19,14 +20,14 @@ import type { ArgoDeployProps } from "./types";
 
 interface ConnectionPayloadDatas {
   deployMethod: DeployMethod;
-  argoUrl: string;
   telemetryTypes: TelemetryTypes[];
+  connectionName: string;
 }
 
 function appStateFormToConnectionPayload(
   formState: ConnectionPayloadDatas,
 ): ConnectionPayload {
-  const { telemetryTypes, deployMethod, argoUrl } = formState;
+  const { telemetryTypes, deployMethod, connectionName  } = formState;
 
   const initialPayload: Pick<
     ConnectionPayload,
@@ -36,16 +37,20 @@ function appStateFormToConnectionPayload(
     telemetryTypes: telemetryTypes,
   };
 
+  const destinations: Destination[] = [{
+    integrationName: connectionName,
+    type: "datadog"
+  }]
+
   if (deployMethod === "argocd-sideload") {
     const deployment: ArgoDeployment = {
       type: deployMethod,
-      fields: {
-        url: argoUrl,
-      },
+      integrationName: connectionName
     };
     return {
       ...initialPayload,
       deployment,
+      destinations
     };
   }
 
@@ -54,6 +59,7 @@ function appStateFormToConnectionPayload(
     deployment: {
       type: deployMethod,
     },
+    destinations
   };
 }
 
@@ -114,7 +120,7 @@ export function useArgoDeployHandlers({
     const connectionPayload = appStateFormToConnectionPayload({
       telemetryTypes,
       deployMethod,
-      argoUrl: argoUrl!,
+      connectionName,
     });
     const ddIntegrationPayload: DatadogIntegrationBody = {
       url: url,

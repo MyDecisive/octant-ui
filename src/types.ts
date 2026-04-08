@@ -11,25 +11,15 @@ export type TelemetryTypes = "logs" | "metrics" | "traces";
 
 interface BasePayloadPart {
   type: string;
-  fields?: Record<string, string>;
 }
 
 export interface ArgoDeployment extends BasePayloadPart {
   type: "argocd-sideload";
-  fields: {
-    url: string;
-  };
+  integrationName?: string;
 }
 
 export interface SelfDeployment extends BasePayloadPart {
   type: "argocd-manifests";
-}
-export interface ConnectionPayload {
-  // Deploy method
-  deployment: ArgoDeployment | SelfDeployment;
-  // Prepare Collector
-  sourceType: "datadog";
-  telemetryTypes?: TelemetryTypes[];
 }
 
 export interface Destination {
@@ -37,11 +27,11 @@ export interface Destination {
   integrationName: string;
 }
 
-export interface ManifestPayload {
+export interface ConnectionPayload {
   sourceType: "datadog";
   telemetryTypes: TelemetryTypes[];
   deployment: {
-    integrationName: string;
+    integrationName?: string;
     type: DeployMethod;
   };
   destinations: Destination[];
