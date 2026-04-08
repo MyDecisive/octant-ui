@@ -128,7 +128,7 @@ export function useArgoDeployHandlers({
     };
     const argoIntegrationPayload: ArgoCdIntegrationBody = {
       accountToken: accountToken,
-      url: argoUrl!,
+      apiUrl: argoUrl!,
     };
 
     setDeployError(null);
