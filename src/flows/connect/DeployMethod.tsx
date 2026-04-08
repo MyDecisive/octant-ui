@@ -16,12 +16,12 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   const { deployMethod, argoUrl, accountToken } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
-      const { deployMethod, argoUrl = "", accountToken = "" } = state.form;
+      const { deployMethod, argoUrl, accountToken } = state.form;
 
       return {
         deployMethod,
-        argoUrl,
-        accountToken,
+        argoUrl: argoUrl || "",
+        accountToken: accountToken || "",
       };
     }),
   );
@@ -82,12 +82,14 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
                   tooltip={
                     "Target Argo URL is where these changes will live in your version control platform. Please make sure this Argo URL changes as your promote this change through your SDLC environments."
                   }
+                  onBlur={(e) => localStorage.setItem("octant-argo-url", e.target.value)}
                 />
                 <Input
                   value={accountToken}
                   onChange={(e) => setFormField("accountToken", e.target.value)}
                   required
                   placeholder="Argo account token?"
+                  onBlur={(e) => localStorage.setItem("octant-argo-token", e.target.value)}
                 />
               </>
             )}

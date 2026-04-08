@@ -27,15 +27,23 @@ interface Actions {
 type OctantConnectStore = Values & Actions;
 
 function createDefaultOctantConnectForm(): AppStateForm {
+  const argoUrl = localStorage.getItem("octant-argo-url");
+  const argoToken = localStorage.getItem("octant-argo-token");
+  const ddApiKey = localStorage.getItem("octant-dd-api-key");
+  const ddUrl = localStorage.getItem("octant-dd-url");
   return {
     deployMethod: "argocd-sideload",
     telemetryTypes: [],
+    argoUrl,
+    accountToken: argoToken,
+    apiKey: ddApiKey,
+    url: ddUrl
   };
 }
 
 function createDefaultOctantConnectState() {
   return {
-    activeView: "splash",
+    activeView: "splash", 
     form: createDefaultOctantConnectForm(),
   };
 }

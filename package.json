@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "docker-build": "docker build -t ghcr.io/mydecisive/octant-ui:$npm_package_version .",
-    "build-to-kind": "npm run docker-build && kind load docker-image ghcr.io/mydecisive/octant-ui:$npm_package_version -n mdai",
+    "build-to-kind": "npm run docker-build && kind load docker-image ghcr.io/mydecisive/octant-ui:$npm_package_version -n mdai-argo-labs",
     "local-deploy": "helm template octant-ui ./deployment -f ./deployment/values.yaml --set image.repository=octant-ui --set image.tag=$npm_package_version -n mdai | kubectl apply -n mdai -f -",
     "local-pod-restart": "kubectl -n mdai rollout restart deploy/octant-ui",
     "local-all": "npm run build-to-kind && npm run local-deploy && npm run local-pod-restart",

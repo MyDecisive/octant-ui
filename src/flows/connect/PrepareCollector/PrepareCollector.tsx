@@ -40,15 +40,15 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
       // Provide default empty string values so React recognizes the Inputs as controlled
       const {
         telemetryTypes,
-        url = "",
-        apiKey = "",
+        url,
+        apiKey,
         connectionName = "",
       } = state.form;
 
       return {
         telemetryTypes,
-        url,
-        apiKey,
+        url: url || "",
+        apiKey: apiKey || "",
         connectionName,
       };
     }),
@@ -120,7 +120,7 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
             placeholder="Destination URL"
             tooltip={"Log into your Datadog account to acquire the API key"}
             onFocus={() => setFocusedField("url")}
-            onBlur={handleBlur}
+            onBlur={(e) => handleBlur() && localStorage.setItem("octant-dd-url", e.target.value)}
           />
           <Input
             value={apiKey}
@@ -128,7 +128,7 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
             required
             placeholder="Datadog API key"
             onFocus={() => setFocusedField("apiKey")}
-            onBlur={handleBlur}
+            onBlur={(e) => handleBlur() && localStorage.setItem("octant-dd-api-key", e.target.value)}
           />
 
           <Typography variant="h6">Telemetry connection</Typography>
