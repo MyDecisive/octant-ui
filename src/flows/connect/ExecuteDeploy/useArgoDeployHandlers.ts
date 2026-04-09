@@ -3,12 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import { useOctantConnectStore } from "@store";
-import type {
-  ArgoDeployment,
-  ConnectionPayload,
-  DeployMethod,
-  TelemetryTypes,
-} from "@types";
+import type { ManifestPayload } from "@types";
 import {
   connections,
   integrations,
@@ -16,46 +11,6 @@ import {
   type DatadogIntegrationBody,
 } from "../../../services/api";
 import type { ArgoDeployProps } from "./types";
-
-interface ConnectionPayloadDatas {
-  deployMethod: DeployMethod;
-  argoUrl: string;
-  telemetryTypes: TelemetryTypes[];
-}
-
-function appStateFormToConnectionPayload(
-  formState: ConnectionPayloadDatas,
-): ConnectionPayload {
-  const { telemetryTypes, deployMethod, argoUrl } = formState;
-
-  const initialPayload: Pick<
-    ConnectionPayload,
-    "sourceType" | "telemetryTypes"
-  > = {
-    sourceType: "datadog",
-    telemetryTypes: telemetryTypes,
-  };
-
-  if (deployMethod === "argocd-sideload") {
-    const deployment: ArgoDeployment = {
-      type: deployMethod,
-      fields: {
-        url: argoUrl,
-      },
-    };
-    return {
-      ...initialPayload,
-      deployment,
-    };
-  }
-
-  return {
-    ...initialPayload,
-    deployment: {
-      type: deployMethod,
-    },
-  };
-}
 
 function determineDeployButtonProps(
   loading: boolean,
@@ -96,33 +51,35 @@ export function useArgoDeployHandlers({
 }: ArgoDeployProps) {
   const [loading, setLoading] = useState(false);
   const [deployError, setDeployError] = useState<string | null>(null);
-  const {
-    connectionName,
-    url,
-    apiKey,
-    accountToken,
-    telemetryTypes,
-    deployMethod,
-    argoUrl,
-  } = useOctantConnectStore(useShallow((state) => state.form));
+  const { connectionName, url, apiKey, accountToken, telemetryTypes, argoUrl } =
+    useOctantConnectStore(useShallow((state) => state.form));
 
   const handleDeployButtonClick = useCallback(() => {
     if (!connectionName || !url || !apiKey || !accountToken) {
       return;
     }
 
-    const connectionPayload = appStateFormToConnectionPayload({
+    const connectionPayload: ManifestPayload = {
+      sourceType: "datadog",
       telemetryTypes,
-      deployMethod,
-      argoUrl: argoUrl!,
-    });
+      destinations: [
+        {
+          type: "datadog",
+          integrationName: connectionName,
+        },
+      ],
+      deployment: {
+        type: "argocd-sideload",
+        integrationName: connectionName,
+      },
+    };
     const ddIntegrationPayload: DatadogIntegrationBody = {
       url: url,
       apiKey: apiKey,
     };
     const argoIntegrationPayload: ArgoCdIntegrationBody = {
       accountToken: accountToken,
-      url: argoUrl!,
+      apiUrl: argoUrl!,
     };
 
     setDeployError(null);
@@ -160,7 +117,6 @@ export function useArgoDeployHandlers({
     apiKey,
     accountToken,
     telemetryTypes,
-    deployMethod,
     argoUrl,
     onDeployFinish,
   ]);
