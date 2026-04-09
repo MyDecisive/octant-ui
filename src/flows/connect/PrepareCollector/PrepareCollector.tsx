@@ -134,8 +134,10 @@ export function PrepareCollector({ onClickProgress }: BaseFlowViewProps) {
           <Typography variant="h6">Telemetry connection</Typography>
 
           <Input
-            value={connectionName}
-            onChange={(e) => setFormField("connectionName", e.target.value)}
+            value={decodeURI(connectionName)}
+            onChange={(e) =>
+              setFormField("connectionName", encodeURI(e.target.value))
+            }
             onFocus={() => setFocusedField("connectionName")}
             onBlur={handleBlur}
             required
