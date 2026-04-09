@@ -37,6 +37,7 @@ export function ViewContent({
         {mainContent}
         {onButtonClick && (
           <Button
+            className="view-content-main-column-button"
             variant="contained"
             size="small"
             type={"button"}

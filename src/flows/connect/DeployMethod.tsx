@@ -8,12 +8,12 @@ import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 
 const deployMethodOptions = [
-  { label: "Yes, deploy on my behalf", value: "argocd" },
-  { label: "No, I will deploy on my own", value: "self" },
+  { label: "Yes, deploy on my behalf", value: "argocd-sideload" },
+  { label: "No, I will deploy on my own", value: "argocd-manifests" },
 ];
 
 export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
-  const { deployMethod, accountToken, argoUrl } = useOctantConnectStore(
+  const { deployMethod, argoUrl, accountToken } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
       const { deployMethod, argoUrl = "", accountToken = "" } = state.form;
@@ -28,9 +28,9 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const handleSetDeployMethod = useCallback(
-    (method: "argocd" | "self") => {
+    (method: "argocd-sideload" | "argocd-manifests") => {
       setFormField("deployMethod", method);
-      if (method === "self") {
+      if (method === "argocd-manifests") {
         setFormField("accountToken", undefined);
         setFormField("argoUrl", undefined);
       }
@@ -39,12 +39,12 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
   );
 
   const canClickNextButton = useMemo(() => {
-    if (deployMethod === "argocd") {
-      return !!(accountToken.length && argoUrl.length);
+    if (deployMethod === "argocd-sideload") {
+      return !!(argoUrl.length && accountToken.length);
     }
 
     return true;
-  }, [deployMethod, accountToken, argoUrl]);
+  }, [deployMethod, argoUrl, accountToken]);
 
   return (
     <ViewContent
@@ -56,7 +56,7 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
           on your behalf.
           <br />
           <br />
-          Note: Do not deploy to a branch that is actively in development (ex.
+          Note: Do not deploy to a argoUrl that is actively in development (ex.
           production environment).
         </>
       }
@@ -67,16 +67,21 @@ export function DeployMethod({ onClickProgress }: BaseFlowViewProps) {
               values={deployMethodOptions}
               selected={deployMethod}
               onChange={(event) =>
-                handleSetDeployMethod(event.target.value as "argocd" | "self")
+                handleSetDeployMethod(
+                  event.target.value as "argocd-sideload" | "argocd-manifests",
+                )
               }
             />
-            {deployMethod === "argocd" && (
+            {deployMethod === "argocd-sideload" && (
               <>
                 <Input
                   value={argoUrl}
                   onChange={(e) => setFormField("argoUrl", e.target.value)}
                   required
-                  placeholder="Argo repository URL"
+                  placeholder="Target Argo URL"
+                  tooltip={
+                    "Target Argo URL is where these changes will live in your version control platform. Please make sure this Argo URL changes as your promote this change through your SDLC environments."
+                  }
                 />
                 <Input
                   value={accountToken}

@@ -14,6 +14,7 @@
   color: var(--mdai-grey-700);
 }
 
+.simple-card-button.MuiButton-root,
 .simple-card-link.MuiButton-root {
   flex-shrink: 0;
   padding: 0;

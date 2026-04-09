@@ -9,9 +9,7 @@ server {
     }
 
     location /api/ {
-        set $gateway_upstream ${GATEWAY_HOST};
-        rewrite ^/api/(.*)$ /$1 break;
-        proxy_pass $gateway_upstream;
+        proxy_pass ${GATEWAY_HOST}/;
         
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

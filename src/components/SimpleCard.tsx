@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import Button, { type ButtonProps } from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Stack from "@mui/material/Stack";
@@ -10,16 +10,22 @@ import "./SimpleCard.css";
 interface SimpleCardProps {
   title: string;
   description?: string;
-  linkText?: string;
-  linkHref?: string;
   content?: ReactNode;
+  link?: {
+    text: string;
+    href: string;
+  };
+  button?: ButtonProps & {
+    onClick: () => void;
+    text: string;
+  };
 }
 
 export function SimpleCard({
   title,
   description,
-  linkText,
-  linkHref,
+  link,
+  button,
   content,
 }: SimpleCardProps) {
   return (
@@ -39,17 +45,29 @@ export function SimpleCard({
           </Box>
           {content}
         </Stack>
-        {linkText && linkHref && (
+        {link && (
           <Button
             variant="text"
             target="_blank"
             rel="noopener noreferrer"
-            href={linkHref}
+            href={link.href}
             size="small"
             className="simple-card-link"
             disableRipple
           >
-            {linkText}
+            {link.text}
+          </Button>
+        )}
+        {button && (
+          <Button
+            variant="text"
+            size="small"
+            className="simple-card-button"
+            disableRipple
+            onClick={button.onClick}
+            loading={button.loading}
+          >
+            {button.text}
           </Button>
         )}
       </CardContent>

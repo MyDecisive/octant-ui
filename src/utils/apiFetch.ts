@@ -4,7 +4,7 @@ function normalizeBaseUrl(baseUrl: string): string {
   return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
 }
 
-const BASE_URL = normalizeBaseUrl(
+export const BASE_URL = normalizeBaseUrl(
   import.meta.env.VITE_API_BASE_URL ?? DEFAULT_BASE_URL,
 );
 

@@ -36,3 +36,7 @@
 .data-fidelity-table.MuiDataGrid-root .MuiDataGrid-row {
   border-bottom: 1px solid #d0d0d6;
 }
+
+.data-fidelity-action-button.MuiButton-root {
+  align-self: flex-start;
+}

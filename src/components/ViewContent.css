@@ -13,7 +13,7 @@
   min-height: 0;
 }
 
-.view-content-main-column.MuiStack-root button {
+.view-content-main-column-button.MuiButton-root {
   align-self: flex-start;
   text-transform: none;
 }

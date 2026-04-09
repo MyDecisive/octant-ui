@@ -1,5 +1,7 @@
 import type { JSX } from "react";
 
+export type DeployMethod = "argocd-sideload" | "argocd-manifests";
+
 export interface BaseFlowViewProps {
   onClickProgress: () => void;
 }
@@ -7,27 +9,19 @@ export interface BaseFlowViewProps {
 export type IntegrationType = "datadog" | "argocd";
 export type TelemetryTypes = "logs" | "metrics" | "traces";
 
-interface BasePayloadPart {
-  type: string;
-  fields?: Record<string, string>;
+interface Destination {
+  type: "datadog";
+  integrationName: string;
 }
 
-export interface ArgoDeployment extends BasePayloadPart {
-  type: "argocd";
-  fields: {
-    url: string;
-  };
-}
-
-export interface SelfDeployment extends BasePayloadPart {
-  type: "self";
-}
-export interface ConnectionPayload {
-  // Deploy method
-  deployment: ArgoDeployment | SelfDeployment;
-  // Prepare Collector
+export interface ManifestPayload {
   sourceType: "datadog";
-  telemetryTypes?: TelemetryTypes[];
+  telemetryTypes: TelemetryTypes[];
+  deployment: {
+    integrationName: string;
+    type: DeployMethod;
+  };
+  destinations: Destination[];
 }
 
 export type ViewMap = Record<

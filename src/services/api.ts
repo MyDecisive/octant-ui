@@ -1,5 +1,5 @@
-import type { ConnectionPayload, IntegrationType } from "@types";
-import { apiFetch } from "@utils/apiFetch";
+import type { IntegrationType, ManifestPayload } from "@types";
+import { apiFetch, BASE_URL } from "@utils/apiFetch";
 
 interface Integration {
   name: string;
@@ -12,6 +12,7 @@ export interface DatadogIntegrationBody {
 
 export interface ArgoCdIntegrationBody {
   accountToken: string;
+  apiUrl: string;
 }
 
 type IntegrationBody = DatadogIntegrationBody | ArgoCdIntegrationBody;
@@ -59,6 +60,19 @@ export const integrations = {
 };
 
 export const connections = {
+  generateManifests: (
+    connectionName: string,
+    body: ManifestPayload,
+  ): Promise<Response> => {
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
+      return devDelay<Response>(new Response(null, { status: 200 }));
+    }
+    return fetch(`${BASE_URL}/connections/${connectionName}/manifests/yaml`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  },
   getAll: (): Promise<Connection[]> => {
     if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
       return devDelay<Connection[]>([{ name: "datadog-connection-1" }]);
@@ -66,9 +80,11 @@ export const connections = {
     return apiFetch.get("/connections");
   },
 
-  upsert: (name: string, body: ConnectionPayload): Promise<void> => {
-    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true")
+  upsert: (name: string, body: ManifestPayload): Promise<void> => {
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
+      console.log("connections.upsert args", { name, body });
       return devDelay<void>(undefined);
+    }
     return apiFetch.put(`/connections/${name}`, { body });
   },
 
