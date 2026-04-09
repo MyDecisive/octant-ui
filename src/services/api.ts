@@ -59,6 +59,10 @@ export const integrations = {
   },
 };
 
+function generateFidelityValue() {
+  return Math.random() > 0.8;
+}
+
 export const connections = {
   generateManifests: (
     connectionName: string,
@@ -78,6 +82,26 @@ export const connections = {
       return devDelay<Connection[]>([{ name: "datadog-connection-1" }]);
     }
     return apiFetch.get("/connections");
+  },
+
+  getStatus: (
+    connectionName: string,
+  ): Promise<{
+    receivingData: boolean;
+    sendingData: boolean;
+    dataIntegrity: boolean;
+    details: unknown;
+  }> => {
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
+      return devDelay({
+        receivingData: generateFidelityValue(),
+        sendingData: generateFidelityValue(),
+        dataIntegrity: generateFidelityValue(),
+        details: "",
+      });
+    }
+
+    return apiFetch.get(`/connections/${connectionName}/status`);
   },
 
   upsert: (name: string, body: ManifestPayload): Promise<void> => {

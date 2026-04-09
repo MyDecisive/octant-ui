@@ -5,6 +5,7 @@ import type { ButtonProps } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 import {
   DataGrid,
   type GridColDef,
@@ -13,16 +14,18 @@ import {
 import type { BaseFlowViewProps } from "@types";
 import { useCallback, useState } from "react";
 
+import { useOctantConnectStore } from "@store";
+import { connections } from "../../services/api";
 import "./DataFidelity.css";
 
-type FidelityCellValues = "loading" | "good" | "bad" | null;
+type FidelityCellValues = "loading" | boolean | null;
 
 interface DataFidelityStatus {
   id: string;
   connection: "Datadog";
-  receiving: FidelityCellValues;
-  sending: FidelityCellValues;
-  integrity: FidelityCellValues;
+  receivingData: FidelityCellValues;
+  sendingData: FidelityCellValues;
+  dataIntegrity: FidelityCellValues;
   details: FidelityCellValues;
 }
 
@@ -30,9 +33,9 @@ const initialRows: DataFidelityStatus[] = [
   {
     id: "datadog",
     connection: "Datadog",
-    receiving: null,
-    sending: null,
-    integrity: null,
+    receivingData: null,
+    sendingData: null,
+    dataIntegrity: null,
     details: null,
   },
 ];
@@ -40,10 +43,10 @@ const initialRows: DataFidelityStatus[] = [
 function FidelityCell({
   value,
 }: GridRenderCellParams<DataFidelityStatus, FidelityCellValues>) {
-  if (value === "bad") {
+  if (value === false) {
     return <CancelIcon color="error" />;
   }
-  if (value === "good") {
+  if (value === true) {
     return <CheckCircleIcon color="success" />;
   }
 
@@ -71,19 +74,19 @@ const columns: GridColDef<DataFidelityStatus>[] = [
   },
   {
     ...baseColumn,
-    field: "receiving",
+    field: "receivingData",
     headerName: "Receiving data",
     renderCell: FidelityCell,
   },
   {
     ...baseColumn,
-    field: "sending",
+    field: "sendingData",
     headerName: "Sending data",
     renderCell: FidelityCell,
   },
   {
     ...baseColumn,
-    field: "integrity",
+    field: "dataIntegrity",
     headerName: "Data integrity",
     renderCell: FidelityCell,
   },
@@ -131,45 +134,53 @@ function determineButtonProps(
   };
 }
 
-async function fakeTestDataFidelity() {
-  return await new Promise((resolve) => setTimeout(resolve, 1500));
-}
-
-function generateFidelityValue() {
-  return Math.random() > 0.8 ? "bad" : "good";
-}
-
 export function DataFidelity({ onClickProgress }: BaseFlowViewProps) {
   const [rows, setRows] = useState<DataFidelityStatus[]>(initialRows);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTestedAtLeastOnce, setHasTested] = useState(false);
+  const [error, setError] = useState<string | null>();
+  const connectionName = useOctantConnectStore(
+    (state) => state.form.connectionName,
+  );
 
   const handleTestButtonClick = useCallback(() => {
     setLoading(true);
     setRows((currentRows) =>
       currentRows.map((row) => ({
         ...row,
-        receiving: "loading",
-        sending: "loading",
-        integrity: "loading",
+        receivingData: "loading",
+        sendingData: "loading",
+        dataIntegrity: "loading",
       })),
     );
-    void fakeTestDataFidelity()
-      .then(() => {
+
+    void connections
+      .getStatus(connectionName!)
+      .then((response) => {
         setRows((currentRows) =>
           currentRows.map((row) => ({
             ...row,
-            receiving: generateFidelityValue(),
-            sending: generateFidelityValue(),
-            integrity: generateFidelityValue(),
+            receivingData: response.receivingData,
+            sendingData: response.sendingData,
+            dataIntegrity: response.dataIntegrity,
           })),
         );
       })
       .then(() => {
-        setLoading(false);
         setHasTested(true);
+      })
+      .catch((error: unknown) => {
+        console.log("error getting connection status", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while trying to determine the status of your collector",
+        );
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, []);
+  }, [connectionName]);
 
   const { text, variant, color } = determineButtonProps(
     loading,
@@ -211,6 +222,11 @@ export function DataFidelity({ onClickProgress }: BaseFlowViewProps) {
           >
             {text}
           </Button>
+          {error && (
+            <Typography variant="body2" color="error">
+              {error}
+            </Typography>
+          )}
         </>
       }
       buttonDisabled={!hasTestedAtLeastOnce}
