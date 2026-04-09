@@ -1,8 +1,4 @@
-import type {
-  ConnectionPayload,
-  IntegrationType,
-  ManifestPayload,
-} from "@types";
+import type { IntegrationType, ManifestPayload } from "@types";
 import { apiFetch, BASE_URL } from "@utils/apiFetch";
 
 interface Integration {
@@ -16,7 +12,7 @@ export interface DatadogIntegrationBody {
 
 export interface ArgoCdIntegrationBody {
   accountToken: string;
-  url: string;
+  apiUrl: string;
 }
 
 type IntegrationBody = DatadogIntegrationBody | ArgoCdIntegrationBody;
@@ -84,9 +80,11 @@ export const connections = {
     return apiFetch.get("/connections");
   },
 
-  upsert: (name: string, body: ConnectionPayload): Promise<void> => {
-    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true")
+  upsert: (name: string, body: ManifestPayload): Promise<void> => {
+    if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
+      console.log("connections.upsert args", { name, body });
       return devDelay<void>(undefined);
+    }
     return apiFetch.put(`/connections/${name}`, { body });
   },
 
