@@ -82,6 +82,11 @@ export function useArgoDeployHandlers({
       apiUrl: argoUrl!,
     };
 
+    localStorage.setItem("octant-last-integrations", JSON.stringify({
+      argocd: argoIntegrationPayload,
+      datadog: ddIntegrationPayload
+    }));
+
     setDeployError(null);
     setLoading(true);
 

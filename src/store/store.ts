@@ -1,5 +1,6 @@
 import type { DeployMethod, TelemetryTypes, ViewKey } from "@types";
 import { create } from "zustand";
+import type { ArgoCdIntegrationBody, DatadogIntegrationBody } from "../services/api";
 
 export interface AppStateForm {
   deployMethod: DeployMethod;
@@ -26,10 +27,29 @@ interface Actions {
 
 type OctantConnectStore = Values & Actions;
 
+type LastIntegrationValues = {
+  argocd?: ArgoCdIntegrationBody;
+  datadog?: DatadogIntegrationBody;
+}
+
 function createDefaultOctantConnectForm(): AppStateForm {
+  const lastIntegrationValuesStr = localStorage.getItem("octant-last-integrations") as string || undefined;
+  let lastIntegrationValues: LastIntegrationValues = {}
+  try {
+    if (lastIntegrationValuesStr) {
+      lastIntegrationValues = JSON.parse(lastIntegrationValuesStr) as LastIntegrationValues
+    }
+  } catch (err) {
+    console.log(err)
+  }
+
   return {
     deployMethod: "argocd-sideload",
     telemetryTypes: [],
+    argoUrl: lastIntegrationValues?.argocd?.apiUrl,
+    accountToken: lastIntegrationValues?.argocd?.accountToken,
+    url: lastIntegrationValues?.datadog?.url,
+    apiKey: lastIntegrationValues?.datadog?.apiKey,
   };
 }
 
