@@ -13,7 +13,7 @@
 
 .code-snippet-content {
   width: 100%;
-  max-height: inherit;
+  max-height: 100%;
   min-width: 0;
   min-height: 0;
   overflow-x: auto;
