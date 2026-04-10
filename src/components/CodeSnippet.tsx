@@ -8,9 +8,14 @@ import "./CodeSnippet.css";
 interface CodeSnippetProps {
   code: string;
   copyButton?: boolean;
+  maxHeight?: string;
 }
 
-export function CodeSnippet({ code, copyButton = true }: CodeSnippetProps) {
+export function CodeSnippet({
+  code,
+  copyButton = true,
+  maxHeight = "100vh",
+}: CodeSnippetProps) {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyCodeToClipboard = async () => {
@@ -24,7 +29,7 @@ export function CodeSnippet({ code, copyButton = true }: CodeSnippetProps) {
   };
 
   return (
-    <Box className="code-snippet-container">
+    <Box className="code-snippet-container" sx={{ maxHeight: maxHeight }}>
       <Box className="code-snippet-content">
         <pre>
           <code>{code}</code>
