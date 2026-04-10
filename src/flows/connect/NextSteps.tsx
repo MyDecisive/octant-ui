@@ -1,9 +1,14 @@
 import { CodeSnippet } from "@components/CodeSnippet";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewContent } from "@components/ViewContent";
+import { useOctantConnectStore } from "@store";
 import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 
 export function NextSteps() {
+  const connectionName = useOctantConnectStore(
+    (state) => state.form.connectionName,
+  );
+
   const { loading, fetchAndDownload } = useFetchManifestsAndDownload();
 
   const handleDownloadManifestsClick = () => fetchAndDownload();
@@ -47,8 +52,9 @@ export function NextSteps() {
           <SimpleCard
             title="Revert your Argo CD & Datadog agent changes"
             description="Something didn't go as planned. Run the command below to restore both your Argo CD configuration and Datadog agent to their previous state:"
-            // TODO: Replace with actual command once ready
-            content={<CodeSnippet code={"[command goes here]"} />}
+            content={
+              <CodeSnippet code={`argocd app delete ${connectionName}`} />
+            }
           />
         </>
       }

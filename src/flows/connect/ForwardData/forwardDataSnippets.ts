@@ -1,30 +1,15 @@
-export interface ForwardDataSnippet {
-  title: string;
-  code: string;
-}
-
-interface CreateForwardDataSnippetsOptions {
+interface ForwardDataSnippetOptions {
   connectionName?: string;
   url?: string;
-}
-
-const DEFAULT_COLLECTOR_NAMESPACE = "mdai";
-const collectorNamePlaceholder = "<collector_name>";
-const datadogSitePlaceholder = "<dd_site>.datadoghq.com";
-
-function createCollectorEndpoint(connectionName?: string) {
-  const collectorName = connectionName || collectorNamePlaceholder;
-
-  return `http://${collectorName}-collector.${DEFAULT_COLLECTOR_NAMESPACE}.svc.cluster.local:8126`;
+  namespace?: string;
 }
 
 export function createForwardDataSnippets({
   connectionName,
   url,
-}: CreateForwardDataSnippetsOptions): ForwardDataSnippet[] {
-  const collectorEndpoint = createCollectorEndpoint(connectionName);
-  const datadogSite = url || datadogSitePlaceholder;
-
+  namespace = "mdai",
+}: ForwardDataSnippetOptions) {
+  const collectorEndpoint = `http://${connectionName}-collector.${namespace}.svc.cluster.local:8126`;
   return [
     {
       title: "Metrics only",
@@ -68,7 +53,7 @@ export function createForwardDataSnippets({
       code: `datadog:
   apiKeyExistingSecret: datadog-secret
   clusterName: <cluster_name>
-  site: ${datadogSite}
+  site: ${url}
 
   # Metrics / events / service checks are forwarded here instead of Datadog intake.
   # Your collector or gateway must understand Datadog intake formats.

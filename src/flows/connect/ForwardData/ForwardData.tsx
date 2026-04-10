@@ -4,9 +4,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps } from "@types";
-import { useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { createForwardDataSnippets } from "./ForwardDataUtils";
+import { createForwardDataSnippets } from "./forwardDataSnippets";
 
 export function ForwardData({ onClickProgress }: BaseFlowViewProps) {
   const { connectionName, url } = useOctantConnectStore(
@@ -15,10 +14,10 @@ export function ForwardData({ onClickProgress }: BaseFlowViewProps) {
       url: state.form.url,
     })),
   );
-  const forwardDataSnippets = useMemo(
-    () => createForwardDataSnippets({ connectionName, url }),
-    [connectionName, url],
-  );
+  const forwardDataSnippets = createForwardDataSnippets({
+    connectionName,
+    url,
+  });
 
   return (
     <ViewContent
