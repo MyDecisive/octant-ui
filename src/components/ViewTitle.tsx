@@ -11,7 +11,9 @@ interface ViewTitleProps {
 export function ViewTitle({ title, description }: ViewTitleProps) {
   return (
     <Stack gap={1} alignItems={"flex-start"} alignSelf={"stretch"}>
-      <Typography variant="h5">{title}</Typography>
+      <Typography className="view-title-title" variant="h5">
+        {title}
+      </Typography>
       {description && (
         <Typography variant="body2" className="view-title-description">
           {description}
