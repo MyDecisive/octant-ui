@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import "./ViewTitle.css";
 
 interface ViewTitleProps {
-  title: string;
+  title: ReactNode;
   description?: ReactNode;
 }
 
