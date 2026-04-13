@@ -1,0 +1,13 @@
+.splash-avatar.MuiAvatar-root {
+  border-radius: 100px;
+  background: var(--primary-_states-focus, rgba(142, 36, 170, 0.12));
+  color: rgba(0, 0, 0, 0.56);
+}
+
+.splash-button.MuiButton-root {
+  align-self: flex-start;
+}
+
+img.octobuddy-logo {
+  height: 30px;
+}
