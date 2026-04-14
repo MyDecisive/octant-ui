@@ -1,7 +1,6 @@
 import { useOctantConnectStore } from "@store";
 import { useCallback } from "react";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/install";
-import "./FlowContainer.css";
 import { LeftColumn } from "./layout/LeftColumn";
 import { Nav } from "./Nav";
 
