@@ -84,24 +84,35 @@ export const theme = createTheme({
       },
     },
     MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+      },
       variants: [
         {
           props: { variant: "secondary" },
           style: {
             background: "#E0E0E0",
             color: "#1D1D21",
+            padding: "4px 10px",
+            minWidth: 64,
+          },
+        },
+        {
+          props: { variant: "successDisabled" },
+          style: {
+            padding: "4px 10px",
+            minWidth: 64,
+            boxShadow: "none",
+            "&.Mui-disabled": {
+              background: "#DDEEDD",
+              color: "rgba(0, 0, 0, 0.38)",
+              opacity: 1,
+            },
           },
         },
       ],
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-          "&.Mui-disabled.MuiButton-colorSuccess.MuiButton-contained": {
-            backgroundColor: "rgba(46, 125, 50, 30%)",
-            color: "rgba(0,0,0,38%)",
-          },
-        },
-      },
     },
   },
 });

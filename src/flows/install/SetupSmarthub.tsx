@@ -1,76 +1,31 @@
+import { AsyncButtonRow } from "@components/AsyncButtonRow";
 import { Input } from "@components/formInputs/Input";
-import { ButtonRow } from "@components/layout/ButtonRow";
 import { CenterColumn } from "@components/layout/CenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps } from "@types";
-import { useEffect, useState } from "react";
-
-interface InstallStatus {
-  status: "install" | "installing" | "error" | "installed";
-  attempts: number;
-  error: string | null;
-}
+import { useRef } from "react";
 
 export function SetupSmarthub({ onClickProgress }: BaseFlowViewProps) {
   const namespace = useOctantConnectStore((state) => state.form.namespace);
   const setFormField = useOctantConnectStore((state) => state.setFormField);
+  const installAttemptRef = useRef(0);
 
-  // TODO: Refine/Refactor below once API implemented
-  const [installStatus, setInstallStatus] = useState<InstallStatus>({
-    status: "install",
-    attempts: 0,
-    error: null,
-  });
-
-  useEffect(() => {
-    if (installStatus.status !== "installing") {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      if (installStatus.attempts === 1) {
-        setInstallStatus((currentStatus) => ({
-          ...currentStatus,
-          status: "error",
-          error:
-            "Something went wrong while trying to install Smarthub. Please review your settings and try again.",
-        }));
-        return;
-      }
-      setInstallStatus((currentStatus) => ({
-        ...currentStatus,
-        status: "installed",
-        error: null,
-      }));
-    }, 2000);
-    return () => window.clearTimeout(timer);
-  }, [installStatus]);
-
-  const handleInstallClick = () => {
-    if (
-      installStatus.status === "installing" ||
-      installStatus.status === "installed"
-    ) {
-      return;
-    }
-    setInstallStatus((currentStatus) => ({
-      status: "installing",
-      attempts: currentStatus.attempts + 1,
-      error: null,
-    }));
-  };
-
-  const installButtonText =
-    installStatus.status === "installing"
-      ? "Installing..."
-      : installStatus.status === "error"
-        ? "Retry install"
-        : installStatus.status === "installed"
-          ? "Installed"
-          : "Install";
+  const handleInstall = () =>
+    new Promise<void>((resolve, reject) => {
+      installAttemptRef.current += 1;
+      window.setTimeout(() => {
+        if (installAttemptRef.current === 1) {
+          reject(
+            new Error(
+              "Something went wrong while trying to install Smarthub. Review your settings.",
+            ),
+          );
+          return;
+        }
+        resolve();
+      }, 2000);
+    });
 
   return (
     <CenterColumn>
@@ -86,40 +41,19 @@ export function SetupSmarthub({ onClickProgress }: BaseFlowViewProps) {
         onChange={(e) => setFormField("namespace", e.target.value)}
       />
 
-      <ButtonRow>
-        <Button
-          className="view-content-main-column-button"
-          variant={
-            installStatus.status === "installed"
-              ? "successDisabled"
-              : "contained"
-          }
-          size="small"
-          type={"button"}
-          onClick={handleInstallClick}
-          disabled={
-            installStatus.status === "installing" ||
-            installStatus.status === "installed"
-          }
-        >
-          {installButtonText}
-        </Button>
-        <Button
-          className="view-content-main-column-button"
-          variant="contained"
-          size="small"
-          type={"button"}
-          onClick={onClickProgress}
-          disabled={installStatus.status !== "installed"}
-        >
-          Next
-        </Button>
-      </ButtonRow>
-      {installStatus.error && (
-        <Typography variant="body2" color="error">
-          {installStatus.error}
-        </Typography>
-      )}
+      <AsyncButtonRow
+        asyncFunction={handleInstall}
+        canAsync={namespace.trim().length > 0}
+        retries={1}
+        onClickProgress={onClickProgress}
+        asyncButtonText={{
+          text: "Install",
+          loading: "Installing...",
+          done: "Installed",
+          retry: "Retry install",
+          error: "Install failed",
+        }}
+      />
     </CenterColumn>
   );
 }
