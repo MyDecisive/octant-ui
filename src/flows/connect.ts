@@ -1,4 +1,5 @@
 import type { ViewMap, ViewOrder } from "@types";
+import { ArgoInstall } from "./connect/ArgoInstall";
 import { DataFidelity } from "./connect/DataFidelity";
 import { DeployMethod } from "./connect/DeployMethod";
 import { ExecuteDeploy } from "./connect/ExecuteDeploy/ExecuteDeploy";
@@ -7,6 +8,10 @@ import { NextSteps } from "./connect/NextSteps";
 import { PrepareCollector } from "./connect/PrepareCollector/PrepareCollector";
 
 export const VIEW_MAP: ViewMap = {
+  argoInstall: {
+    Component: ArgoInstall,
+    label: "Install via ArgoCD",
+  },
   deployMethod: {
     Component: DeployMethod,
     label: "Deploy to your Argo CD server",
@@ -34,6 +39,7 @@ export const VIEW_MAP: ViewMap = {
 };
 
 export const VIEW_ORDER: ViewOrder = [
+  "argoInstall",
   "deployMethod",
   "prepareCollector",
   "executeDeploy",
