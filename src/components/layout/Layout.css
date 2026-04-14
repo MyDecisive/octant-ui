@@ -1,9 +1,12 @@
 .meta-container.MuiBox-root {
+  --layout-max-height: calc(100vh - calc(var(--mdai-spacing-unit) * 20));
+
   box-sizing: content-box;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding: calc(var(--mdai-spacing-unit) * 5) calc(var(--mdai-spacing-unit) * 3);
+  overflow: hidden;
 }
 
 .layout-container.MuiPaper-root {
@@ -11,12 +14,19 @@
   padding: calc(var(--mdai-spacing-unit) * 5) calc(var(--mdai-spacing-unit) * 3);
   min-height: 620px;
   border: 1px solid #cfcfd4;
-  height: 100%;
+  height: min(100%, var(--layout-max-height));
+  max-height: var(--layout-max-height);
+  overflow: hidden;
 }
 
 .column-container.MuiBox-root {
   display: grid;
   gap: calc(var(--mdai-spacing-unit) * 3);
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto;
+  grid-template-rows: min(100%, var(--layout-max-height));
+  align-items: flex-start;
+  max-height: var(--layout-max-height);
+  min-height: 0;
+  height: min(100%, var(--layout-max-height));
+  overflow: hidden;
 }
