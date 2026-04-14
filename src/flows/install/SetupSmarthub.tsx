@@ -8,11 +8,11 @@ import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps } from "@types";
 import { useEffect, useState } from "react";
 
-type InstallStatus = {
+interface InstallStatus {
   status: "install" | "installing" | "error" | "installed";
   attempts: number;
   error: string | null;
-};
+}
 
 export function SetupSmarthub({ onClickProgress }: BaseFlowViewProps) {
   const namespace = useOctantConnectStore((state) => state.form.namespace);
