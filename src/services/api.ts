@@ -118,3 +118,9 @@ export const connections = {
     return apiFetch.delete(`/connections/${name}`);
   },
 };
+
+export const argoCd = {
+  post: () => {
+    return devDelay<{ success: boolean }>({ success: true });
+  },
+};

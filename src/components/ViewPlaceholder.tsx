@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import type { BaseFlowViewProps } from "@types";
 import { ButtonRow } from "./layout/ButtonRow";
 import { CenterColumn } from "./layout/CenterColumn";
@@ -12,7 +12,6 @@ export function ViewPlaceholder({
       <div>{`this is a placeholder for the ${viewKey} component`}</div>
       <ButtonRow>
         <Button
-          className="view-content-main-column-button"
           variant="contained"
           size="small"
           type={"button"}

@@ -92,24 +92,14 @@ export const theme = createTheme({
             color: "#1D1D21",
           },
         },
-        {
-          props: { variant: "successDisabled" },
-          style: {
-            boxShadow: "none",
-            "&.MuiButton-sizeSmall": {
-              padding: "4px 10px",
-            },
-            "&.Mui-disabled": {
-              background: "#DDEEDD",
-              color: "rgba(0, 0, 0, 0.38)",
-              opacity: 1,
-            },
-          },
-        },
       ],
       styleOverrides: {
         root: {
           textTransform: "none",
+          "&.Mui-disabled.MuiButton-colorSuccess.MuiButton-contained": {
+            backgroundColor: "rgba(46, 125, 50, 30%)",
+            color: "rgba(0,0,0,38%)",
+          },
         },
       },
     },
