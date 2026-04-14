@@ -2,6 +2,7 @@ import type { DeployMethod, TelemetryTypes, ViewKey } from "@types";
 import { create } from "zustand";
 
 export interface AppStateForm {
+  argoAgreement: boolean;
   deployMethod: DeployMethod;
   argoUrl?: string;
   accountToken?: string;
@@ -28,6 +29,7 @@ type OctantConnectStore = Values & Actions;
 
 function createDefaultOctantConnectForm(): AppStateForm {
   return {
+    argoAgreement: false,
     deployMethod: "argocd-sideload",
     telemetryTypes: [],
   };
@@ -35,7 +37,7 @@ function createDefaultOctantConnectForm(): AppStateForm {
 
 function createDefaultOctantConnectState() {
   return {
-    activeView: "deployMethod",
+    activeView: "argoInstall",
     form: createDefaultOctantConnectForm(),
   };
 }
