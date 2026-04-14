@@ -1,6 +1,6 @@
-import { CheckboxGroup } from "@components/FormInputs/CheckboxGroup";
-import { Input } from "@components/FormInputs/Input";
-import { Select } from "@components/FormInputs/Select";
+import { CheckboxGroup } from "@components/formInputs/CheckboxGroup";
+import { Input } from "@components/formInputs/Input";
+import { Select } from "@components/formInputs/Select";
 import { ViewContent } from "@components/ViewContent";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";

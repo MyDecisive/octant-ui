@@ -1,4 +1,5 @@
-import { CenterColumn } from "@components/Layout/CenterColumn";
+import { ButtonRow } from "@components/layout/ButtonRow";
+import { CenterColumn } from "@components/layout/CenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { Button } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
@@ -30,16 +31,18 @@ export function ArgoInstall({ onClickProgress }: BaseFlowViewProps) {
         }
         label="I understand and consent this application to make changes to the development environment."
       />
-      <Button
-        className="view-content-main-column-button"
-        variant="contained"
-        size="small"
-        type={"button"}
-        onClick={onClickProgress}
-        disabled={!argoAgreement}
-      >
-        Next
-      </Button>
+      <ButtonRow>
+        <Button
+          className="view-content-main-column-button"
+          variant="contained"
+          size="small"
+          type={"button"}
+          onClick={onClickProgress}
+          disabled={!argoAgreement}
+        >
+          Next
+        </Button>
+      </ButtonRow>
     </CenterColumn>
   );
 }

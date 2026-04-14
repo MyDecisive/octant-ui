@@ -1,5 +1,5 @@
-import { Input } from "@components/FormInputs/Input";
-import { RadioButtonsGroup } from "@components/FormInputs/RadioButtonsGroup";
+import { Input } from "@components/formInputs/Input";
+import { RadioButtonsGroup } from "@components/formInputs/RadioButtonsGroup";
 import { ViewContent } from "@components/ViewContent";
 import Stack from "@mui/material/Stack";
 import { useOctantConnectStore } from "@store";
