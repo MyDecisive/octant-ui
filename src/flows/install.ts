@@ -2,6 +2,7 @@ import { ViewPlaceholder } from "@components/ViewPlaceholder";
 import type { ViewMap, ViewOrder } from "@types";
 import { ArgoInstall } from "./install/ArgoInstall";
 import { ConnectToCluster } from "./install/ConnectToCluster";
+import { DeployCollector } from "./install/DeployCollector/DeployCollector";
 import { SetupSmarthub } from "./install/SetupSmarthub";
 
 export const VIEW_MAP: ViewMap = {
@@ -17,8 +18,8 @@ export const VIEW_MAP: ViewMap = {
     Component: SetupSmarthub,
     label: "Set up and install your Smarthub",
   },
-  prepare: {
-    Component: ViewPlaceholder,
+  deployCollector: {
+    Component: DeployCollector,
     label: "Prepare and deploy collector",
   },
   update: {
@@ -35,7 +36,7 @@ export const VIEW_ORDER: ViewOrder = [
   "argoInstall",
   "connectToCluster",
   "setupSmarthub",
-  "prepare",
+  "deployCollector",
   "update",
   "next",
 ];
