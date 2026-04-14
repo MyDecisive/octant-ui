@@ -8,7 +8,7 @@ export const VIEW_MAP: ViewMap = {
     Component: ArgoInstall,
     label: "Install via ArgoCD",
   },
-  connect: {
+  connectToCluster: {
     Component: ConnectToCluster,
     label: "Connect to your Kubernetes cluster",
   },
@@ -32,7 +32,7 @@ export const VIEW_MAP: ViewMap = {
 
 export const VIEW_ORDER: ViewOrder = [
   "install",
-  "connect",
+  "connectToCluster",
   "setup",
   "prepare",
   "update",
