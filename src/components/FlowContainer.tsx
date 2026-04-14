@@ -1,14 +1,13 @@
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import { useOctantConnectStore } from "@store";
 import { useCallback } from "react";
-import { VIEW_MAP, VIEW_ORDER } from "../flows/connect";
+import { VIEW_MAP, VIEW_ORDER } from "../flows/install";
 import "./FlowContainer.css";
+import { LeftColumn } from "./layout/LeftColumn";
 import { Nav } from "./Nav";
 
 const flowStepKeys = VIEW_ORDER.filter((step) => VIEW_MAP[step].label);
 const flowSteps = flowStepKeys.map((key) => ({
-  title: VIEW_MAP[key].label!,
+  title: VIEW_MAP[key].label,
   id: key,
 }));
 
@@ -21,25 +20,20 @@ export function FlowContainer() {
     setActiveView(VIEW_ORDER[currentViewIdx + 1]);
   }, [activeView, setActiveView]);
 
-  const { Component, label } = VIEW_MAP[activeView];
+  const { Component } = VIEW_MAP[activeView];
 
   const activeStepIndex = flowStepKeys.indexOf(activeView);
 
   return (
-    <Box className="flow-container-box">
-      <Paper
-        className={`flow-container-paper${!label ? " splash" : ""}`}
-        elevation={0}
-      >
-        {label && (
-          <Nav
-            activeStepIndex={activeStepIndex}
-            steps={flowSteps}
-            onStepClick={setActiveView}
-          />
-        )}
-        <Component viewKey={activeView} onClickProgress={onClickProgress} />
-      </Paper>
-    </Box>
+    <>
+      <LeftColumn>
+        <Nav
+          activeStepIndex={activeStepIndex}
+          steps={flowSteps}
+          onStepClick={setActiveView}
+        />
+      </LeftColumn>
+      <Component viewKey={activeView} onClickProgress={onClickProgress} />
+    </>
   );
 }

@@ -35,7 +35,7 @@ function createDefaultOctantConnectForm(): AppStateForm {
 
 function createDefaultOctantConnectState() {
   return {
-    activeView: "deployMethod",
+    activeView: "install",
     form: createDefaultOctantConnectForm(),
   };
 }
