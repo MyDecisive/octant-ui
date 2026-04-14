@@ -28,11 +28,11 @@ export function ConnectToCluster({ onClickProgress }: BaseFlowViewProps) {
 
   const handleArgoConnection = useCallback(() => {
     setLoading(true);
-    void argoCd.post(argoUrl, accountToken).then(() => {
+    void argoCd.post().then(() => {
       setConnected(true);
       setLoading(false);
     });
-  }, [argoUrl, accountToken]);
+  }, []);
 
   const connectButtonProps = useMemo(
     () => getConnectButtonProps(argoUrl, accountToken, loading, connected),

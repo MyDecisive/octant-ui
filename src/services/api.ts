@@ -120,8 +120,7 @@ export const connections = {
 };
 
 export const argoCd = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  post: (url: string, token: string) => {
+  post: () => {
     return devDelay<{ success: boolean }>({ success: true });
   },
 };
