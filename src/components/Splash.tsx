@@ -1,4 +1,4 @@
-import { CenterColumn } from "@components/Layout/CenterColumn";
+import { CenterColumn } from "@components/layout/CenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import CableRoundedIcon from "@mui/icons-material/CableRounded";
 import MiscellaneousServicesRoundedIcon from "@mui/icons-material/MiscellaneousServicesRounded";

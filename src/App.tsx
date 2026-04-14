@@ -1,5 +1,5 @@
 import { FlowContainer } from "@components/FlowContainer";
-import { Layout } from "@components/Layout/Layout";
+import { Layout } from "@components/layout/Layout";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";

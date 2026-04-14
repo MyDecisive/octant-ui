@@ -1,4 +1,5 @@
 .meta-container.MuiBox-root {
+  box-sizing: content-box;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
