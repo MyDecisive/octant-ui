@@ -1,6 +1,7 @@
 import { ViewPlaceholder } from "@components/ViewPlaceholder";
 import type { ViewMap, ViewOrder } from "@types";
 import { ArgoInstall } from "./install/ArgoInstall";
+import { ConnectToCluster } from "./install/ConnectToCluster";
 
 export const VIEW_MAP: ViewMap = {
   install: {
@@ -8,7 +9,7 @@ export const VIEW_MAP: ViewMap = {
     label: "Install via ArgoCD",
   },
   connect: {
-    Component: ViewPlaceholder,
+    Component: ConnectToCluster,
     label: "Connect to your Kubernetes cluster",
   },
   setup: {
