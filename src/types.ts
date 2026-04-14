@@ -4,6 +4,7 @@ export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
 export interface BaseFlowViewProps {
   onClickProgress: () => void;
+  viewKey?: string;
 }
 
 export type IntegrationType = "datadog" | "argocd";
@@ -27,11 +28,8 @@ export interface ManifestPayload {
 export type ViewMap = Record<
   string,
   {
-    Component: (props: {
-      viewKey?: string;
-      onClickProgress: () => void;
-    }) => JSX.Element;
-    label?: string;
+    Component: (props: BaseFlowViewProps) => JSX.Element;
+    label: string;
   }
 >;
 
