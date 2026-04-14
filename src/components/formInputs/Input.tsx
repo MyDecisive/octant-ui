@@ -3,10 +3,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { type ChangeEvent, type FocusEventHandler } from "react";
 
 interface InputProps {
   label?: string;
+  title?: string;
   placeholder?: string;
   value?: string;
   onChange: (
@@ -21,6 +23,7 @@ interface InputProps {
 
 export function Input({
   label,
+  title,
   value,
   onChange,
   required = false,
@@ -31,7 +34,8 @@ export function Input({
   onBlur,
 }: InputProps) {
   return (
-    <Stack sx={{ maxWidth: 360 }}>
+    <Stack sx={{ maxWidth: 360 }} gap={1}>
+      {title && <Typography variant="body1">{title}</Typography>}
       <TextField
         label={label}
         value={value}

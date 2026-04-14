@@ -1,7 +1,7 @@
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { CenterColumn } from "@components/layout/CenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useOctantConnectStore } from "@store";

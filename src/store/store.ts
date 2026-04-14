@@ -3,6 +3,7 @@ import { create } from "zustand";
 
 export interface AppStateForm {
   argoAgreement: boolean;
+  namespace: string;
   deployMethod: DeployMethod;
   argoUrl?: string;
   accountToken?: string;
@@ -30,6 +31,7 @@ type OctantConnectStore = Values & Actions;
 function createDefaultOctantConnectForm(): AppStateForm {
   return {
     argoAgreement: false,
+    namespace: "mdai",
     deployMethod: "argocd-sideload",
     telemetryTypes: [],
   };
@@ -37,7 +39,7 @@ function createDefaultOctantConnectForm(): AppStateForm {
 
 function createDefaultOctantConnectState() {
   return {
-    activeView: "install",
+    activeView: "argoInstall",
     form: createDefaultOctantConnectForm(),
   };
 }
