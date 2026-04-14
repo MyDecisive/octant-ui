@@ -83,18 +83,22 @@ export const theme = createTheme({
       },
     },
     MuiButton: {
+      variants: [
+        {
+          props: { variant: "secondary" },
+          style: {
+            background: "#E0E0E0",
+            color: "#1D1D21",
+          },
+        },
+      ],
       styleOverrides: {
         root: {
           textTransform: "none",
-          variants: [
-            {
-              props: { variant: "secondary" },
-              style: {
-                background: "#E0E0E0",
-                color: "text.primary",
-              },
-            },
-          ],
+          "&.Mui-disabled.MuiButton-colorSuccess.MuiButton-contained": {
+            backgroundColor: "rgba(46, 125, 50, 30%)",
+            color: "rgba(0,0,0,38%)",
+          },
         },
       },
     },
