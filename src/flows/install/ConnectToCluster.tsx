@@ -65,7 +65,6 @@ export function ConnectToCluster({ onClickProgress }: BaseFlowViewProps) {
       />
       <ButtonRow>
         <Button
-          className="view-content-main-column-button"
           variant="contained"
           size="small"
           type={"button"}
@@ -77,7 +76,6 @@ export function ConnectToCluster({ onClickProgress }: BaseFlowViewProps) {
           {connectButtonProps.text}
         </Button>
         <Button
-          className="view-content-main-column-button"
           variant="contained"
           size="small"
           type={"button"}
