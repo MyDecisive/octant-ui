@@ -4,6 +4,7 @@ import type {} from "@mui/x-data-grid/themeAugmentation";
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     secondary: true;
+    successDisabled: true;
   }
 }
 
@@ -83,18 +84,32 @@ export const theme = createTheme({
       },
     },
     MuiButton: {
+      variants: [
+        {
+          props: { variant: "secondary" },
+          style: {
+            background: "#E0E0E0",
+            color: "#1D1D21",
+          },
+        },
+        {
+          props: { variant: "successDisabled" },
+          style: {
+            boxShadow: "none",
+            "&.MuiButton-sizeSmall": {
+              padding: "4px 10px",
+            },
+            "&.Mui-disabled": {
+              background: "#DDEEDD",
+              color: "rgba(0, 0, 0, 0.38)",
+              opacity: 1,
+            },
+          },
+        },
+      ],
       styleOverrides: {
         root: {
           textTransform: "none",
-          variants: [
-            {
-              props: { variant: "secondary" },
-              style: {
-                background: "#E0E0E0",
-                color: "text.primary",
-              },
-            },
-          ],
         },
       },
     },
