@@ -1,6 +1,6 @@
 import { ViewPlaceholder } from "@components/ViewPlaceholder";
 import type { ViewMap, ViewOrder } from "@types";
-import { ArgoInstall } from "./connect/ArgoInstall";
+import { ArgoInstall } from "./install/ArgoInstall";
 
 export const VIEW_MAP: ViewMap = {
   install: {

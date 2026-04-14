@@ -1,4 +1,4 @@
-import { CenterColumn } from "@components/Layout/CenterColumn";
+import { CenterColumn } from "@components/layout/CenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { Button } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
