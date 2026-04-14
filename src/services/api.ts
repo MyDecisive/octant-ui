@@ -118,3 +118,10 @@ export const connections = {
     return apiFetch.delete(`/connections/${name}`);
   },
 };
+
+export const argoCd = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  post: (url: string, token: string) => {
+    return devDelay<{ success: boolean }>({ success: true });
+  },
+};
