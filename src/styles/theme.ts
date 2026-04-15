@@ -82,6 +82,15 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          padding: "8px 16px",
+          minHeight: "24px",
+        },
+      },
+    },
     MuiButton: {
       variants: [
         {
