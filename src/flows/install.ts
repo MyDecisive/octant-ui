@@ -4,6 +4,7 @@ import { ArgoInstall } from "./install/ArgoInstall";
 import { ConnectToCluster } from "./install/ConnectToCluster";
 import { DeployCollector } from "./install/DeployCollector/DeployCollector";
 import { SetupSmarthub } from "./install/SetupSmarthub";
+import { UpdateAgent } from "./install/UpdateAgent";
 
 export const VIEW_MAP: ViewMap = {
   argoInstall: {
@@ -22,8 +23,8 @@ export const VIEW_MAP: ViewMap = {
     Component: DeployCollector,
     label: "Prepare and deploy collector",
   },
-  update: {
-    Component: ViewPlaceholder,
+  updateAgent: {
+    Component: UpdateAgent,
     label: "Update Datadog agent and test",
   },
   next: {
@@ -37,6 +38,6 @@ export const VIEW_ORDER: ViewOrder = [
   "connectToCluster",
   "setupSmarthub",
   "deployCollector",
-  "update",
+  "updateAgent",
   "next",
 ];
