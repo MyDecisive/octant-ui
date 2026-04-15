@@ -4,7 +4,7 @@ export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
 export interface BaseFlowViewProps {
   onClickProgress: () => void;
-  viewKey?: string;
+  viewKey: string;
 }
 
 export type IntegrationType = "datadog" | "argocd";

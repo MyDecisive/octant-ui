@@ -1,13 +1,12 @@
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { CenterColumn } from "@components/layout/CenterColumn";
+import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
-import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useOctantConnectStore } from "@store";
-import type { BaseFlowViewProps } from "@types";
 
-export function ArgoInstall({ onClickProgress }: BaseFlowViewProps) {
+export function ArgoInstall() {
   const argoAgreement = useOctantConnectStore(
     (state) => state.form.argoAgreement,
   );
@@ -32,16 +31,7 @@ export function ArgoInstall({ onClickProgress }: BaseFlowViewProps) {
         label="I understand and consent this application to make changes to the development environment."
       />
       <ButtonRow>
-        <Button
-          className="view-content-main-column-button"
-          variant="contained"
-          size="small"
-          type={"button"}
-          onClick={onClickProgress}
-          disabled={!argoAgreement}
-        >
-          Next
-        </Button>
+        <NextButton disabled={!argoAgreement} />
       </ButtonRow>
     </CenterColumn>
   );

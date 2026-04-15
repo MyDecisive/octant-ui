@@ -1,7 +1,7 @@
 import Button, { type ButtonProps } from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { ButtonRow } from "./layout/ButtonRow";
+import { NextButton } from "./NextButton";
 
 interface AsyncButtonText {
   text: string;
@@ -15,7 +15,6 @@ interface AsyncButtonRowProps {
   asyncFunction: () => Promise<unknown>;
   canAsync: boolean;
   retries?: number;
-  onClickProgress: () => void;
   asyncButtonText: AsyncButtonText;
 }
 
@@ -23,7 +22,6 @@ export function AsyncButtonRow({
   asyncFunction,
   canAsync,
   retries = 0,
-  onClickProgress,
   asyncButtonText,
 }: AsyncButtonRowProps) {
   const [done, setDone] = useState(false);
@@ -65,37 +63,20 @@ export function AsyncButtonRow({
   );
 
   return (
-    <>
-      <ButtonRow>
-        <Button
-          variant="contained"
-          size="small"
-          type={"button"}
-          onClick={handleAsyncCall}
-          disabled={buttonProps.disabled}
-          color={buttonProps.color}
-          loading={buttonProps.loading}
-        >
-          {buttonProps.text}
-        </Button>
-        <Button
-          variant="contained"
-          size="small"
-          type={"button"}
-          onClick={onClickProgress}
-          disabled={!done}
-          color={done ? "primary" : "secondary"}
-        >
-          Next
-        </Button>
-      </ButtonRow>
-      {error != null && (
-        <Typography variant="body2" color="error">
-          {error}
-          {canRetry && ` Please try again.`}
-        </Typography>
-      )}
-    </>
+    <ButtonRow>
+      <Button
+        variant="contained"
+        size="small"
+        type={"button"}
+        onClick={handleAsyncCall}
+        disabled={buttonProps.disabled}
+        color={buttonProps.color}
+        loading={buttonProps.loading}
+      >
+        {buttonProps.text}
+      </Button>
+      <NextButton disabled={!done} />
+    </ButtonRow>
   );
 }
 

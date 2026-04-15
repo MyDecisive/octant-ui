@@ -1,24 +1,14 @@
-import Button from "@mui/material/Button";
 import type { BaseFlowViewProps } from "@types";
 import { ButtonRow } from "./layout/ButtonRow";
 import { CenterColumn } from "./layout/CenterColumn";
+import { NextButton } from "./NextButton";
 
-export function ViewPlaceholder({
-  viewKey,
-  onClickProgress,
-}: BaseFlowViewProps) {
+export function ViewPlaceholder({ viewKey }: BaseFlowViewProps) {
   return (
     <CenterColumn>
       <div>{`this is a placeholder for the ${viewKey} component`}</div>
       <ButtonRow>
-        <Button
-          variant="contained"
-          size="small"
-          type={"button"}
-          onClick={onClickProgress}
-        >
-          Next
-        </Button>
+        <NextButton disabled={false} />
       </ButtonRow>
     </CenterColumn>
   );
