@@ -1,4 +1,5 @@
 import { CodeSnippet } from "@components/CodeSnippet";
+import { DataFidelityCard } from "@components/DataFidelityCard/DataFidelityCard";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { CenterColumn } from "@components/layout/CenterColumn";
 import { NextButton } from "@components/NextButton";
@@ -11,7 +12,6 @@ import Tabs from "@mui/material/Tabs";
 import { useOctantConnectStore } from "@store";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { DataFidelityTable } from "../../components/DataFidelityTable/DataFidelityTable";
 import { createForwardDataSnippets } from "../createForwardDataSnippets";
 
 export function UpdateAgent() {
@@ -58,7 +58,7 @@ export function UpdateAgent() {
         </Stack>
       </TabPanel>
       <TabPanel activeValue={activeTab} value="test">
-        <DataFidelityTable setIsValid={setIsValid} />
+        <DataFidelityCard setIsValid={setIsValid} />
       </TabPanel>
       <ButtonRow>
         <NextButton disabled={!hasTested} />
