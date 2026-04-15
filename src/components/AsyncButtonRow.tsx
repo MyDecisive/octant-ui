@@ -68,7 +68,7 @@ export function AsyncButtonRow({
     <>
       <ButtonRow>
         <Button
-          variant={buttonProps.variant}
+          variant="contained"
           size="small"
           type={"button"}
           onClick={handleAsyncCall}
@@ -108,7 +108,6 @@ function getAsyncButtonProps(
   error: string | null,
 ): {
   text: string;
-  variant: ButtonProps["variant"];
   color: ButtonProps["color"];
   disabled: boolean;
   loading: boolean;
@@ -116,7 +115,6 @@ function getAsyncButtonProps(
   if (loading) {
     return {
       text: textOptions.loading ?? textOptions.text,
-      variant: "secondary",
       disabled: true,
       loading: textOptions.loading ? false : true,
       color: "secondary",
@@ -126,10 +124,9 @@ function getAsyncButtonProps(
   if (done) {
     return {
       text: textOptions.done ?? textOptions.text,
-      variant: "successDisabled",
       disabled: true,
       loading: false,
-      color: undefined,
+      color: "success",
     };
   }
 
@@ -138,7 +135,6 @@ function getAsyncButtonProps(
     if (canRetry) {
       return {
         text: textOptions.retry ?? textOptions.text,
-        variant: "contained",
         disabled: false,
         loading: false,
         color: "primary",
@@ -146,7 +142,6 @@ function getAsyncButtonProps(
     }
     return {
       text: textOptions.error ?? textOptions.text,
-      variant: "secondary",
       disabled: false,
       loading: false,
       color: "secondary",
@@ -156,7 +151,6 @@ function getAsyncButtonProps(
   if (canAsync) {
     return {
       text: textOptions.text,
-      variant: "contained",
       disabled: false,
       loading: false,
       color: "primary",
@@ -165,7 +159,6 @@ function getAsyncButtonProps(
 
   return {
     text: textOptions.text,
-    variant: "secondary",
     disabled: true,
     loading: false,
     color: "secondary",

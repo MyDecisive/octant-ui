@@ -2,6 +2,8 @@ import { AsyncButtonRow } from "@components/AsyncButtonRow";
 import { Input } from "@components/formInputs/Input";
 import { CenterColumn } from "@components/layout/CenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps } from "@types";
 import { useRef } from "react";
@@ -33,13 +35,15 @@ export function SetupSmarthub({ onClickProgress }: BaseFlowViewProps) {
         title="Set up and install your Smarthub"
         description="Tell us where you’d like the Smarthub live and how you want to us preserve important data for you. When you’re ready run a quick test to make sure the hub is running smoothly in your environment."
       />
-      <Input
-        label="Kubernetes namespace"
-        title="Namespace"
-        value={namespace}
-        placeholder="mdai"
-        onChange={(e) => setFormField("namespace", e.target.value)}
-      />
+      <Stack gap={1}>
+        <Typography>Namespace</Typography>
+        <Input
+          label="Kubernetes namespace"
+          value={namespace}
+          placeholder="mdai"
+          onChange={(e) => setFormField("namespace", e.target.value)}
+        />
+      </Stack>
 
       <AsyncButtonRow
         asyncFunction={handleInstall}
