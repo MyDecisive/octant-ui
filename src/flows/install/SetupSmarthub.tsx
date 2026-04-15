@@ -33,7 +33,7 @@ export function SetupSmarthub({ onClickProgress }: BaseFlowViewProps) {
     <CenterColumn>
       <ViewTitle
         title="Set up and install your Smarthub"
-        description="Tell us where you’d like the Smarthub live and how you want to us preserve important data for you. When you’re ready run a quick test to make sure the hub is running smoothly in your environment."
+        description="Tell us where you’d like the Smarthub to live and how you want us to preserve important data for you. When you’re ready, we'll run a quick test to make sure the hub is running smoothly in your environment."
       />
       <Stack gap={1}>
         <Typography>Namespace</Typography>
