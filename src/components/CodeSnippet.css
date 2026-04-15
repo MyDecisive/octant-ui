@@ -4,7 +4,7 @@
   color: #ffffff;
   border-radius: 8px;
   background: #454545;
-  overflow: hidden;
+  overflow: scroll;
   align-items: flex-start;
   max-height: 100vh;
   min-width: 0;
