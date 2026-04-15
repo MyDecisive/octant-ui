@@ -10,3 +10,6 @@ jobs:
   docker-push:
     uses: MyDecisive/ci/.github/workflows/docker-ghcr.yaml@main
     secrets: inherit # pass all secrets
+  octant-build:
+    uses: MyDecisive/octant/.github/workflows/docker.yml@main
+    secrets: inherit # pass all secrets
