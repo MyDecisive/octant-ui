@@ -4,7 +4,6 @@ import type {} from "@mui/x-data-grid/themeAugmentation";
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     secondary: true;
-    successDisabled: true;
   }
 }
 
