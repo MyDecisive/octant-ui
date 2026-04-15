@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import Button, { type ButtonProps } from "@mui/material/Button";
 import { useState } from "react";
 import { ButtonRow } from "./layout/ButtonRow";
@@ -63,20 +64,28 @@ export function AsyncButtonRow({
   );
 
   return (
-    <ButtonRow>
-      <Button
-        variant="contained"
-        size="small"
-        type={"button"}
-        onClick={handleAsyncCall}
-        disabled={buttonProps.disabled}
-        color={buttonProps.color}
-        loading={buttonProps.loading}
-      >
-        {buttonProps.text}
-      </Button>
-      <NextButton disabled={!done} />
-    </ButtonRow>
+    <>
+      <ButtonRow>
+        <Button
+          variant="contained"
+          size="small"
+          type={"button"}
+          onClick={handleAsyncCall}
+          disabled={buttonProps.disabled}
+          color={buttonProps.color}
+          loading={buttonProps.loading}
+        >
+          {buttonProps.text}
+        </Button>
+        <NextButton disabled={!done} />
+      </ButtonRow>
+      {error != null && (
+        <Typography variant="body2" color="error">
+          {error}
+          {canRetry && ` Please try again.`}
+        </Typography>
+      )}
+    </>
   );
 }
 
