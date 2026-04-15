@@ -25,6 +25,13 @@ export interface ManifestPayload {
   destinations: Destination[];
 }
 
+export interface DataFidelityResponse {
+  receivingData: boolean;
+  sendingData: boolean;
+  dataIntegrity: boolean;
+  details: null | string;
+}
+
 export type ViewMap = Record<
   string,
   {
