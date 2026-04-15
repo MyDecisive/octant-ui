@@ -9,11 +9,7 @@ import { ViewTitle } from "@components/ViewTitle";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
-import type {
-  BaseFlowViewProps,
-  ManifestPayload,
-  TelemetryTypes,
-} from "@types";
+import type { ManifestPayload, TelemetryTypes } from "@types";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import {
@@ -46,7 +42,7 @@ const telemetryTypeOptions: {
   },
 ];
 
-export function DeployCollector({ onClickProgress }: BaseFlowViewProps) {
+export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
   const { telemetryTypes, url, apiKey, connectionName, accountToken, argoUrl } =
     useOctantConnectStore(
@@ -190,7 +186,6 @@ export function DeployCollector({ onClickProgress }: BaseFlowViewProps) {
           helperText="We recommend providing a name that can be easily referenced later, e.g., datadog-io"
         />
         <AsyncButtonRow
-          onClickProgress={onClickProgress}
           asyncFunction={handleDeployButtonClick}
           canAsync={
             !!(
