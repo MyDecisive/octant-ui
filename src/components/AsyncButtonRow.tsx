@@ -32,18 +32,20 @@ export function AsyncButtonRow({
   const [attempts, setAttempts] = useState(0);
 
   const handleAsyncCall = () => {
+    setError(null);
     setLoading(true);
     setAttempts((curr) => curr + 1);
     void asyncFunction()
       .then(() => {
+        setError(null);
         setDone(true);
       })
       .catch((err: unknown) => {
-        console.error("Failed to deploy collector", err);
+        console.error("Async action failed", err);
         setError(
           err instanceof Error
             ? err.message
-            : "Something went wrong while deploying the collector.",
+            : "Something went wrong while completing this step. Please try again.",
         );
       })
       .finally(() => {
@@ -63,35 +65,37 @@ export function AsyncButtonRow({
   );
 
   return (
-    <ButtonRow>
-      <Button
-        variant="contained"
-        size="small"
-        type={"button"}
-        onClick={handleAsyncCall}
-        disabled={buttonProps.disabled}
-        color={buttonProps.color}
-        loading={buttonProps.loading}
-      >
-        {buttonProps.text}
-      </Button>
+    <>
+      <ButtonRow>
+        <Button
+          variant="contained"
+          size="small"
+          type={"button"}
+          onClick={handleAsyncCall}
+          disabled={buttonProps.disabled}
+          color={buttonProps.color}
+          loading={buttonProps.loading}
+        >
+          {buttonProps.text}
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          type={"button"}
+          onClick={onClickProgress}
+          disabled={!done}
+          color={done ? "primary" : "secondary"}
+        >
+          Next
+        </Button>
+      </ButtonRow>
       {error != null && (
         <Typography variant="body2" color="error">
           {error}
           {canRetry && ` Please try again.`}
         </Typography>
       )}
-      <Button
-        variant="contained"
-        size="small"
-        type={"button"}
-        onClick={onClickProgress}
-        disabled={!done}
-        color={done ? "primary" : "secondary"}
-      >
-        Next
-      </Button>
-    </ButtonRow>
+    </>
   );
 }
 

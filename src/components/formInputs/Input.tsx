@@ -1,6 +1,5 @@
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
-import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import { type ChangeEvent, type FocusEventHandler } from "react";
@@ -31,30 +30,28 @@ export function Input({
   onBlur,
 }: InputProps) {
   return (
-    <Stack sx={{ maxWidth: 360 }}>
-      <TextField
-        label={label}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        size="small"
-        required={required}
-        helperText={helperText}
-        fullWidth
-        slotProps={{
-          input: {
-            endAdornment: tooltip ? (
-              <InputAdornment position="end">
-                <Tooltip title={tooltip} placement="right" arrow>
-                  <InfoOutlinedIcon />
-                </Tooltip>
-              </InputAdornment>
-            ) : undefined,
-          },
-        }}
-      />
-    </Stack>
+    <TextField
+      label={label}
+      value={value}
+      placeholder={placeholder}
+      onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      size="small"
+      required={required}
+      helperText={helperText}
+      fullWidth
+      slotProps={{
+        input: {
+          endAdornment: tooltip ? (
+            <InputAdornment position="end">
+              <Tooltip title={tooltip} placement="right" arrow>
+                <InfoOutlinedIcon />
+              </Tooltip>
+            </InputAdornment>
+          ) : undefined,
+        },
+      }}
+    />
   );
 }
