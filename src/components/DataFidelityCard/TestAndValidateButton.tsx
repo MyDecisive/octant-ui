@@ -72,11 +72,9 @@ export function TestAndValidateButton({
     void connections
       .getStatus(connectionName!)
       .then((response) => {
-        console.log("response ", response);
         const didNotPass = Object.values(response).some((value) => {
           return value === false;
         });
-        console.log("didNotPass ", didNotPass);
         if (didNotPass) {
           setShouldRetry(true);
         } else {
