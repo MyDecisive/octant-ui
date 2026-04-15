@@ -1,3 +1,4 @@
+import { ConfigDrawer } from "@components/ConfigDrawer/ConfigDrawer";
 import { CheckboxGroup } from "@components/formInputs/CheckboxGroup";
 import { Input } from "@components/formInputs/Input";
 import { Select } from "@components/formInputs/Select";
@@ -8,7 +9,6 @@ import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps, TelemetryTypes } from "@types";
 import { useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { ConfigDrawer } from "./ConfigDrawer";
 
 const dataSourceOptions: {
   label: string;

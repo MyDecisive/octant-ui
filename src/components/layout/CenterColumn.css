@@ -1,3 +1,5 @@
 .center-column.MuiBox-root {
   grid-column: 4 / span 5;
+  max-height: 100%;
+  overflow: auto;
 }
