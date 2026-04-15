@@ -5,10 +5,9 @@ import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
-import type { BaseFlowViewProps } from "@types";
 import { useRef } from "react";
 
-export function SetupSmarthub({ onClickProgress }: BaseFlowViewProps) {
+export function SetupSmarthub() {
   const namespace = useOctantConnectStore((state) => state.form.namespace);
   const setFormField = useOctantConnectStore((state) => state.setFormField);
   const installAttemptRef = useRef(0);
@@ -49,7 +48,6 @@ export function SetupSmarthub({ onClickProgress }: BaseFlowViewProps) {
         asyncFunction={handleInstall}
         canAsync={namespace.trim().length > 0}
         retries={1}
-        onClickProgress={onClickProgress}
         asyncButtonText={{
           text: "Install",
           loading: "Installing...",

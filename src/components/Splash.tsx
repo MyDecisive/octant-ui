@@ -25,7 +25,9 @@ const ROWS = [
   },
 ];
 
-export function Splash({ onClickProgress }: BaseFlowViewProps) {
+export function Splash({
+  onClickProgress,
+}: Pick<BaseFlowViewProps, "onClickProgress">) {
   return (
     <CenterColumn>
       <ViewTitle

@@ -3,11 +3,10 @@ import { Input } from "@components/formInputs/Input";
 import { CenterColumn } from "@components/layout/CenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useOctantConnectStore } from "@store";
-import type { BaseFlowViewProps } from "@types";
 import { useShallow } from "zustand/shallow";
 import { argoCd } from "../../services/api";
 
-export function ConnectToCluster({ onClickProgress }: BaseFlowViewProps) {
+export function ConnectToCluster() {
   const { argoUrl, accountToken } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
@@ -47,7 +46,6 @@ export function ConnectToCluster({ onClickProgress }: BaseFlowViewProps) {
       <AsyncButtonRow
         asyncFunction={argoCd.post}
         canAsync={!!(argoUrl.length && accountToken.length)}
-        onClickProgress={onClickProgress}
         asyncButtonText={{
           text: "Check connection",
           loading: "Connecting to your cluster...",
