@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import type { BaseFlowViewProps } from "@types";
 import { useShallow } from "zustand/shallow";
-import { createForwardDataSnippets } from "./forwardDataSnippets";
+import { createForwardDataSnippets } from "../createForwardDataSnippets";
 
 export function ForwardData({ onClickProgress }: BaseFlowViewProps) {
   const { connectionName, url } = useOctantConnectStore(
