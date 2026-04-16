@@ -5,12 +5,12 @@ import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import type { FidelityState } from "@types";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import "./DataFidelityCard.css";
 import { DetailsCell } from "./DetailsCell";
 import { FidelityCell } from "./FidelityCell";
 import { TestAndValidateButton } from "./TestAndValidateButton";
-import type { FidelityState } from "./types";
 
 function createInitialDataFidelity() {
   return {
