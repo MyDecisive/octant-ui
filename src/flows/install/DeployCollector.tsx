@@ -17,7 +17,7 @@ import {
   connections,
   type DatadogIntegrationBody,
   integrations,
-} from "../../../services/api";
+} from "../../services/api";
 
 const dataSourceOptions: {
   label: string;

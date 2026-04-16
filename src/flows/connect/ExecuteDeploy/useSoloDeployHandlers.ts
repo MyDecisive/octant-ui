@@ -1,7 +1,7 @@
 import { type ButtonProps } from "@mui/material";
 import { useCallback, useMemo } from "react";
 
-import { useFetchManifestsAndDownload } from "../useFetchManifestsAndDownload";
+import { useFetchManifestsAndDownload } from "../../install/useFetchManifestsAndDownload";
 import type { SoloDeployProps } from "./types";
 
 function determineDownloadButtonProps(

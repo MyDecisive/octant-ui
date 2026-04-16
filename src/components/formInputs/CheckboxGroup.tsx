@@ -49,6 +49,7 @@ export function CheckboxGroup({
                 checked={selected.includes(value)}
                 onChange={handleCheckedChange}
                 value={value}
+                disableRipple
               />
             }
             label={label}

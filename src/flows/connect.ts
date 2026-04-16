@@ -3,9 +3,9 @@ import { DataFidelity } from "./connect/DataFidelity";
 import { DeployMethod } from "./connect/DeployMethod";
 import { ExecuteDeploy } from "./connect/ExecuteDeploy/ExecuteDeploy";
 import { ForwardData } from "./connect/ForwardData";
-import { NextSteps } from "./connect/NextSteps";
 import { PrepareCollector } from "./connect/PrepareCollector/PrepareCollector";
 import { ArgoInstall } from "./install/ArgoInstall";
+import { NextSteps } from "./install/NextSteps";
 
 export const VIEW_MAP: ViewMap = {
   argoInstall: {

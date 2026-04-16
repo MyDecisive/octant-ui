@@ -26,6 +26,7 @@ export function ArgoInstall() {
             onChange={(event) =>
               setFormField("argoAgreement", event.target.checked)
             }
+            disableRipple
           />
         }
         label="I understand and consent this application to make changes to the development environment."

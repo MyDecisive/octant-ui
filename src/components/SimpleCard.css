@@ -1,9 +1,31 @@
 .simple-card-container.MuiCard-root {
-  width: 100%;
   border: 1px solid var(--mdai-border);
   border-radius: 4px;
   background-color: transparent;
   box-shadow: none;
+}
+
+.simple-card-content.MuiCardContent-root {
+  padding: 16px;
+}
+
+.simple-card-main-content.MuiStack-root {
+  width: 100%;
+}
+
+.simple-card-header.MuiCardHeader-root {
+  padding: 0;
+  align-items: center;
+}
+
+.simple-card-header .MuiCardHeader-content {
+  min-width: 0;
+}
+
+.simple-card-header .MuiCardHeader-action {
+  margin: 0;
+  align-self: center;
+  flex-shrink: 0;
 }
 
 .simple-card-title.MuiTypography-root {
@@ -14,19 +36,7 @@
   color: var(--mdai-grey-700);
 }
 
-.simple-card-button.MuiButton-root,
-.simple-card-link.MuiButton-root {
-  flex-shrink: 0;
+.simple-card-footer.MuiCardActions-root {
+  width: 100%;
   padding: 0;
-}
-
-.simple-card-content.MuiCardContent-root {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.simple-card-main-content.MuiStack-root {
-  max-width: stretch;
 }

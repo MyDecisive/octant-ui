@@ -9,6 +9,7 @@ import CheckCircleOutlineOutlined from "@mui/icons-material/CheckCircleOutlineOu
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
@@ -51,9 +52,12 @@ export function UpdateAgent() {
         />
       </Tabs>
       <TabPanel activeValue={activeTab} value="update">
-        <Stack gap={3} className="forward-data-code-snippets">
+        <Stack gap={2} className="forward-data-code-snippets">
           {forwardDataSnippets.map(({ title, code }) => (
-            <CodeSnippet key={title} code={code} maxHeight="200px" />
+            <Stack key={title}>
+              <Typography variant="subtitle2">{title}</Typography>
+              <CodeSnippet code={code} maxHeight="150px" />
+            </Stack>
           ))}
         </Stack>
       </TabPanel>
