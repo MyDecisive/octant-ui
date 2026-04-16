@@ -5,8 +5,26 @@
   box-shadow: none;
 }
 
-.simple-card-main-content {
-  width: 80%;
+.simple-card-content.MuiCardContent-root {
+  padding: 16px;
+}
+
+.simple-card-main-content.MuiStack-root {
+  width: 100%;
+}
+
+.simple-card-header.MuiStack-root {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.simple-card-header-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.simple-card-header-action {
+  flex-shrink: 0;
 }
 
 .simple-card-title.MuiTypography-root {
@@ -17,29 +35,6 @@
   color: var(--mdai-grey-700);
 }
 
-.simple-card-actions-container {
-  min-width: 20%;
-}
-
-.simple-card-button.MuiButton-root,
-.simple-card-link.MuiButton-root {
-  flex-shrink: 0;
-  padding: 0;
-}
-
-.simple-card-content.MuiCardContent-root {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.simple-card-content.column.MuiCardContent-root {
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 100px;
-}
-
-.simple-card-main-content.MuiStack-root {
-  max-width: stretch;
+.simple-card-footer {
+  width: 100%;
 }

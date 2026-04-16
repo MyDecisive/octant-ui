@@ -1,7 +1,10 @@
 import { CodeSnippet } from "@components/CodeSnippet";
+import { ButtonRow } from "@components/layout/ButtonRow";
 import { CenterColumn } from "@components/layout/CenterColumn";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewTitle } from "@components/ViewTitle";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import { useOctantConnectStore } from "@store";
 import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 
@@ -22,40 +25,60 @@ export function NextSteps() {
       />
 
       <SimpleCard
-        title="Try out one of our solutions"
-        description="Play around with our installable labs."
-        link={{
-          text: "See our docs",
-          href: "https://docs.mydecisive.ai/",
-        }}
+        title="Start budgeting now"
+        description="{sales-y description goes here}"
+        headerAction={<Chip color="primary" label="Recommended" size="small" />}
       />
       <SimpleCard
         title="Migrate Smarthub into production"
         description="Ready to go live? Follow our step-by-step guide to safely migrate Smarthub from your current environment into production."
-        link={{
-          text: "See our docs",
-          href: "https://docs.mydecisive.ai/",
-        }}
+        headerAction={
+          <Button
+            variant="text"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://docs.mydecisive.ai/"
+            size="small"
+            disableRipple
+          >
+            See our docs
+          </Button>
+        }
       />
       <SimpleCard
         title="Commit your changes to Source control"
         description="Your manifests are ready. Push them to your repository to make the configuration official and version-controlled."
-        direction="column"
-        button={{
-          text: "Download .zip",
-          onClick: handleDownloadManifestsClick,
-          loading,
-        }}
-        link={{
-          text: "See our docs",
-          href: "https://docs.mydecisive.ai/",
-        }}
+        footer={
+          <ButtonRow>
+            <Button
+              variant="text"
+              size="small"
+              disableRipple
+              onClick={handleDownloadManifestsClick}
+              loading={loading}
+            >
+              Download .zip first
+            </Button>
+            <Button
+              variant="text"
+              color="secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.mydecisive.ai/"
+              size="small"
+              disableRipple
+            >
+              Go to docs
+            </Button>
+          </ButtonRow>
+        }
       />
       <SimpleCard
         title="Revert your Argo CD & Datadog agent changes"
         description="Something didn't go as planned. Run the command below to restore both your Argo CD configuration and Datadog agent to their previous state:"
-        content={<CodeSnippet code={`argocd app delete ${connectionName}`} />}
-      />
+      >
+        <CodeSnippet code={`argocd app delete ${connectionName}`} />
+      </SimpleCard>
     </CenterColumn>
   );
 }

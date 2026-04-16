@@ -9,6 +9,7 @@ import CheckCircleOutlineOutlined from "@mui/icons-material/CheckCircleOutlineOu
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
