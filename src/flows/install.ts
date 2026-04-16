@@ -1,8 +1,8 @@
-import { ViewPlaceholder } from "@components/ViewPlaceholder";
 import type { ViewMap, ViewOrder } from "@types";
 import { ArgoInstall } from "./install/ArgoInstall";
 import { ConnectToCluster } from "./install/ConnectToCluster";
-import { DeployCollector } from "./install/DeployCollector/DeployCollector";
+import { DeployCollector } from "./install/DeployCollector";
+import { NextSteps } from "./install/NextSteps";
 import { SetupSmarthub } from "./install/SetupSmarthub";
 import { UpdateAgent } from "./install/UpdateAgent";
 
@@ -27,8 +27,8 @@ export const VIEW_MAP: ViewMap = {
     Component: UpdateAgent,
     label: "Update Datadog agent and test",
   },
-  next: {
-    Component: ViewPlaceholder,
+  nextSteps: {
+    Component: NextSteps,
     label: "Next steps",
   },
 };
@@ -39,5 +39,5 @@ export const VIEW_ORDER: ViewOrder = [
   "setupSmarthub",
   "deployCollector",
   "updateAgent",
-  "next",
+  "nextSteps",
 ];

@@ -106,7 +106,6 @@ export const connections = {
 
   upsert: (name: string, body: ManifestPayload): Promise<void> => {
     if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
-      console.log("connections.upsert args", { name, body });
       return devDelay<void>(undefined);
     }
     return apiFetch.put(`/connections/${name}`, { body });

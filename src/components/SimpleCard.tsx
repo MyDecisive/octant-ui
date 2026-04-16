@@ -11,6 +11,7 @@ interface SimpleCardProps {
   title: string;
   description?: string;
   content?: ReactNode;
+  direction?: "row" | "column";
   link?: {
     text: string;
     href: string;
@@ -27,10 +28,13 @@ export function SimpleCard({
   link,
   button,
   content,
+  direction = "row",
 }: SimpleCardProps) {
   return (
     <Card className="simple-card-container">
-      <CardContent className="simple-card-content">
+      <CardContent
+        className={`simple-card-content ${direction === "column" && "column"}`}
+      >
         <Stack gap={2} className="simple-card-main-content">
           <Box>
             <Typography variant="body2" className="simple-card-title">
@@ -45,31 +49,37 @@ export function SimpleCard({
           </Box>
           {content}
         </Stack>
-        {link && (
-          <Button
-            variant="text"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={link.href}
-            size="small"
-            className="simple-card-link"
-            disableRipple
-          >
-            {link.text}
-          </Button>
-        )}
-        {button && (
-          <Button
-            variant="text"
-            size="small"
-            className="simple-card-button"
-            disableRipple
-            onClick={button.onClick}
-            loading={button.loading}
-          >
-            {button.text}
-          </Button>
-        )}
+        <Stack
+          gap={3}
+          direction={"row"}
+          className="simple-card-actions-container"
+        >
+          {button && (
+            <Button
+              className="simple-card-button"
+              variant="text"
+              size="small"
+              disableRipple
+              onClick={button.onClick}
+              loading={button.loading}
+            >
+              {button.text}
+            </Button>
+          )}
+          {link && (
+            <Button
+              variant="text"
+              target="_blank"
+              rel="noopener noreferrer"
+              href={link.href}
+              size="small"
+              className="simple-card-link"
+              disableRipple
+            >
+              {link.text}
+            </Button>
+          )}
+        </Stack>
       </CardContent>
     </Card>
   );
