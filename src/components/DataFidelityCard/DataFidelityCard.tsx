@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import type { FidelityState } from "@types";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import "./DataFidelityCard.css";
-import { DetailsCell } from "./DetailsCell";
 import { FidelityCell } from "./FidelityCell";
 import { TestAndValidateButton } from "./TestAndValidateButton";
 
@@ -73,11 +72,7 @@ export function DataFidelityCard({
             >
               <Typography>{rowLabelsMap[key]}</Typography>
               <Typography>
-                {key === "details" ? (
-                  <DetailsCell value={dataFidelity[key]} />
-                ) : (
-                  <FidelityCell value={dataFidelity[key]} />
-                )}
+                <FidelityCell value={dataFidelity[key]} />
               </Typography>
             </Stack>
           </>
