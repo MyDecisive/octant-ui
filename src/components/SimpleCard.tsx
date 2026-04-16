@@ -1,8 +1,8 @@
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import type { ReactNode } from "react";
 import "./SimpleCard.css";
 
@@ -25,24 +25,24 @@ export function SimpleCard({
     <Card className="simple-card-container">
       <CardContent className="simple-card-content">
         <Stack gap={2} className="simple-card-main-content">
-          <Stack direction="row" gap={3} className="simple-card-header">
-            <Box className="simple-card-header-copy">
-              <Typography variant="body2" className="simple-card-title">
-                {title}
-              </Typography>
-
-              {description && (
-                <Typography variant="body2" className="simple-card-description">
-                  {description}
-                </Typography>
-              )}
-            </Box>
-            {headerAction && (
-              <Box className="simple-card-header-action">{headerAction}</Box>
-            )}
-          </Stack>
+          <CardHeader
+            className="simple-card-header"
+            action={headerAction}
+            title={title}
+            subheader={description}
+            slotProps={{
+              title: {
+                variant: "body2",
+                className: "simple-card-title",
+              },
+              subheader: {
+                variant: "body2",
+                className: "simple-card-description",
+              },
+            }}
+          />
           {children}
-          {footer && <Box className="simple-card-footer">{footer}</Box>}
+          {footer && <CardActions className="simple-card-footer">{footer}</CardActions>}
         </Stack>
       </CardContent>
     </Card>

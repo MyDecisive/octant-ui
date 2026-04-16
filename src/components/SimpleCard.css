@@ -13,17 +13,18 @@
   width: 100%;
 }
 
-.simple-card-header.MuiStack-root {
-  justify-content: space-between;
+.simple-card-header.MuiCardHeader-root {
+  padding: 0;
   align-items: center;
 }
 
-.simple-card-header-copy {
-  flex: 1 1 auto;
+.simple-card-header .MuiCardHeader-content {
   min-width: 0;
 }
 
-.simple-card-header-action {
+.simple-card-header .MuiCardHeader-action {
+  margin: 0;
+  align-self: center;
   flex-shrink: 0;
 }
 
@@ -35,6 +36,7 @@
   color: var(--mdai-grey-700);
 }
 
-.simple-card-footer {
+.simple-card-footer.MuiCardActions-root {
   width: 100%;
+  padding: 0;
 }
