@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.storybook.tsbuildinfo"
+  },
+  "include": [
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
+    "src/stories/**/*.ts",
+    "src/stories/**/*.tsx",
+    "src/stories/**/*.mdx"
+  ],
+  "exclude": ["node_modules", "dist"]
+}
