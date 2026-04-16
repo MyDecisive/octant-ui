@@ -16,13 +16,11 @@ conctact us if you need help [docs link]`,
   missingFields: {
     title: `You're missing critical fields`,
     content: `You're missing one or more critical fields
-
 <ul>
   <li>service_name</li>
   <li>host</li>
   <li>etc</li>
 </ul>
-
 contact us to ensure you have the right settings. [docs link]`,
     code: `copy paste this and send to us`,
   },

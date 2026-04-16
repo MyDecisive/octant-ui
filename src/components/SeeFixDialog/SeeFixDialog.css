@@ -2,6 +2,11 @@ div.fix-dialog-content-container {
   white-space: pre-wrap;
 }
 
+div.fix-dialog-content-container > ul {
+  margin: 0;
+  white-space: normal;
+}
+
 .fix-dialog-container.MuiPaper-root {
   max-width: 444px;
 }
