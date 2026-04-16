@@ -1,4 +1,8 @@
-import type { IntegrationType, ManifestPayload } from "@types";
+import type {
+  DataFidelityResponse,
+  IntegrationType,
+  ManifestPayload,
+} from "@types";
 import { apiFetch, BASE_URL } from "@utils/apiFetch";
 
 interface Integration {
@@ -84,14 +88,7 @@ export const connections = {
     return apiFetch.get("/connections");
   },
 
-  getStatus: (
-    connectionName: string,
-  ): Promise<{
-    receivingData: boolean;
-    sendingData: boolean;
-    dataIntegrity: boolean;
-    details: unknown;
-  }> => {
+  getStatus: (connectionName: string): Promise<DataFidelityResponse> => {
     if (import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true") {
       return devDelay({
         receivingData: generateFidelityValue(),
