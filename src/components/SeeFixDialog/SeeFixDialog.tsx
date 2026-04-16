@@ -1,10 +1,12 @@
 import { CodeSnippet } from "@components/CodeSnippet";
+import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import type { DataFidelityDetails } from "@types";
 import { FIX_CONTENT } from "./constants";
@@ -17,7 +19,7 @@ interface SeeFixDialogProps {
 }
 
 export function SeeFixDialog({ fixType, open, onClose }: SeeFixDialogProps) {
-  const { title, content, code } = FIX_CONTENT[fixType];
+  const { title, content, code, link } = FIX_CONTENT[fixType];
   return (
     <Dialog
       open={open}
@@ -32,11 +34,22 @@ export function SeeFixDialog({ fixType, open, onClose }: SeeFixDialogProps) {
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <Stack direction={"column"} gap={3}>
-          <DialogContentText>
-            <div
+          <DialogContentText component={"div"}>
+            <span
               className="fix-dialog-content-container"
               dangerouslySetInnerHTML={{ __html: content }}
             />
+            {link && (
+              <Link
+                className="fix-dialog-content-external-link"
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.text}
+                <ArrowOutwardRoundedIcon />
+              </Link>
+            )}
           </DialogContentText>
           <CodeSnippet code={code} />
         </Stack>

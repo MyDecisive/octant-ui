@@ -6,7 +6,7 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { FidelityState } from "@types";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
 import "./DataFidelityCard.css";
 import { FidelityCell } from "./FidelityCell";
 import { TestAndValidateButton } from "./TestAndValidateButton";
@@ -61,7 +61,7 @@ export function DataFidelityCard({
       />
       <CardContent className="data-fidelity-card-content">
         {ROW_ORDER.map((key) => (
-          <>
+          <Fragment key={key}>
             <Divider key={`divider-${key}`} />
             <Stack
               className="data-fidelity-content-row"
@@ -75,7 +75,7 @@ export function DataFidelityCard({
                 <FidelityCell value={dataFidelity[key]} />
               </Typography>
             </Stack>
-          </>
+          </Fragment>
         ))}
       </CardContent>
       <CardActions className="data-fidelity-card-actions">
