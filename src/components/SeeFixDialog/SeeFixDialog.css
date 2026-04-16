@@ -1,0 +1,7 @@
+div.fix-dialog-content-container {
+  white-space: pre-wrap;
+}
+
+.fix-dialog-container.MuiPaper-root {
+  max-width: 444px;
+}
