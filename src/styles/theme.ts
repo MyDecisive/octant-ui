@@ -7,6 +7,13 @@ declare module "@mui/material/Button" {
   }
 }
 
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    chipLabel: true;
+    metric: true;
+  }
+}
+
 export const theme = createTheme({
   palette: {
     mode: "light",
@@ -40,8 +47,8 @@ export const theme = createTheme({
       contrastText: "#FFFFFF",
     },
     text: {
-      primary: "#1D1D21",
-      secondary: "#66666F",
+      primary: "#000000de",
+      secondary: "#00000099",
     },
     background: {
       default: "#CFCFD4",
@@ -74,6 +81,28 @@ export const theme = createTheme({
           },
         },
       },
+    },
+    MuiTypography: {
+      variants: [
+        {
+          props: { variant: "chipLabel" },
+          style: {
+            fontSize: "13px",
+            fontWeight: 500,
+            lineHeight: "18px",
+            letterSpacing: "0.16px",
+          },
+        },
+        {
+          props: { variant: "metric" },
+          style: {
+            fontSize: "36px",
+            fontWeight: 500,
+            lineHeight: "56px",
+            letterSpacing: "-0.5px",
+          },
+        },
+      ],
     },
     MuiInputLabel: {
       styleOverrides: {
