@@ -44,7 +44,7 @@ export function AsyncButtonRow({
         setError(
           err instanceof Error
             ? err.message
-            : "Something went wrong while completing this step. Please try again.",
+            : "Something went wrong while completing this step.",
         );
       })
       .finally(() => {

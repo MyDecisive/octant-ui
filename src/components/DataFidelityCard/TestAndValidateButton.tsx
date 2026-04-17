@@ -1,10 +1,10 @@
 import Button, { type ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
+import type { FidelityState } from "@types";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { useShallow } from "zustand/shallow";
 import { connections } from "../../services/api";
-import type { FidelityState } from "./types";
 
 function determineButtonProps(
   loading: boolean,
@@ -49,6 +49,16 @@ function createLoadingDataFidelity(): FidelityState {
   };
 }
 
+// TODO: remove Demo code
+function createSuccessfulDataFidelity(): FidelityState {
+  return {
+    receivingData: true,
+    sendingData: true,
+    dataIntegrity: true,
+    details: null,
+  };
+}
+
 export function TestAndValidateButton({
   setDataFidelity,
   setIsValid,
@@ -56,9 +66,15 @@ export function TestAndValidateButton({
   setDataFidelity: Dispatch<SetStateAction<FidelityState>>;
   setIsValid: Dispatch<SetStateAction<boolean>>;
 }) {
+  // TODO: remove Demo code
+  const demoSuccessAttempt = 3;
+  const isDemoMode =
+    import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true";
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
   const [shouldRetry, setShouldRetry] = useState<boolean | null>(null);
+  // TODO: remove Demo code
+  const [attemptCount, setAttemptCount] = useState(0);
 
   const { connectionName } = useOctantConnectStore(
     useShallow((state) => ({
@@ -67,8 +83,24 @@ export function TestAndValidateButton({
   );
 
   const handleTestButtonClick = () => {
+    // TODO: remove Demo code
+    const nextAttempt = attemptCount + 1;
+
     setLoading(true);
+    // TODO: remove Demo code
+    setError(null);
+    setAttemptCount(nextAttempt);
     setDataFidelity(createLoadingDataFidelity());
+
+    // TODO: remove Demo code
+    if (isDemoMode && nextAttempt >= demoSuccessAttempt) {
+      setShouldRetry(false);
+      setIsValid(true);
+      setDataFidelity(createSuccessfulDataFidelity());
+      setLoading(false);
+      return;
+    }
+
     void connections
       .getStatus(connectionName!)
       .then((response) => {

@@ -1,4 +1,5 @@
 import type {
+  DataFidelityDetails,
   DataFidelityResponse,
   IntegrationType,
   ManifestPayload,
@@ -67,6 +68,20 @@ function generateFidelityValue() {
   return Math.random() > 0.8;
 }
 
+const detailsVal: DataFidelityDetails[] = [
+  "notReceiving",
+  "notSending",
+  "missingFields",
+  "oom",
+  "resourceLimit",
+];
+
+function generateDetailsValue(): DataFidelityDetails {
+  const randomIdx = Math.floor(Math.random() * 10);
+
+  return detailsVal[randomIdx % detailsVal.length];
+}
+
 export const connections = {
   generateManifests: (
     connectionName: string,
@@ -94,7 +109,7 @@ export const connections = {
         receivingData: generateFidelityValue(),
         sendingData: generateFidelityValue(),
         dataIntegrity: generateFidelityValue(),
-        details: "",
+        details: generateDetailsValue(),
       });
     }
 

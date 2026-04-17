@@ -72,3 +72,7 @@ img {
   max-width: 100%;
   display: block;
 }
+
+div#root {
+  height: 100vh;
+}

@@ -1,7 +1,7 @@
 import type { DeployMethod, TelemetryTypes, ViewKey } from "@types";
 import { create } from "zustand";
 
-export interface AppStateForm {
+interface AppStateForm {
   argoAgreement: boolean;
   namespace: string;
   deployMethod: DeployMethod;

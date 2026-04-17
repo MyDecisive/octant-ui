@@ -25,11 +25,27 @@ export interface ManifestPayload {
   destinations: Destination[];
 }
 
+export type DataFidelityDetails =
+  | "notReceiving"
+  | "notSending"
+  | "missingFields"
+  | "oom"
+  | "resourceLimit";
+
 export interface DataFidelityResponse {
   receivingData: boolean;
   sendingData: boolean;
   dataIntegrity: boolean;
-  details: null | string;
+  details: null | DataFidelityDetails;
+}
+
+export type DataState = "loading" | boolean | null;
+
+export interface FidelityState {
+  receivingData: DataState;
+  sendingData: DataState;
+  dataIntegrity: DataState;
+  details: null | "loading" | DataFidelityDetails;
 }
 
 export type ViewMap = Record<
