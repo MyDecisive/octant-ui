@@ -18,7 +18,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "predeploy:storybook": "npm run build-storybook",
-    "deploy:storybook": "gh-pages -d storybook-static --dest storybook"
+    "deploy:storybook": "gh-pages -d storybook-static --dest storybook --no-history"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
