@@ -39,6 +39,53 @@ Preview the production build locally:
 npm run preview -- --host 0.0.0.0
 ```
 
+## Storybook
+
+Storybook is configured for local component development and documentation.
+
+Run Storybook locally:
+
+```bash
+npm run storybook
+```
+
+Build the static Storybook site:
+
+```bash
+npm run build-storybook
+```
+
+Where to add stories:
+
+- Keep Storybook stories under `src/stories/`
+- Import real app components into stories from there instead of colocating story files next to components
+
+Storybook styling:
+
+- `.storybook/preview.tsx` applies the app theme, `CssBaseline`, and global CSS
+- Stories should render against the same MUI theme as the app by default
+
+Production/build isolation:
+
+- `npm run build` does not invoke Storybook
+- Storybook packages live in `devDependencies`
+- Vite only bundles modules reachable from `src/main.tsx`, so stories are not included in the production app unless they are imported by app code
+- `tsconfig.app.json` explicitly excludes `src/stories` and `*.stories.*` files so the app typecheck/build path does not process Storybook stories
+- `tsconfig.storybook.json` exists to cover Storybook and story files separately
+
+Typical workflow:
+
+```bash
+npm install
+npm run storybook
+```
+
+If you want to verify Storybook compiles in CI or before merging:
+
+```bash
+npm run build-storybook
+```
+
 ## Kubernetes (Minimal)
 
 At a minimum, you need:
