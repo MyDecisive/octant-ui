@@ -19,15 +19,17 @@ export function UpdateAgent() {
   const [activeTab, setActiveTab] = useState<string>("update");
   const [hasTested, setIsValid] = useState(false);
 
-  const { connectionName, url } = useOctantConnectStore(
+  const { connectionName, url, namespace } = useOctantConnectStore(
     useShallow((state) => ({
       connectionName: state.form.connectionName,
       url: state.form.url,
+      namespace: state.form.namespace,
     })),
   );
   const forwardDataSnippets = createForwardDataSnippets({
     connectionName,
     url,
+    namespace,
   });
 
   return (
