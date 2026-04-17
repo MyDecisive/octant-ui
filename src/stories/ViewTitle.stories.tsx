@@ -1,9 +1,22 @@
+import { CenterColumn } from "@components/layout/CenterColumn";
+import { Layout } from "@components/layout/Layout";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ViewTitle } from "../components/ViewTitle";
 
 const meta = {
   title: "Components/ViewTitle",
   component: ViewTitle,
+  decorators: [
+    (Story) => (
+      <Layout>
+        <CenterColumn>
+          <div style={{ backgroundColor: "#F3F3F6", borderRadius: "4px" }}>
+            <Story />
+          </div>
+        </CenterColumn>
+      </Layout>
+    ),
+  ],
   parameters: {
     layout: "padded",
   },
