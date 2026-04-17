@@ -1,8 +1,8 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import type { Preview } from "@storybook/react-vite";
-import { theme } from "../src/styles/theme";
 import "../src/styles/index.css";
+import { theme } from "../src/styles/theme";
 
 const preview: Preview = {
   decorators: [

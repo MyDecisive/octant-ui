@@ -6,6 +6,7 @@
   "include": [
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
+    "src/vite-env.d.ts",
     "src/stories/**/*.ts",
     "src/stories/**/*.tsx",
     "src/stories/**/*.mdx"
