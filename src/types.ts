@@ -59,3 +59,5 @@ export type ViewMap = Record<
 export type ViewKey = keyof ViewMap;
 
 export type ViewOrder = ViewKey[];
+
+export type FilterStatus = "inactive" | "updating" | "applied";

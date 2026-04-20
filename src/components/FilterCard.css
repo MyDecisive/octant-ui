@@ -1,0 +1,32 @@
+.filter-card-container.MuiStack-root {
+  background-color: #fff;
+  padding-top: calc(var(--mdai-spacing-unit) * 2);
+}
+
+.filter-card-container.MuiStack-root > .MuiStack-root {
+  width: 100%;
+}
+.filter-card-title-row.MuiStack-root,
+.filter-card-metric-row.MuiStack-root {
+  padding-left: calc(var(--mdai-spacing-unit) * 2);
+  padding-right: calc(var(--mdai-spacing-unit) * 2);
+}
+.filter-card-metric-row-label.MuiTypography-root {
+  line-height: 20px;
+  justify-self: flex-start;
+  flex: 1 0 auto;
+  font-weight: 700;
+}
+.filter-card-metric-row-unit.MuiTypography-root {
+  line-height: 20px;
+  margin-left: calc(var(--mdai-spacing-unit) / 2);
+}
+
+.filter-card-status-chip.MuiChip-root {
+  margin-left: auto;
+}
+
+.filter-card-title-row-helper-text-target.MuiSvgIcon-root {
+  color: #0000008a;
+  margin-left: var(--mdai-spacing-unit);
+}
