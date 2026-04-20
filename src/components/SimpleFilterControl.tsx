@@ -7,18 +7,18 @@ import {
   Typography,
 } from "@mui/material";
 import { Accordion } from "./Accordion";
-import "./FilterWidget.css";
 import { SliderControl } from "./formInputs/SliderControl";
+import "./SimpleFilterControl.css";
 
-interface FilterWidgetProps {
+interface SimpleFilterControlProps {
   volumeFilter?: number;
   persistErrors?: boolean;
 }
 
-export function FilterWidget({
+export function SimpleFilterControl({
   volumeFilter,
   persistErrors,
-}: FilterWidgetProps) {
+}: SimpleFilterControlProps) {
   const hasVolumeFilter = volumeFilter != undefined;
   const hasPersistErrors = persistErrors != undefined;
 

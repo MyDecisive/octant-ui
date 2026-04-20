@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FilterWidget } from "../components/FilterWidget";
+import { SimpleFilterControl } from "../components/SimpleFilterControl";
 
 const meta = {
-  title: "Components/FilterWidget",
-  component: FilterWidget,
+  title: "Components/SimpleFilterControl",
+  component: SimpleFilterControl,
   parameters: {
     layout: "centered",
   },
   args: {},
-} satisfies Meta<typeof FilterWidget>;
+} satisfies Meta<typeof SimpleFilterControl>;
 
 export default meta;
 
