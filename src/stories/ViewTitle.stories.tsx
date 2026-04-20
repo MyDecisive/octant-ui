@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ViewTitle } from "../components/ViewTitle";
 
 const meta = {
-  title: "Components/ViewTitle",
+  title: "Layout/ViewTitle",
   component: ViewTitle,
   decorators: [
     (Story) => (

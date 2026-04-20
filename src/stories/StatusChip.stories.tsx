@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StatusChip } from "../components/StatusChip";
 
 const meta = {
-  title: "Components/StatusChip",
+  title: "Display/StatusChip",
   component: StatusChip,
   parameters: {
     layout: "padded",

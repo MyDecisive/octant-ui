@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SimpleFilterControl } from "../components/SimpleFilterControl";
 
 const meta = {
-  title: "Components/SimpleFilterControl",
+  title: "Control/SimpleFilterControl",
   component: SimpleFilterControl,
   parameters: {
     layout: "centered",

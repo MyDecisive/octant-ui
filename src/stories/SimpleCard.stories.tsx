@@ -27,7 +27,7 @@ interface SimpleCardStoryArgs extends Pick<
 }
 
 const meta = {
-  title: "Components/SimpleCard",
+  title: "Layout/SimpleCard",
   component: SimpleCard,
   decorators: [
     (Story) => (

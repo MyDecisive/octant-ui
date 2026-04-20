@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CodeSnippet } from "../components/CodeSnippet";
 
 const meta = {
-  title: "Components/CodeSnippet",
+  title: "Display/CodeSnippet",
   component: CodeSnippet,
   decorators: [
     (Story) => (

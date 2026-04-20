@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DataCard } from "../components/DataCard";
 
 const meta = {
-  title: "Components/DataCard",
+  title: "Display/DataCard",
   component: DataCard,
   parameters: {
     layout: "centered",
