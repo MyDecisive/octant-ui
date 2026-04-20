@@ -1,0 +1,10 @@
+.slider-control-container.MuiStack-root {
+  width: 100%;
+  min-width: 0;
+}
+
+.slider-control-container.MuiStack-root > .slider-control-input {
+  width: calc(100% - (var(--mdai-spacing-unit) * 2));
+  margin-left: auto;
+  margin-right: auto;
+}
