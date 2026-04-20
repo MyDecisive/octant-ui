@@ -1,3 +1,7 @@
+.simple-filter-control.mdai-accordion-container.MuiPaper-root::before {
+  background-color: transparent;
+}
+
 .simple-filter-control-button-container.MuiStack-root {
   border-top: 1px solid #d9d9d9;
 }
