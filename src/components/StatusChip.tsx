@@ -17,9 +17,18 @@ const statusPropsMap = {
 
 export function StatusChip({
   status,
+  className,
 }: {
   status: keyof typeof statusPropsMap;
+  className?: string;
 }) {
   const statusProps = statusPropsMap[status];
-  return <Chip variant="outlined" clickable={false} {...statusProps} />;
+  return (
+    <Chip
+      className={className}
+      variant="outlined"
+      clickable={false}
+      {...statusProps}
+    />
+  );
 }
