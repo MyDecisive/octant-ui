@@ -1,11 +1,9 @@
-import {
-  Button,
-  Chip,
-  Divider,
-  Stack,
-  Switch,
-  Typography,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 import { Accordion } from "./Accordion";
 import { SliderControl } from "./formInputs/SliderControl";
 import "./SimpleFilterControl.css";
@@ -19,12 +17,13 @@ export function SimpleFilterControl({
   volumeFilter,
   persistErrors,
 }: SimpleFilterControlProps) {
-  const hasVolumeFilter = volumeFilter != undefined;
-  const hasPersistErrors = persistErrors != undefined;
+  const hasVolumeFilter = !!volumeFilter;
+  const hasPersistErrors = !!persistErrors;
 
   const showFilterChips = hasPersistErrors || hasVolumeFilter;
   return (
     <Accordion
+      className="simple-filter-control"
       title={
         <Stack>
           <Typography variant="h5">Filters</Typography>
@@ -49,7 +48,7 @@ export function SimpleFilterControl({
         </Stack>
       }
       content={
-        <Stack className="filter-widget-content-container" gap={1}>
+        <Stack className="simple-filter-control-content-container" gap={1}>
           <SliderControl
             value={volumeFilter ?? 0}
             label="Volume to filter"
