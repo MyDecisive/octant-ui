@@ -1,7 +1,7 @@
 import { Accordion } from "@components/Accordion";
 import Stack from "@mui/material/Stack";
+import { useOctantConnectStore } from "@store";
 import { useShallow } from "zustand/shallow";
-import { useOctantConnectStore } from "../../store/octantConnectStore";
 import {
   createUpdatedConfigLines,
   formKeyToConfigKeyMap,
