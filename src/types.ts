@@ -1,3 +1,4 @@
+import type { GridColDef } from "@mui/x-data-grid";
 import type { JSX } from "react";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
@@ -61,3 +62,11 @@ export type ViewKey = keyof ViewMap;
 export type ViewOrder = ViewKey[];
 
 export type FilterStatus = "inactive" | "updating" | "applied";
+
+// Table Types
+export interface BaseRowDefinition {
+  id: string;
+}
+
+export type ColumnType<T extends BaseRowDefinition = BaseRowDefinition> =
+  GridColDef<T>;
