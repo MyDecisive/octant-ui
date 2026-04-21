@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { BaseRowDefinition } from "@types";
+import { ProgressLineWithLabel } from "../components/ProgressLineWithLabel";
 import { createColumnDefinitions } from "../components/Table/createColumnDefinitions";
 import { Table } from "../components/Table/Table";
 
@@ -10,7 +11,7 @@ const meta = {
     layout: "centered",
   },
   args: {},
-} satisfies Meta<typeof Table<SpanData>>;
+} satisfies Meta<typeof Table>;
 
 export default meta;
 
@@ -81,14 +82,65 @@ export const Traces: Story = {
   },
 };
 
+interface LogData extends BaseRowDefinition {
+  name: string;
+  sent: number;
+  percent: number;
+  cost: number;
+}
+
+const logsColumns = createColumnDefinitions([
+  {
+    headerName: "service name",
+    field: "name",
+  },
+  {
+    headerName: "Logs sent (GB)",
+    field: "sent",
+    type: "number",
+  },
+  {
+    headerName: "% of Total",
+    field: "percent",
+    renderCell: ({ value }) => (
+      <ProgressLineWithLabel value={value as number} showLabel />
+    ),
+  },
+  {
+    headerName: "Estimated cost",
+    field: "cost",
+    cellClassName: "bold",
+    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
+    align: "right",
+    headerAlign: "right",
+  },
+]);
+
+function createDummyLogData() {
+  const data: LogData[] = [];
+
+  for (let index = 0; index < 40; index++) {
+    const row: LogData = {
+      id: `row-${index.toString()}`,
+      name: `service ${index.toString()}`,
+      sent: index % 10,
+      percent: Math.floor(Math.random() * 100),
+      cost: index * Math.floor(Math.random() * 10),
+    };
+    data.push(row);
+  }
+
+  return data;
+}
+
 export const Logs: Story = {
   args: {
     label: "Logs - Top Talkers",
-    columns: traceColumns,
-    rows: createDummySpanData(),
+    columns: logsColumns,
+    rows: createDummyLogData(),
     showToolbar: true,
     footerLabel: "Total estimated cost",
     calculateTotal: (rows) =>
-      rows.reduce((sum, r) => sum + (r as SpanData).cost, 0),
+      rows.reduce((sum, r) => sum + (r as LogData).cost, 0),
   },
 };

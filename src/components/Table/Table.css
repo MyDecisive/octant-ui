@@ -19,16 +19,11 @@
 /** border styles */
 .mdai-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft
   .MuiDataGrid-columnSeparator {
-  color: #f3f3f6;
+  color: transparent;
 }
-
 .mdai-table.MuiDataGrid-root.MuiDataGrid-withBorderColor {
   --DataGrid-rowBorderColor: #d0d0d6;
-  border-color: #f3f3f6;
-}
-
-.mdai-table.MuiDataGrid-root .MuiDataGrid-row {
-  border-bottom: 1px solid #d0d0d6;
+  border-color: #d0d0d6;
 }
 
 .mdai-action-button.MuiButton-root {
@@ -48,6 +43,7 @@
 .mdai-table-toolbar.MuiDataGrid-toolbar {
   display: flex;
   justify-content: flex-start;
+  border: none;
 }
 
 .mdai-table-footer-pagination.MuiTablePagination-root {
@@ -62,4 +58,8 @@
 .mdai-table-footer-text.MuiStack-root {
   flex: 1 0 auto;
   padding-right: 10px; /** to match the default cell padding */
+}
+
+.mdai-table-footer.MuiDataGrid-footerContainer.MuiDataGrid-withBorderColor {
+  border-color: #0000001f;
 }
