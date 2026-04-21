@@ -1,4 +1,3 @@
-import type { GridColDef } from "@mui/x-data-grid";
 import type { JSX } from "react";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
@@ -67,6 +66,3 @@ export type FilterStatus = "inactive" | "updating" | "applied";
 export interface BaseRowDefinition {
   id: string;
 }
-
-export type ColumnType<T extends BaseRowDefinition = BaseRowDefinition> =
-  GridColDef<T>;

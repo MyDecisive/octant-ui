@@ -1,6 +1,6 @@
-import type { ColumnType } from "@types";
+import type { GridColDef } from "@mui/x-data-grid";
 
-export const baseColumn: Partial<ColumnType> = {
+export const baseColumn: Partial<GridColDef> = {
   flex: 2,
   cellClassName: "mdai-table-cell",
   headerClassName: "mdai-table-header-cell",

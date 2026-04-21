@@ -14,6 +14,12 @@ declare module "@mui/material/Typography" {
   }
 }
 
+declare module "@mui/material/Typography" {
+  interface TypographyOwnProps {
+    bold?: boolean;
+  }
+}
+
 export const theme = createTheme({
   palette: {
     mode: "light",
@@ -138,6 +144,12 @@ export const theme = createTheme({
             fontWeight: 500,
             lineHeight: "56px",
             letterSpacing: "-0.5px",
+          },
+        },
+        {
+          props: { bold: true },
+          style: {
+            fontWeight: 700,
           },
         },
       ],

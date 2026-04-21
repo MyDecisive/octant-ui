@@ -1,3 +1,4 @@
+import type { GridColDef } from "@mui/x-data-grid";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { BaseRowDefinition } from "@types";
 import { ProgressLineWithLabel } from "../components/ProgressLineWithLabel";
@@ -15,9 +16,11 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type LogStory = StoryObj<Meta<typeof Table<LogData>>>;
+type SpanStory = StoryObj<Meta<typeof Table<SpanData>>>;
+type SummaryStory = StoryObj<Meta<typeof Table<SummaryData>>>;
 
-const traceColumns = createColumnDefinitions([
+const traceColumns = createColumnDefinitions<SpanData>([
   {
     headerName: "Root spans",
     field: "span",
@@ -70,15 +73,14 @@ function createDummySpanData() {
   return data;
 }
 
-export const Traces: Story = {
+export const Traces: SpanStory = {
   args: {
     label: "Traces - Top Talkers",
     columns: traceColumns,
     rows: createDummySpanData(),
     showToolbar: true,
     footerLabel: "Total estimated cost",
-    calculateTotal: (rows) =>
-      rows.reduce((sum, r) => sum + (r as SpanData).cost, 0),
+    calculateTotal: (rows) => rows.reduce((sum, r) => sum + r.cost, 0),
   },
 };
 
@@ -89,7 +91,7 @@ interface LogData extends BaseRowDefinition {
   cost: number;
 }
 
-const logsColumns = createColumnDefinitions([
+const logsColumns = createColumnDefinitions<LogData>([
   {
     headerName: "service name",
     field: "name",
@@ -133,14 +135,105 @@ function createDummyLogData() {
   return data;
 }
 
-export const Logs: Story = {
+export const Logs: LogStory = {
   args: {
     label: "Logs - Top Talkers",
     columns: logsColumns,
     rows: createDummyLogData(),
     showToolbar: true,
     footerLabel: "Total estimated cost",
-    calculateTotal: (rows) =>
-      rows.reduce((sum, r) => sum + (r as LogData).cost, 0),
+    calculateTotal: (rows) => rows.reduce((sum, r) => sum + r.cost, 0),
+  },
+};
+
+interface SummaryData extends BaseRowDefinition {
+  type: "logs" | "traces";
+  cost: number;
+  received: number;
+  sent: number;
+  rate: number;
+  percent: number;
+}
+
+function summaryValueFormatter(value: number, { type }: SummaryData) {
+  return `${value.toLocaleString()} ${type === "logs" ? "GB" : "MM Events"}`;
+}
+
+function summaryRateFormatter(value: number, { type }: SummaryData) {
+  return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
+}
+
+const summaryColumns = createColumnDefinitions<SummaryData>([
+  {
+    headerName: "Type",
+    field: "type",
+    headerClassName: "bold",
+    cellClassName: "bold",
+    valueFormatter: (value: string) =>
+      `${value[0].toLocaleUpperCase()}${value.slice(1)}`,
+  },
+  {
+    headerName: "Received",
+    headerClassName: "bold",
+    field: "received",
+    valueFormatter: summaryValueFormatter,
+  },
+  {
+    headerName: "Sent",
+    headerClassName: "bold",
+    field: "sent",
+    valueFormatter: summaryValueFormatter,
+  },
+  {
+    headerName: "Rate",
+    headerClassName: "bold",
+    field: "rate",
+    valueFormatter: summaryRateFormatter,
+  },
+  {
+    headerName: "% of Total",
+    headerClassName: "bold",
+    field: "percent",
+    valueFormatter: (value: number) => `${value} %`,
+  },
+  {
+    headerName: "Est. Cost",
+    headerClassName: "bold",
+    field: "cost",
+    valueFormatter: (value: number) => `$${value}`,
+    cellClassName: "bold",
+  },
+] as GridColDef<SummaryData>[]);
+
+const summaryData: SummaryData[] = [
+  {
+    id: "logs",
+    type: "logs",
+    cost: 700,
+    received: 100,
+    sent: 100,
+    rate: 0.1,
+    percent: 70,
+  },
+  {
+    id: "traces",
+    type: "traces",
+    cost: 300,
+    received: 4.2,
+    sent: 4.2,
+    rate: 1.27,
+    percent: 30,
+  },
+];
+
+export const Summary: SummaryStory = {
+  args: {
+    label: "Overall Estimated Cost",
+    columns: summaryColumns,
+    rows: summaryData,
+    showToolbar: true,
+    footerLabel: "the last 24h",
+    calculateTotal: (rows) => rows.reduce((sum, r) => sum + r.cost, 0),
+    summaryTable: true,
   },
 };
