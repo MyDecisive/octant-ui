@@ -1,11 +1,12 @@
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { defineConfig } from "vite";
+import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [react()],
+    plugins: [react(), svgr()],
     base: mode == "ghpages" ? "/octant-ui" : "/",
     // Added for dev to be able to access mdai-gateway
     server: {
