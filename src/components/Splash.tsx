@@ -7,9 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useLocation } from "wouter";
-import Octobuddy from "../assets/logo.svg?react";
-import { ROUTES } from "../constants/ROUTES";
+import type { BaseFlowViewProps } from "@types";
 import "./Splash.css";
 
 const ROWS = [
@@ -27,17 +25,15 @@ const ROWS = [
   },
 ];
 
-export function Splash() {
-  const [, setLocation] = useLocation();
-  const onClickProgress = () => {
-    setLocation(ROUTES.INSTALL);
-  };
+export function Splash({
+  onClickProgress,
+}: Pick<BaseFlowViewProps, "onClickProgress">) {
   return (
     <FlowCenterColumn>
       <ViewTitle
         title={
           <Stack direction="row" gap="10px" alignItems={"center"}>
-            <Octobuddy />
+            <img src="./logo.svg" alt="Octobuddy" className="octobuddy-logo" />
             Get started with Octant
           </Stack>
         }
