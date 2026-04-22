@@ -1,0 +1,14 @@
+.filter-card-container.mdai-accordion-container.MuiAccordion-root {
+  border-radius: 0;
+}
+
+.filter-card-metric-row-label.MuiTypography-root {
+  line-height: 20px;
+  justify-self: flex-start;
+  flex: 1 0 auto;
+  font-weight: 700;
+}
+.filter-card-metric-row-unit.MuiTypography-root {
+  line-height: 20px;
+  margin-left: calc(var(--mdai-spacing-unit) / 2);
+}
