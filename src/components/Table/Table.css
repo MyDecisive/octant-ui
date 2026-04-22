@@ -1,0 +1,96 @@
+.mdai-table-container.MuiCard-root {
+  padding: calc(var(--mdai-spacing-unit) * 2);
+}
+
+/** no focus state for row cells */
+.mdai-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft:focus,
+.mdai-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft:focus-within,
+.mdai-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft:focus,
+.mdai-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft:focus-within {
+  outline: none;
+}
+/** no hover state for rows */
+.mdai-table.MuiDataGrid-root .MuiDataGrid-row:hover {
+  background-color: #f3f3f6;
+}
+
+/** consistent cursor */
+.mdai-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft,
+.mdai-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft {
+  cursor: default;
+}
+
+/** border styles */
+.mdai-table-header-cell.MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--alignLeft
+  .MuiDataGrid-columnSeparator {
+  color: transparent;
+}
+.mdai-table.MuiDataGrid-root.MuiDataGrid-withBorderColor {
+  --DataGrid-rowBorderColor: #d0d0d6;
+  border: none;
+}
+
+.mdai-action-button.MuiButton-root {
+  align-self: flex-start;
+}
+
+/** cell styles */
+.mdai-table-cell.MuiDataGrid-cell.MuiDataGrid-cell--textLeft {
+  display: flex;
+  align-items: center;
+}
+
+.mdai-table-cell.MuiDataGrid-cell.bold {
+  font-weight: 600;
+}
+.mdai-table-header-cell.MuiDataGrid-columnHeader.bold
+  .MuiDataGrid-columnHeaderTitle {
+  font-weight: 700;
+}
+
+.mdai-table-toolbar.MuiDataGrid-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  border: none;
+}
+
+.mdai-table-toolbar-label.MuiTypography-root {
+  font-weight: 700;
+}
+
+.mdai-table-footer-pagination.MuiTablePagination-root {
+  flex: 0 1 auto;
+}
+
+.mdai-table-footer-pagination.MuiTablePagination-root
+  > .MuiTablePagination-toolbar {
+  padding-left: 0;
+}
+
+.mdai-table-footer-text-container.MuiStack-root {
+  flex: 1 0 auto;
+  padding-right: 10px; /** to match the default cell padding */
+}
+
+.mdai-table-footer.MuiDataGrid-footerContainer.MuiDataGrid-withBorderColor {
+  border-color: #0000001f;
+}
+.MuiDataGrid-root.MuiDataGrid-autoHeight.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.mdai-table.summary-table
+  > .MuiDataGrid-mainContent
+  > .MuiDataGrid-main {
+  border-top-left-radius: var(--mdai-spacing-unit);
+  border-top-right-radius: var(--mdai-spacing-unit);
+  border: 1px solid #000;
+}
+.MuiDataGrid-root.MuiDataGrid-autoHeight.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.mdai-table.summary-table
+  > .MuiDataGrid-mainContent
+  > .MuiDataGrid-footerContainer.mdai-summary-table-footer {
+  border-bottom-left-radius: var(--mdai-spacing-unit);
+  border-bottom-right-radius: var(--mdai-spacing-unit);
+  border: 1px solid #000;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--mdai-spacing-unit) * 2);
+}

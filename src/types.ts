@@ -59,3 +59,8 @@ export type ViewMap = Record<
 export type ViewKey = keyof ViewMap;
 
 export type ViewOrder = ViewKey[];
+
+// Table Types
+export interface BaseRowDefinition {
+  id: string;
+}
