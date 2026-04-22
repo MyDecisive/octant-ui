@@ -4,6 +4,20 @@ import type {} from "@mui/x-data-grid/themeAugmentation";
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     secondary: true;
+    nav: true;
+  }
+}
+
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    chipLabel: true;
+    metric: true;
+  }
+}
+
+declare module "@mui/material/Typography" {
+  interface TypographyOwnProps {
+    bold?: boolean;
   }
 }
 
@@ -40,8 +54,8 @@ export const theme = createTheme({
       contrastText: "#FFFFFF",
     },
     text: {
-      primary: "#1D1D21",
-      secondary: "#66666F",
+      primary: "#000000de",
+      secondary: "#00000099",
     },
     background: {
       default: "#CFCFD4",
@@ -56,6 +70,44 @@ export const theme = createTheme({
   },
   typography: {
     fontFamily: '"Geist", sans-serif',
+    h1: {
+      fontSize: "4.5rem",
+      fontWeight: 400,
+    },
+    h2: {
+      fontSize: "3rem",
+      fontWeight: 400,
+    },
+    h3: {
+      fontSize: "2rem",
+    },
+    h4: {
+      fontSize: "1.5rem",
+    },
+    h5: {
+      fontSize: "1.25rem",
+      fontWeight: 500,
+    },
+    h6: {
+      fontSize: "1rem",
+      fontWeight: 400,
+    },
+    body1: {
+      lineHeight: "160%",
+    },
+    body2: {},
+    subtitle1: {
+      fontSize: "1.5rem",
+      fontStyle: "normal",
+      fontWeight: 400,
+    },
+    subtitle2: {
+      fontSize: "1.25rem",
+      fontStyle: "normal",
+      fontWeight: 400,
+    },
+    overline: {},
+    caption: {},
   },
   components: {
     MuiOutlinedInput: {
@@ -74,6 +126,34 @@ export const theme = createTheme({
           },
         },
       },
+    },
+    MuiTypography: {
+      variants: [
+        {
+          props: { variant: "chipLabel" },
+          style: {
+            fontSize: "13px",
+            fontWeight: 500,
+            lineHeight: "18px",
+            letterSpacing: "0.16px",
+          },
+        },
+        {
+          props: { variant: "metric" },
+          style: {
+            fontSize: "36px",
+            fontWeight: 500,
+            lineHeight: "56px",
+            letterSpacing: "-0.5px",
+          },
+        },
+        {
+          props: { bold: true },
+          style: {
+            fontWeight: 700,
+          },
+        },
+      ],
     },
     MuiInputLabel: {
       styleOverrides: {
@@ -98,6 +178,29 @@ export const theme = createTheme({
           style: {
             background: "#E0E0E0",
             color: "#1D1D21",
+          },
+        },
+        {
+          props: { variant: "nav" },
+          style: {
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "8px",
+            alignSelf: "stretch",
+            background: "#transparent",
+            color: "#000",
+            padding: "12px 8px",
+            fontSize: "10px",
+            fontWeight: 400,
+            lineHeight: "10px",
+            textAlign: "center",
+            minWidth: 0,
+            borderRadius: 0,
+            "& .MuiButton-icon.MuiButton-startIcon": {
+              margin: 0,
+            },
           },
         },
       ],
