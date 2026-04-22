@@ -15,7 +15,7 @@
     "local-all": "npm run build-to-kind && npm run local-deploy && npm run local-pod-restart",
     "predeploy": "tsc -b && vite build --mode ghpages",
     "deploy": "gh-pages -d dist",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build",
     "predeploy:storybook": "npm run build-storybook",
     "deploy:storybook": "gh-pages -d storybook-static --dest storybook --no-history"
