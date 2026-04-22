@@ -1,3 +1,4 @@
+import { Accordion } from "@components/Accordion";
 import Stack from "@mui/material/Stack";
 import { useOctantConnectStore } from "@store";
 import classNames from "classnames";
@@ -7,7 +8,6 @@ import {
   formKeyToConfigKeyMap,
 } from "./collectorConfigUtils";
 import "./ConfigDrawer.css";
-import { ExpandConfig } from "@components/ExpandConfig";
 
 interface ConfigDrawerProps {
   focusedField: string | undefined;
@@ -41,7 +41,9 @@ export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
       gap={1}
       alignItems={"stretch"}
     >
-      <ExpandConfig
+      <Accordion
+        className="config-drawer-accordion"
+        hideExpandIcon
         title={<pre className="config-drawer-line">Expand config view +</pre>}
         content={
           <>
