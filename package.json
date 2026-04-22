@@ -16,12 +16,14 @@
     "predeploy": "tsc -b && vite build --mode ghpages",
     "deploy": "gh-pages -d dist",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "predeploy:storybook": "npm run build-storybook",
+    "deploy:storybook": "gh-pages -d storybook-static --dest storybook --no-history"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.9",
+    "@mui/icons-material": "^7.3.10",
     "@mui/material": "^7.3.8",
     "@mui/x-data-grid": "^8.27.5",
     "classnames": "^2.5.1",
@@ -55,6 +57,7 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.48.0",
     "vite": "^7.3.1",
+    "vite-plugin-svgr": "^5.2.0",
     "vitest": "^4.1.4"
   }
 }
