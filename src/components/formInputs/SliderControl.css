@@ -4,7 +4,5 @@
 }
 
 .slider-control-container.MuiStack-root > .slider-control-input {
-  width: calc(100% - (var(--mdai-spacing-unit) * 2));
-  margin-left: auto;
-  margin-right: auto;
+  padding: calc(var(--mdai-spacing-unit) * 2.5) 0;
 }

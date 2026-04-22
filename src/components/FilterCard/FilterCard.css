@@ -6,8 +6,7 @@
 .filter-card-container.MuiStack-root > .MuiStack-root {
   width: 100%;
 }
-.filter-card-title-row.MuiStack-root,
-.filter-card-metric-row.MuiStack-root {
+.filter-card-title-row.MuiStack-root {
   padding-left: calc(var(--mdai-spacing-unit) * 2);
   padding-right: calc(var(--mdai-spacing-unit) * 2);
 }

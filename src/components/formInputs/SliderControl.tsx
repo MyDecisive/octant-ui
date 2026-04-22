@@ -22,9 +22,11 @@ export function SliderControl({
         justifyContent={"space-between"}
         alignItems={"center"}
       >
-        <Typography variant="h6">{label}</Typography>
+        <Typography className="slider-control-label" variant="chipLabel">
+          {label}
+        </Typography>
         {valueUnits != "" && (
-          <Typography variant="h6">{`${rest.value}${valueUnits}`}</Typography>
+          <Typography>{`${rest.value}${valueUnits}`}</Typography>
         )}
       </Stack>
       <Slider className="slider-control-input" {...rest} />

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FilterCard } from "../components/FilterCard";
+import { FilterCard } from "../components/FilterCard/FilterCard";
 
 const meta = {
   title: "Components/FilterCard",
@@ -17,7 +17,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     title: "Log Filtering",
-    helperText: "this is the amout of log data, not log lines",
     unit: "GB",
     status: "applied",
     received: 100,

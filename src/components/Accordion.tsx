@@ -48,7 +48,11 @@ export function Accordion({
         id={summaryId}
         className={classNames("mdai-accordion-summary", summaryClassName)}
       >
-        <Typography component="span">{title}</Typography>
+        {typeof title === "string" ? (
+          <Typography component="span">{title}</Typography>
+        ) : (
+          title
+        )}
       </AccordionSummary>
       <AccordionDetails
         className={classNames(
