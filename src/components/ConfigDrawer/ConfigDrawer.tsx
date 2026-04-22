@@ -1,6 +1,7 @@
-import { ExpandConfig } from "@components/ExpandConfig";
+import { Accordion } from "@components/Accordion";
 import Stack from "@mui/material/Stack";
 import { useOctantConnectStore } from "@store";
+import classNames from "classnames";
 import { useShallow } from "zustand/shallow";
 import {
   createUpdatedConfigLines,
@@ -10,9 +11,10 @@ import "./ConfigDrawer.css";
 
 interface ConfigDrawerProps {
   focusedField: string | undefined;
+  className?: string;
 }
 
-export function ConfigDrawer({ focusedField }: ConfigDrawerProps) {
+export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
   const { telemetryTypes, url, apiKey, connectionName } = useOctantConnectStore(
     useShallow((state) => {
       const { telemetryTypes, url, apiKey, connectionName } = state.form;
@@ -34,8 +36,14 @@ export function ConfigDrawer({ focusedField }: ConfigDrawerProps) {
   );
 
   return (
-    <Stack className="config-drawer-container" gap={1} alignItems={"stretch"}>
-      <ExpandConfig
+    <Stack
+      className={classNames("config-drawer-container", className)}
+      gap={1}
+      alignItems={"stretch"}
+    >
+      <Accordion
+        className="config-drawer-accordion"
+        hideExpandIcon
         title={<pre className="config-drawer-line">Expand config view +</pre>}
         content={
           <>

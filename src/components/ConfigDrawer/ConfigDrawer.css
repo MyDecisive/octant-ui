@@ -20,3 +20,8 @@ pre.config-drawer-line {
 pre.config-drawer-line.highlight {
   background: rgba(255, 255, 255, 0.12);
 }
+
+.config-drawer-accordion.mdai-accordion-container {
+  background-color: #454545;
+  color: var(--mdai-light-grey);
+}
