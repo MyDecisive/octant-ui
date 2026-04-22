@@ -1,5 +1,5 @@
 import { ButtonRow } from "@components/layout/ButtonRow";
-import { CenterColumn } from "@components/layout/CenterColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,7 +13,7 @@ export function ArgoInstall() {
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   return (
-    <CenterColumn>
+    <FlowCenterColumn>
       <ViewTitle
         title="Install via ArgoCD"
         description="Octant will install and create Argo apps to deploy the Smarthub and all your settings"
@@ -34,6 +34,6 @@ export function ArgoInstall() {
       <ButtonRow>
         <NextButton disabled={!argoAgreement} />
       </ButtonRow>
-    </CenterColumn>
+    </FlowCenterColumn>
   );
 }

@@ -1,6 +1,6 @@
 import { AsyncButtonRow } from "@components/AsyncButtonRow";
 import { Input } from "@components/formInputs/Input";
-import { CenterColumn } from "@components/layout/CenterColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useOctantConnectStore } from "@store";
 import { useShallow } from "zustand/shallow";
@@ -22,7 +22,7 @@ export function ConnectToCluster() {
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   return (
-    <CenterColumn>
+    <FlowCenterColumn>
       <ViewTitle
         title="Connect to your Kubernetes Cluster"
         description="<Provide ArgoCD somethings and validate connection>"
@@ -52,6 +52,6 @@ export function ConnectToCluster() {
           done: "Connected",
         }}
       />
-    </CenterColumn>
+    </FlowCenterColumn>
   );
 }

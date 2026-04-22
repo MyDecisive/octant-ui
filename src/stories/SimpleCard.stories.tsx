@@ -1,5 +1,5 @@
-import { CenterColumn } from "@components/layout/CenterColumn";
-import { Layout } from "@components/layout/Layout";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
+import { FlowLayout } from "@components/layout/FlowLayout";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -27,17 +27,17 @@ interface SimpleCardStoryArgs extends Pick<
 }
 
 const meta = {
-  title: "Components/SimpleCard",
+  title: "Layout/SimpleCard",
   component: SimpleCard,
   decorators: [
     (Story) => (
-      <Layout>
-        <CenterColumn>
+      <FlowLayout>
+        <FlowCenterColumn>
           <div style={{ backgroundColor: "#F3F3F6", borderRadius: "4px" }}>
             <Story />
           </div>
-        </CenterColumn>
-      </Layout>
+        </FlowCenterColumn>
+      </FlowLayout>
     ),
   ],
   parameters: {

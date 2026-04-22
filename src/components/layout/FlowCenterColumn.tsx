@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import "./RightColumn.css";
+import "./FlowCenterColumn.css";
 
-export function RightColumn({ children }: { children: React.ReactNode }) {
+export function FlowCenterColumn({ children }: { children: React.ReactNode }) {
   return (
-    <Box className="right-column">
+    <Box className="center-column">
       <Stack gap={3} direction={"column"}>
         {children}
       </Stack>

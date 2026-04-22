@@ -1,4 +1,4 @@
-import { CenterColumn } from "@components/layout/CenterColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import CableRoundedIcon from "@mui/icons-material/CableRounded";
 import MiscellaneousServicesRoundedIcon from "@mui/icons-material/MiscellaneousServicesRounded";
@@ -7,7 +7,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import type { BaseFlowViewProps } from "@types";
+import { useLocation } from "wouter";
+import Octobuddy from "../assets/logo.svg?react";
+import { ROUTES } from "../constants/ROUTES";
 import "./Splash.css";
 
 const ROWS = [
@@ -25,15 +27,17 @@ const ROWS = [
   },
 ];
 
-export function Splash({
-  onClickProgress,
-}: Pick<BaseFlowViewProps, "onClickProgress">) {
+export function Splash() {
+  const [, setLocation] = useLocation();
+  const onClickProgress = () => {
+    setLocation(ROUTES.INSTALL);
+  };
   return (
-    <CenterColumn>
+    <FlowCenterColumn>
       <ViewTitle
         title={
           <Stack direction="row" gap="10px" alignItems={"center"}>
-            <img src="./logo.svg" alt="Octobuddy" className="octobuddy-logo" />
+            <Octobuddy />
             Get started with Octant
           </Stack>
         }
@@ -63,6 +67,6 @@ export function Splash({
       >
         Let's get going
       </Button>
-    </CenterColumn>
+    </FlowCenterColumn>
   );
 }

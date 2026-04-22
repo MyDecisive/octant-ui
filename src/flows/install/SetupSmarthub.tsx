@@ -1,6 +1,6 @@
 import { AsyncButtonRow } from "@components/AsyncButtonRow";
 import { Input } from "@components/formInputs/Input";
-import { CenterColumn } from "@components/layout/CenterColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -29,7 +29,7 @@ export function SetupSmarthub() {
     });
 
   return (
-    <CenterColumn>
+    <FlowCenterColumn>
       <ViewTitle
         title="Set up and install your Smarthub"
         description="Tell us where you’d like the Smarthub to live and how you want us to preserve important data for you. When you’re ready, we'll run a quick test to make sure the hub is running smoothly in your environment."
@@ -56,6 +56,6 @@ export function SetupSmarthub() {
           error: "Install failed",
         }}
       />
-    </CenterColumn>
+    </FlowCenterColumn>
   );
 }

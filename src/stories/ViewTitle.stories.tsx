@@ -1,20 +1,20 @@
-import { CenterColumn } from "@components/layout/CenterColumn";
-import { Layout } from "@components/layout/Layout";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
+import { FlowLayout } from "@components/layout/FlowLayout";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ViewTitle } from "../components/ViewTitle";
 
 const meta = {
-  title: "Components/ViewTitle",
+  title: "Layout/ViewTitle",
   component: ViewTitle,
   decorators: [
     (Story) => (
-      <Layout>
-        <CenterColumn>
+      <FlowLayout>
+        <FlowCenterColumn>
           <div style={{ backgroundColor: "#F3F3F6", borderRadius: "4px" }}>
             <Story />
           </div>
-        </CenterColumn>
-      </Layout>
+        </FlowCenterColumn>
+      </FlowLayout>
     ),
   ],
   parameters: {
