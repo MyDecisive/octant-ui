@@ -1,0 +1,33 @@
+.page-container.MuiBox-root {
+  max-width: 1220px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+}
+
+.page-main-content-container.MuiStack-root {
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.page-header-container.MuiCard-root {
+  padding: calc(var(--mdai-spacing-unit) * 2);
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+}
+
+.page-title.MuiTypography-root {
+  font-size: 34px;
+  line-height: 36px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-family: "Roboto Condensed", sans-serif;
+  color: #000;
+}
