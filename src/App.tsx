@@ -1,24 +1,30 @@
 import { FlowContainer } from "@components/FlowContainer";
 import { FlowLayout } from "@components/layout/FlowLayout";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { PageContainer } from "@components/layout/PageContainer";
+import { Route, Switch } from "wouter";
 import { Splash } from "./components/Splash";
-import { theme } from "./styles/theme";
+import { ROUTES } from "./constants/ROUTES";
+import { ClarityPage } from "./pages/Clarity";
+
+const flowRoutes = new RegExp(/^\/(?:install)?$/);
 
 function App() {
-  const [splash, setSplash] = useState(true);
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <FlowLayout>
-        {splash ? (
-          <Splash onClickProgress={() => setSplash(false)} />
-        ) : (
-          <FlowContainer />
-        )}
-      </FlowLayout>
-    </ThemeProvider>
+    <Switch>
+      <Route path={flowRoutes}>
+        <FlowLayout>
+          <Route path={ROUTES.SPLASH} component={Splash} />
+          <Route path={ROUTES.INSTALL} component={FlowContainer} />
+        </FlowLayout>
+      </Route>
+      <PageContainer>
+        <Switch>
+          <Route path={ROUTES.CLARITY} component={ClarityPage} />
+          <Route path={ROUTES.CONNECTIONS} component={FlowContainer} />
+          <Route path={ROUTES.SMARTHUB} component={FlowContainer} />
+        </Switch>
+      </PageContainer>
+    </Switch>
   );
 }
 
