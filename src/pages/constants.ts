@@ -1,8 +1,8 @@
-import { createColumnDefinitions } from "@components/Table/createColumnDefinitions";
+import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 
-export const traceColumns = createColumnDefinitions<SpanData>([
+export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
     headerName: "Root spans",
     field: "span",
@@ -62,7 +62,7 @@ export interface LogData extends BaseRowDefinition {
   cost: number;
 }
 
-export const logsColumns = createColumnDefinitions<LogData>([
+export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
   {
     headerName: "service name",
     field: "name",
@@ -122,7 +122,7 @@ function summaryRateFormatter(value: number, { type }: SummaryData) {
   return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
 }
 
-export const summaryColumns = createColumnDefinitions<SummaryData>([
+export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
   {
     headerName: "Type",
     field: "type",
