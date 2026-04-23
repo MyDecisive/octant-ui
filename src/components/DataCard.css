@@ -1,0 +1,9 @@
+.data-card-container.MuiStack-root {
+  padding: calc(var(--mdai-spacing-unit) * 2);
+  border-radius: var(--mdai-spacing-unit);
+  border: 1px solid #000;
+}
+
+.data-card-metrics-row-divider.MuiDivider-root {
+  border-left: 1px solid #000;
+}

@@ -115,7 +115,7 @@ export function DeployCollector() {
 
         <Select
           label="Data source"
-          value="datadog"
+          selected="datadog"
           disabled
           options={dataSourceOptions}
           onChange={() => null}
@@ -148,7 +148,7 @@ export function DeployCollector() {
         </Typography>
         <Select
           label="Data destination"
-          value="datadog"
+          selected="datadog"
           disabled
           options={dataSourceOptions}
           onChange={() => null}
