@@ -6,7 +6,7 @@ import { baseColumn } from "./constants";
 // The argument for this function expects each object to have a `field` and `label` at minimum.
 // It may also have a `renderCell` function, if needed.
 // See here for more options: https://mui.com/x/api/data-grid/grid-col-def/
-export function createColumnDefinitions<
+export function createColumnDefinitionsForDataTable<
   T extends BaseRowDefinition = BaseRowDefinition,
 >(columns: GridColDef<T>[]): GridColDef<T>[] {
   return columns.map((opinionatedColumnDef) => {
