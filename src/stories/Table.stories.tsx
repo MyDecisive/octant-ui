@@ -2,7 +2,7 @@ import type { GridColDef } from "@mui/x-data-grid";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { BaseRowDefinition } from "@types";
 import { ProgressLineWithLabel } from "../components/ProgressLineWithLabel";
-import { createColumnDefinitions } from "../components/Table/createColumnDefinitions";
+import { createColumnDefinitionsForDataTable } from "../components/Table/createColumnDefinitionsForDataTable";
 import { Table } from "../components/Table/Table";
 
 const meta = {
@@ -20,7 +20,7 @@ type LogStory = StoryObj<Meta<typeof Table<LogData>>>;
 type SpanStory = StoryObj<Meta<typeof Table<SpanData>>>;
 type SummaryStory = StoryObj<Meta<typeof Table<SummaryData>>>;
 
-const traceColumns = createColumnDefinitions<SpanData>([
+const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
     headerName: "Root spans",
     field: "span",
@@ -91,7 +91,7 @@ interface LogData extends BaseRowDefinition {
   cost: number;
 }
 
-const logsColumns = createColumnDefinitions<LogData>([
+const logsColumns = createColumnDefinitionsForDataTable<LogData>([
   {
     headerName: "service name",
     field: "name",
@@ -163,7 +163,7 @@ function summaryRateFormatter(value: number, { type }: SummaryData) {
   return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
 }
 
-const summaryColumns = createColumnDefinitions<SummaryData>([
+const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
   {
     headerName: "Type",
     field: "type",
