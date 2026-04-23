@@ -1,8 +1,7 @@
 import { useOctantConnectStore } from "@store";
 import { useCallback } from "react";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/install";
-import { LeftColumn } from "./layout/LeftColumn";
-import { Nav } from "./Nav";
+import { StepperNav } from "./StepperNav";
 
 const flowStepKeys = VIEW_ORDER.filter((step) => VIEW_MAP[step].label);
 const flowSteps = flowStepKeys.map((key) => ({
@@ -25,13 +24,11 @@ export function FlowContainer() {
 
   return (
     <>
-      <LeftColumn>
-        <Nav
-          activeStepIndex={activeStepIndex}
-          steps={flowSteps}
-          onStepClick={setActiveView}
-        />
-      </LeftColumn>
+      <StepperNav
+        activeStepIndex={activeStepIndex}
+        steps={flowSteps}
+        onStepClick={setActiveView}
+      />
       <Component viewKey={activeView} onClickProgress={onClickProgress} />
     </>
   );

@@ -1,5 +1,5 @@
 import { FlowContainer } from "@components/FlowContainer";
-import { Layout } from "@components/layout/Layout";
+import { FlowLayout } from "@components/layout/FlowLayout";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
@@ -11,13 +11,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Layout>
+      <FlowLayout>
         {splash ? (
           <Splash onClickProgress={() => setSplash(false)} />
         ) : (
           <FlowContainer />
         )}
-      </Layout>
+      </FlowLayout>
     </ThemeProvider>
   );
 }

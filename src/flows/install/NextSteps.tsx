@@ -1,6 +1,6 @@
 import { CodeSnippet } from "@components/CodeSnippet";
 import { ButtonRow } from "@components/layout/ButtonRow";
-import { CenterColumn } from "@components/layout/CenterColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewTitle } from "@components/ViewTitle";
 import Button from "@mui/material/Button";
@@ -18,7 +18,7 @@ export function NextSteps() {
   const handleDownloadManifestsClick = () => fetchAndDownload();
 
   return (
-    <CenterColumn>
+    <FlowCenterColumn>
       <ViewTitle
         title="Next steps"
         description="You’re all set. When you’re ready, feel free to check out our labs catalog or manage your Argo changes."
@@ -79,6 +79,6 @@ export function NextSteps() {
       >
         <CodeSnippet code={`argocd app delete ${connectionName}`} />
       </SimpleCard>
-    </CenterColumn>
+    </FlowCenterColumn>
   );
 }

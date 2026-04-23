@@ -1,7 +1,7 @@
 import { CodeSnippet } from "@components/CodeSnippet";
 import { DataFidelityCard } from "@components/DataFidelityCard/DataFidelityCard";
 import { ButtonRow } from "@components/layout/ButtonRow";
-import { CenterColumn } from "@components/layout/CenterColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { NextButton } from "@components/NextButton";
 import { TabPanel } from "@components/TabPanel";
 import { ViewTitle } from "@components/ViewTitle";
@@ -33,7 +33,7 @@ export function UpdateAgent() {
   });
 
   return (
-    <CenterColumn>
+    <FlowCenterColumn>
       <ViewTitle
         title="Update Datadog agent and test data flow in our Smarthub"
         description="Update your Datadog agent config in your Kubernetes cluster or Argo CD project and restart it with the updated manifest changes."
@@ -69,6 +69,6 @@ export function UpdateAgent() {
       <ButtonRow>
         <NextButton disabled={!hasTested} />
       </ButtonRow>
-    </CenterColumn>
+    </FlowCenterColumn>
   );
 }

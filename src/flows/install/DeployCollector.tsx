@@ -3,8 +3,7 @@ import { ConfigDrawer } from "@components/ConfigDrawer/ConfigDrawer";
 import { CheckboxGroup } from "@components/formInputs/CheckboxGroup";
 import { Input } from "@components/formInputs/Input";
 import { Select } from "@components/formInputs/Select";
-import { CenterColumn } from "@components/layout/CenterColumn";
-import { RightColumn } from "@components/layout/RightColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
@@ -105,7 +104,7 @@ export function DeployCollector() {
 
   return (
     <>
-      <CenterColumn>
+      <FlowCenterColumn>
         <ViewTitle
           title="Get ready to deploy the collector"
           description="Tell us how and where you would like to send your data from
@@ -201,10 +200,8 @@ export function DeployCollector() {
             loading: "Deploying...",
           }}
         />
-      </CenterColumn>
-      <RightColumn>
-        <ConfigDrawer focusedField={focusedField} />
-      </RightColumn>
+      </FlowCenterColumn>
+      <ConfigDrawer focusedField={focusedField} className="right-column" />
     </>
   );
 }

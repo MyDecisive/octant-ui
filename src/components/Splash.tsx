@@ -1,4 +1,4 @@
-import { CenterColumn } from "@components/layout/CenterColumn";
+import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import CableRoundedIcon from "@mui/icons-material/CableRounded";
 import MiscellaneousServicesRoundedIcon from "@mui/icons-material/MiscellaneousServicesRounded";
@@ -29,7 +29,7 @@ export function Splash({
   onClickProgress,
 }: Pick<BaseFlowViewProps, "onClickProgress">) {
   return (
-    <CenterColumn>
+    <FlowCenterColumn>
       <ViewTitle
         title={
           <Stack direction="row" gap="10px" alignItems={"center"}>
@@ -63,6 +63,6 @@ export function Splash({
       >
         Let's get going
       </Button>
-    </CenterColumn>
+    </FlowCenterColumn>
   );
 }
