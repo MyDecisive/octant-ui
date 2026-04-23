@@ -64,3 +64,5 @@ export type ViewOrder = ViewKey[];
 export interface BaseRowDefinition {
   id: string;
 }
+
+export type TimeRange = "today" | "mtd" | "lastMonth";

@@ -4,8 +4,12 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import MuiSelect, { type SelectChangeEvent } from "@mui/material/Select";
+import MuiSelect, {
+  type SelectProps as MuiSelectProps,
+  type SelectChangeEvent,
+} from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
+import classNames from "classnames";
 import "./Select.css";
 
 export interface SelectOption {
@@ -19,10 +23,12 @@ export interface SelectProps {
   label?: string;
   options: SelectOption[];
   disabled?: boolean;
+  className?: string;
   helperText?: string;
   errorText?: string;
   selected: string;
   onChange: (event: SelectChangeEvent) => void;
+  size?: MuiSelectProps["size"]; // TODO: get from MuiSelect props
 }
 
 export function Select({
@@ -31,17 +37,24 @@ export function Select({
   options,
   selected,
   onChange,
+  className,
   helperText,
   errorText,
+  size,
 }: SelectProps) {
   return (
-    <FormControl className="mdai-select-container" fullWidth>
+    <FormControl
+      className={classNames("mdai-select-container", className)}
+      fullWidth
+      variant="standard"
+    >
       {label && <InputLabel id={"select-label-id"}>{label}</InputLabel>}
       <MuiSelect
         id="select-menu"
         labelId="select-label-id"
         className="mdai-select-menu"
         value={selected}
+        size={size}
         label={label}
         disabled={disabled}
         onChange={onChange}

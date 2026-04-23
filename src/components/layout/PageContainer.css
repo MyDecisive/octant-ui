@@ -22,6 +22,10 @@
   box-shadow: none;
 }
 
+.page-header-container.MuiCard-root .mdai-timepicker {
+  width: 340px;
+}
+
 .page-title.MuiTypography-root {
   font-size: 34px;
   line-height: 36px;
