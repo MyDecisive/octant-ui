@@ -21,6 +21,19 @@ declare module "@mui/material/Typography" {
   }
 }
 
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    chipLabel: true;
+    metric: true;
+  }
+}
+
+declare module "@mui/material/Typography" {
+  interface TypographyOwnProps {
+    bold?: boolean;
+  }
+}
+
 export const theme = createTheme({
   palette: {
     mode: "light",
@@ -95,7 +108,11 @@ export const theme = createTheme({
     body1: {
       lineHeight: "160%",
     },
-    body2: {},
+    body2: {
+      fontSize: "0.875rem",
+      lineHeight: "1.25rem",
+      fontWeight: 400,
+    },
     subtitle1: {
       fontSize: "1.5rem",
       fontStyle: "normal",
@@ -107,9 +124,23 @@ export const theme = createTheme({
       fontWeight: 400,
     },
     overline: {},
-    caption: {},
+    caption: {
+      fontSize: "0.75rem",
+      fontWeight: 400,
+    },
   },
   components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: "#000",
+          padding: "8px 12px",
+        },
+        arrow: {
+          color: "#000",
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {

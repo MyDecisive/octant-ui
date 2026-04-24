@@ -53,6 +53,12 @@
   justify-content: flex-start;
   border: none;
 }
+.mdai-summary-table-toolbar.MuiDataGrid-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border: none;
+}
 
 .mdai-table-toolbar-label.MuiTypography-root {
   font-weight: 700;
@@ -75,22 +81,11 @@
 .mdai-table-footer.MuiDataGrid-footerContainer.MuiDataGrid-withBorderColor {
   border-color: #0000001f;
 }
-.MuiDataGrid-root.MuiDataGrid-autoHeight.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.mdai-table.summary-table
-  > .MuiDataGrid-mainContent
-  > .MuiDataGrid-main {
-  border-top-left-radius: var(--mdai-spacing-unit);
-  border-top-right-radius: var(--mdai-spacing-unit);
-  border: 1px solid #000;
+
+.mdai-summary-table-tooltip-cta-button.MuiButton-root {
+  color: #d500f9;
 }
-.MuiDataGrid-root.MuiDataGrid-autoHeight.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.mdai-table.summary-table
-  > .MuiDataGrid-mainContent
-  > .MuiDataGrid-footerContainer.mdai-summary-table-footer {
-  border-bottom-left-radius: var(--mdai-spacing-unit);
-  border-bottom-right-radius: var(--mdai-spacing-unit);
-  border: 1px solid #000;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: calc(var(--mdai-spacing-unit) * 2);
+
+.mdai-summary-table-tooltip.MuiTooltip-tooltip {
+  max-width: 369px;
 }
