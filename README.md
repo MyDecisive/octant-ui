@@ -1,3 +1,7 @@
+[![Chores](https://github.com/mydecisive/octant-ui/actions/workflows/chores.yml/badge.svg)](https://github.com/mydecisive/octant-ui/actions/workflows/chores.yml)
+[![codecov](https://codecov.io/gh/MyDecisive/octant-ui/graph/badge.svg?token=UPHRBSXOON)](https://codecov.io/gh/MyDecisive/octant-ui)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/octant-ui)](https://artifacthub.io/packages/search?repo=octant-ui)
+
 # MyDecisive Octant UI
 
 React + TypeScript + Vite frontend for Octant.
