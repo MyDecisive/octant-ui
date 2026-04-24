@@ -28,7 +28,7 @@ export interface SelectProps {
   errorText?: string;
   selected: string;
   onChange: (event: SelectChangeEvent) => void;
-  size?: MuiSelectProps["size"]; // TODO: get from MuiSelect props
+  size?: MuiSelectProps["size"];
 }
 
 export function Select({
