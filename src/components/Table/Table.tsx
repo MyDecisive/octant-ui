@@ -1,9 +1,11 @@
 import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 import classNames from "classnames";
-import { SummaryTableFooter } from "./SummaryTableFooter";
+import type { ReactNode } from "react";
+import { SummaryTableToolbar } from "./SummaryTableToolbar";
 import "./Table.css";
 import { TableFooter } from "./TableFooter";
 import { TableToolbar } from "./TableToolbar";
@@ -11,6 +13,7 @@ import { TableToolbar } from "./TableToolbar";
 declare module "@mui/x-data-grid" {
   interface ToolbarPropsOverrides {
     label: string;
+    total: number;
   }
   interface FooterPropsOverrides {
     total?: number;
@@ -21,11 +24,12 @@ declare module "@mui/x-data-grid" {
 
 interface TableProps<T extends BaseRowDefinition> extends Omit<
   DataGridProps,
-  "rows" | "columns"
+  "rows" | "columns" | "label"
 > {
   rows: T[];
   columns: GridColDef<T>[];
   label?: string;
+  header?: ReactNode;
   footerLabel?: string;
   footerClassName?: string;
   summaryTable?: boolean;
@@ -49,30 +53,34 @@ export function Table<T extends BaseRowDefinition>({
   rows,
   columns,
   label,
+  header,
   footerLabel,
   hideFooterPagination,
   footerClassName,
   summaryTable,
+  className,
   calculateTotal,
   ...rest
 }: TableProps<T>) {
   const total = calculateTotal ? calculateTotal(rows) : undefined;
   return (
-    <Card className="mdai-table-container">
+    <Card className={classNames("mdai-table-container", className)}>
+      {header && <CardHeader title={header} />}
       <DataGrid
         className={classNames("mdai-table", { "summary-table": summaryTable })}
         autoHeight
         disableRowSelectionOnClick
         slots={{
-          toolbar: TableToolbar,
-          footer: summaryTable ? SummaryTableFooter : TableFooter,
+          toolbar: summaryTable ? SummaryTableToolbar : TableToolbar,
+          footer: summaryTable ? undefined : TableFooter,
         }}
         slotProps={{
           toolbar: {
             label,
+            total,
           },
           footer: {
-            hideFooterPagination: summaryTable ?? hideFooterPagination,
+            hideFooterPagination,
             label: footerLabel,
             total,
             className: footerClassName,
@@ -84,6 +92,7 @@ export function Table<T extends BaseRowDefinition>({
         {...((summaryTable ?? hideFooterPagination) ? {} : paginationProps)}
         rows={rows}
         columns={columns}
+        hideFooter={summaryTable}
         {...rest}
       />
     </Card>

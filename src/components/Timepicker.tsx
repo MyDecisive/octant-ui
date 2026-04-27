@@ -3,9 +3,10 @@ import {
   type SelectOption,
   type SelectProps,
 } from "@components/formInputs/Select";
+import type { TimeRange } from "@types";
 
 interface TimepickerProps extends Omit<SelectProps, "options" | "selected"> {
-  value: "today" | "mtd" | "lastMonth";
+  value: TimeRange;
 }
 
 const initialOptions: SelectOption[] = [
@@ -38,10 +39,12 @@ const initialOptions: SelectOption[] = [
 export function Timepicker({ value, onChange }: TimepickerProps) {
   return (
     <Select
+      className="mdai-timepicker"
       label="Time range"
       selected={value}
       onChange={onChange}
       options={initialOptions}
+      size="small"
     />
   );
 }

@@ -6,9 +6,12 @@ import { ViewTitle } from "@components/ViewTitle";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { useOctantConnectStore } from "@store";
+import { useLocation } from "wouter";
+import { ROUTES } from "../../constants/ROUTES";
 import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 
 export function NextSteps() {
+  const [, setLocation] = useLocation();
   const connectionName = useOctantConnectStore(
     (state) => state.form.connectionName,
   );
@@ -27,7 +30,14 @@ export function NextSteps() {
       <SimpleCard
         title="Start budgeting now"
         description="{sales-y description goes here}"
-        headerAction={<Chip color="primary" label="Recommended" size="small" />}
+        headerAction={
+          <Chip
+            color="primary"
+            label="Recommended"
+            size="small"
+            onClick={() => setLocation(ROUTES.CLARITY)}
+          />
+        }
       />
       <SimpleCard
         title="Migrate Smarthub into production"
