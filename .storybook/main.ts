@@ -13,6 +13,9 @@ const config: StorybookConfig = {
   framework: "@storybook/react-vite",
   viteFinal: (config) => {
     config.plugins?.push(svgr());
+    if (process.env.NODE_ENV === "production") {
+      config.base = "/octant-ui/storybook/";
+    }
     return config;
   },
 };
