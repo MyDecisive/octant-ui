@@ -6,7 +6,7 @@ import classNames from "classnames";
 import type { ReactNode } from "react";
 import "./CompactCard.css";
 
-interface CompactCardProps {
+export interface CompactCardProps {
   header?: ReactNode;
   content?: ReactNode;
   footer?: ReactNode;

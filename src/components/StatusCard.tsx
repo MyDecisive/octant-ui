@@ -15,7 +15,7 @@ interface StatusRowData {
   value: string | StatusRowState;
 }
 
-interface StatusCardProps {
+export interface StatusCardProps {
   label: string;
   lastSuccessful: string;
   rows: StatusRowData[];
