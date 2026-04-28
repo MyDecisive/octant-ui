@@ -3,3 +3,10 @@
   max-height: 100%;
   overflow: auto;
 }
+
+.center-column.MuiBox-root > .MuiStack-root > .flow-next-button.MuiButton-root,
+.center-column.MuiBox-root
+  > .MuiStack-root
+  > .flow-async-button.MuiButton-root {
+  align-self: flex-start;
+}

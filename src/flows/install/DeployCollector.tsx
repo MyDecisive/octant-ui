@@ -1,4 +1,4 @@
-import { AsyncButtonRow } from "@components/AsyncButtonRow";
+import { AsyncNextButton } from "@components/AsyncNextButton";
 import { ConfigDrawer } from "@components/ConfigDrawer/ConfigDrawer";
 import { CheckboxGroup } from "@components/formInputs/CheckboxGroup";
 import { Input } from "@components/formInputs/Input";
@@ -184,7 +184,7 @@ export function DeployCollector() {
           placeholder="Name this connection"
           helperText="We recommend providing a name that can be easily referenced later, e.g., datadog-io"
         />
-        <AsyncButtonRow
+        <AsyncNextButton
           asyncFunction={handleDeployButtonClick}
           canAsync={
             !!(
@@ -194,11 +194,8 @@ export function DeployCollector() {
               connectionName.length
             )
           }
-          asyncButtonText={{
-            text: "Deploy collector",
-            done: "Done",
-            loading: "Deploying...",
-          }}
+          text="Deploy"
+          loadingText="Deploying"
         />
       </FlowCenterColumn>
       <ConfigDrawer focusedField={focusedField} className="right-column" />

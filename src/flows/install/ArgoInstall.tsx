@@ -1,4 +1,3 @@
-import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
@@ -31,9 +30,7 @@ export function ArgoInstall() {
         }
         label="I understand and consent this application to make changes to the development environment."
       />
-      <ButtonRow>
-        <NextButton disabled={!argoAgreement} />
-      </ButtonRow>
+      <NextButton disabled={!argoAgreement} />
     </FlowCenterColumn>
   );
 }
