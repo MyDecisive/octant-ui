@@ -3,13 +3,13 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import type { DataFidelityDetails, DataState } from "@types";
+import type { DataFidelityDetails, StatusRowState } from "@types";
 import { useState } from "react";
 
 export function FidelityCell({
   value,
 }: {
-  value: null | DataState | DataFidelityDetails;
+  value: null | StatusRowState | DataFidelityDetails;
 }) {
   const [open, setOpen] = useState(false);
   switch (value) {

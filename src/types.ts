@@ -39,12 +39,12 @@ export interface DataFidelityResponse {
   details: null | DataFidelityDetails;
 }
 
-export type DataState = "loading" | boolean | null;
+export type StatusRowState = "loading" | boolean | null;
 
 export interface FidelityState {
-  receivingData: DataState;
-  sendingData: DataState;
-  dataIntegrity: DataState;
+  receivingData: StatusRowState;
+  sendingData: StatusRowState;
+  dataIntegrity: StatusRowState;
   details: null | "loading" | DataFidelityDetails;
 }
 

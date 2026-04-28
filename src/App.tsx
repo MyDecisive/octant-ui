@@ -5,6 +5,8 @@ import { Route, Router, Switch } from "wouter";
 import { Splash } from "./components/Splash";
 import { ROUTES } from "./constants/ROUTES";
 import { ClarityPage } from "./pages/Clarity";
+import { ConnectionsPage } from "./pages/Connections";
+import { SmarthubPage } from "./pages/Smarthub";
 
 const flowRoutes = new RegExp(/^\/(?:install)?$/);
 
@@ -24,8 +26,8 @@ function App() {
           <PageContainer>
             <Switch>
               <Route path={ROUTES.CLARITY} component={ClarityPage} />
-              <Route path={ROUTES.CONNECTIONS} component={FlowContainer} />
-              <Route path={ROUTES.SMARTHUB} component={FlowContainer} />
+              <Route path={ROUTES.CONNECTIONS} component={ConnectionsPage} />
+              <Route path={ROUTES.SMARTHUB} component={SmarthubPage} />
             </Switch>
           </PageContainer>
         </Route>
