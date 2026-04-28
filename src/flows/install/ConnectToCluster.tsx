@@ -4,7 +4,7 @@ import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useOctantConnectStore } from "@store";
 import { useShallow } from "zustand/shallow";
-import { argoCd } from "../../services/api";
+import { testInstallClusterConnection } from "./services/installService";
 
 export function ConnectToCluster() {
   const { argoUrl, accountToken } = useOctantConnectStore(
@@ -20,6 +20,12 @@ export function ConnectToCluster() {
     }),
   );
   const setFormField = useOctantConnectStore((state) => state.setFormField);
+
+  const handleTestConnection = () =>
+    testInstallClusterConnection({
+      argoEndpoint: argoUrl,
+      argoAccountToken: accountToken,
+    });
 
   return (
     <FlowCenterColumn>
@@ -44,7 +50,7 @@ export function ConnectToCluster() {
         placeholder="Argo account token?"
       />
       <AsyncButtonRow
-        asyncFunction={argoCd.post}
+        asyncFunction={handleTestConnection}
         canAsync={!!(argoUrl.length && accountToken.length)}
         asyncButtonText={{
           text: "Check connection",

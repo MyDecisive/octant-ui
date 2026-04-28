@@ -11,12 +11,7 @@ import { useOctantConnectStore } from "@store";
 import type { ManifestPayload, TelemetryTypes } from "@types";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import {
-  type ArgoCdIntegrationBody,
-  connections,
-  type DatadogIntegrationBody,
-  integrations,
-} from "../../services/api";
+import { saveInstallConfiguration } from "./services/installService";
 
 const dataSourceOptions: {
   label: string;
@@ -85,21 +80,18 @@ export function DeployCollector() {
         integrationName: connectionName,
       },
     };
-    const ddIntegrationPayload: DatadogIntegrationBody = {
-      url: url,
-      apiKey: apiKey,
-    };
-    const argoIntegrationPayload: ArgoCdIntegrationBody = {
-      accountToken: accountToken!,
-      apiUrl: argoUrl!,
-    };
-
-    await Promise.all([
-      integrations.upsert("datadog", connectionName, ddIntegrationPayload),
-      integrations.upsert("argocd", connectionName, argoIntegrationPayload),
-    ]);
-
-    await connections.upsert(connectionName, connectionPayload);
+    await saveInstallConfiguration({
+      connectionName,
+      datadog: {
+        apiKey,
+        url,
+      },
+      argocd: {
+        accountToken: accountToken!,
+        apiUrl: argoUrl!,
+      },
+      manifest: connectionPayload,
+    });
   };
 
   return (

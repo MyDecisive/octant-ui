@@ -7,6 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "vitest run",
     "preview": "vite preview",
     "docker-build": "docker build -t ghcr.io/mydecisive/octant-ui:$npm_package_version .",
     "build-to-kind": "npm run docker-build && kind load docker-image ghcr.io/mydecisive/octant-ui:$npm_package_version -n mdai",
@@ -26,6 +27,7 @@
     "@mui/icons-material": "^7.3.10",
     "@mui/material": "^7.3.8",
     "@mui/x-data-grid": "^8.27.5",
+    "@mydecisiveai/octant-client": "^0.4.6-alpha",
     "classnames": "^2.5.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -36,7 +38,6 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^5.1.2",
     "@eslint/js": "^9.39.1",
-    "@mydecisiveai/octant-client": "^0.4.1-alpha",
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-onboarding": "^10.3.5",
