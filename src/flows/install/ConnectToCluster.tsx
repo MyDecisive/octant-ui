@@ -8,7 +8,7 @@ import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
-import { argoCd } from "../../services/api";
+import { argoCdServiceClient } from "../../services/argoCd";
 
 function validateArgoUrl(value: string) {
   const requiredError = validateRequired(value);
@@ -60,8 +60,11 @@ export function ConnectToCluster() {
 
   const testArgoConnection = async () => {
     try {
-      const result = await argoCd.post();
-      console.log("result ", result);
+      const result = await argoCdServiceClient.testConnection({
+        argoAccountToken: accountToken,
+        argoEndpoint: argoUrl,
+      });
+
       if (result.success) {
         advanceInstallFlow();
         return;
