@@ -1,18 +1,16 @@
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import InputAdornment from "@mui/material/InputAdornment";
+import { InputEndAdornment } from "@components/InputEndAdornment";
 import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
-import { type ChangeEvent, type FocusEventHandler } from "react";
+import { type ChangeEventHandler, type FocusEventHandler } from "react";
 
 interface InputProps {
   label?: string;
   placeholder?: string;
   value?: string;
-  onChange: (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
+  onChange: ChangeEventHandler<HTMLInputElement>;
   required?: boolean;
   tooltip?: string;
+  success?: boolean;
+  error?: boolean;
   helperText?: string;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -28,6 +26,8 @@ export function Input({
   helperText,
   onFocus,
   onBlur,
+  success,
+  error,
 }: InputProps) {
   return (
     <TextField
@@ -40,16 +40,17 @@ export function Input({
       size="small"
       required={required}
       helperText={helperText}
+      error={error}
       fullWidth
       slotProps={{
         input: {
-          endAdornment: tooltip ? (
-            <InputAdornment position="end">
-              <Tooltip title={tooltip} placement="right" arrow>
-                <InfoOutlinedIcon />
-              </Tooltip>
-            </InputAdornment>
-          ) : undefined,
+          endAdornment: (
+            <InputEndAdornment
+              tooltip={tooltip}
+              success={success}
+              error={error}
+            />
+          ),
         },
       }}
     />
