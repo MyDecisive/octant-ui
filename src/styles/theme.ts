@@ -186,6 +186,32 @@ export const theme = createTheme({
         },
       ],
     },
+    MuiAlert: {
+      defaultProps: {
+        variant: "filled",
+      },
+      styleOverrides: {
+        root: {
+          fontWeight: 400,
+          [`& > .MuiAlert-action > .MuiButtonBase-root`]: {
+            padding: "4px 5px",
+            color: "#5F2120",
+          },
+        },
+      },
+      variants: [
+        {
+          props: { severity: "error" },
+          style: {
+            backgroundColor: "#FDEDED",
+            color: "#5F2120",
+            [`& > .MuiAlert-icon`]: {
+              color: "#D32F2F",
+            },
+          },
+        },
+      ],
+    },
     MuiInputLabel: {
       styleOverrides: {
         root: {
