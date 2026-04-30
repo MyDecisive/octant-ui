@@ -1,8 +1,8 @@
+import { Alert } from "@components/Alert";
 import { AsyncNextButton } from "@components/AsyncNextButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
-import Alert from "@mui/material/Alert";
 import { useOctantConnectStore } from "@store";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
