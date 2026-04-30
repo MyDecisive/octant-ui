@@ -8,5 +8,5 @@ on:
 
 jobs:
   docker-push:
-    uses: MyDecisive/ci/.github/workflows/docker-ghcr.yaml@main
+    uses: MyDecisive/ci/.github/workflows/docker-ghcr.yaml@tv/slack_version_publish
     secrets: inherit # pass all secrets
