@@ -1,14 +1,10 @@
 import { CodeSnippet } from "@components/CodeSnippet";
-import { DataFidelityCard } from "@components/DataFidelityCard/DataFidelityCard";
+import { CheckboxGroup } from "@components/formInputs/CheckboxGroup";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { NextButton } from "@components/NextButton";
-import { TabPanel } from "@components/TabPanel";
 import { ViewTitle } from "@components/ViewTitle";
-import CheckCircleOutlineOutlined from "@mui/icons-material/CheckCircleOutlineOutlined";
 import Stack from "@mui/material/Stack";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
 import { useState } from "react";
@@ -16,59 +12,70 @@ import { useShallow } from "zustand/shallow";
 import { createForwardDataSnippets } from "../createForwardDataSnippets";
 
 export function UpdateAgent() {
-  const [activeTab, setActiveTab] = useState<string>("update");
-  const [hasTested, setIsValid] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
 
-  const { connectionName, url, namespace } = useOctantConnectStore(
-    useShallow((state) => ({
-      connectionName: state.form.connectionName,
-      url: state.form.url,
-      namespace: state.form.namespace,
-    })),
-  );
-  const forwardDataSnippets = createForwardDataSnippets({
-    connectionName,
-    url,
+  const { telemetryTypes, connectionName, url, namespace } =
+    useOctantConnectStore(
+      useShallow((state) => ({
+        connectionName: state.form.connectionName,
+        url: state.form.url,
+        namespace: state.form.namespace,
+        telemetryTypes: state.form.telemetryTypes,
+      })),
+    );
+  const { locationUrl, code } = createForwardDataSnippets({
+    connectionName: connectionName!,
+    url: url!,
     namespace,
+    telemetryTypes,
   });
 
   return (
-    <FlowCenterColumn>
-      <ViewTitle
-        title="Update Datadog agent and test data flow in our Smarthub"
-        description="Update your Datadog agent config in your Kubernetes cluster or Argo CD project and restart it with the updated manifest changes."
-      />
-
-      <Tabs value={activeTab} onChange={(_, tab: string) => setActiveTab(tab)}>
-        <Tab
-          value="update"
-          label="Update Datadog agent"
-          aria-controls={"update-control-tab"}
+    <>
+      <FlowCenterColumn>
+        <ViewTitle
+          title="Update Datadog agent and test data flow in our Smarthub"
+          description={
+            <Typography variant="body2" color="secondary">
+              Update your Datadog agent config in your Kubernetes cluster or
+              Argo CD project and restart it with the updated manifest changes.
+              <br />
+              <br />
+              To update, you’ll need to copy and paste the code snippet of the
+              data type(s) you previously selected.
+            </Typography>
+          }
         />
-        <Tab
-          value="test"
-          label={"Test connection and data fidelity"}
-          icon={<CheckCircleOutlineOutlined />}
-          iconPosition="end"
-          aria-controls={"test-control-tab"}
+        <CheckboxGroup
+          selected={confirmed ? ["confirmed"] : []}
+          onChange={(values) => setConfirmed(!!values.length)}
+          options={[
+            {
+              value: "confirmed",
+              label: "I have updated the Datadog agent and I am ready to test",
+            },
+          ]}
         />
-      </Tabs>
-      <TabPanel activeValue={activeTab} value="update">
-        <Stack gap={2} className="forward-data-code-snippets">
-          {forwardDataSnippets.map(({ title, code }) => (
-            <Stack key={title}>
-              <Typography variant="subtitle2">{title}</Typography>
-              <CodeSnippet code={code} maxHeight="150px" />
-            </Stack>
-          ))}
+        <ButtonRow>
+          <NextButton disabled={!confirmed} />
+          <Typography variant="chipLabel">
+            This process will take about 5 minutes.
+          </Typography>
+        </ButtonRow>
+      </FlowCenterColumn>
+      <Stack className="right-column" gap={3}>
+        <Typography variant="body2" bold>
+          Paste the following code snippets in your Datadog agent:
+        </Typography>
+        <Stack gap={1}>
+          <Typography variant="body2">MyDecisive location URL</Typography>
+          <CodeSnippet code={locationUrl} maxHeight="150px" />
         </Stack>
-      </TabPanel>
-      <TabPanel activeValue={activeTab} value="test">
-        <DataFidelityCard setIsValid={setIsValid} />
-      </TabPanel>
-      <ButtonRow>
-        <NextButton disabled={!hasTested} />
-      </ButtonRow>
-    </FlowCenterColumn>
+        <Stack gap={1}>
+          <Typography variant="body2">Then do this:</Typography>
+          <CodeSnippet code={code} maxHeight="440px" />
+        </Stack>
+      </Stack>
+    </>
   );
 }
