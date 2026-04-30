@@ -3,7 +3,12 @@ import type { ReactNode } from "react";
 
 export function ButtonRow({ children }: { children: ReactNode }) {
   return (
-    <Stack direction={"row"} gap={2} alignItems={"flex-start"}>
+    <Stack
+      direction={"row"}
+      gap={2}
+      alignItems={"center"}
+      justifyContent={"flex-start"}
+    >
       {children}
     </Stack>
   );
