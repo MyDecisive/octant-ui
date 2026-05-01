@@ -14,11 +14,14 @@ export function ViewTitle({ title, description }: ViewTitleProps) {
       <Typography className="view-title-title" variant="h5">
         {title}
       </Typography>
-      {description && (
-        <Typography variant="body2" className="view-title-description">
-          {description}
-        </Typography>
-      )}
+      {description &&
+        (typeof description === "string" ? (
+          <Typography variant="body2" className="view-title-description">
+            {description}
+          </Typography>
+        ) : (
+          description
+        ))}
     </Stack>
   );
 }
