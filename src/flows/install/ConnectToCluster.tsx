@@ -1,4 +1,4 @@
-import { AsyncButtonRow } from "@components/AsyncButtonRow";
+import { AsyncNextButton } from "@components/AsyncNextButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
@@ -43,14 +43,10 @@ export function ConnectToCluster() {
         required
         placeholder="Argo account token?"
       />
-      <AsyncButtonRow
+      <AsyncNextButton
         asyncFunction={argoCd.post}
         canAsync={!!(argoUrl.length && accountToken.length)}
-        asyncButtonText={{
-          text: "Check connection",
-          loading: "Connecting to your cluster...",
-          done: "Connected",
-        }}
+        loadingText={"Connecting"}
       />
     </FlowCenterColumn>
   );

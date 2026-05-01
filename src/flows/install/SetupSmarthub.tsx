@@ -1,4 +1,4 @@
-import { AsyncButtonRow } from "@components/AsyncButtonRow";
+import { AsyncNextButton } from "@components/AsyncNextButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
@@ -44,17 +44,10 @@ export function SetupSmarthub() {
         />
       </Stack>
 
-      <AsyncButtonRow
+      <AsyncNextButton
         asyncFunction={handleInstall}
         canAsync={namespace.trim().length > 0}
-        retries={1}
-        asyncButtonText={{
-          text: "Install",
-          loading: "Installing...",
-          done: "Installed",
-          retry: "Retry install",
-          error: "Install failed",
-        }}
+        loadingText={"Installing"}
       />
     </FlowCenterColumn>
   );

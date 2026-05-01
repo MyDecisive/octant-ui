@@ -1,5 +1,6 @@
 import type { DeployMethod, TelemetryTypes, ViewKey } from "@types";
 import { create } from "zustand";
+import { VIEW_ORDER } from "../flows/install";
 
 interface AppStateForm {
   argoAgreement: boolean;
@@ -24,6 +25,7 @@ interface Actions {
     value: AppStateForm[keyof AppStateForm],
   ) => void;
   resetForm: () => void;
+  advanceInstallFlow: () => void;
 }
 
 type OctantConnectStore = Values & Actions;
@@ -52,4 +54,16 @@ export const useOctantConnectStore = create<OctantConnectStore>()((set) => ({
     set((state) => ({ ...state, form: { ...state.form, [key]: value } })),
   resetForm: () =>
     set((state) => ({ ...state, form: createDefaultOctantConnectForm() })),
+  advanceInstallFlow: () => {
+    set((state) => {
+      const currentView = state.activeView;
+      const currentViewIdx = VIEW_ORDER.indexOf(currentView);
+
+      const nextView = VIEW_ORDER[currentViewIdx + 1];
+      return {
+        ...state,
+        activeView: nextView,
+      };
+    });
+  },
 }));

@@ -13,6 +13,7 @@ export function NextButton({ disabled }: { disabled: boolean }) {
 
   return (
     <Button
+      className="flow-next-button"
       variant="contained"
       size="small"
       type={"button"}
