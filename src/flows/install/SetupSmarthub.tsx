@@ -1,33 +1,53 @@
 import { AsyncNextButton } from "@components/AsyncNextButton";
+import { ErrorDialog } from "@components/ErrorDialog";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { InstallStatus } from "@mydecisiveai/octant-client";
 import { useOctantConnectStore } from "@store";
-import { useRef } from "react";
+import { useState } from "react";
+import { installServiceClient } from "../../services/install";
 
 export function SetupSmarthub() {
   const namespace = useOctantConnectStore((state) => state.form.namespace);
+  const connectionName = useOctantConnectStore(
+    (state) => state.form.connectionName,
+  );
   const setFormField = useOctantConnectStore((state) => state.setFormField);
-  const installAttemptRef = useRef(0);
 
-  const handleInstall = () =>
-    new Promise<boolean>((resolve, reject) => {
-      installAttemptRef.current += 1;
-      window.setTimeout(() => {
-        if (installAttemptRef.current === 1) {
-          reject(
-            new Error(
-              "Something went wrong while trying to install Smarthub. Review your settings.",
-            ),
-          );
-          return false;
+  const [installError, setInstallError] = useState<string | null>(null);
+
+  const handleInstall = async () => {
+    try {
+      await installServiceClient.installMDAIHub({
+        namespace,
+        connectionName,
+      });
+
+      for await (const res of installServiceClient.getInstallStatus({
+        connectionName,
+      })) {
+        switch (res.installStatus) {
+          case InstallStatus.ERROR:
+            setInstallError(
+              res.details?.map((detail) => detail.message).join("\n"),
+            );
+            return false;
+          case InstallStatus.INSTALLED:
+            return true;
+          default:
+            continue;
         }
-        resolve(true);
-      }, 2000);
+      }
+
       return true;
-    });
+    } catch (e) {
+      setInstallError(e instanceof Error ? e.message : "Something went wrong");
+      return false;
+    }
+  };
 
   return (
     <FlowCenterColumn>
@@ -44,7 +64,10 @@ export function SetupSmarthub() {
           onChange={(e) => setFormField("namespace", e.target.value)}
         />
       </Stack>
-
+      <ErrorDialog
+        open={!!installError}
+        onClose={() => setInstallError(null)}
+      />
       <AsyncNextButton
         asyncFunction={handleInstall}
         canAsync={namespace.trim().length > 0}
