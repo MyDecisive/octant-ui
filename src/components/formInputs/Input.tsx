@@ -1,10 +1,7 @@
 import { InputEndAdornment } from "@components/InputEndAdornment";
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import type { InputValidationErrors } from "@types";
-import debounce from "debounce";
 import {
-  useEffect,
-  useMemo,
   useState,
   type ChangeEventHandler,
   type FocusEventHandler,
@@ -73,26 +70,18 @@ export function Input({
     onValidation?.(errors);
   };
 
-  const debouncedValidate = useMemo(() => debounce(handleValidate, 400), []);
-
   const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
     handleValidate(value);
     onBlur?.(e);
   };
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value;
-
     if (validationErrors) {
       setValidationErrors(null);
       onValidation?.(undefined);
     }
 
     onChange?.(e);
-
-    if (validationErrors !== null) {
-      debouncedValidate(value);
-    }
   };
 
   const fieldError = error ?? hasValidationError(validationErrors);
@@ -102,8 +91,6 @@ export function Input({
     helperText,
     error,
   );
-
-  useEffect(() => () => debouncedValidate.clear(), [debouncedValidate]);
 
   return (
     <TextField
