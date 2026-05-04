@@ -71,35 +71,42 @@ export function DeployCollector() {
   const handleBlur = () => setFocusedField(undefined);
 
   const handleDeployButtonClick = async () => {
-    const connectionPayload: ManifestPayload = {
-      sourceType: "datadog",
-      telemetryTypes,
-      destinations: [
-        {
-          type: "datadog",
+    try {
+      const connectionPayload: ManifestPayload = {
+        sourceType: "datadog",
+        telemetryTypes,
+        destinations: [
+          {
+            type: "datadog",
+            integrationName: connectionName,
+          },
+        ],
+        deployment: {
+          type: "argocd-sideload",
           integrationName: connectionName,
         },
-      ],
-      deployment: {
-        type: "argocd-sideload",
-        integrationName: connectionName,
-      },
-    };
-    const ddIntegrationPayload: DatadogIntegrationBody = {
-      url: url,
-      apiKey: apiKey,
-    };
-    const argoIntegrationPayload: ArgoCdIntegrationBody = {
-      accountToken: accountToken!,
-      apiUrl: argoUrl!,
-    };
+      };
+      const ddIntegrationPayload: DatadogIntegrationBody = {
+        url: url,
+        apiKey: apiKey,
+      };
+      const argoIntegrationPayload: ArgoCdIntegrationBody = {
+        accountToken: accountToken!,
+        apiUrl: argoUrl!,
+      };
 
-    await Promise.all([
-      integrations.upsert("datadog", connectionName, ddIntegrationPayload),
-      integrations.upsert("argocd", connectionName, argoIntegrationPayload),
-    ]);
+      await Promise.all([
+        integrations.upsert("datadog", connectionName, ddIntegrationPayload),
+        integrations.upsert("argocd", connectionName, argoIntegrationPayload),
+      ]);
 
-    await connections.upsert(connectionName, connectionPayload);
+      await connections.upsert(connectionName, connectionPayload);
+
+      return true;
+      // eslint-disable-next-line
+    } catch (_) {
+      return false;
+    }
   };
 
   return (
