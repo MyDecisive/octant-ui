@@ -55,6 +55,8 @@ export function createDummySpanData() {
   return data;
 }
 
+export const spanData = createDummySpanData();
+
 export interface LogData extends BaseRowDefinition {
   name: string;
   sent: number;
@@ -105,6 +107,9 @@ export function createDummyLogData() {
 
   return data;
 }
+
+export const logData = createDummyLogData();
+
 export interface SummaryData extends BaseRowDefinition {
   type: "logs" | "traces";
   cost: number;
