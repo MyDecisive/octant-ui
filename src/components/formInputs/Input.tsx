@@ -1,21 +1,49 @@
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
-import { type ChangeEvent, type FocusEventHandler } from "react";
+import { InputEndAdornment } from "@components/InputEndAdornment";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
+import type { InputValidationErrors } from "@types";
+import {
+  useState,
+  type ChangeEventHandler,
+  type FocusEventHandler,
+} from "react";
 
-interface InputProps {
-  label?: string;
-  placeholder?: string;
-  value?: string;
-  onChange: (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
-  required?: boolean;
+interface InputProps extends Omit<TextFieldProps<"outlined">, "variant"> {
   tooltip?: string;
+  success?: boolean;
+  validate?: (value?: string) => InputValidationErrors;
+  onValidation?: (error: InputValidationErrors) => void;
+  value?: string;
   helperText?: string;
-  onFocus?: FocusEventHandler<HTMLInputElement>;
-  onBlur?: FocusEventHandler<HTMLInputElement>;
+}
+
+function hasValidationError(maybeErrors: InputValidationErrors | null) {
+  if (maybeErrors == null) {
+    return false;
+  }
+
+  return maybeErrors.length > 0;
+}
+
+function getErrorOrHelperText(
+  validationErrors: InputValidationErrors | null,
+  helperText?: string,
+  errorProp?: boolean,
+) {
+  if (!errorProp && !validationErrors) {
+    return helperText;
+  }
+
+  if (errorProp) {
+    return helperText;
+  }
+
+  if (validationErrors) {
+    return Array.isArray(validationErrors)
+      ? validationErrors[0]
+      : validationErrors;
+  }
+
+  return undefined;
 }
 
 export function Input({
@@ -28,28 +56,65 @@ export function Input({
   helperText,
   onFocus,
   onBlur,
+  success,
+  error,
+  validate,
+  onValidation,
 }: InputProps) {
+  const [validationErrors, setValidationErrors] =
+    useState<InputValidationErrors | null>(null);
+
+  const handleValidate = (value?: string) => {
+    const errors = validate?.(value);
+    setValidationErrors(errors);
+    onValidation?.(errors);
+  };
+
+  const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
+    handleValidate(value);
+    onBlur?.(e);
+  };
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (validationErrors) {
+      setValidationErrors(null);
+      onValidation?.(undefined);
+    }
+
+    onChange?.(e);
+  };
+
+  const fieldError = error ?? hasValidationError(validationErrors);
+
+  const fieldHelperText = getErrorOrHelperText(
+    validationErrors,
+    helperText,
+    error,
+  );
+
   return (
     <TextField
+      variant="outlined"
       label={label}
       value={value}
       placeholder={placeholder}
-      onChange={onChange}
+      onChange={handleChange}
       onFocus={onFocus}
-      onBlur={onBlur}
+      onBlur={handleBlur}
       size="small"
       required={required}
-      helperText={helperText}
+      helperText={fieldHelperText}
+      error={fieldError}
       fullWidth
       slotProps={{
         input: {
-          endAdornment: tooltip ? (
-            <InputAdornment position="end">
-              <Tooltip title={tooltip} placement="right" arrow>
-                <InfoOutlinedIcon />
-              </Tooltip>
-            </InputAdornment>
-          ) : undefined,
+          endAdornment: (
+            <InputEndAdornment
+              tooltip={tooltip}
+              success={success}
+              error={error}
+            />
+          ),
         },
       }}
     />
