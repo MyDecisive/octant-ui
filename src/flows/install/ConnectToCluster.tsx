@@ -23,16 +23,22 @@ export function ConnectToCluster() {
   const [tokenError, setTokenError] = useState<InputValidationErrors | null>(
     null,
   );
+  const [connectionNameError, setConnectionNameError] =
+    useState<InputValidationErrors | null>(null);
   const [connectionError, setConnectionError] = useState<string | undefined>();
-  const { argoUrl, accountToken } = useOctantConnectStore(
+  const { argoUrl, accountToken, connectionName } = useOctantConnectStore(
     useShallow((state) => {
       // Provide default empty string values so React recognizes the Inputs as controlled
-      const { deployMethod, argoUrl = "", accountToken = "" } = state.form;
+      const {
+        argoUrl = "",
+        accountToken = "",
+        connectionName = "",
+      } = state.form;
 
       return {
-        deployMethod,
         argoUrl,
         accountToken,
+        connectionName,
       };
     }),
   );
@@ -55,17 +61,24 @@ export function ConnectToCluster() {
         argoEndpoint: argoUrl,
       });
 
-      if (result.success) {
-        return true;
+      if (!result.success) {
+        setConnectionError(
+          "Token is invalid. Please regenerate your token and try again.",
+        );
+        return false;
       }
-      setConnectionError(
-        "Token is invalid. Please regenerate your token and try again.",
-      );
-      return false;
+
+      await argoCdServiceClient.saveArgoConnection({
+        argoAccountToken: accountToken,
+        argoEndpoint: argoUrl,
+        name: connectionName,
+      });
+
+      return true;
       // eslint-disable-next-line
     } catch (_) {
       setConnectionError(
-        "Oops, we couldn't verify your ArgoCD connection. Please double check your entries and try again.",
+        "We hit an issue setting up your ArgoCD connection. Please double check your entries and try again.",
       );
       return false;
     }
@@ -77,7 +90,16 @@ export function ConnectToCluster() {
         title="Connect to your Kubernetes Cluster"
         description="<Provide ArgoCD somethings and validate connection>"
       />
-
+      <Input
+        value={decodeURI(connectionName)}
+        onChange={(e) =>
+          setFormField("connectionName", encodeURI(e.target.value))
+        }
+        validate={validateRequired}
+        onValidation={setConnectionNameError}
+        placeholder="Name this connection"
+        helperText="We recommend providing a name that can be easily referenced later, e.g., datadog-io"
+      />
       <Input
         value={argoUrl}
         onChange={handleUrlChange}
@@ -106,7 +128,11 @@ export function ConnectToCluster() {
       {connectionError && <Alert severity="error" title={connectionError} />}
       <AsyncNextButton
         asyncFunction={testArgoConnection}
-        canAsync={urlError === undefined && tokenError === undefined}
+        canAsync={
+          urlError === undefined &&
+          tokenError === undefined &&
+          connectionNameError === undefined
+        }
         loadingText={"Connecting"}
         isSubmit
       />
