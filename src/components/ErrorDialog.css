@@ -1,0 +1,11 @@
+#error-dialog-title.MuiDialogTitle-root {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--mdai-spacing-unit);
+  font-weight: 500;
+}
+
+#error-dialog-description.MuiDialogContentText-root {
+  font-size: 14px;
+}
