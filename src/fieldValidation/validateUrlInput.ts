@@ -1,11 +1,30 @@
-const urlRegex = new RegExp(
-  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
-);
+const protocolRegex = /^[a-z][a-z\d+.-]*:\/\//i;
+const hostnameRegex =
+  /^(localhost|(?:[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?\.)+[a-z]{2,63})$/i;
+
+function parseUrlInput(value: string): URL | undefined {
+  const trimmedValue = value.trim();
+  const urlValue = protocolRegex.test(trimmedValue)
+    ? trimmedValue
+    : `http://${trimmedValue}`;
+
+  try {
+    return new URL(urlValue);
+  } catch {
+    return undefined;
+  }
+}
 
 export function validateUrlInput(value: string) {
-  if (urlRegex.test(value)) {
+  const url = parseUrlInput(value);
+
+  if (
+    url &&
+    (url.protocol === "http:" || url.protocol === "https:") &&
+    hostnameRegex.test(url.hostname)
+  ) {
     return undefined;
   }
 
-  return "Enter a valid URL. Expected format: http://www.abc.com";
+  return "Enter a valid URL. Expected format: http://www.abc.com or localhost:8080";
 }
