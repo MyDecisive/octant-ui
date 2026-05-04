@@ -1,6 +1,6 @@
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import type { SvgIconProps } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -27,7 +27,11 @@ export function InputEndAdornment({
     );
   }
 
-  let Icon = InfoOutlinedIcon;
+  if (!tooltip && !error && !success) {
+    return undefined;
+  }
+
+  let Icon = InfoRoundedIcon;
   let color: SvgIconProps["color"] = "secondary";
 
   if (success) {
