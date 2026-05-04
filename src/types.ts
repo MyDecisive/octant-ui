@@ -2,6 +2,8 @@ import type { JSX } from "react";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
+export type InputValidationErrors = string[] | string | undefined;
+
 export interface BaseFlowViewProps {
   onClickProgress: () => void;
   viewKey: string;

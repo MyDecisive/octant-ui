@@ -13,7 +13,7 @@ export function SetupSmarthub() {
   const installAttemptRef = useRef(0);
 
   const handleInstall = () =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<boolean>((resolve, reject) => {
       installAttemptRef.current += 1;
       window.setTimeout(() => {
         if (installAttemptRef.current === 1) {
@@ -22,10 +22,11 @@ export function SetupSmarthub() {
               "Something went wrong while trying to install Smarthub. Review your settings.",
             ),
           );
-          return;
+          return false;
         }
-        resolve();
+        resolve(true);
       }, 2000);
+      return true;
     });
 
   return (

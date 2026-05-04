@@ -21,13 +21,16 @@
     "deploy:storybook": "gh-pages -d storybook-static --dest storybook"
   },
   "dependencies": {
+    "@connectrpc/connect": "^2.1.1",
+    "@connectrpc/connect-web": "^2.1.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.10",
     "@mui/material": "^7.3.8",
     "@mui/x-data-grid": "^8.27.5",
-    "@mydecisiveai/octant-client": "^0.4.5-alpha",
+    "@mydecisiveai/octant-client": "^0.4.8-alpha",
     "classnames": "^2.5.1",
+    "debounce": "^3.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "wouter": "^3.9.0",

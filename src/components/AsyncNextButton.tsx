@@ -3,10 +3,11 @@ import { useOctantConnectStore } from "@store";
 import { useState } from "react";
 
 interface AsyncButtonProps {
-  asyncFunction: () => Promise<unknown>;
+  asyncFunction: () => Promise<boolean>;
   canAsync: boolean;
   text?: string;
   loadingText?: string;
+  isSubmit?: boolean;
 }
 
 export function AsyncNextButton({
@@ -14,6 +15,7 @@ export function AsyncNextButton({
   canAsync,
   text = "Next",
   loadingText,
+  isSubmit,
 }: AsyncButtonProps) {
   const [loading, setLoading] = useState(false);
   const advanceInstallFlow = useOctantConnectStore(
@@ -23,8 +25,10 @@ export function AsyncNextButton({
   const handleAsyncCall = () => {
     setLoading(true);
     void asyncFunction()
-      .then(() => {
-        advanceInstallFlow();
+      .then((success) => {
+        if (success) {
+          advanceInstallFlow();
+        }
       })
       .finally(() => {
         setLoading(false);
@@ -39,7 +43,7 @@ export function AsyncNextButton({
       className="flow-async-button"
       variant="contained"
       size="small"
-      type={"button"}
+      type={isSubmit ? "submit" : "button"}
       loadingPosition="start"
       onClick={handleAsyncCall}
       disabled={!canAsync}
