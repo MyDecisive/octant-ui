@@ -1,12 +1,14 @@
 import { FilterCard } from "@components/FilterCard/FilterCard";
+import { SearchField } from "@components/SearchField";
 import { Table } from "@components/Table/Table";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import { useState } from "react";
 import "./Clarity.css";
 import {
-  createDummyLogData,
-  createDummySpanData,
+  logData,
   logsColumns,
+  spanData,
   summaryColumns,
   summaryData,
   traceColumns,
@@ -15,10 +17,41 @@ import {
   type SummaryData,
 } from "./constants";
 
+function rowMatchesSearch<T extends LogData | SpanData>(row: T, query: string) {
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+
+  if (!normalizedQuery) {
+    return true;
+  }
+
+  return Object.values(row).some((value) =>
+    String(value).toLocaleLowerCase().includes(normalizedQuery),
+  );
+}
+
 export function ClarityPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredLogData = logData.filter((row) =>
+    rowMatchesSearch(row, searchQuery),
+  );
+  const filteredSpanData = spanData.filter((row) =>
+    rowMatchesSearch(row, searchQuery),
+  );
+  const searchOptions = [
+    ...new Set([
+      ...logData.map(({ name }) => name),
+      ...spanData.map(({ span }) => span),
+    ]),
+  ];
+
   return (
     <Box className="main-content-container">
       <Stack gap={3} className="left-column">
+        <SearchField
+          options={searchOptions}
+          value={searchQuery}
+          onChange={setSearchQuery}
+        />
         <Table<SummaryData>
           label={"Overall Estimated Cost"}
           columns={summaryColumns}
@@ -32,7 +65,7 @@ export function ClarityPage() {
           <Table<LogData>
             label={"Logs - Top Talkers"}
             columns={logsColumns}
-            rows={createDummyLogData()}
+            rows={filteredLogData}
             showToolbar
             footerLabel={"Total estimated cost"}
             calculateTotal={(rows) => rows.reduce((sum, r) => sum + r.cost, 0)}
@@ -40,7 +73,7 @@ export function ClarityPage() {
           <Table<SpanData>
             label={"Traces - Top Talkers"}
             columns={traceColumns}
-            rows={createDummySpanData()}
+            rows={filteredSpanData}
             showToolbar
             footerLabel={"Total estimated cost"}
             calculateTotal={(rows) => rows.reduce((sum, r) => sum + r.cost, 0)}
