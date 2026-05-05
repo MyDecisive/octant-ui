@@ -1,11 +1,10 @@
-import type { DeployMethod, TelemetryTypes, ViewKey } from "@types";
+import type { TelemetryTypes, ViewKey } from "@types";
 import { create } from "zustand";
 import { VIEW_ORDER } from "../flows/install";
 
 interface AppStateForm {
   argoAgreement: boolean;
   namespace: string;
-  deployMethod: DeployMethod;
   argoUrl?: string;
   accountToken?: string;
   telemetryTypes: TelemetryTypes[];
@@ -35,7 +34,6 @@ function createDefaultOctantConnectForm(): AppStateForm {
   return {
     argoAgreement: false,
     namespace: "mdai",
-    deployMethod: "argocd-sideload",
     telemetryTypes: [],
     mdaiVersion: "0.9.3-octant",
   };
