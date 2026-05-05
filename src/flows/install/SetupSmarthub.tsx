@@ -15,6 +15,7 @@ export function SetupSmarthub() {
   const connectionName = useOctantConnectStore(
     (state) => state.form.connectionName,
   );
+  const mdaiVersion = useOctantConnectStore((state) => state.form.mdaiVersion);
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const [installError, setInstallError] = useState<string | null>(null);
@@ -24,6 +25,7 @@ export function SetupSmarthub() {
       await installServiceClient.installMDAIHub({
         namespace,
         connectionName,
+        mdaiVersion,
       });
 
       for await (const res of installServiceClient.getInstallStatus({
