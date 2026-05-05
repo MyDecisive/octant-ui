@@ -8,9 +8,13 @@ import { ViewTitle } from "@components/ViewTitle";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
-import type { ManifestPayload, TelemetryTypes } from "@types";
+import type { FormFields, ManifestPayload, TelemetryTypes } from "@types";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { useFormValidation } from "../../fieldValidation/useFormValidation";
+import { validateRequired } from "../../fieldValidation/validateRequired";
+import { validateTelemetryTypesSelection } from "../../fieldValidation/validateTelemetryTypesSelection";
+import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import {
   type ArgoCdIntegrationBody,
   connections,
@@ -41,6 +45,12 @@ const telemetryTypeOptions: {
   },
 ];
 
+const formSpec: FormFields = {
+  telemetryTypes: [validateTelemetryTypesSelection],
+  url: [validateRequired, validateUrlInput],
+  apiKey: [validateRequired],
+};
+
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
   const { telemetryTypes, url, apiKey, connectionName, accountToken, argoUrl } =
@@ -67,6 +77,8 @@ export function DeployCollector() {
       }),
     );
   const setFormField = useOctantConnectStore((state) => state.setFormField);
+
+  const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
 
   const handleBlur = () => setFocusedField(undefined);
 
@@ -130,6 +142,7 @@ export function DeployCollector() {
 
         <CheckboxGroup
           label="Which data types do you want to track?"
+          {...callbacks.telemetryTypes}
           options={telemetryTypeOptions}
           selected={telemetryTypes}
           onChange={(checked) =>
@@ -163,7 +176,7 @@ export function DeployCollector() {
         <Input
           value={url}
           onChange={(e) => setFormField("url", e.target.value)}
-          required
+          {...callbacks.url}
           placeholder="Destination URL"
           tooltip={"Log into your Datadog account to acquire the API key"}
           onFocus={() => setFocusedField("url")}
@@ -172,35 +185,14 @@ export function DeployCollector() {
         <Input
           value={apiKey}
           onChange={(e) => setFormField("apiKey", e.target.value)}
-          required
+          {...callbacks.apiKey}
           placeholder="Datadog API key"
           onFocus={() => setFocusedField("apiKey")}
           onBlur={handleBlur}
         />
-
-        <Typography variant="h6">Telemetry connection</Typography>
-
-        <Input
-          value={decodeURI(connectionName)}
-          onChange={(e) =>
-            setFormField("connectionName", encodeURI(e.target.value))
-          }
-          onFocus={() => setFocusedField("connectionName")}
-          onBlur={handleBlur}
-          required
-          placeholder="Name this connection"
-          helperText="We recommend providing a name that can be easily referenced later, e.g., datadog-io"
-        />
         <AsyncNextButton
           asyncFunction={handleDeployButtonClick}
-          canAsync={
-            !!(
-              telemetryTypes.length &&
-              url.length &&
-              apiKey.length &&
-              connectionName.length
-            )
-          }
+          canAsync={isFormValid}
           text="Deploy"
           loadingText="Deploying"
         />
