@@ -44,7 +44,7 @@ export function useFormValidation(fields: FormFields) {
     }, {} as FieldValidationMap);
   }, [fields]);
 
-  const isFormValid = fieldNames.every(
+  const formIsValid = fieldNames.every(
     (name) => fieldErrors[name] === undefined,
   );
 
@@ -72,7 +72,7 @@ export function useFormValidation(fields: FormFields) {
 
   return {
     callbacks: validationCallbacks,
-    isFormValid,
+    formIsValid,
     fieldErrors,
     validateAll,
   };

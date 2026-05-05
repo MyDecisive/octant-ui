@@ -12,21 +12,14 @@ import { validateRequired } from "../../fieldValidation/validateRequired";
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import { argoCdServiceClient } from "../../services/argoCd";
 
-function validateUrl(value?: string) {
-  const requiredError = validateRequired(value);
-  if (requiredError) return requiredError;
-
-  return validateUrlInput(value!);
-}
-
 const formSpec: FormFields = {
   connectionName: [validateRequired],
-  argoUrl: [validateRequired, validateUrl],
+  argoUrl: [validateRequired, validateUrlInput],
   accountToken: [validateRequired],
 };
 
 export function ConnectToCluster() {
-  const { callbacks, isFormValid, validateAll } = useFormValidation(formSpec);
+  const { callbacks, formIsValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
   const { argoUrl, accountToken, connectionName } = useOctantConnectStore(
     useShallow((state) => {
@@ -128,7 +121,7 @@ export function ConnectToCluster() {
       {connectionError && <Alert severity="error" title={connectionError} />}
       <AsyncNextButton
         asyncFunction={testArgoConnection}
-        canAsync={isFormValid}
+        canAsync={formIsValid}
         loadingText={"Connecting"}
         isSubmit
       />
