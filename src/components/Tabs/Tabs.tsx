@@ -30,7 +30,7 @@ function formatTabLabel(
   showResultCounts: boolean,
 ) {
   if (showResultCounts && resultCount !== undefined) {
-    return `(${resultCount.toString()}) ${label}`;
+    return `${label} (${resultCount.toString()})`;
   }
 
   return label;
