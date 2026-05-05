@@ -1,7 +1,6 @@
 .config-drawer-container.MuiStack-root {
   width: 100%;
   min-width: 0;
-  border-radius: calc(var(--mdai-spacing-unit) * 2);
   height: 100%;
 }
 

@@ -11,6 +11,7 @@ interface AccordionProps {
   title: ReactNode;
   content: ReactNode;
   className?: string;
+  headingClassName?: string;
   summaryClassName?: string;
   contentContainerClassname?: string;
   transitionClassname?: string;
@@ -24,6 +25,7 @@ export function Accordion({
   summaryClassName,
   contentContainerClassname,
   transitionClassname,
+  headingClassName,
   hideExpandIcon,
 }: AccordionProps) {
   const panelId = useId();
@@ -39,6 +41,9 @@ export function Accordion({
             "mdai-accordion-contents-container",
             transitionClassname,
           ),
+        },
+        heading: {
+          className: classNames("mdai-accordion-heading", headingClassName),
         },
       }}
     >
