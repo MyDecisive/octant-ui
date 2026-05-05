@@ -4,27 +4,29 @@ import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useOctantConnectStore } from "@store";
-import type { InputValidationErrors } from "@types";
+import type { FormFields } from "@types";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
+import { useFormValidation } from "../../fieldValidation/useFormValidation";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import { argoCdServiceClient } from "../../services/argoCd";
 
-function validateArgoUrl(value?: string) {
+function validateUrl(value?: string) {
   const requiredError = validateRequired(value);
   if (requiredError) return requiredError;
 
   return validateUrlInput(value!);
 }
 
+const formSpec: FormFields = {
+  connectionName: [validateRequired],
+  argoUrl: [validateRequired, validateUrl],
+  accountToken: [validateRequired],
+};
+
 export function ConnectToCluster() {
-  const [urlError, setUrlError] = useState<InputValidationErrors | null>(null);
-  const [tokenError, setTokenError] = useState<InputValidationErrors | null>(
-    null,
-  );
-  const [connectionNameError, setConnectionNameError] =
-    useState<InputValidationErrors | null>(null);
+  const { callbacks, isFormValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
   const { argoUrl, accountToken, connectionName } = useOctantConnectStore(
     useShallow((state) => {
@@ -55,6 +57,7 @@ export function ConnectToCluster() {
   };
 
   const testArgoConnection = async () => {
+    if (!validateAll({ argoUrl, accountToken, connectionName })) return false;
     try {
       const result = await argoCdServiceClient.testConnection({
         argoAccountToken: accountToken,
@@ -63,7 +66,7 @@ export function ConnectToCluster() {
 
       if (!result.success) {
         setConnectionError(
-          "Token is invalid. Please regenerate your token and try again.",
+          "Credentials are invalid. Please regenerate your token, check your URL, and try again.",
         );
         return false;
       }
@@ -95,16 +98,14 @@ export function ConnectToCluster() {
         onChange={(e) =>
           setFormField("connectionName", encodeURI(e.target.value))
         }
-        validate={validateRequired}
-        onValidation={setConnectionNameError}
+        {...callbacks.connectionName}
         placeholder="Name this connection"
         helperText="We recommend providing a name that can be easily referenced later, e.g., datadog-io"
       />
       <Input
         value={argoUrl}
         onChange={handleUrlChange}
-        validate={validateArgoUrl}
-        onValidation={setUrlError}
+        {...callbacks.argoUrl}
         label="ArgoCD Cluster URL"
         placeholder="e.g. https://www.main.com"
         tooltip={
@@ -117,8 +118,7 @@ export function ConnectToCluster() {
       <Input
         value={accountToken}
         onChange={handleTokenChange}
-        validate={validateRequired}
-        onValidation={setTokenError}
+        {...callbacks.accountToken}
         label="ArgoCD API token"
         placeholder="argocd.token.xxxxxxxx"
         helperText={
@@ -128,11 +128,7 @@ export function ConnectToCluster() {
       {connectionError && <Alert severity="error" title={connectionError} />}
       <AsyncNextButton
         asyncFunction={testArgoConnection}
-        canAsync={
-          urlError === undefined &&
-          tokenError === undefined &&
-          connectionNameError === undefined
-        }
+        canAsync={isFormValid}
         loadingText={"Connecting"}
         isSubmit
       />

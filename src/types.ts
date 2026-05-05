@@ -2,8 +2,6 @@ import type { JSX } from "react";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
-export type InputValidationErrors = string[] | string | undefined;
-
 export interface BaseFlowViewProps {
   onClickProgress: () => void;
   viewKey: string;
@@ -68,3 +66,24 @@ export interface BaseRowDefinition {
 }
 
 export type TimeRange = "today" | "mtd" | "lastMonth";
+
+// Form validation types
+export type InputValidationErrors = string[] | string | undefined;
+
+export type FormFields = Record<
+  string,
+  ((value?: string) => string | undefined)[]
+>;
+
+export type FieldValidationMap = Record<
+  string,
+  {
+    validate: (value?: string) => InputValidationErrors;
+    onValidation: (error: InputValidationErrors) => void;
+  }
+>;
+
+export type FieldErrorsMap = Record<
+  keyof FormFields,
+  InputValidationErrors | null
+>;
