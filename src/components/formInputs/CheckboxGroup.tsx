@@ -2,8 +2,12 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
+import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
-import { useCallback, type ChangeEvent, type FocusEventHandler } from "react";
+import type { InputValidationErrors } from "@types";
+import { getErrorOrHelperText } from "@utils/getErrorOrHelperText";
+import { useState, type ChangeEvent, type FocusEventHandler } from "react";
+import { hasValidationError } from "../../fieldValidation/hasValidationError";
 
 interface CheckBoxGroupProps {
   options: { label: string; value: string }[];
@@ -12,6 +16,10 @@ interface CheckBoxGroupProps {
   label?: string;
   onFocus?: FocusEventHandler<HTMLDivElement>;
   onBlur?: FocusEventHandler<HTMLDivElement>;
+  validate?: (value?: string[]) => InputValidationErrors;
+  onValidation?: (error: InputValidationErrors) => void;
+  helperText?: string;
+  error?: boolean;
 }
 
 export function CheckboxGroup({
@@ -21,24 +29,52 @@ export function CheckboxGroup({
   label,
   onFocus,
   onBlur,
+  helperText,
+  error,
+  validate,
+  onValidation,
 }: CheckBoxGroupProps) {
-  const handleCheckedChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const { value, checked } = event.target;
+  const [validationErrors, setValidationErrors] =
+    useState<InputValidationErrors | null>(null);
 
-      const nextSelected = checked
-        ? selected.includes(value)
-          ? selected
-          : [...selected, value]
-        : selected.filter((item) => item !== value);
+  const handleValidate = (value?: string[]) => {
+    const errors = validate?.(value);
+    setValidationErrors(errors);
+    onValidation?.(errors);
+  };
 
-      onChange(nextSelected);
-    },
-    [selected, onChange],
+  const handleCheckedChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+
+    if (validationErrors) {
+      setValidationErrors(null);
+      onValidation?.(undefined);
+    }
+
+    const nextSelected = checked
+      ? selected.includes(value)
+        ? selected
+        : [...selected, value]
+      : selected.filter((item) => item !== value);
+
+    onChange(nextSelected);
+  };
+
+  const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
+    handleValidate(selected);
+    onBlur?.(e);
+  };
+
+  const fieldError = error ?? hasValidationError(validationErrors);
+
+  const fieldHelperText = getErrorOrHelperText(
+    validationErrors,
+    helperText,
+    error,
   );
 
   return (
-    <FormControl onFocus={onFocus} onBlur={onBlur}>
+    <FormControl onFocus={onFocus} onBlur={handleBlur} error={fieldError}>
       {label && <FormLabel>{label}</FormLabel>}
       <FormGroup>
         {options.map(({ label, value }) => (
@@ -56,6 +92,7 @@ export function CheckboxGroup({
           />
         ))}
       </FormGroup>
+      {fieldHelperText && <FormHelperText>{fieldHelperText}</FormHelperText>}
     </FormControl>
   );
 }
