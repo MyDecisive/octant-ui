@@ -10,3 +10,6 @@ jobs:
   helm-publish:
     uses: MyDecisive/ci/.github/workflows/helm-publish.yml@main
     secrets: inherit # pass all secrets
+  octant-publish:
+    uses: MyDecisive/octant/.github/workflows/helm-publish.yml@main
+    secrets: inherit # pass all secrets
