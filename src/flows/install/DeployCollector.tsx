@@ -8,19 +8,16 @@ import { ViewTitle } from "@components/ViewTitle";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useOctantConnectStore } from "@store";
-import type { FormFields, ManifestPayload, TelemetryTypes } from "@types";
+import type { FormFields, TelemetryTypes } from "@types";
+import { toMLTTypes } from "@utils/toMltTypes";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { validateTelemetryTypesSelection } from "../../fieldValidation/validateTelemetryTypesSelection";
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
-import {
-  type ArgoCdIntegrationBody,
-  connections,
-  type DatadogIntegrationBody,
-  integrations,
-} from "../../services/api";
+import { connectionServiceClient } from "../../services/connection";
+import { dDogServiceClient } from "../../services/ddog";
 
 const dataSourceOptions: {
   label: string;
@@ -53,7 +50,7 @@ const formSpec: FormFields = {
 
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
-  const { telemetryTypes, url, apiKey, connectionName, accountToken, argoUrl } =
+  const { telemetryTypes, url, apiKey, connectionName, namespace } =
     useOctantConnectStore(
       useShallow((state) => {
         // Provide default empty string values so React recognizes the Inputs as controlled
@@ -61,9 +58,8 @@ export function DeployCollector() {
           telemetryTypes,
           url = "",
           apiKey = "",
-          connectionName = "",
-          accountToken,
-          argoUrl,
+          connectionName = "shenanigans",
+          namespace,
         } = state.form;
 
         return {
@@ -71,8 +67,7 @@ export function DeployCollector() {
           url,
           apiKey,
           connectionName,
-          accountToken,
-          argoUrl,
+          namespace,
         };
       }),
     );
@@ -84,36 +79,45 @@ export function DeployCollector() {
 
   const handleDeployButtonClick = async () => {
     try {
-      const connectionPayload: ManifestPayload = {
-        sourceType: "datadog",
-        telemetryTypes,
-        destinations: [
-          {
-            type: "datadog",
-            integrationName: connectionName,
-          },
-        ],
-        deployment: {
-          type: "argocd-sideload",
-          integrationName: connectionName,
-        },
-      };
-      const ddIntegrationPayload: DatadogIntegrationBody = {
-        url: url,
-        apiKey: apiKey,
-      };
-      const argoIntegrationPayload: ArgoCdIntegrationBody = {
-        accountToken: accountToken!,
-        apiUrl: argoUrl!,
-      };
+      await dDogServiceClient.saveDatadogIntegration({
+        url,
+        apiKey,
+        name: connectionName,
+      });
 
-      await Promise.all([
-        integrations.upsert("datadog", connectionName, ddIntegrationPayload),
-        integrations.upsert("argocd", connectionName, argoIntegrationPayload),
-      ]);
+      const chunks: Uint8Array[] = [];
+      let total = BigInt(0);
+      let mimeType = "";
 
-      await connections.upsert(connectionName, connectionPayload);
+      for await (const res of connectionServiceClient.generateManifests({
+        namespace,
+        connectionName,
+        telemetryTypes: toMLTTypes(telemetryTypes),
+        format: 2, // yaml
+        deploymentType: 1, // sideload
+      })) {
+        chunks.push(res.data);
+        total = res.total;
+        mimeType = res.type;
+      }
 
+      const combined = new Uint8Array(Number(total));
+      let offset = 0;
+      for (const chunk of chunks) {
+        combined.set(chunk, offset);
+        offset += chunk.byteLength;
+      }
+
+      const blob = new Blob([combined], { type: mimeType });
+      const extension = mimeType.includes("zip") ? "zip" : "yaml";
+      const filename = `${connectionName}-manifests.${extension}`;
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(downloadUrl);
+      document.body.removeChild(a);
       return true;
       // eslint-disable-next-line
     } catch (_) {
