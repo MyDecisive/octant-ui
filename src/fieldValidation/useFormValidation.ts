@@ -48,7 +48,7 @@ export function useFormValidation(fields: FormFields) {
     (name) => fieldErrors[name] === undefined,
   );
 
-  const validateAll = (values: Record<string, string | undefined>) => {
+  const validateAll = (values: Record<string, unknown>) => {
     const results: Record<string, InputValidationErrors> = {};
 
     for (const [key, validators] of Object.entries(fields)) {

@@ -69,16 +69,16 @@ export type TimeRange = "today" | "mtd" | "lastMonth";
 
 // Form validation types
 export type InputValidationErrors = string[] | string | undefined;
+export type FieldValidator<T = string> = (value?: T) => string | undefined;
 
-export type FormFields = Record<
-  string,
-  ((value?: string) => string | undefined)[]
->;
+// eslint-disable-next-line
+export type FormFields = Record<string, FieldValidator<any>[]>;
 
 export type FieldValidationMap = Record<
   string,
   {
-    validate: (value?: string) => InputValidationErrors;
+    // eslint-disable-next-line
+    validate: (value?: any) => InputValidationErrors;
     onValidation: (error: InputValidationErrors) => void;
   }
 >;
