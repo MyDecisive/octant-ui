@@ -12,6 +12,7 @@ interface AppStateForm {
   url?: string;
   apiKey?: string;
   connectionName?: string;
+  mdaiVersion?: string;
 }
 interface Values {
   activeView: ViewKey;
@@ -36,6 +37,7 @@ function createDefaultOctantConnectForm(): AppStateForm {
     namespace: "mdai",
     deployMethod: "argocd-sideload",
     telemetryTypes: [],
+    mdaiVersion: "0.9.3-octant",
   };
 }
 
