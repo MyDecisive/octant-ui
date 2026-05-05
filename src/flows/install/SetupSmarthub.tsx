@@ -7,10 +7,18 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { InstallStatus } from "@mydecisiveai/octant-client";
 import { useOctantConnectStore } from "@store";
+import type { FormFields } from "@types";
 import { useState } from "react";
+import { useFormValidation } from "../../fieldValidation/useFormValidation";
+import { validateRequired } from "../../fieldValidation/validateRequired";
 import { installServiceClient } from "../../services/install";
 
+const formSpec: FormFields = {
+  namespace: [validateRequired],
+};
+
 export function SetupSmarthub() {
+  const { callbacks, fieldErrors } = useFormValidation(formSpec);
   const namespace = useOctantConnectStore((state) => state.form.namespace);
   const connectionName = useOctantConnectStore(
     (state) => state.form.connectionName,
@@ -52,7 +60,7 @@ export function SetupSmarthub() {
   };
 
   return (
-    <FlowCenterColumn>
+    <FlowCenterColumn isForm>
       <ViewTitle
         title="Set up and install your Smarthub"
         description="Tell us where you’d like the Smarthub to live and how you want us to preserve important data for you. When you’re ready, we'll run a quick test to make sure the hub is running smoothly in your environment."
@@ -62,6 +70,7 @@ export function SetupSmarthub() {
         <Input
           label="Kubernetes namespace"
           value={namespace}
+          {...callbacks.namespace}
           placeholder="mdai"
           onChange={(e) => setFormField("namespace", e.target.value)}
         />
@@ -71,8 +80,9 @@ export function SetupSmarthub() {
         onClose={() => setInstallError(null)}
       />
       <AsyncNextButton
+        isSubmit
         asyncFunction={handleInstall}
-        canAsync={namespace.trim().length > 0}
+        canAsync={!fieldErrors.namespace}
         loadingText={"Installing"}
       />
     </FlowCenterColumn>
