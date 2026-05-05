@@ -1,0 +1,19 @@
+.search-field-autocomplete {
+  min-width: 40%;
+}
+
+.search-field-autocomplete
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #6d6d75;
+}
+
+.search-field-autocomplete
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #6d6d75;
+}
+
+.search-field-autocomplete .MuiInputLabel-root.Mui-focused {
+  color: #6d6d75;
+}
