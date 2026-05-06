@@ -35,7 +35,7 @@ function createDefaultOctantConnectForm(): AppStateForm {
     argoAgreement: false,
     namespace: "mdai",
     telemetryTypes: [],
-    mdaiVersion: "0.9.3-octant",
+    mdaiVersion: "0.10.0",
   };
 }
 
