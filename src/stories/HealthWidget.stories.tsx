@@ -36,3 +36,92 @@ export const SimpleRed: Story = {
     },
   },
 };
+export const ComplexGreen: Story = {
+  args: {
+    status: "operational",
+    title: "Datadog connection",
+    facets: [
+      {
+        label: "Clients connected",
+        health: true,
+      },
+      {
+        label: "Receiving data",
+        health: true,
+      },
+      {
+        label: "Sending data",
+        health: true,
+      },
+      {
+        label: "Data integrity",
+        health: true,
+      },
+    ],
+  },
+};
+
+export const ComplexRed: Story = {
+  args: {
+    status: "error",
+    title: "Datadog connection",
+    facets: [
+      {
+        label: "Clients connected",
+        health: false,
+        fix: {
+          label: "How to fix",
+          description: "{Generic description}",
+          actions: [
+            {
+              text: "See our docs",
+              onClick: () => console.log("clicked the thing"),
+            },
+          ],
+        },
+      },
+      {
+        label: "Receiving data",
+        health: false,
+        fix: {
+          label: "How to fix",
+          description: "{Generic description}",
+          actions: [
+            {
+              text: "See our docs",
+              onClick: () => console.log("clicked the thing"),
+            },
+          ],
+        },
+      },
+      {
+        label: "Sending data",
+        health: false,
+        fix: {
+          label: "How to fix",
+          description: "{Generic description}",
+          actions: [
+            {
+              text: "See our docs",
+              onClick: () => console.log("clicked the thing"),
+            },
+          ],
+        },
+      },
+      {
+        label: "Data integrity",
+        health: false,
+        fix: {
+          label: "How to fix",
+          description: "{Generic description}",
+          actions: [
+            {
+              text: "See our docs",
+              onClick: () => console.log("clicked the thing"),
+            },
+          ],
+        },
+      },
+    ],
+  },
+};

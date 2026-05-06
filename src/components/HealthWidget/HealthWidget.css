@@ -20,6 +20,22 @@
   align-items: center;
 }
 
-.mdai-accordion-summary.MuiAccordionSummary-root.Mui-expanded.no-close {
+.mdai-accordion-summary.MuiAccordionSummary-root.MuiButtonBase-root.no-close {
   cursor: default;
+}
+
+.health-facet-row-label.MuiTypography-root {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.health-facet-row-label-row-container.MuiStack-root {
+  padding: calc(var(--mdai-spacing-unit) * 0.75) 0;
+}
+
+.health-facet-row-container.MuiStack-root
+  > .health-widget-fix-card.MuiCard-root {
+  margin-bottom: calc(var(--mdai-spacing-unit) * 2);
 }
