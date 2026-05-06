@@ -1,7 +1,7 @@
 .main-content-container.MuiBox-root {
   padding: calc(var(--mdai-spacing-unit) * 2);
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   align-items: flex-start;
   gap: calc(var(--mdai-spacing-unit) * 2);
   height: 100%;
@@ -9,9 +9,15 @@
 }
 
 .main-content-container.MuiBox-root > .left-column.MuiStack-root {
-  width: 774px;
+  grid-column: span 8;
 }
 
 .main-content-container.MuiBox-root > .right-column.MuiStack-root {
-  width: 326px;
+  grid-column: span 4;
+}
+
+.main-content-container.MuiBox-root
+  > .no-connection-card-container.MuiCard-root {
+  grid-column: 4 / span 6;
+  margin-top: 126px;
 }
