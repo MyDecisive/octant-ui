@@ -41,7 +41,7 @@ function createDefaultOctantConnectForm(): AppStateForm {
 
 function createDefaultOctantConnectState() {
   return {
-    activeView: "argoInstall",
+    activeView: "nextSteps",
     form: createDefaultOctantConnectForm(),
   };
 }
