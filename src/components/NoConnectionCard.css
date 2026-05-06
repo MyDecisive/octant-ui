@@ -6,7 +6,7 @@
 }
 
 .no-connection-card-content,
-.MuiCardHeader-content {
+.no-connection-card-content .MuiCardHeader-content {
   display: flex;
   justify-content: center;
   align-items: center;

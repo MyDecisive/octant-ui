@@ -1,21 +1,15 @@
-import { CodeSnippet } from "@components/CodeSnippet";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewTitle } from "@components/ViewTitle";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
-import { useOctantConnectStore } from "@store";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/ROUTES";
 import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 
 export function NextSteps() {
   const [, setLocation] = useLocation();
-  const connectionName = useOctantConnectStore(
-    (state) => state.form.connectionName,
-  );
-
   const { loading, fetchAndDownload } = useFetchManifestsAndDownload();
 
   const handleDownloadManifestsClick = () => fetchAndDownload();
@@ -30,19 +24,22 @@ export function NextSteps() {
       <SimpleCard
         title="Start budgeting now"
         description="{sales-y description goes here}"
-        headerAction={
-          <Chip
-            color="primary"
-            label="Recommended"
-            size="small"
+        headerAction={<Chip color="info" label="Recommended" size="small" />}
+        footer={
+          <Button
+            variant="text"
             onClick={() => setLocation(ROUTES.CLARITY)}
-          />
+            size="small"
+            disableRipple
+          >
+            Go to Clarity
+          </Button>
         }
       />
       <SimpleCard
         title="Migrate Smarthub into production"
         description="Ready to go live? Follow our step-by-step guide to safely migrate Smarthub from your current environment into production."
-        headerAction={
+        footer={
           <Button
             variant="text"
             target="_blank"
@@ -83,12 +80,6 @@ export function NextSteps() {
           </ButtonRow>
         }
       />
-      <SimpleCard
-        title="Revert your Argo CD & Datadog agent changes"
-        description="Something didn't go as planned. Run the command below to restore both your Argo CD configuration and Datadog agent to their previous state:"
-      >
-        <CodeSnippet code={`argocd app delete ${connectionName}`} />
-      </SimpleCard>
     </FlowCenterColumn>
   );
 }
