@@ -1,11 +1,13 @@
 import { InputEndAdornment } from "@components/InputEndAdornment";
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import type { InputValidationErrors } from "@types";
+import { getErrorOrHelperText } from "@utils/getErrorOrHelperText";
 import {
   useState,
   type ChangeEventHandler,
   type FocusEventHandler,
 } from "react";
+import { hasValidationError } from "../../fieldValidation/hasValidationError";
 
 interface InputProps extends Omit<TextFieldProps<"outlined">, "variant"> {
   tooltip?: string;
@@ -14,36 +16,6 @@ interface InputProps extends Omit<TextFieldProps<"outlined">, "variant"> {
   onValidation?: (error: InputValidationErrors) => void;
   value?: string;
   helperText?: string;
-}
-
-function hasValidationError(maybeErrors: InputValidationErrors | null) {
-  if (maybeErrors == null) {
-    return false;
-  }
-
-  return maybeErrors.length > 0;
-}
-
-function getErrorOrHelperText(
-  validationErrors: InputValidationErrors | null,
-  helperText?: string,
-  errorProp?: boolean,
-) {
-  if (!errorProp && !validationErrors) {
-    return helperText;
-  }
-
-  if (errorProp) {
-    return helperText;
-  }
-
-  if (validationErrors) {
-    return Array.isArray(validationErrors)
-      ? validationErrors[0]
-      : validationErrors;
-  }
-
-  return undefined;
 }
 
 export function Input({

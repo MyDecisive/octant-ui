@@ -46,7 +46,7 @@ export function Select({
     <FormControl
       className={classNames("mdai-select-container", className)}
       fullWidth
-      variant="standard"
+      variant="outlined"
     >
       {label && <InputLabel id={"select-label-id"}>{label}</InputLabel>}
       <MuiSelect
