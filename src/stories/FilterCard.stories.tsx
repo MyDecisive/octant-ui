@@ -23,5 +23,8 @@ export const Default: Story = {
     filtered: 50,
     volumeFilter: 0,
     persistErrors: false,
+    onApplyFilter: (volume, persist) => {
+      console.log("apply trace filter changes ", { volume, persist });
+    },
   },
 };

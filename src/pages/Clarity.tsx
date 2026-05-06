@@ -125,6 +125,9 @@ export function ClarityPage() {
       </Stack>
       <Stack className="right-column" gap={1}>
         <FilterCard
+          onApplyFilter={(volume, persist) => {
+            console.log("apply log filter changes ", { volume, persist });
+          }}
           title={"Log filters"}
           unit={"GB"}
           received={100}
@@ -132,6 +135,9 @@ export function ClarityPage() {
           filtered={50}
         />
         <FilterCard
+          onApplyFilter={(volume, persist) => {
+            console.log("apply trace filter changes ", { volume, persist });
+          }}
           title={"Traces filters"}
           unit={"MM Spans"}
           received={100}
