@@ -5,7 +5,13 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import "./NoConnectionCard.css";
 
-export function NoConnectionCard() {
+interface NoConnectionCardProps {
+  onButtonClick?: () => void;
+}
+
+export function NoConnectionCard({
+  onButtonClick = () => {},
+}: NoConnectionCardProps) {
   return (
     <Card className="no-connection-card-container">
       <CardContent className="no-connection-card-content">
@@ -19,12 +25,7 @@ export function NoConnectionCard() {
             "We may not have visibility into your data.  Let’s review and manage your pipeline to make sure everything is connected."
           }
         />
-        <Button
-          className="no-connection-card-button"
-          variant="secondary"
-          size="small"
-          onClick={() => {}}
-        >
+        <Button variant="secondary" size="small" onClick={onButtonClick}>
           Go to Connections
         </Button>
       </CardContent>
