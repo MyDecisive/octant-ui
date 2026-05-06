@@ -28,7 +28,7 @@
     "@mui/icons-material": "^7.3.10",
     "@mui/material": "^7.3.8",
     "@mui/x-data-grid": "^8.27.5",
-    "@mydecisiveai/octant-client": "^0.4.10-alpha",
+    "@mydecisiveai/octant-client": "^0.4.11-alpha",
     "classnames": "^2.5.1",
     "debounce": "^3.0.0",
     "react": "^19.2.0",
