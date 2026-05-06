@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useState, type ChangeEventHandler } from "react";
 
 import { Accordion } from "@components/Accordion";
 import { Switch } from "@mui/material";
@@ -18,6 +19,7 @@ interface FilterCardProps {
   unit: string;
   volumeFilter?: number;
   persistErrors?: boolean;
+  onApplyFilter: (volumeFilter: number, persistErrors: boolean) => void;
 }
 
 export function FilterCard({
@@ -28,7 +30,31 @@ export function FilterCard({
   volumeFilter,
   persistErrors,
   unit,
+  onApplyFilter,
 }: FilterCardProps) {
+  const [sampleRate, setSampleRate] = useState(volumeFilter ?? 0);
+  const [persist, setPersist] = useState(persistErrors ?? false);
+
+  const handlePersistChange: ChangeEventHandler<HTMLInputElement> = (e) =>
+    setPersist(e.target.value === "true");
+
+  const handleRateChange: (
+    event: React.SyntheticEvent | Event,
+    value: number,
+  ) => void = (_, value) => setSampleRate(value);
+
+  const noValueHasBeenChanged =
+    sampleRate === volumeFilter || persist === persistErrors;
+
+  const handleCancel = () => {
+    setSampleRate(volumeFilter ?? 0);
+    setPersist(persistErrors ?? false);
+  };
+
+  const handleApply = () => {
+    onApplyFilter(sampleRate, persist);
+  };
+
   return (
     <Accordion
       className="filter-card-container"
@@ -48,10 +74,11 @@ export function FilterCard({
           </Stack>
           <Divider />
           <SliderControl
-            value={volumeFilter ?? 0}
+            value={sampleRate}
             label="Reduce log volume by"
             valueUnits="%"
             size="small"
+            onChangeCommitted={handleRateChange}
           />
           <Divider />
           <Stack
@@ -60,7 +87,7 @@ export function FilterCard({
             alignItems={"center"}
           >
             <Typography variant="chipLabel">Always keep errors</Typography>
-            <Switch value={persistErrors} />
+            <Switch value={persist} onChange={handlePersistChange} />
           </Stack>
           <Divider />
           <Stack
@@ -69,10 +96,21 @@ export function FilterCard({
             gap={1}
             justifyContent={"flex-end"}
           >
-            <Button variant="text" color="inherit" size="small">
+            <Button
+              disabled={noValueHasBeenChanged}
+              onClick={handleCancel}
+              variant="text"
+              color="inherit"
+              size="small"
+            >
               Cancel
             </Button>
-            <Button variant="text" size="small">
+            <Button
+              disabled={noValueHasBeenChanged}
+              onClick={handleApply}
+              variant="text"
+              size="small"
+            >
               Apply
             </Button>
           </Stack>
