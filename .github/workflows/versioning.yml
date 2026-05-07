@@ -48,7 +48,7 @@ jobs:
       ref: refs/tags/${{ needs.gh-tag.outputs.new_tag }}
     secrets: inherit # pass all secrets
   trigger-octant:
-    needs: docker-tag
+    needs: [gh-tag, docker-tag]
     if: needs.gh-tag.outputs.new_tag != ''
     name: Trigger Octant Build
     runs-on: ubuntu-24.04
@@ -68,3 +68,4 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           repository: ${{ env.REPO_ORGANIZATION }}/${{ env.OCTANT_REPO }}
           event-type: build-and-publish
+          client-payload: '{"ui-ver": "${{needs.gh-tag.outputs.new_tag }}"}'
