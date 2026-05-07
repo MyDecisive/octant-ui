@@ -1,5 +1,4 @@
 import { useOctantConnectStore } from "@store";
-import { useCallback } from "react";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/install";
 import { StepperNav } from "./StepperNav";
 
@@ -13,11 +12,6 @@ export function FlowContainer() {
   const activeView = useOctantConnectStore((state) => state.activeView);
   const setActiveView = useOctantConnectStore((state) => state.setActiveView);
 
-  const onClickProgress = useCallback(() => {
-    const currentViewIdx = VIEW_ORDER.indexOf(activeView);
-    setActiveView(VIEW_ORDER[currentViewIdx + 1]);
-  }, [activeView, setActiveView]);
-
   const { Component } = VIEW_MAP[activeView];
 
   const activeStepIndex = flowStepKeys.indexOf(activeView);
@@ -29,7 +23,7 @@ export function FlowContainer() {
         steps={flowSteps}
         onStepClick={setActiveView}
       />
-      <Component viewKey={activeView} onClickProgress={onClickProgress} />
+      <Component />
     </>
   );
 }
