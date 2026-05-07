@@ -1,17 +1,17 @@
 import { Accordion } from "@components/Accordion";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Fragment } from "react";
 import { determineWidgetAccordionProps } from "./determineWidgetAccordionProps";
 import { FixCard, type FixInfo } from "./FixCard";
+import { HeaderStatusChip } from "./HeaderStatusChip";
 import { HealthFacetRow, type HealthFacet } from "./HealthFacetRow";
 import "./HealthWidget.css";
 
 export interface HealthWidgetProps {
   title: string;
-  status: "error" | "operational";
+  status: "error" | "operational" | "loading";
   fix?: FixInfo;
   facets?: HealthFacet[];
 }
@@ -42,16 +42,7 @@ export function HealthWidget({
           <Typography variant="body1" bold>
             {title}
           </Typography>
-          {status === "error" ? (
-            <Chip variant="filled" size="small" color="error" label="Error" />
-          ) : (
-            <Chip
-              variant="filled"
-              size="small"
-              color="success"
-              label="Operational"
-            />
-          )}
+          <HeaderStatusChip status={status} />
         </Stack>
       }
       content={

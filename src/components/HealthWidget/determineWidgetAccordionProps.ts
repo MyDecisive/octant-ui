@@ -5,6 +5,14 @@ export function determineWidgetAccordionProps({
   fix,
   facets,
 }: HealthWidgetProps) {
+  if (status === "loading") {
+    return {
+      summaryClassName: "no-close",
+      hideExpandIcon: true,
+      defaultExpanded: false,
+      expanded: false,
+    };
+  }
   if (!facets) {
     if (status === "error" && !!fix) {
       return {
