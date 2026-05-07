@@ -5,8 +5,6 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-ENV VITE_API_URL=http://localhost:50051
-
 COPY . .
 RUN npm run build
 
