@@ -50,27 +50,34 @@ const formSpec: FormFields = {
 
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
-  const { telemetryTypes, url, apiKey, connectionName, namespace } =
-    useOctantConnectStore(
-      useShallow((state) => {
-        // Provide default empty string values so React recognizes the Inputs as controlled
-        const {
-          telemetryTypes,
-          url = "",
-          apiKey = "",
-          connectionName = "shenanigans",
-          namespace,
-        } = state.form;
-
-        return {
-          telemetryTypes,
-          url,
-          apiKey,
-          connectionName,
-          namespace,
-        };
-      }),
-    );
+  const {
+    telemetryTypes,
+    url,
+    apiKey,
+    connectionName,
+    namespace,
+    mdaiVersion,
+  } = useOctantConnectStore(
+    useShallow((state) => {
+      // Provide default empty string values so React recognizes the Inputs as controlled
+      const {
+        telemetryTypes,
+        url = "",
+        apiKey = "",
+        connectionName,
+        namespace,
+        mdaiVersion,
+      } = state.form;
+      return {
+        telemetryTypes,
+        url,
+        apiKey,
+        connectionName,
+        namespace,
+        mdaiVersion,
+      };
+    }),
+  );
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
@@ -97,6 +104,7 @@ export function DeployCollector() {
         telemetryTypes: toMLTTypes(telemetryTypes),
         format: 2, // yaml
         deploymentType: 1, // sideload
+        mdaiVersion,
       })) {
         chunks.push(res.data);
         total = res.total;
