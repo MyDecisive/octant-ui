@@ -32,11 +32,13 @@ export function FilterCard({
   unit,
   onApplyFilter,
 }: FilterCardProps) {
-  const [sampleRate, setSampleRate] = useState(volumeFilter ?? 0);
-  const [persist, setPersist] = useState(persistErrors ?? false);
+  const appliedSampleRate = volumeFilter ?? 0;
+  const appliedPersist = persistErrors ?? false;
+  const [sampleRate, setSampleRate] = useState(appliedSampleRate);
+  const [persist, setPersist] = useState(appliedPersist);
 
   const handlePersistChange: ChangeEventHandler<HTMLInputElement> = (e) =>
-    setPersist(e.target.value === "true");
+    setPersist(e.target.checked);
 
   const handleRateChange: (
     event: React.SyntheticEvent | Event,
@@ -44,17 +46,16 @@ export function FilterCard({
   ) => void = (_, value) => setSampleRate(value);
 
   const noValueHasBeenChanged =
-    sampleRate === volumeFilter || persist === persistErrors;
+    sampleRate === appliedSampleRate && persist === appliedPersist;
 
   const handleCancel = () => {
-    setSampleRate(volumeFilter ?? 0);
-    setPersist(persistErrors ?? false);
+    setSampleRate(appliedSampleRate);
+    setPersist(appliedPersist);
   };
 
   const handleApply = () => {
     onApplyFilter(sampleRate, persist);
   };
-
   return (
     <Accordion
       className="filter-card-container"
@@ -87,7 +88,7 @@ export function FilterCard({
             alignItems={"center"}
           >
             <Typography variant="chipLabel">Always keep errors</Typography>
-            <Switch value={persist} onChange={handlePersistChange} />
+            <Switch checked={persist} onChange={handlePersistChange} />
           </Stack>
           <Divider />
           <Stack

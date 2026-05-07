@@ -1,4 +1,5 @@
 import { FilterCard } from "@components/FilterCard/FilterCard";
+import { FilterEmptyStateCard } from "@components/FilterCard/FilterEmptyStateCard";
 import { NoConnectionCard } from "@components/NoConnectionCard";
 import { Table } from "@components/Table/Table";
 import { Tabs, type TabItem } from "@components/Tabs/Tabs";
@@ -34,6 +35,14 @@ export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
   const [searchLoading, setSearchLoading] = useState(false);
+  const [logFilters, setLogFilters] = useState<{
+    volumeFilter?: number;
+    persistErrors?: boolean;
+  }>({});
+  const [traceFilters, setTraceFilters] = useState<{
+    volumeFilter?: number;
+    persistErrors?: boolean;
+  }>({});
   const normalizedSearchQuery = searchQuery.trim();
   const hasClarityContent =
     summaryData.length > 0 || logData.length > 0 || spanData.length > 0;
@@ -131,26 +140,63 @@ export function ClarityPage() {
             />
           </Stack>
           <Stack className="right-column" gap={1}>
-            <FilterCard
-              onApplyFilter={(volume, persist) => {
-                console.log("apply log filter changes ", { volume, persist });
-              }}
-              title={"Log filters"}
-              unit={"GB"}
-              received={100}
-              sent={50}
-              filtered={50}
-            />
-            <FilterCard
-              onApplyFilter={(volume, persist) => {
-                console.log("apply trace filter changes ", { volume, persist });
-              }}
-              title={"Traces filters"}
-              unit={"MM Spans"}
-              received={100}
-              sent={50}
-              filtered={50}
-            />
+            {logData.length === 0 ? (
+              <FilterEmptyStateCard
+                title="Here is why you need logs"
+                description="Enable logs to see what is happening across your services."
+                actionLabel="Turn on logs"
+                onAction={() => {
+                  console.log("turn on logs");
+                }}
+              />
+            ) : (
+              <FilterCard
+                onApplyFilter={(volume, persist) => {
+                  setLogFilters({
+                    volumeFilter: volume,
+                    persistErrors: persist,
+                  });
+                  console.log("apply log filter changes ", { volume, persist });
+                }}
+                title={"Log filters"}
+                unit={"GB"}
+                received={100}
+                sent={50}
+                filtered={50}
+                volumeFilter={logFilters.volumeFilter}
+                persistErrors={logFilters.persistErrors}
+              />
+            )}
+            {spanData.length === 0 ? (
+              <FilterEmptyStateCard
+                title="Here is why you need traces"
+                description="Enable traces to see what's actually happening."
+                actionLabel="Turn on traces"
+                onAction={() => {
+                  console.log("turn on traces");
+                }}
+              />
+            ) : (
+              <FilterCard
+                onApplyFilter={(volume, persist) => {
+                  setTraceFilters({
+                    volumeFilter: volume,
+                    persistErrors: persist,
+                  });
+                  console.log("apply trace filter changes ", {
+                    volume,
+                    persist,
+                  });
+                }}
+                title={"Traces filters"}
+                unit={"MM Spans"}
+                received={100}
+                sent={50}
+                filtered={50}
+                volumeFilter={traceFilters.volumeFilter}
+                persistErrors={traceFilters.persistErrors}
+              />
+            )}
           </Stack>
         </>
       ) : (

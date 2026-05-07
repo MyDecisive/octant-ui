@@ -1,0 +1,22 @@
+.filter-card-empty-state-container.MuiCard-root {
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: none;
+  min-height: 252px;
+}
+
+.filter-card-empty-state-content.MuiCardContent-root {
+  min-height: 252px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--mdai-spacing-unit) * 2);
+  padding: calc(var(--mdai-spacing-unit) * 2);
+}
+
+.filter-card-empty-state-content.MuiCardContent-root
+  > .MuiButton-root:last-child {
+  align-self: center;
+  margin-top: auto;
+}
