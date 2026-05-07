@@ -21,19 +21,6 @@ declare module "@mui/material/Typography" {
   }
 }
 
-declare module "@mui/material/Typography" {
-  interface TypographyPropsVariantOverrides {
-    chipLabel: true;
-    metric: true;
-  }
-}
-
-declare module "@mui/material/Typography" {
-  interface TypographyOwnProps {
-    bold?: boolean;
-  }
-}
-
 export const theme = createTheme({
   palette: {
     mode: "light",
@@ -130,6 +117,20 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiChip: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          ...(ownerState.color === "success" && {
+            backgroundColor: "#C8E6C9",
+            color: "#1E4620",
+          }),
+          ...(ownerState.color === "error" && {
+            backgroundColor: "#FDEDED",
+            color: "#5F2120",
+          }),
+        }),
+      },
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
@@ -144,6 +145,14 @@ export const theme = createTheme({
         },
         arrow: {
           color: "#000",
+        },
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#FFF",
+          border: "1px solid rgba(0,0,0,0.23)",
         },
       },
     },

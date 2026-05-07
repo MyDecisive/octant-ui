@@ -1,5 +1,7 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordion, {
+  type AccordionProps as MuiAccordionProps,
+} from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
@@ -7,7 +9,10 @@ import classNames from "classnames";
 import { useId, type ReactNode } from "react";
 import "./Accordion.css";
 
-interface AccordionProps {
+interface AccordionProps extends Omit<
+  MuiAccordionProps,
+  "title" | "content" | "children"
+> {
   title: ReactNode;
   content: ReactNode;
   className?: string;
@@ -27,6 +32,7 @@ export function Accordion({
   transitionClassname,
   headingClassName,
   hideExpandIcon,
+  ...rest
 }: AccordionProps) {
   const panelId = useId();
   const summaryId = `${panelId}-header`;
@@ -34,6 +40,7 @@ export function Accordion({
 
   return (
     <MuiAccordion
+      {...rest}
       className={classNames("mdai-accordion-container", className)}
       slotProps={{
         transition: {
