@@ -28,7 +28,7 @@ export function FilterEmptyStateCard({
               variant: "h6",
             },
             subheader: {
-              variant: "body1",
+              variant: "body2",
             },
           }}
         />
