@@ -90,8 +90,10 @@ export function DeployCollector() {
       let mimeType = "";
 
       for await (const res of connectionServiceClient.generateManifests({
-        namespace,
-        connectionName,
+        scope: {
+          connectionName,
+          namespace,
+        },
         telemetryTypes: toMLTTypes(telemetryTypes),
         format: 2, // yaml
         deploymentType: 1, // sideload
