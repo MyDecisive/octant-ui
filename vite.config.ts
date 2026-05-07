@@ -24,16 +24,6 @@ export default defineConfig(({ mode }) => {
         // For example, you can add specific plugins or configure output formats.
       },
     },
-    // Added for dev to be able to access mdai-gateway
-    server: {
-      proxy: {
-        "/api": {
-          target: "http://localhost:8081",
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
-        },
-      },
-    },
     resolve: {
       alias: {
         "@components": path.resolve(__dirname, "./src/components"),
