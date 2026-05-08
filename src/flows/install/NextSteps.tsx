@@ -61,7 +61,7 @@ export function NextSteps() {
               variant="text"
               size="small"
               disableRipple
-              onClick={handleDownloadManifestsClick}
+              onClick={void handleDownloadManifestsClick}
               loading={loading}
             >
               Download .zip first
