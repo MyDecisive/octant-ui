@@ -30,6 +30,7 @@ export function SetupSmarthub() {
   const advanceInstallFlow = useConnectStore(
     (state) => state.advanceInstallFlow,
   );
+  const setState = useOctantStore((state) => state.setState);
 
   const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");
   const [installError, setInstallError] = useState<string | null>(null);
@@ -56,6 +57,7 @@ export function SetupSmarthub() {
       })) {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
+            setState("namespace", namespace);
             return true;
           case InstallStatus.TIMEOUT:
             setDialogStatus("warn");
@@ -97,6 +99,11 @@ export function SetupSmarthub() {
     }
   };
 
+  const handleContinueFromDialog = () => {
+    setState("namespace", namespace);
+    advanceInstallFlow();
+  };
+
   return (
     <FlowCenterColumn isForm>
       <ViewTitle
@@ -117,7 +124,7 @@ export function SetupSmarthub() {
         status={dialogStatus}
         open={showDialog}
         onClose={() => setShowDialog(false)}
-        onContinue={advanceInstallFlow}
+        onContinue={handleContinueFromDialog}
         errorInfo={installError}
       />
       <AsyncNextButton

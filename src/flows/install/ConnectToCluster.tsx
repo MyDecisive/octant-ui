@@ -41,6 +41,7 @@ export function ConnectToCluster() {
   const setFormField = useConnectStore(
     useShallow((state) => state.setFormField),
   );
+  const setState = useOctantStore((state) => state.setState);
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormField("argoUrl", e.target.value);
@@ -70,7 +71,7 @@ export function ConnectToCluster() {
         argoEndpoint: argoUrl,
         name: connectionName,
       });
-
+      setState("connectionName", connectionName);
       return true;
       // eslint-disable-next-line
     } catch (_) {
