@@ -11,6 +11,8 @@ on:
 permissions:
   contents: read
   id-token: write
+  packages: write
+  attestations: write
 
 env:
   REPO_ORGANIZATION: "MyDecisive"
@@ -20,8 +22,6 @@ jobs:
   gh-tag:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-22.04
-    permissions:
-      contents: write
     outputs:
       new_tag: ${{ steps.bump_version.outputs.new_tag }}
     steps:
