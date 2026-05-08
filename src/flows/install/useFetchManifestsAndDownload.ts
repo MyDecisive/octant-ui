@@ -1,19 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import {
   DeploymentType,
   ManifestOutFormat,
 } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { useOctantConnectStore } from "@store/connectStore";
+import { useConnectStore } from "@store/connectStore";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { connectionServiceClient } from "../../services/connection";
 
 // TODO: Handle error state
 export function useFetchManifestsAndDownload() {
   const [loading, setLoading] = useState(false);
-  const form = useOctantConnectStore(useShallow((state) => state.form));
-  const timeoutRef = useRef<number | null>(null);
+  const form = useConnectStore(useShallow((state) => state.form));
 
   const { connectionName, telemetryTypes, mdaiVersion, namespace } = form;
 
@@ -72,7 +71,7 @@ export function useFetchManifestsAndDownload() {
   useEffect(() => {
     if (timeoutRef.current) {
       return () => {
-        clearTimeout(timeoutRef.current!);
+        clearTimeout(timeoutRef.current);
       };
     }
   }, []);

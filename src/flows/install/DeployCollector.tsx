@@ -9,7 +9,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { useOctantConnectStore } from "@store/connectStore";
+import { useConnectStore } from "@store/connectStore";
 import type { FormFields, TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useState } from "react";
@@ -53,7 +53,7 @@ const formSpec: FormFields = {
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
   const { telemetryTypes, url, apiKey, connectionName, namespace } =
-    useOctantConnectStore(
+    useConnectStore(
       useShallow((state) => {
         // Provide default empty string values so React recognizes the Inputs as controlled
         const {
@@ -72,7 +72,7 @@ export function DeployCollector() {
         };
       }),
     );
-  const setFormField = useOctantConnectStore((state) => state.setFormField);
+  const setFormField = useConnectStore((state) => state.setFormField);
 
   const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
 

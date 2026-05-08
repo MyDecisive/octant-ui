@@ -3,13 +3,11 @@ import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useOctantConnectStore } from "@store/connectStore";
+import { useConnectStore } from "@store/connectStore";
 
 export function ArgoInstall() {
-  const argoAgreement = useOctantConnectStore(
-    (state) => state.form.argoAgreement,
-  );
-  const setFormField = useOctantConnectStore((state) => state.setFormField);
+  const argoAgreement = useConnectStore((state) => state.form.argoAgreement);
+  const setFormField = useConnectStore((state) => state.setFormField);
 
   return (
     <FlowCenterColumn>

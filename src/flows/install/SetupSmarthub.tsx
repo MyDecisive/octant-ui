@@ -9,7 +9,8 @@ import {
   InstallStatus,
   type GetInstallStatusResponse,
 } from "@mydecisiveai/octant-client";
-import { useOctantConnectStore } from "@store/connectStore";
+import { useConnectStore } from "@store/connectStore";
+import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useState } from "react";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
@@ -22,13 +23,11 @@ const formSpec: FormFields = {
 
 export function SetupSmarthub() {
   const { callbacks, fieldErrors } = useFormValidation(formSpec);
-  const namespace = useOctantConnectStore((state) => state.form.namespace);
-  const connectionName = useOctantConnectStore(
-    (state) => state.form.connectionName,
-  );
-  const mdaiVersion = useOctantConnectStore((state) => state.form.mdaiVersion);
-  const setFormField = useOctantConnectStore((state) => state.setFormField);
-  const advanceInstallFlow = useOctantConnectStore(
+  const namespace = useConnectStore((state) => state.form.namespace);
+  const connectionName = useConnectStore((state) => state.form.connectionName);
+  const mdaiVersion = useConnectStore((state) => state.form.mdaiVersion);
+  const setFormField = useConnectStore((state) => state.setFormField);
+  const advanceInstallFlow = useConnectStore(
     (state) => state.advanceInstallFlow,
   );
 
