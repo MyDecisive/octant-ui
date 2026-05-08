@@ -1,11 +1,14 @@
 import { AsyncNextButton } from "@components/AsyncNextButton";
-import { ErrorDialog } from "@components/ErrorDialog";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
+import { SetupSmarthubDialog } from "@components/SetupSmarthubDialog";
 import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { InstallStatus } from "@mydecisiveai/octant-client";
+import {
+  InstallStatus,
+  type GetInstallStatusResponse,
+} from "@mydecisiveai/octant-client";
 import { useOctantConnectStore } from "@store";
 import type { FormFields } from "@types";
 import { useState } from "react";
@@ -25,34 +28,65 @@ export function SetupSmarthub() {
   );
   const mdaiVersion = useOctantConnectStore((state) => state.form.mdaiVersion);
   const setFormField = useOctantConnectStore((state) => state.setFormField);
+  const advanceInstallFlow = useOctantConnectStore(
+    (state) => state.advanceInstallFlow,
+  );
 
+  const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");
   const [installError, setInstallError] = useState<string | null>(null);
+  const [showDialog, setShowDialog] = useState(false);
+  const [hasInstalled, setHasInstalled] = useState(false);
 
   const handleInstall = async () => {
     try {
-      await installServiceClient.installMDAIHub({
-        namespace,
-        connectionName,
-        mdaiVersion,
-      });
+      if (!hasInstalled) {
+        await installServiceClient.installMDAIHub({
+          namespace,
+          connectionName,
+          mdaiVersion,
+        });
+
+        setHasInstalled(true);
+      }
+
+      let latestRes: GetInstallStatusResponse | undefined = undefined;
+      let latestError: GetInstallStatusResponse | undefined = undefined;
 
       for await (const res of installServiceClient.getInstallStatus({
         connectionName,
       })) {
         switch (res.installStatus) {
-          case InstallStatus.ERROR:
-            setInstallError(
-              res.details?.map((detail) => detail.message).join("\n"),
-            );
-            return false;
           case InstallStatus.INSTALLED:
             return true;
+          case InstallStatus.TIMEOUT:
+            setDialogStatus("warn");
+            if (latestRes) {
+              setInstallError(
+                latestRes.details
+                  .map(({ name, message }) => `${name}: ${message}`)
+                  .join("\n"),
+              );
+            }
+            return false;
+          case InstallStatus.ERROR:
+            latestError = res;
+            continue;
           default:
+            latestRes = res;
             continue;
         }
       }
 
-      return true;
+      setDialogStatus("error");
+      if (latestError) {
+        setInstallError(
+          latestError.details
+            .map(({ name, message }) => `${name}: ${message}`)
+            .join("\n"),
+        );
+      }
+
+      return false;
     } catch (e) {
       setInstallError(e instanceof Error ? e.message : "Something went wrong");
       return false;
@@ -75,9 +109,12 @@ export function SetupSmarthub() {
           onChange={(e) => setFormField("namespace", e.target.value)}
         />
       </Stack>
-      <ErrorDialog
-        open={!!installError}
-        onClose={() => setInstallError(null)}
+      <SetupSmarthubDialog
+        status={dialogStatus}
+        open={showDialog}
+        onClose={() => setShowDialog(false)}
+        onContinue={advanceInstallFlow}
+        errorInfo={installError}
       />
       <AsyncNextButton
         isSubmit
