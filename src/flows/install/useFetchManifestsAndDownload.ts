@@ -1,61 +1,74 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
+import {
+  DeploymentType,
+  ManifestOutFormat,
+} from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useOctantConnectStore } from "@store";
-import type { ManifestPayload } from "@types";
-import { connections } from "../../services/api";
+import { toMLTTypes } from "@utils/toMltTypes";
+import { connectionServiceClient } from "../../services/connection";
+
+function getManifestBlobPart(data: Uint8Array | string) {
+  const bytes =
+    typeof data === "string"
+      ? Uint8Array.from(atob(data), (char) => char.charCodeAt(0))
+      : new Uint8Array(data);
+
+  return bytes.buffer;
+}
 
 // TODO: Handle error state
-export function useFetchManifestsAndDownload(isSideload?: boolean) {
+export function useFetchManifestsAndDownload() {
   const [loading, setLoading] = useState(false);
   const form = useOctantConnectStore(useShallow((state) => state.form));
+  const timeoutRef = useRef<number | null>(null);
 
-  const { connectionName, telemetryTypes } = form;
+  const { connectionName, telemetryTypes, mdaiVersion, namespace } = form;
 
   const fetchAndDownload = useCallback(
-    (onStart?: () => void, onEnd?: () => void) => {
-      const manifestBody: ManifestPayload = {
-        sourceType: "datadog",
-        telemetryTypes,
-        destinations: [
-          {
-            type: "datadog",
-            integrationName: connectionName!,
-          },
-        ],
-        deployment: {
-          type: isSideload ? "argocd-sideload" : "argocd-manifests",
-          integrationName: connectionName!,
-        },
-      };
-
+    async (onStart?: () => void, onEnd?: () => void) => {
       onStart?.();
       setLoading(true);
-      void connections
-        .generateManifests(connectionName!, manifestBody)
-        .then(async (res) => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
 
-          const disposition = res.headers.get("Content-Disposition");
-          const filename =
-            disposition?.match(/filename="?([^"]+)"?/)?.[1] ??
-            `${connectionName}-manifests.yaml`;
+      const chunks: BlobPart[] = [];
+      let mimeType = "";
 
-          const blob = await res.blob();
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = filename;
-          a.click();
-          URL.revokeObjectURL(url);
+      for await (const res of connectionServiceClient.generateManifests({
+        scope: {
+          connectionName,
+          namespace,
+        },
+        telemetryTypes: toMLTTypes(telemetryTypes),
+        format: ManifestOutFormat.YAML,
+        deploymentType: DeploymentType.ARGO_SIDELOAD,
+        mdaiVersion,
+      })) {
+        chunks.push(getManifestBlobPart(res.data));
+        mimeType = res.type;
+      }
+
+      const blob = new Blob(chunks, { type: mimeType });
+      const extension = mimeType.includes("zip") ? "zip" : "yaml";
+      const filename = `${connectionName}-manifests.${extension}`;
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      await new Promise<void>((resolve) => {
+        timeoutRef.current = setTimeout(() => {
+          URL.revokeObjectURL(downloadUrl);
           document.body.removeChild(a);
-        })
-        .finally(() => {
-          setLoading(false);
-          onEnd?.();
-        });
+          resolve();
+        }, 60_000);
+      });
+      setLoading(false);
+      onEnd?.();
     },
-    [connectionName, telemetryTypes, isSideload],
+    [connectionName, telemetryTypes, namespace, mdaiVersion],
   );
 
   const returnValues = useMemo(() => {
@@ -65,5 +78,12 @@ export function useFetchManifestsAndDownload(isSideload?: boolean) {
     };
   }, [loading, fetchAndDownload]);
 
+  useEffect(() => {
+    if (timeoutRef.current) {
+      return () => {
+        clearTimeout(timeoutRef.current!);
+      };
+    }
+  }, []);
   return returnValues;
 }
