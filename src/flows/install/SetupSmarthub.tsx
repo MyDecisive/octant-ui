@@ -9,7 +9,8 @@ import {
   InstallStatus,
   type GetInstallStatusResponse,
 } from "@mydecisiveai/octant-client";
-import { useOctantConnectStore } from "@store";
+import { useConnectStore } from "@store/connectStore";
+import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useState } from "react";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
@@ -22,15 +23,14 @@ const formSpec: FormFields = {
 
 export function SetupSmarthub() {
   const { callbacks, fieldErrors } = useFormValidation(formSpec);
-  const namespace = useOctantConnectStore((state) => state.form.namespace);
-  const connectionName = useOctantConnectStore(
-    (state) => state.form.connectionName,
-  );
-  const mdaiVersion = useOctantConnectStore((state) => state.form.mdaiVersion);
-  const setFormField = useOctantConnectStore((state) => state.setFormField);
-  const advanceInstallFlow = useOctantConnectStore(
+  const namespace = useConnectStore((state) => state.form.namespace);
+  const connectionName = useConnectStore((state) => state.form.connectionName);
+  const mdaiVersion = useConnectStore((state) => state.form.mdaiVersion);
+  const setFormField = useConnectStore((state) => state.setFormField);
+  const advanceInstallFlow = useConnectStore(
     (state) => state.advanceInstallFlow,
   );
+  const setState = useOctantStore((state) => state.setState);
 
   const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");
   const [installError, setInstallError] = useState<string | null>(null);
@@ -57,6 +57,7 @@ export function SetupSmarthub() {
       })) {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
+            setState("namespace", namespace);
             return true;
           case InstallStatus.TIMEOUT:
             setDialogStatus("warn");
@@ -98,6 +99,11 @@ export function SetupSmarthub() {
     }
   };
 
+  const handleContinueFromDialog = () => {
+    setState("namespace", namespace);
+    advanceInstallFlow();
+  };
+
   return (
     <FlowCenterColumn isForm>
       <ViewTitle
@@ -118,7 +124,7 @@ export function SetupSmarthub() {
         status={dialogStatus}
         open={showDialog}
         onClose={() => setShowDialog(false)}
-        onContinue={advanceInstallFlow}
+        onContinue={handleContinueFromDialog}
         errorInfo={installError}
       />
       <AsyncNextButton

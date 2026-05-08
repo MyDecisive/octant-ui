@@ -1,4 +1,4 @@
-import { useOctantConnectStore } from "@store";
+import { useConnectStore } from "@store/connectStore";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/install";
 import { StepperNav } from "./StepperNav";
 
@@ -9,8 +9,8 @@ const flowSteps = flowStepKeys.map((key) => ({
 }));
 
 export function FlowContainer() {
-  const activeView = useOctantConnectStore((state) => state.activeView);
-  const setActiveView = useOctantConnectStore((state) => state.setActiveView);
+  const activeView = useConnectStore((state) => state.activeView);
+  const setActiveView = useConnectStore((state) => state.setActiveView);
 
   const { Component } = VIEW_MAP[activeView];
 

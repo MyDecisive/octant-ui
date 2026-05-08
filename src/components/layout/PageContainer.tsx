@@ -1,13 +1,16 @@
+import { Select, type SelectOption } from "@components/formInputs/Select";
 import { PageNav } from "@components/PageNav";
-import { Timepicker } from "@components/Timepicker";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useOctantStore } from "@store/octantStore";
 import type { TimeRange } from "@types";
-import { useState } from "react";
+import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/ROUTES";
+import { timeframeServiceClient } from "../../services/timeframe";
 import "./PageContainer.css";
 
 const locationTitleMap = {
@@ -17,11 +20,45 @@ const locationTitleMap = {
 };
 
 export function PageContainer({ children }: { children: React.ReactNode }) {
+  const { timeRange, namespace, connectionName } = useOctantStore((store) => {
+    const { timeRange, namespace, connectionName } = store;
+
+    return { timeRange: String(timeRange), namespace, connectionName };
+  });
+
+  const setState = useOctantStore((store) => store.setState);
   const [location] = useLocation();
-  const [selectedRange, setSelectedRange] = useState<TimeRange>("today");
+
+  const [pickerOptions, setPickerOptions] = useState<SelectOption[]>([]);
+
+  const setSelectedRange = (newRange: TimeRange) =>
+    setState("timeRange", newRange);
 
   const showTimepicker = location === ROUTES.CLARITY;
   const title = locationTitleMap[location];
+
+  useEffect(() => {
+    if (pickerOptions.length < 1) {
+      async function fetchPickerOptions() {
+        const {
+          statuses,
+          // TODO: figure out how best to use these flags
+          // trace,
+          // log,
+        } = await timeframeServiceClient.timeframeStatus({
+          namespace,
+          connectionName,
+        });
+
+        const options = timeframeToPickerOptions(statuses);
+
+        setPickerOptions(options);
+      }
+
+      void fetchPickerOptions();
+    }
+  }, [pickerOptions, namespace, connectionName]);
+
   return (
     <Box className="page-container">
       <PageNav />
@@ -36,9 +73,13 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
               {title}
             </Typography>
             {showTimepicker && (
-              <Timepicker
-                value={selectedRange}
+              <Select
+                selected={timeRange}
                 onChange={(e) => setSelectedRange(e.target.value as TimeRange)}
+                options={pickerOptions}
+                className="mdai-timepicker"
+                label="Time range"
+                size="small"
               />
             )}
           </Stack>

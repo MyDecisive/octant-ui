@@ -6,7 +6,7 @@ import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useOctantConnectStore } from "@store";
+import { useConnectStore } from "@store/connectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { createForwardDataSnippets } from "../createForwardDataSnippets";
@@ -14,15 +14,14 @@ import { createForwardDataSnippets } from "../createForwardDataSnippets";
 export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(false);
 
-  const { telemetryTypes, connectionName, url, namespace } =
-    useOctantConnectStore(
-      useShallow((state) => ({
-        connectionName: state.form.connectionName,
-        url: state.form.url,
-        namespace: state.form.namespace,
-        telemetryTypes: state.form.telemetryTypes,
-      })),
-    );
+  const { telemetryTypes, connectionName, url, namespace } = useConnectStore(
+    useShallow((state) => ({
+      connectionName: state.form.connectionName,
+      url: state.form.url,
+      namespace: state.form.namespace,
+      telemetryTypes: state.form.telemetryTypes,
+    })),
+  );
   const { locationUrl, code } = createForwardDataSnippets({
     connectionName: connectionName!,
     url: url!,

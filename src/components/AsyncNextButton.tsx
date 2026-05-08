@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import { useOctantConnectStore } from "@store";
+import { useConnectStore } from "@store/connectStore";
 import { useState } from "react";
 
 interface AsyncButtonProps {
@@ -18,7 +18,7 @@ export function AsyncNextButton({
   isSubmit,
 }: AsyncButtonProps) {
   const [loading, setLoading] = useState(false);
-  const advanceInstallFlow = useOctantConnectStore(
+  const advanceInstallFlow = useConnectStore(
     (state) => state.advanceInstallFlow,
   );
 

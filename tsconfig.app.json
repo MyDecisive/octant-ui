@@ -4,7 +4,7 @@
       "@components/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
       "@types": ["./src/types.ts"],
-      "@store": ["./src/store/store.ts"]
+      "@store/*": ["./src/store/*"]
     },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",

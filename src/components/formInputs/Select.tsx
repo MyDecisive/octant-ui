@@ -1,14 +1,13 @@
+import { RichMenuItem } from "@components/RichMenuItem";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import Chip, { type ChipProps } from "@mui/material/Chip";
+import { type ChipProps } from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import MuiSelect, {
   type SelectProps as MuiSelectProps,
   type SelectChangeEvent,
 } from "@mui/material/Select";
-import Typography from "@mui/material/Typography";
 import classNames from "classnames";
 import "./Select.css";
 
@@ -64,15 +63,14 @@ export function Select({
         }}
       >
         {options.map(({ label, value, chip, helperText: optionHelperText }) => (
-          <MenuItem className="mdai-select-menu-item" key={value} value={value}>
-            <span>{label || value}</span>
-            {chip && <Chip {...chip} />}
-            {optionHelperText && (
-              <Typography className="option-helper-text" color="textDisabled">
-                {optionHelperText}
-              </Typography>
-            )}
-          </MenuItem>
+          <RichMenuItem
+            className="mdai-select-menu-item"
+            key={value}
+            label={label}
+            chip={chip}
+            value={value}
+            helperText={optionHelperText}
+          />
         ))}
       </MuiSelect>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}

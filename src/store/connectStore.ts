@@ -30,7 +30,7 @@ interface Actions {
 
 type OctantConnectStore = Values & Actions;
 
-function createDefaultOctantConnectForm(): AppStateForm {
+function createDefaultConnectForm(): AppStateForm {
   return {
     argoAgreement: false,
     namespace: "mdai",
@@ -39,21 +39,21 @@ function createDefaultOctantConnectForm(): AppStateForm {
   };
 }
 
-function createDefaultOctantConnectState() {
+function createDefaultConnectState() {
   return {
     activeView: "argoInstall",
-    form: createDefaultOctantConnectForm(),
+    form: createDefaultConnectForm(),
   };
 }
 
-export const useOctantConnectStore = create<OctantConnectStore>()((set) => ({
-  ...createDefaultOctantConnectState(),
+export const useConnectStore = create<OctantConnectStore>()((set) => ({
+  ...createDefaultConnectState(),
   setActiveView: (newView) =>
     set((state) => ({ ...state, activeView: newView })),
   setFormField: (key, value) =>
     set((state) => ({ ...state, form: { ...state.form, [key]: value } })),
   resetForm: () =>
-    set((state) => ({ ...state, form: createDefaultOctantConnectForm() })),
+    set((state) => ({ ...state, form: createDefaultConnectForm() })),
   advanceInstallFlow: () => {
     set((state) => {
       const currentView = state.activeView;

@@ -1,6 +1,6 @@
 import { Accordion } from "@components/Accordion";
 import Stack from "@mui/material/Stack";
-import { useOctantConnectStore } from "@store";
+import { useConnectStore } from "@store/connectStore";
 import classNames from "classnames";
 import { useShallow } from "zustand/shallow";
 import {
@@ -15,7 +15,7 @@ interface ConfigDrawerProps {
 }
 
 export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
-  const { telemetryTypes, url, apiKey, connectionName } = useOctantConnectStore(
+  const { telemetryTypes, url, apiKey, connectionName } = useConnectStore(
     useShallow((state) => {
       const { telemetryTypes, url, apiKey, connectionName } = state.form;
 

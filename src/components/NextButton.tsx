@@ -1,10 +1,10 @@
 import Button from "@mui/material/Button";
-import { useOctantConnectStore } from "@store";
+import { useConnectStore } from "@store/connectStore";
 import { VIEW_ORDER } from "../flows/install";
 
 export function NextButton({ disabled }: { disabled: boolean }) {
-  const activeView = useOctantConnectStore((state) => state.activeView);
-  const setActiveView = useOctantConnectStore((state) => state.setActiveView);
+  const activeView = useConnectStore((state) => state.activeView);
+  const setActiveView = useConnectStore((state) => state.setActiveView);
 
   const onClickProgress = () => {
     const currentViewIdx = VIEW_ORDER.indexOf(activeView);
