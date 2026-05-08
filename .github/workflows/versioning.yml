@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
   REPO_ORGANIZATION: "MyDecisive"
   OCTANT_REPO: "octant"
