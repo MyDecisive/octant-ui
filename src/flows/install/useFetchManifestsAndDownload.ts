@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 import {
@@ -9,12 +9,22 @@ import { useConnectStore } from "@store/connectStore";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { connectionServiceClient } from "../../services/connection";
 
+function getManifestBlobPart(data: Uint8Array | string) {
+  const bytes =
+    typeof data === "string"
+      ? Uint8Array.from(atob(data), (char) => char.charCodeAt(0))
+      : new Uint8Array(data);
+
+  return bytes.buffer;
+}
+
 // TODO: Handle error state
 export function useFetchManifestsAndDownload() {
   const [loading, setLoading] = useState(false);
   const form = useConnectStore(useShallow((state) => state.form));
 
   const { connectionName, telemetryTypes, mdaiVersion, namespace } = form;
+  const timeoutRef = useRef<number | null>(null);
 
   const fetchAndDownload = useCallback(
     async (onStart?: () => void, onEnd?: () => void) => {
@@ -71,7 +81,7 @@ export function useFetchManifestsAndDownload() {
   useEffect(() => {
     if (timeoutRef.current) {
       return () => {
-        clearTimeout(timeoutRef.current);
+        clearTimeout(timeoutRef.current!);
       };
     }
   }, []);

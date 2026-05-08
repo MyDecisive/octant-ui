@@ -8,7 +8,7 @@ import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import { Typography } from "@mui/material";
 import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
-import { useOctantConnectStore } from "@store";
+import { useConnectStore } from "@store/connectStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { connectionServiceClient } from "../../services/connection";
@@ -62,7 +62,7 @@ export function VerifyConnection() {
 
   const timeoutRef = useRef<number | null>(null);
 
-  const { connectionName, namespace } = useOctantConnectStore(
+  const { connectionName, namespace } = useConnectStore(
     useShallow((state) => ({
       connectionName: state.form.connectionName,
       namespace: state.form.namespace,

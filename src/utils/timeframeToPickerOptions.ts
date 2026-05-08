@@ -29,7 +29,7 @@ const codeToChip: Record<
     size: "small",
   },
 };
-
+// TODO: selected item annotations per designs
 export function timeframeToPickerOptions(
   statuses: TimeframeStatusResponse_Status[],
 ): SelectOption[] {
