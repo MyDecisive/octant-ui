@@ -7,6 +7,8 @@ import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+import { IntegrationType } from "@mydecisiveai/octant-client";
+import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useOctantConnectStore } from "@store";
 import type { FormFields, TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
@@ -50,34 +52,26 @@ const formSpec: FormFields = {
 
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
-  const {
-    telemetryTypes,
-    url,
-    apiKey,
-    connectionName,
-    namespace,
-    mdaiVersion,
-  } = useOctantConnectStore(
-    useShallow((state) => {
-      // Provide default empty string values so React recognizes the Inputs as controlled
-      const {
-        telemetryTypes,
-        url = "",
-        apiKey = "",
-        connectionName,
-        namespace,
-        mdaiVersion,
-      } = state.form;
-      return {
-        telemetryTypes,
-        url,
-        apiKey,
-        connectionName,
-        namespace,
-        mdaiVersion,
-      };
-    }),
-  );
+  const { telemetryTypes, url, apiKey, connectionName, namespace } =
+    useOctantConnectStore(
+      useShallow((state) => {
+        // Provide default empty string values so React recognizes the Inputs as controlled
+        const {
+          telemetryTypes,
+          url = "",
+          apiKey = "",
+          connectionName,
+          namespace,
+        } = state.form;
+        return {
+          telemetryTypes,
+          url,
+          apiKey,
+          connectionName,
+          namespace,
+        };
+      }),
+    );
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
@@ -92,42 +86,24 @@ export function DeployCollector() {
         name: connectionName,
       });
 
-      const chunks: Uint8Array[] = [];
-      let total = BigInt(0);
-      let mimeType = "";
-
-      for await (const res of connectionServiceClient.generateManifests({
+      await connectionServiceClient.createConnection({
         scope: {
           connectionName,
           namespace,
         },
         telemetryTypes: toMLTTypes(telemetryTypes),
-        format: 2, // yaml
-        deploymentType: 1, // sideload
-        mdaiVersion,
-      })) {
-        chunks.push(res.data);
-        total = res.total;
-        mimeType = res.type;
-      }
+        deployment: {
+          type: DeploymentType.ARGO_SIDELOAD,
+          integrationName: connectionName,
+        },
+        destinations: [
+          {
+            type: IntegrationType.DATADOG,
+            integrationName: connectionName,
+          },
+        ],
+      });
 
-      const combined = new Uint8Array(Number(total));
-      let offset = 0;
-      for (const chunk of chunks) {
-        combined.set(chunk, offset);
-        offset += chunk.byteLength;
-      }
-
-      const blob = new Blob([combined], { type: mimeType });
-      const extension = mimeType.includes("zip") ? "zip" : "yaml";
-      const filename = `${connectionName}-manifests.${extension}`;
-      const downloadUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = downloadUrl;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(downloadUrl);
-      document.body.removeChild(a);
       return true;
       // eslint-disable-next-line
     } catch (_) {
