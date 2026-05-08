@@ -67,6 +67,9 @@ export function SetupSmarthub() {
                   .join("\n"),
               );
             }
+
+            setShowDialog(true);
+
             return false;
           case InstallStatus.ERROR:
             latestError = res;
@@ -85,6 +88,8 @@ export function SetupSmarthub() {
             .join("\n"),
         );
       }
+
+      setShowDialog(true);
 
       return false;
     } catch (e) {
