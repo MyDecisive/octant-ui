@@ -7,6 +7,8 @@ import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+import { IntegrationType } from "@mydecisiveai/octant-client";
+import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useOctantConnectStore } from "@store";
 import type { FormFields, TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
@@ -48,45 +50,28 @@ const formSpec: FormFields = {
   apiKey: [validateRequired],
 };
 
-function getManifestBlobPart(data: Uint8Array | string) {
-  const bytes =
-    typeof data === "string"
-      ? Uint8Array.from(atob(data), (char) => char.charCodeAt(0))
-      : new Uint8Array(data);
-
-  return bytes.buffer;
-}
-
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
-  const {
-    telemetryTypes,
-    url,
-    apiKey,
-    connectionName,
-    namespace,
-    mdaiVersion,
-  } = useOctantConnectStore(
-    useShallow((state) => {
-      // Provide default empty string values so React recognizes the Inputs as controlled
-      const {
-        telemetryTypes,
-        url = "",
-        apiKey = "",
-        connectionName,
-        namespace,
-        mdaiVersion,
-      } = state.form;
-      return {
-        telemetryTypes,
-        url,
-        apiKey,
-        connectionName,
-        namespace,
-        mdaiVersion,
-      };
-    }),
-  );
+  const { telemetryTypes, url, apiKey, connectionName, namespace } =
+    useOctantConnectStore(
+      useShallow((state) => {
+        // Provide default empty string values so React recognizes the Inputs as controlled
+        const {
+          telemetryTypes,
+          url = "",
+          apiKey = "",
+          connectionName,
+          namespace,
+        } = state.form;
+        return {
+          telemetryTypes,
+          url,
+          apiKey,
+          connectionName,
+          namespace,
+        };
+      }),
+    );
   const setFormField = useOctantConnectStore((state) => state.setFormField);
 
   const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
@@ -101,37 +86,27 @@ export function DeployCollector() {
         name: connectionName,
       });
 
-      const chunks: BlobPart[] = [];
-      let mimeType = "";
-
-      for await (const res of connectionServiceClient.generateManifests({
+      await connectionServiceClient.createConnection({
         scope: {
           connectionName,
           namespace,
         },
         telemetryTypes: toMLTTypes(telemetryTypes),
-        format: 2, // yaml
-        deploymentType: 1, // sideload
-        mdaiVersion,
-      })) {
-        chunks.push(getManifestBlobPart(res.data));
-        mimeType = res.type;
-      }
+        deployment: {
+          type: DeploymentType.ARGO_SIDELOAD,
+          integrationName: connectionName,
+        },
+        destinations: [
+          {
+            type: IntegrationType.DATADOG,
+            integrationName: connectionName,
+          },
+        ],
+      });
 
-      const blob = new Blob(chunks, { type: mimeType });
-      const extension = mimeType.includes("zip") ? "zip" : "yaml";
-      const filename = `${connectionName}-manifests.${extension}`;
-      const downloadUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = downloadUrl;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
       return true;
-    } catch (error) {
-      console.error("Failed to generate and download manifests", error);
+      // eslint-disable-next-line
+    } catch (_) {
       return false;
     }
   };
