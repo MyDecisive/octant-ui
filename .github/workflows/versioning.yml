@@ -8,6 +8,14 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  REPO_ORGANIZATION: "MyDecisive"
+  OCTANT_REPO: "octant"
+
 jobs:
   gh-tag:
     if: github.event.pull_request.merged == true
@@ -21,7 +29,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: '0'  # 0 is needed to get all tags
-
       - name: Bump version and push tag
         id: bump_version
         uses: anothrNick/github-tag-action@1.75.0
@@ -43,3 +50,24 @@ jobs:
     with:
       ref: refs/tags/${{ needs.gh-tag.outputs.new_tag }}
     secrets: inherit # pass all secrets
+  trigger-octant:
+    needs: [gh-tag, docker-tag]
+    name: Trigger Octant Build
+    if: needs.gh-tag.outputs.new_tag != ''
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.INTERNAL_WRITE_ACCESS_GH_APP_ID }}
+          private-key: ${{ secrets.INTERNAL_WRITE_ACCESS_GH_APP_PRIVATE_KEY }}
+          owner: ${{ env.REPO_ORGANIZATION }}
+          repositories: ${{ env.OCTANT_REPO }}
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          repository: ${{ env.REPO_ORGANIZATION }}/${{ env.OCTANT_REPO }}
+          event-type: build-and-publish
+          client-payload: '{"ui-ver": "${{needs.gh-tag.outputs.new_tag }}"}'
