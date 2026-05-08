@@ -48,6 +48,15 @@ const formSpec: FormFields = {
   apiKey: [validateRequired],
 };
 
+function getManifestBlobPart(data: Uint8Array | string) {
+  const bytes =
+    typeof data === "string"
+      ? Uint8Array.from(atob(data), (char) => char.charCodeAt(0))
+      : new Uint8Array(data);
+
+  return bytes.buffer;
+}
+
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
   const {
@@ -92,8 +101,7 @@ export function DeployCollector() {
         name: connectionName,
       });
 
-      const chunks: Uint8Array[] = [];
-      let total = BigInt(0);
+      const chunks: BlobPart[] = [];
       let mimeType = "";
 
       for await (const res of connectionServiceClient.generateManifests({
@@ -106,31 +114,24 @@ export function DeployCollector() {
         deploymentType: 1, // sideload
         mdaiVersion,
       })) {
-        chunks.push(res.data);
-        total = res.total;
+        chunks.push(getManifestBlobPart(res.data));
         mimeType = res.type;
       }
 
-      const combined = new Uint8Array(Number(total));
-      let offset = 0;
-      for (const chunk of chunks) {
-        combined.set(chunk, offset);
-        offset += chunk.byteLength;
-      }
-
-      const blob = new Blob([combined], { type: mimeType });
+      const blob = new Blob(chunks, { type: mimeType });
       const extension = mimeType.includes("zip") ? "zip" : "yaml";
       const filename = `${connectionName}-manifests.${extension}`;
       const downloadUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
       a.download = filename;
+      document.body.appendChild(a);
       a.click();
-      URL.revokeObjectURL(downloadUrl);
-      document.body.removeChild(a);
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
       return true;
-      // eslint-disable-next-line
-    } catch (_) {
+    } catch (error) {
+      console.error("Failed to generate and download manifests", error);
       return false;
     }
   };
