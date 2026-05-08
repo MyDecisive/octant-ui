@@ -35,14 +35,19 @@ export function SetupSmarthub() {
   const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");
   const [installError, setInstallError] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState(false);
+  const [hasInstalled, setHasInstalled] = useState(false);
 
   const handleInstall = async () => {
     try {
-      await installServiceClient.installMDAIHub({
-        namespace,
-        connectionName,
-        mdaiVersion,
-      });
+      if (!hasInstalled) {
+        await installServiceClient.installMDAIHub({
+          namespace,
+          connectionName,
+          mdaiVersion,
+        });
+
+        setHasInstalled(true);
+      }
 
       let latestRes: GetInstallStatusResponse | undefined = undefined;
       let latestError: GetInstallStatusResponse | undefined = undefined;
