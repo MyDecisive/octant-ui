@@ -25,7 +25,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: '0'  # 0 is needed to get all tags
-
       - name: Bump version and push tag
         id: bump_version
         uses: anothrNick/github-tag-action@1.75.0
@@ -49,10 +48,9 @@ jobs:
     secrets: inherit # pass all secrets
   trigger-octant:
     needs: [gh-tag, docker-tag]
-    if: needs.gh-tag.outputs.new_tag != ''
     name: Trigger Octant Build
+    if: needs.gh-tag.outputs.new_tag != ''
     runs-on: ubuntu-24.04
-    needs: push
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@v2
