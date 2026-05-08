@@ -2,11 +2,6 @@ import type { JSX } from "react";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
-export interface BaseFlowViewProps {
-  onClickProgress: () => void;
-  viewKey: string;
-}
-
 export type IntegrationType = "datadog" | "argocd";
 export type TelemetryTypes = "logs" | "metrics" | "traces";
 
@@ -51,7 +46,7 @@ export interface FidelityState {
 export type ViewMap = Record<
   string,
   {
-    Component: (props: BaseFlowViewProps) => JSX.Element;
+    Component: () => JSX.Element;
     label: string;
   }
 >;

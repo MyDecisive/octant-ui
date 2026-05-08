@@ -5,6 +5,7 @@ import { DeployCollector } from "./install/DeployCollector";
 import { NextSteps } from "./install/NextSteps";
 import { SetupSmarthub } from "./install/SetupSmarthub";
 import { UpdateAgent } from "./install/UpdateAgent";
+import { VerifyConnection } from "./install/VerifyConnection";
 
 export const VIEW_MAP: ViewMap = {
   argoInstall: {
@@ -31,6 +32,10 @@ export const VIEW_MAP: ViewMap = {
     Component: NextSteps,
     label: "Next steps",
   },
+  verifyConnection: {
+    Component: VerifyConnection,
+    label: "Verify connection and data",
+  },
 };
 
 export const VIEW_ORDER: ViewOrder = [
@@ -39,5 +44,6 @@ export const VIEW_ORDER: ViewOrder = [
   "setupSmarthub",
   "deployCollector",
   "updateAgent",
+  "verifyConnection",
   "nextSteps",
 ];
