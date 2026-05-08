@@ -3,7 +3,7 @@ import { AsyncNextButton } from "@components/AsyncNextButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 import type { FormFields } from "@types";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";

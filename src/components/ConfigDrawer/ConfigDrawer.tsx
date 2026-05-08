@@ -1,6 +1,6 @@
 import { Accordion } from "@components/Accordion";
 import Stack from "@mui/material/Stack";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 import classNames from "classnames";
 import { useShallow } from "zustand/shallow";
 import {

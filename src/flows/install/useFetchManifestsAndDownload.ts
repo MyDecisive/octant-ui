@@ -5,18 +5,9 @@ import {
   DeploymentType,
   ManifestOutFormat,
 } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { connectionServiceClient } from "../../services/connection";
-
-function getManifestBlobPart(data: Uint8Array | string) {
-  const bytes =
-    typeof data === "string"
-      ? Uint8Array.from(atob(data), (char) => char.charCodeAt(0))
-      : new Uint8Array(data);
-
-  return bytes.buffer;
-}
 
 // TODO: Handle error state
 export function useFetchManifestsAndDownload() {

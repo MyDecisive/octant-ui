@@ -6,7 +6,7 @@ import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { createForwardDataSnippets } from "../createForwardDataSnippets";

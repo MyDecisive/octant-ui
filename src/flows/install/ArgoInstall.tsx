@@ -3,7 +3,7 @@ import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 
 export function ArgoInstall() {
   const argoAgreement = useOctantConnectStore(

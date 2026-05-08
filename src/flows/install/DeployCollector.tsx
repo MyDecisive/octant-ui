@@ -9,7 +9,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 import type { FormFields, TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useState } from "react";

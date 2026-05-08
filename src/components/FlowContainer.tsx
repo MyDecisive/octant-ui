@@ -1,5 +1,5 @@
-import { useOctantConnectStore } from "@store";
 import { VIEW_MAP, VIEW_ORDER } from "../flows/install";
+import { useOctantConnectStore } from "../store/connectStore";
 import { StepperNav } from "./StepperNav";
 
 const flowStepKeys = VIEW_ORDER.filter((step) => VIEW_MAP[step].label);

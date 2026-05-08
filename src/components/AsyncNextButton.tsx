@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
-import { useOctantConnectStore } from "@store";
 import { useState } from "react";
+import { useOctantConnectStore } from "../store/connectStore";
 
 interface AsyncButtonProps {
   asyncFunction: () => Promise<boolean>;

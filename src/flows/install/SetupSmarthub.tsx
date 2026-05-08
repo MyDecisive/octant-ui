@@ -9,7 +9,7 @@ import {
   InstallStatus,
   type GetInstallStatusResponse,
 } from "@mydecisiveai/octant-client";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 import type { FormFields } from "@types";
 import { useState } from "react";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";

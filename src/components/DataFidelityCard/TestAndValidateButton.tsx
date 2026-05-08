@@ -1,6 +1,6 @@
 import Button, { type ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useOctantConnectStore } from "@store";
+import { useOctantConnectStore } from "@store/connectStore";
 import type { FidelityState } from "@types";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { useShallow } from "zustand/shallow";

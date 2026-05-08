@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
-import { useOctantConnectStore } from "@store";
 import { VIEW_ORDER } from "../flows/install";
+import { useOctantConnectStore } from "../store/connectStore";
 
 export function NextButton({ disabled }: { disabled: boolean }) {
   const activeView = useOctantConnectStore((state) => state.activeView);
