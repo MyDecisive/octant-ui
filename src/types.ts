@@ -1,9 +1,11 @@
+import { type Filter as ClientFilter } from "@mydecisiveai/octant-client";
 import type { JSX } from "react";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
 export type IntegrationType = "datadog" | "argocd";
 export type TelemetryTypes = "logs" | "metrics" | "traces";
+export type FilterTypes = "logs" | "traces";
 
 interface Destination {
   type: "datadog";
@@ -82,3 +84,10 @@ export type FieldErrorsMap = Record<
   keyof FormFields,
   InputValidationErrors | null
 >;
+
+export interface Filter extends Pick<
+  ClientFilter,
+  "includeErr" | "pctSampled"
+> {
+  type: FilterTypes;
+}
