@@ -58,6 +58,10 @@ export function Select({
         disabled={disabled}
         onChange={onChange}
         IconComponent={KeyboardArrowDown}
+        renderValue={(value) => {
+          const valueOption = options.find((opt) => opt.value === value);
+          return <RichMenuItem value={value} {...valueOption} />;
+        }}
         MenuProps={{
           className: "mdai-select-menu-options-container",
         }}

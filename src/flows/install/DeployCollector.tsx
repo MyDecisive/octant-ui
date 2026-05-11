@@ -125,6 +125,7 @@ export function DeployCollector() {
         <Select
           label="Data source"
           selected="datadog"
+          size="small"
           disabled
           options={dataSourceOptions}
           onChange={() => null}
@@ -159,6 +160,7 @@ export function DeployCollector() {
         <Select
           label="Data destination"
           selected="datadog"
+          size="small"
           disabled
           options={dataSourceOptions}
           onChange={() => null}
