@@ -18,6 +18,7 @@ import {
   type SpanData,
   type SummaryData,
 } from "./constants";
+import { useManageFilters } from "./useManageFilters";
 
 function rowMatchesSearch(row: LogData | SpanData, query: string) {
   const normalizedQuery = query.trim().toLocaleLowerCase();
@@ -35,14 +36,7 @@ export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
   const [searchLoading, setSearchLoading] = useState(false);
-  const [logFilters, setLogFilters] = useState<{
-    volumeFilter?: number;
-    persistErrors?: boolean;
-  }>({});
-  const [traceFilters, setTraceFilters] = useState<{
-    volumeFilter?: number;
-    persistErrors?: boolean;
-  }>({});
+  const { logs, traces } = useManageFilters();
   const normalizedSearchQuery = searchQuery.trim();
   const hasClarityContent =
     summaryData.length > 0 || logData.length > 0 || spanData.length > 0;
@@ -151,20 +145,15 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
-                onApplyFilter={(volume, persist) => {
-                  setLogFilters({
-                    volumeFilter: volume,
-                    persistErrors: persist,
-                  });
-                  console.log("apply log filter changes ", { volume, persist });
-                }}
+                onApplyFilter={logs.updateLogsFilter}
                 title={"Log filters"}
                 unit={"GB"}
                 received={100}
                 sent={50}
                 filtered={50}
-                pctSampled={logFilters.volumeFilter}
-                includeErr={logFilters.persistErrors}
+                pctSampled={logs.pctSampled}
+                loading={logs.loading}
+                includeErr={logs.includeErr}
               />
             )}
             {spanData.length === 0 ? (
@@ -178,23 +167,15 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
-                onApplyFilter={(volume, persist) => {
-                  setTraceFilters({
-                    volumeFilter: volume,
-                    persistErrors: persist,
-                  });
-                  console.log("apply trace filter changes ", {
-                    volume,
-                    persist,
-                  });
-                }}
+                onApplyFilter={traces.updateTracesFilter}
                 title={"Traces filters"}
                 unit={"MM Spans"}
                 received={100}
                 sent={50}
                 filtered={50}
-                pctSampled={traceFilters.volumeFilter}
-                includeErr={traceFilters.persistErrors}
+                pctSampled={traces.pctSampled}
+                loading={traces.loading}
+                includeErr={traces.includeErr}
               />
             )}
           </Stack>

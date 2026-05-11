@@ -19,7 +19,8 @@ interface FilterCardProps {
   unit: string;
   pctSampled?: number;
   includeErr?: boolean;
-  onApplyFilter: (pctSampled: number, includeErr: boolean) => void;
+  loading?: boolean;
+  onApplyFilter: (pctSampled: number, includeErr: boolean) => Promise<void>;
 }
 
 export function FilterCard({
@@ -28,6 +29,7 @@ export function FilterCard({
   sent,
   filtered,
   pctSampled,
+  loading,
   includeErr,
   unit,
   onApplyFilter,
@@ -54,7 +56,7 @@ export function FilterCard({
   };
 
   const handleApply = () => {
-    onApplyFilter(sampleRate, persist);
+    void onApplyFilter(sampleRate, persist);
   };
   return (
     <Accordion
@@ -99,6 +101,7 @@ export function FilterCard({
           >
             <Button
               disabled={noValueHasBeenChanged}
+              loading={loading}
               onClick={handleCancel}
               variant="text"
               color="inherit"
@@ -108,6 +111,7 @@ export function FilterCard({
             </Button>
             <Button
               disabled={noValueHasBeenChanged}
+              loading={loading}
               onClick={handleApply}
               variant="text"
               size="small"

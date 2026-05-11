@@ -21,13 +21,13 @@ export function FilterCardTitle({
     <Stack direction={"row"} alignItems={"center"} gap={2}>
       <Typography variant="body1">{title}</Typography>
       <Stack direction={"row"} alignItems={"center"} gap={1}>
-        {includeErr == null && pctSampled == null && (
+        {!includeErr && !pctSampled && (
           <Chip label="None applied" disabled {...chipProps} />
         )}
         {includeErr && (
           <Chip label={"Keep errors"} color="success" {...chipProps} />
         )}
-        {pctSampled != null && (
+        {pctSampled && (
           <Chip
             label={`${pctSampled.toLocaleString()}%`}
             color="success"
