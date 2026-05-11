@@ -163,8 +163,8 @@ export function ClarityPage() {
                 received={100}
                 sent={50}
                 filtered={50}
-                volumeFilter={logFilters.volumeFilter}
-                persistErrors={logFilters.persistErrors}
+                pctSampled={logFilters.volumeFilter}
+                includeErr={logFilters.persistErrors}
               />
             )}
             {spanData.length === 0 ? (
@@ -193,8 +193,8 @@ export function ClarityPage() {
                 received={100}
                 sent={50}
                 filtered={50}
-                volumeFilter={traceFilters.volumeFilter}
-                persistErrors={traceFilters.persistErrors}
+                pctSampled={traceFilters.volumeFilter}
+                includeErr={traceFilters.persistErrors}
               />
             )}
           </Stack>

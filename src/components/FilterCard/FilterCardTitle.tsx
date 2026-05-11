@@ -10,26 +10,26 @@ const chipProps: Partial<ChipProps> = {
 
 export function FilterCardTitle({
   title,
-  persistErrors,
-  volumeFilter,
+  includeErr,
+  pctSampled,
 }: {
-  volumeFilter?: number;
-  persistErrors?: boolean;
+  pctSampled?: number;
+  includeErr?: boolean;
   title: string;
 }) {
   return (
     <Stack direction={"row"} alignItems={"center"} gap={2}>
       <Typography variant="body1">{title}</Typography>
       <Stack direction={"row"} alignItems={"center"} gap={1}>
-        {persistErrors == null && volumeFilter == null && (
+        {includeErr == null && pctSampled == null && (
           <Chip label="None applied" disabled {...chipProps} />
         )}
-        {persistErrors && (
+        {includeErr && (
           <Chip label={"Keep errors"} color="success" {...chipProps} />
         )}
-        {volumeFilter != null && (
+        {pctSampled != null && (
           <Chip
-            label={`${volumeFilter.toLocaleString()}%`}
+            label={`${pctSampled.toLocaleString()}%`}
             color="success"
             {...chipProps}
           />

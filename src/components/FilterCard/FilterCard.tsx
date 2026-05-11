@@ -17,9 +17,9 @@ interface FilterCardProps {
   sent: number;
   filtered: number;
   unit: string;
-  volumeFilter?: number;
-  persistErrors?: boolean;
-  onApplyFilter: (volumeFilter: number, persistErrors: boolean) => void;
+  pctSampled?: number;
+  includeErr?: boolean;
+  onApplyFilter: (pctSampled: number, includeErr: boolean) => void;
 }
 
 export function FilterCard({
@@ -27,13 +27,13 @@ export function FilterCard({
   received,
   sent,
   filtered,
-  volumeFilter,
-  persistErrors,
+  pctSampled,
+  includeErr,
   unit,
   onApplyFilter,
 }: FilterCardProps) {
-  const appliedSampleRate = volumeFilter ?? 0;
-  const appliedPersist = persistErrors ?? false;
+  const appliedSampleRate = pctSampled ?? 0;
+  const appliedPersist = includeErr ?? false;
   const [sampleRate, setSampleRate] = useState(appliedSampleRate);
   const [persist, setPersist] = useState(appliedPersist);
 
@@ -62,8 +62,8 @@ export function FilterCard({
       title={
         <FilterCardTitle
           title={title}
-          volumeFilter={volumeFilter}
-          persistErrors={persistErrors}
+          pctSampled={pctSampled}
+          includeErr={includeErr}
         />
       }
       content={
