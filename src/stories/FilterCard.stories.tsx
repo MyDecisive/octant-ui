@@ -35,28 +35,30 @@ export const Default: Story = {
     filtered: 50,
     onApplyFilter: (volume, persist) => {
       console.log("apply trace filter changes ", { volume, persist });
+      return new Promise((resolve) => resolve());
     },
   },
   render: function Render(args) {
     const [filters, setFilters] = useState<{
-      volumeFilter?: number;
-      persistErrors?: boolean;
+      pctSampled?: number;
+      includeErr?: boolean;
     }>({
-      volumeFilter: args.volumeFilter,
-      persistErrors: args.persistErrors,
+      pctSampled: args.pctSampled,
+      includeErr: args.includeErr,
     });
 
     return (
       <FilterCard
         {...args}
-        volumeFilter={filters.volumeFilter}
-        persistErrors={filters.persistErrors}
+        pctSampled={filters.pctSampled}
+        includeErr={filters.includeErr}
         onApplyFilter={(volume, persist) => {
           setFilters({
-            volumeFilter: volume,
-            persistErrors: persist,
+            pctSampled: volume,
+            includeErr: persist,
           });
-          args.onApplyFilter(volume, persist);
+          void args.onApplyFilter(volume, persist);
+          return new Promise((resolve) => resolve());
         }}
       />
     );
@@ -72,6 +74,7 @@ export const EmptyState: Story = {
     filtered: 0,
     onApplyFilter: (volume, persist) => {
       console.log("apply trace filter changes ", { volume, persist });
+      return new Promise((resolve) => resolve());
     },
   },
   render: function Render() {
