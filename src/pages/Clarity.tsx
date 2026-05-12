@@ -7,14 +7,12 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import type { Overall } from "@mydecisiveai/octant-client";
 import { useOctantStore } from "@store/octantStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { timeframeLabels } from "../utils/timeframeToPickerOptions";
 import "./Clarity.css";
 import {
-  logData,
   logsColumns,
-  spanData,
   summaryColumns,
   traceColumns,
   type LogData,
@@ -23,18 +21,6 @@ import {
 } from "./constants";
 import { useManageClarityData } from "./useManageClarityData";
 import { useManageFilters } from "./useManageFilters";
-
-function rowMatchesSearch(row: LogData | SpanData, query: string) {
-  const normalizedQuery = query.trim().toLocaleLowerCase();
-
-  if (!normalizedQuery) {
-    return true;
-  }
-
-  const serviceName = "name" in row ? row.name : row.span;
-
-  return serviceName.toLocaleLowerCase().includes(normalizedQuery);
-}
 
 function overallDataToSummaryRows(data: Overall | null): SummaryData[] {
   return [
@@ -60,20 +46,14 @@ function overallDataToSummaryRows(data: Overall | null): SummaryData[] {
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
-  const [searchLoading, setSearchLoading] = useState(false);
   const timeRangeLabel = useOctantStore(
     useShallow((state) => timeframeLabels[state.timeRange]),
   );
   const { logFilter, traceFilter } = useManageFilters();
-  const { data } = useManageClarityData();
+  const { data, logData, spanData, tableDataLoading } =
+    useManageClarityData(searchQuery);
   const normalizedSearchQuery = searchQuery.trim();
   const hasClarityContent = logData.length > 0 || spanData.length > 0;
-  const filteredLogData = logData.filter((row) =>
-    rowMatchesSearch(row, searchQuery),
-  );
-  const filteredSpanData = spanData.filter((row) =>
-    rowMatchesSearch(row, searchQuery),
-  );
   const showResultCounts = normalizedSearchQuery.length > 0;
   const searchOptions = [
     ...new Set([
@@ -86,12 +66,13 @@ export function ClarityPage() {
     {
       value: "logs",
       label: "Logs",
-      resultCount: filteredLogData.length,
+      resultCount: logData.length,
       children: (
         <Table<LogData>
           label={"Logs - Top Talkers"}
           columns={logsColumns}
-          rows={filteredLogData}
+          rows={logData}
+          loading={tableDataLoading}
           showToolbar
           footerLabel={"Total estimated cost"}
           total={data?.log?.cost ? data?.log?.cost.toLocaleString() : "-"}
@@ -101,12 +82,13 @@ export function ClarityPage() {
     {
       value: "traces",
       label: "Traces",
-      resultCount: filteredSpanData.length,
+      resultCount: spanData.length,
       children: (
         <Table<SpanData>
           label={"Traces - Top Talkers"}
           columns={traceColumns}
-          rows={filteredSpanData}
+          rows={spanData}
+          loading={tableDataLoading}
           showToolbar
           footerLabel={"Total estimated cost"}
           total={data?.trace?.cost ? data?.trace?.cost.toLocaleString() : "-"}
@@ -114,19 +96,6 @@ export function ClarityPage() {
       ),
     },
   ];
-
-  // Dummy data loading on search
-  useEffect(() => {
-    if (!searchLoading) return;
-
-    const loadingTimeout = window.setTimeout(() => {
-      setSearchLoading(false);
-    }, 600);
-
-    return () => {
-      window.clearTimeout(loadingTimeout);
-    };
-  }, [searchLoading]);
 
   return (
     <Box className="main-content-container">
@@ -145,15 +114,12 @@ export function ClarityPage() {
             <Tabs
               activeValue={activeTab}
               items={tabs}
-              loading={searchLoading}
+              loading={tableDataLoading}
               onChange={setActiveTab}
               search={{
                 options: searchOptions,
                 value: searchQuery,
-                onChange: (nextSearchQuery) => {
-                  setSearchQuery(nextSearchQuery);
-                  setSearchLoading(nextSearchQuery.trim().length > 0);
-                },
+                onChange: setSearchQuery,
               }}
               showLoadingPopover
               showResultCounts={showResultCounts}
