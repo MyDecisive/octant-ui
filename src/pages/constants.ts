@@ -1,6 +1,8 @@
 import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
+import { ProgressLineWithLabel } from "@components/ProgressLineWithLabel";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
+import { createElement } from "react";
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
@@ -74,21 +76,23 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     field: "sent",
     type: "number",
   },
-  // {
-  //   headerName: "% of Total",
-  //   field: "percent",
-  //   renderCell: ({ value }) => (
-  //     <ProgressLineWithLabel value={value} showLabel />
-  //   ),
-  // },
-  // {
-  //   headerName: "Estimated cost",
-  //   field: "cost",
-  //   cellClassName: "bold",
-  //   valueFormatter: (value: number) => `$${value.toLocaleString()}`,
-  //   align: "right",
-  //   headerAlign: "right",
-  // },
+  {
+    headerName: "% of Total",
+    field: "percent",
+    renderCell: ({ value }) =>
+      createElement(ProgressLineWithLabel, {
+        value: value as number,
+        showLabel: true,
+      }),
+  },
+  {
+    headerName: "Estimated cost",
+    field: "cost",
+    cellClassName: "bold",
+    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
+    align: "right",
+    headerAlign: "right",
+  },
 ]);
 
 export function createDummyLogData() {
@@ -162,7 +166,7 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
   {
     headerName: "% of Total",
     headerClassName: "bold",
-    field: "percent",
+    field: "pct",
     valueFormatter: (value: number | undefined) => {
       if (value === undefined) {
         return "-";
