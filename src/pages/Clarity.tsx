@@ -5,53 +5,55 @@ import { Table } from "@components/Table/Table";
 import { Tabs, type TabItem } from "@components/Tabs/Tabs";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { useEffect, useState } from "react";
+import type { Overall } from "@mydecisiveai/octant-client";
+import { useOctantStore } from "@store/octantStore";
+import { useState } from "react";
+import { useShallow } from "zustand/shallow";
+import { timeframeLabels } from "../utils/timeframeToPickerOptions";
 import "./Clarity.css";
 import {
-  logData,
   logsColumns,
-  spanData,
   summaryColumns,
-  summaryData,
   traceColumns,
   type LogData,
   type SpanData,
   type SummaryData,
 } from "./constants";
+import { useManageClarityData } from "./useManageClarityData";
+import { useManageFilters } from "./useManageFilters";
 
-function rowMatchesSearch(row: LogData | SpanData, query: string) {
-  const normalizedQuery = query.trim().toLocaleLowerCase();
-
-  if (!normalizedQuery) {
-    return true;
-  }
-
-  const serviceName = "name" in row ? row.name : row.span;
-
-  return serviceName.toLocaleLowerCase().includes(normalizedQuery);
+function overallDataToSummaryRows(data: Overall | null): SummaryData[] {
+  return [
+    {
+      id: "logs",
+      type: "logs",
+      cost: data?.log?.cost,
+      sent: data?.log?.sent,
+      rate: data?.log?.costRate,
+      pct: data?.log?.pct,
+    },
+    {
+      id: "traces",
+      type: "traces",
+      cost: data?.trace?.cost,
+      sent: data?.trace?.sent,
+      rate: data?.trace?.costRate,
+      pct: data?.trace?.pct,
+    },
+  ];
 }
 
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [logFilters, setLogFilters] = useState<{
-    volumeFilter?: number;
-    persistErrors?: boolean;
-  }>({});
-  const [traceFilters, setTraceFilters] = useState<{
-    volumeFilter?: number;
-    persistErrors?: boolean;
-  }>({});
+  const timeRangeLabel = useOctantStore(
+    useShallow((state) => timeframeLabels[state.timeRange]),
+  );
+  const { logFilter, traceFilter } = useManageFilters();
+  const { data, logData, spanData, tableDataLoading } =
+    useManageClarityData(searchQuery);
   const normalizedSearchQuery = searchQuery.trim();
-  const hasClarityContent =
-    summaryData.length > 0 || logData.length > 0 || spanData.length > 0;
-  const filteredLogData = logData.filter((row) =>
-    rowMatchesSearch(row, searchQuery),
-  );
-  const filteredSpanData = spanData.filter((row) =>
-    rowMatchesSearch(row, searchQuery),
-  );
+  const hasClarityContent = logData.length > 0 || spanData.length > 0;
   const showResultCounts = normalizedSearchQuery.length > 0;
   const searchOptions = [
     ...new Set([
@@ -64,47 +66,36 @@ export function ClarityPage() {
     {
       value: "logs",
       label: "Logs",
-      resultCount: filteredLogData.length,
+      resultCount: logData.length,
       children: (
         <Table<LogData>
           label={"Logs - Top Talkers"}
           columns={logsColumns}
-          rows={filteredLogData}
+          rows={logData}
+          loading={tableDataLoading}
           showToolbar
           footerLabel={"Total estimated cost"}
-          calculateTotal={(rows) => rows.reduce((sum, r) => sum + r.cost, 0)}
+          total={data?.log?.cost ? data?.log?.cost.toLocaleString() : "-"}
         />
       ),
     },
     {
       value: "traces",
       label: "Traces",
-      resultCount: filteredSpanData.length,
+      resultCount: spanData.length,
       children: (
         <Table<SpanData>
           label={"Traces - Top Talkers"}
           columns={traceColumns}
-          rows={filteredSpanData}
+          rows={spanData}
+          loading={tableDataLoading}
           showToolbar
           footerLabel={"Total estimated cost"}
-          calculateTotal={(rows) => rows.reduce((sum, r) => sum + r.cost, 0)}
+          total={data?.trace?.cost ? data?.trace?.cost.toLocaleString() : "-"}
         />
       ),
     },
   ];
-
-  // Dummy data loading on search
-  useEffect(() => {
-    if (!searchLoading) return;
-
-    const loadingTimeout = window.setTimeout(() => {
-      setSearchLoading(false);
-    }, 600);
-
-    return () => {
-      window.clearTimeout(loadingTimeout);
-    };
-  }, [searchLoading]);
 
   return (
     <Box className="main-content-container">
@@ -114,26 +105,21 @@ export function ClarityPage() {
             <Table<SummaryData>
               label={"Overall Estimated Cost"}
               columns={summaryColumns}
-              rows={summaryData}
+              rows={overallDataToSummaryRows(data)}
               showToolbar
-              footerLabel={"the last 24h"}
-              calculateTotal={(rows) =>
-                rows.reduce((sum, r) => sum + r.cost, 0)
-              }
+              timeRangeLabel={timeRangeLabel}
+              total={data?.cost ? data.cost.toLocaleString() : "-"}
               summaryTable
             />
             <Tabs
               activeValue={activeTab}
               items={tabs}
-              loading={searchLoading}
+              loading={tableDataLoading}
               onChange={setActiveTab}
               search={{
                 options: searchOptions,
                 value: searchQuery,
-                onChange: (nextSearchQuery) => {
-                  setSearchQuery(nextSearchQuery);
-                  setSearchLoading(nextSearchQuery.trim().length > 0);
-                },
+                onChange: setSearchQuery,
               }}
               showLoadingPopover
               showResultCounts={showResultCounts}
@@ -151,20 +137,15 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
-                onApplyFilter={(volume, persist) => {
-                  setLogFilters({
-                    volumeFilter: volume,
-                    persistErrors: persist,
-                  });
-                  console.log("apply log filter changes ", { volume, persist });
-                }}
+                onApplyFilter={logFilter.updateLogsFilter}
                 title={"Log filters"}
                 unit={"GB"}
-                received={100}
-                sent={50}
-                filtered={50}
-                volumeFilter={logFilters.volumeFilter}
-                persistErrors={logFilters.persistErrors}
+                received={data?.log?.received}
+                sent={data?.log?.sent}
+                filtered={data?.log?.filtered}
+                pctSampled={logFilter.pctSampled}
+                loading={logFilter.loading}
+                includeErr={logFilter.includeErr}
               />
             )}
             {spanData.length === 0 ? (
@@ -178,23 +159,15 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
-                onApplyFilter={(volume, persist) => {
-                  setTraceFilters({
-                    volumeFilter: volume,
-                    persistErrors: persist,
-                  });
-                  console.log("apply trace filter changes ", {
-                    volume,
-                    persist,
-                  });
-                }}
+                onApplyFilter={traceFilter.updateTracesFilter}
                 title={"Traces filters"}
                 unit={"MM Spans"}
-                received={100}
-                sent={50}
-                filtered={50}
-                volumeFilter={traceFilters.volumeFilter}
-                persistErrors={traceFilters.persistErrors}
+                received={data?.trace?.received}
+                sent={data?.trace?.sent}
+                filtered={data?.trace?.filtered}
+                pctSampled={traceFilter.pctSampled}
+                loading={traceFilter.loading}
+                includeErr={traceFilter.includeErr}
               />
             )}
           </Stack>

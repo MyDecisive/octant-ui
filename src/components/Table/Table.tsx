@@ -13,10 +13,11 @@ import { TableToolbar } from "./TableToolbar";
 declare module "@mui/x-data-grid" {
   interface ToolbarPropsOverrides {
     label: string;
-    total: number;
+    total: string;
+    timeRangeLabel?: string;
   }
   interface FooterPropsOverrides {
-    total?: number;
+    total?: string;
     label: string;
     hideFooterPagination?: boolean;
   }
@@ -32,8 +33,9 @@ interface TableProps<T extends BaseRowDefinition> extends Omit<
   header?: ReactNode;
   footerLabel?: string;
   footerClassName?: string;
+  timeRangeLabel?: string;
+  total?: string;
   summaryTable?: boolean;
-  calculateTotal?: (rows: T[]) => number;
 }
 
 const paginationProps: Pick<
@@ -59,10 +61,10 @@ export function Table<T extends BaseRowDefinition>({
   footerClassName,
   summaryTable,
   className,
-  calculateTotal,
+  timeRangeLabel,
+  total,
   ...rest
 }: TableProps<T>) {
-  const total = calculateTotal ? calculateTotal(rows) : undefined;
   return (
     <Card className={classNames("mdai-table-container", className)}>
       {header && <CardHeader title={header} />}
@@ -78,6 +80,7 @@ export function Table<T extends BaseRowDefinition>({
           toolbar: {
             label,
             total,
+            timeRangeLabel,
           },
           footer: {
             hideFooterPagination,

@@ -8,7 +8,7 @@ import {
 import classNames from "classnames";
 
 interface TableFooterProps extends GridFooterContainerProps {
-  total?: number;
+  total?: string;
   label?: string;
   hideFooterPagination?: boolean;
 }

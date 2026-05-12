@@ -1,6 +1,8 @@
 import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
+import { ProgressLineWithLabel } from "@components/ProgressLineWithLabel";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
+import { createElement } from "react";
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
@@ -74,21 +76,23 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     field: "sent",
     type: "number",
   },
-  // {
-  //   headerName: "% of Total",
-  //   field: "percent",
-  //   renderCell: ({ value }) => (
-  //     <ProgressLineWithLabel value={value} showLabel />
-  //   ),
-  // },
-  // {
-  //   headerName: "Estimated cost",
-  //   field: "cost",
-  //   cellClassName: "bold",
-  //   valueFormatter: (value: number) => `$${value.toLocaleString()}`,
-  //   align: "right",
-  //   headerAlign: "right",
-  // },
+  {
+    headerName: "% of Total",
+    field: "percent",
+    renderCell: ({ value }) =>
+      createElement(ProgressLineWithLabel, {
+        value: value as number,
+        showLabel: true,
+      }),
+  },
+  {
+    headerName: "Estimated cost",
+    field: "cost",
+    cellClassName: "bold",
+    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
+    align: "right",
+    headerAlign: "right",
+  },
 ]);
 
 export function createDummyLogData() {
@@ -112,18 +116,29 @@ export const logData = createDummyLogData();
 
 export interface SummaryData extends BaseRowDefinition {
   type: "logs" | "traces";
-  cost: number;
-  received: number;
-  sent: number;
-  rate: number;
-  percent: number;
+  cost: number | undefined;
+  sent: number | undefined;
+  rate: number | undefined;
+  pct: number | undefined;
 }
 
-function summaryValueFormatter(value: number, { type }: SummaryData) {
+function summaryValueFormatter(
+  value: number | undefined,
+  { type }: SummaryData,
+) {
+  if (value === undefined) {
+    return "-";
+  }
   return `${value.toLocaleString()} ${type === "logs" ? "GB" : "MM Events"}`;
 }
 
-function summaryRateFormatter(value: number, { type }: SummaryData) {
+function summaryRateFormatter(
+  value: number | undefined,
+  { type }: SummaryData,
+) {
+  if (value === undefined) {
+    return "-";
+  }
   return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
 }
 
@@ -135,12 +150,6 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     cellClassName: "bold",
     valueFormatter: (value: string) =>
       `${value[0].toLocaleUpperCase()}${value.slice(1)}`,
-  },
-  {
-    headerName: "Received",
-    headerClassName: "bold",
-    field: "received",
-    valueFormatter: summaryValueFormatter,
   },
   {
     headerName: "Sent",
@@ -157,35 +166,24 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
   {
     headerName: "% of Total",
     headerClassName: "bold",
-    field: "percent",
-    valueFormatter: (value: number) => `${value} %`,
+    field: "pct",
+    valueFormatter: (value: number | undefined) => {
+      if (value === undefined) {
+        return "-";
+      }
+      return `${value} %`;
+    },
   },
   {
     headerName: "Est. Cost",
     headerClassName: "bold",
     field: "cost",
-    valueFormatter: (value: number) => `$${value}`,
+    valueFormatter: (value: number | undefined) => {
+      if (value === undefined) {
+        return "-";
+      }
+      return `$${value}`;
+    },
     cellClassName: "bold",
   },
 ] as GridColDef<SummaryData>[]);
-
-export const summaryData: SummaryData[] = [
-  {
-    id: "logs",
-    type: "logs",
-    cost: 700,
-    received: 100,
-    sent: 100,
-    rate: 0.1,
-    percent: 70,
-  },
-  {
-    id: "traces",
-    type: "traces",
-    cost: 300,
-    received: 4.2,
-    sent: 4.2,
-    rate: 1.27,
-    percent: 30,
-  },
-];

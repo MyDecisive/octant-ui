@@ -13,13 +13,14 @@ import { MetricRow } from "./MetricRow";
 
 interface FilterCardProps {
   title: string;
-  received: number;
-  sent: number;
-  filtered: number;
+  received?: number;
+  sent?: number;
+  filtered?: number;
   unit: string;
-  volumeFilter?: number;
-  persistErrors?: boolean;
-  onApplyFilter: (volumeFilter: number, persistErrors: boolean) => void;
+  pctSampled?: number;
+  includeErr?: boolean;
+  loading?: boolean;
+  onApplyFilter: (pctSampled: number, includeErr: boolean) => Promise<void>;
 }
 
 export function FilterCard({
@@ -27,13 +28,14 @@ export function FilterCard({
   received,
   sent,
   filtered,
-  volumeFilter,
-  persistErrors,
+  pctSampled,
+  loading,
+  includeErr,
   unit,
   onApplyFilter,
 }: FilterCardProps) {
-  const appliedSampleRate = volumeFilter ?? 0;
-  const appliedPersist = persistErrors ?? false;
+  const appliedSampleRate = pctSampled ?? 0;
+  const appliedPersist = includeErr ?? false;
   const [sampleRate, setSampleRate] = useState(appliedSampleRate);
   const [persist, setPersist] = useState(appliedPersist);
 
@@ -54,7 +56,7 @@ export function FilterCard({
   };
 
   const handleApply = () => {
-    onApplyFilter(sampleRate, persist);
+    void onApplyFilter(sampleRate, persist);
   };
   return (
     <Accordion
@@ -62,8 +64,8 @@ export function FilterCard({
       title={
         <FilterCardTitle
           title={title}
-          volumeFilter={volumeFilter}
-          persistErrors={persistErrors}
+          pctSampled={pctSampled}
+          includeErr={includeErr}
         />
       }
       content={
@@ -99,6 +101,7 @@ export function FilterCard({
           >
             <Button
               disabled={noValueHasBeenChanged}
+              loading={loading}
               onClick={handleCancel}
               variant="text"
               color="inherit"
@@ -108,6 +111,7 @@ export function FilterCard({
             </Button>
             <Button
               disabled={noValueHasBeenChanged}
+              loading={loading}
               onClick={handleApply}
               variant="text"
               size="small"

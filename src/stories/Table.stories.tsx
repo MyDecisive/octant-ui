@@ -73,14 +73,16 @@ function createDummySpanData() {
   return data;
 }
 
+const spanRows = createDummySpanData();
+
 export const Traces: SpanStory = {
   args: {
     label: "Traces - Top Talkers",
     columns: traceColumns,
-    rows: createDummySpanData(),
+    rows: spanRows,
     showToolbar: true,
     footerLabel: "Total estimated cost",
-    calculateTotal: (rows) => rows.reduce((sum, r) => sum + r.cost, 0),
+    total: spanRows.reduce((sum, { cost }) => sum + cost, 0).toLocaleString(),
   },
 };
 
@@ -135,14 +137,16 @@ function createDummyLogData() {
   return data;
 }
 
+const logRows = createDummyLogData();
+
 export const Logs: LogStory = {
   args: {
     label: "Logs - Top Talkers",
     columns: logsColumns,
-    rows: createDummyLogData(),
+    rows: logRows,
     showToolbar: true,
     footerLabel: "Total estimated cost",
-    calculateTotal: (rows) => rows.reduce((sum, r) => sum + r.cost, 0),
+    total: logRows.reduce((sum, { cost }) => sum + cost, 0).toLocaleString(),
   },
 };
 
@@ -233,7 +237,7 @@ export const Summary: SummaryStory = {
     rows: summaryData,
     showToolbar: true,
     footerLabel: "the last 24h",
-    calculateTotal: (rows) => rows.reduce((sum, r) => sum + r.cost, 0),
+    total: summaryData.reduce((sum, { cost }) => sum + cost, 0).toLocaleString(),
     summaryTable: true,
   },
 };
