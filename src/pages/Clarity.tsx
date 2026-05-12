@@ -5,6 +5,7 @@ import { Table } from "@components/Table/Table";
 import { Tabs, type TabItem } from "@components/Tabs/Tabs";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import type { Overall } from "@mydecisiveai/octant-client";
 import { useEffect, useState } from "react";
 import "./Clarity.css";
 import {
@@ -12,12 +13,12 @@ import {
   logsColumns,
   spanData,
   summaryColumns,
-  summaryData,
   traceColumns,
   type LogData,
   type SpanData,
   type SummaryData,
 } from "./constants";
+import { useManageClarityData } from "./useManageClarityData";
 import { useManageFilters } from "./useManageFilters";
 
 function rowMatchesSearch(row: LogData | SpanData, query: string) {
@@ -32,14 +33,35 @@ function rowMatchesSearch(row: LogData | SpanData, query: string) {
   return serviceName.toLocaleLowerCase().includes(normalizedQuery);
 }
 
+function overallDataToSummaryColumns(data: Overall | null): SummaryData[] {
+  return [
+    {
+      id: "logs",
+      type: "logs",
+      cost: data?.log?.cost,
+      sent: data?.log?.sent,
+      rate: data?.log?.costRate,
+      pct: data?.log?.pct,
+    },
+    {
+      id: "traces",
+      type: "traces",
+      cost: data?.trace?.cost,
+      sent: data?.trace?.sent,
+      rate: data?.trace?.costRate,
+      pct: data?.trace?.pct,
+    },
+  ];
+}
+
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
   const [searchLoading, setSearchLoading] = useState(false);
-  const { logs, traces } = useManageFilters();
+  const { logFilter, traceFilter } = useManageFilters();
+  const { data } = useManageClarityData();
   const normalizedSearchQuery = searchQuery.trim();
-  const hasClarityContent =
-    summaryData.length > 0 || logData.length > 0 || spanData.length > 0;
+  const hasClarityContent = logData.length > 0 || spanData.length > 0;
   const filteredLogData = logData.filter((row) =>
     rowMatchesSearch(row, searchQuery),
   );
@@ -108,12 +130,10 @@ export function ClarityPage() {
             <Table<SummaryData>
               label={"Overall Estimated Cost"}
               columns={summaryColumns}
-              rows={summaryData}
+              rows={overallDataToSummaryColumns(data)}
               showToolbar
               footerLabel={"the last 24h"}
-              calculateTotal={(rows) =>
-                rows.reduce((sum, r) => sum + r.cost, 0)
-              }
+              calculateTotal={() => data!.cost}
               summaryTable
             />
             <Tabs
@@ -145,15 +165,15 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
-                onApplyFilter={logs.updateLogsFilter}
+                onApplyFilter={logFilter.updateLogsFilter}
                 title={"Log filters"}
                 unit={"GB"}
-                received={100}
-                sent={50}
-                filtered={50}
-                pctSampled={logs.pctSampled}
-                loading={logs.loading}
-                includeErr={logs.includeErr}
+                received={data?.log?.received}
+                sent={data?.log?.sent}
+                filtered={data?.log?.filtered}
+                pctSampled={logFilter.pctSampled}
+                loading={logFilter.loading}
+                includeErr={logFilter.includeErr}
               />
             )}
             {spanData.length === 0 ? (
@@ -167,15 +187,15 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
-                onApplyFilter={traces.updateTracesFilter}
+                onApplyFilter={traceFilter.updateTracesFilter}
                 title={"Traces filters"}
                 unit={"MM Spans"}
-                received={100}
-                sent={50}
-                filtered={50}
-                pctSampled={traces.pctSampled}
-                loading={traces.loading}
-                includeErr={traces.includeErr}
+                received={data?.trace?.received}
+                sent={data?.trace?.sent}
+                filtered={data?.trace?.filtered}
+                pctSampled={traceFilter.pctSampled}
+                loading={traceFilter.loading}
+                includeErr={traceFilter.includeErr}
               />
             )}
           </Stack>

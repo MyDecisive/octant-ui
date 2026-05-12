@@ -5,7 +5,6 @@ import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useOctantStore } from "@store/octantStore";
-import type { TimeRange } from "@types";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
@@ -34,8 +33,8 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
 
   const [pickerOptions, setPickerOptions] = useState<SelectOption[]>([]);
 
-  const setSelectedRange = (newRange: TimeRange) =>
-    setState("timeRange", newRange);
+  const setSelectedRange = (newRange: string) =>
+    setState("timeRange", parseInt(newRange));
 
   const showTimepicker = location === ROUTES.CLARITY;
   const title = locationTitleMap[location];
@@ -78,7 +77,7 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
             {showTimepicker && (
               <Select
                 selected={timeRange}
-                onChange={(e) => setSelectedRange(e.target.value as TimeRange)}
+                onChange={(e) => setSelectedRange(e.target.value)}
                 options={pickerOptions}
                 className="mdai-timepicker"
                 label="Time range"

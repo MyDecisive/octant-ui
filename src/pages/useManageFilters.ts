@@ -77,13 +77,13 @@ export function useManageFilters() {
   };
 
   return {
-    logs: {
+    logFilter: {
       ...filters?.logs,
       loading: filtersLoading.has("logs"),
       updateLogsFilter: (pctSampled: number, includeErr: boolean) =>
         handleApplyFilter("logs", pctSampled, includeErr),
     },
-    traces: {
+    traceFilter: {
       ...filters?.traces,
       loading: filtersLoading.has("traces"),
       updateTracesFilter: (pctSampled: number, includeErr: boolean) =>

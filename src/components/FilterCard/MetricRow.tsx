@@ -7,7 +7,7 @@ export function MetricRow({
   unit,
 }: {
   label: string;
-  value: number;
+  value?: number;
   unit: string;
 }) {
   return (
@@ -20,7 +20,7 @@ export function MetricRow({
       <Typography variant="chipLabel" className="filter-card-metric-row-label">
         {label}
       </Typography>
-      <Typography variant="body1">{value}</Typography>
+      <Typography variant="body1">{value ?? "-"}</Typography>
       <Typography
         className="filter-card-metric-row-unit"
         color="secondary"

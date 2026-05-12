@@ -13,9 +13,9 @@ import { MetricRow } from "./MetricRow";
 
 interface FilterCardProps {
   title: string;
-  received: number;
-  sent: number;
-  filtered: number;
+  received?: number;
+  sent?: number;
+  filtered?: number;
   unit: string;
   pctSampled?: number;
   includeErr?: boolean;

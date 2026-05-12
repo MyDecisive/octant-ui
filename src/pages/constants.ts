@@ -112,18 +112,29 @@ export const logData = createDummyLogData();
 
 export interface SummaryData extends BaseRowDefinition {
   type: "logs" | "traces";
-  cost: number;
-  received: number;
-  sent: number;
-  rate: number;
-  percent: number;
+  cost: number | undefined;
+  sent: number | undefined;
+  rate: number | undefined;
+  pct: number | undefined;
 }
 
-function summaryValueFormatter(value: number, { type }: SummaryData) {
+function summaryValueFormatter(
+  value: number | undefined,
+  { type }: SummaryData,
+) {
+  if (value === undefined) {
+    return "-";
+  }
   return `${value.toLocaleString()} ${type === "logs" ? "GB" : "MM Events"}`;
 }
 
-function summaryRateFormatter(value: number, { type }: SummaryData) {
+function summaryRateFormatter(
+  value: number | undefined,
+  { type }: SummaryData,
+) {
+  if (value === undefined) {
+    return "-";
+  }
   return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
 }
 
@@ -135,12 +146,6 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     cellClassName: "bold",
     valueFormatter: (value: string) =>
       `${value[0].toLocaleUpperCase()}${value.slice(1)}`,
-  },
-  {
-    headerName: "Received",
-    headerClassName: "bold",
-    field: "received",
-    valueFormatter: summaryValueFormatter,
   },
   {
     headerName: "Sent",
@@ -158,34 +163,23 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     headerName: "% of Total",
     headerClassName: "bold",
     field: "percent",
-    valueFormatter: (value: number) => `${value} %`,
+    valueFormatter: (value: number | undefined) => {
+      if (value === undefined) {
+        return "-";
+      }
+      return `${value} %`;
+    },
   },
   {
     headerName: "Est. Cost",
     headerClassName: "bold",
     field: "cost",
-    valueFormatter: (value: number) => `$${value}`,
+    valueFormatter: (value: number | undefined) => {
+      if (value === undefined) {
+        return "-";
+      }
+      return `$${value}`;
+    },
     cellClassName: "bold",
   },
 ] as GridColDef<SummaryData>[]);
-
-export const summaryData: SummaryData[] = [
-  {
-    id: "logs",
-    type: "logs",
-    cost: 700,
-    received: 100,
-    sent: 100,
-    rate: 0.1,
-    percent: 70,
-  },
-  {
-    id: "traces",
-    type: "traces",
-    cost: 300,
-    received: 4.2,
-    sent: 4.2,
-    rate: 1.27,
-    percent: 30,
-  },
-];
