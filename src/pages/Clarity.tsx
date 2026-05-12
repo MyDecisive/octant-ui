@@ -6,7 +6,10 @@ import { Tabs, type TabItem } from "@components/Tabs/Tabs";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import type { Overall } from "@mydecisiveai/octant-client";
+import { useOctantStore } from "@store/octantStore";
 import { useEffect, useState } from "react";
+import { useShallow } from "zustand/shallow";
+import { timeframeLabels } from "../utils/timeframeToPickerOptions";
 import "./Clarity.css";
 import {
   logData,
@@ -33,7 +36,7 @@ function rowMatchesSearch(row: LogData | SpanData, query: string) {
   return serviceName.toLocaleLowerCase().includes(normalizedQuery);
 }
 
-function overallDataToSummaryColumns(data: Overall | null): SummaryData[] {
+function overallDataToSummaryRows(data: Overall | null): SummaryData[] {
   return [
     {
       id: "logs",
@@ -58,6 +61,9 @@ export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
   const [searchLoading, setSearchLoading] = useState(false);
+  const timeRangeLabel = useOctantStore(
+    useShallow((state) => timeframeLabels[state.timeRange]),
+  );
   const { logFilter, traceFilter } = useManageFilters();
   const { data } = useManageClarityData();
   const normalizedSearchQuery = searchQuery.trim();
@@ -88,7 +94,7 @@ export function ClarityPage() {
           rows={filteredLogData}
           showToolbar
           footerLabel={"Total estimated cost"}
-          calculateTotal={(rows) => rows.reduce((sum, r) => sum + r.cost, 0)}
+          total={data?.log?.cost ? data?.log?.cost.toLocaleString() : "-"}
         />
       ),
     },
@@ -103,7 +109,7 @@ export function ClarityPage() {
           rows={filteredSpanData}
           showToolbar
           footerLabel={"Total estimated cost"}
-          calculateTotal={(rows) => rows.reduce((sum, r) => sum + r.cost, 0)}
+          total={data?.trace?.cost ? data?.trace?.cost.toLocaleString() : "-"}
         />
       ),
     },
@@ -130,10 +136,10 @@ export function ClarityPage() {
             <Table<SummaryData>
               label={"Overall Estimated Cost"}
               columns={summaryColumns}
-              rows={overallDataToSummaryColumns(data)}
+              rows={overallDataToSummaryRows(data)}
               showToolbar
-              footerLabel={"the last 24h"}
-              calculateTotal={() => data!.cost}
+              timeRangeLabel={timeRangeLabel}
+              total={data?.cost ? data.cost.toLocaleString() : "-"}
               summaryTable
             />
             <Tabs

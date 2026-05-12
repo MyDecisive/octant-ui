@@ -7,11 +7,15 @@ import Typography from "@mui/material/Typography";
 import { Toolbar } from "@mui/x-data-grid";
 import classNames from "classnames";
 
-interface TableFooterProps {
-  total: number;
+interface SummaryTableToolbarProps {
+  timeRangeLabel?: string;
+  total?: string;
 }
 
-export function SummaryTableToolbar({ total }: TableFooterProps) {
+export function SummaryTableToolbar({
+  timeRangeLabel,
+  total,
+}: SummaryTableToolbarProps) {
   return (
     <Toolbar className={classNames("mdai-summary-table-toolbar")}>
       <Stack alignItems={"flex-end"} direction={"row"} gap={1}>
@@ -41,14 +45,10 @@ export function SummaryTableToolbar({ total }: TableFooterProps) {
         </RichTooltip>
       </Stack>
       <Stack alignItems={"flex-end"} direction={"row"} gap={0.5}>
-        <Typography
-          variant="caption"
-          color="secondary"
-        >{`For the last 24h`}</Typography>
-        <Typography
-          bold
-          variant="h5"
-        >{`$${total.toLocaleString()}`}</Typography>
+        <Typography variant="caption" color="secondary">
+          {timeRangeLabel}
+        </Typography>
+        <Typography bold variant="h5">{`$${total}`}</Typography>
       </Stack>
     </Toolbar>
   );

@@ -5,7 +5,7 @@ import {
   type TimeframeStatusResponse_Status,
 } from "@mydecisiveai/octant-client";
 
-const timeframeLabels: Record<Timeframe, string> = {
+export const timeframeLabels: Record<Timeframe, string> = {
   [Timeframe.TIMEFRAME_UNSPECIFIED]: "Unspecified",
   [Timeframe.TIMEFRAME_24HR]: "Today",
   [Timeframe.TIMEFRAME_MTD]: "Month to date",
