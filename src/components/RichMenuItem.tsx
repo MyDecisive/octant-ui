@@ -9,6 +9,7 @@ interface RichMenuItemProps {
   chip?: ChipProps;
   value: string;
   className?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -20,10 +21,12 @@ export function RichMenuItem({
   helperText,
   chip,
   value,
+  disabled,
   className,
 }: RichMenuItemProps) {
   return (
     <MenuItem
+      disabled={disabled}
       className={classNames("mdai-rich-menu-item", className)}
       value={value}
     >

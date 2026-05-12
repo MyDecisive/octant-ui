@@ -9,6 +9,7 @@ import type { TimeRange } from "@types";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import { useShallow } from "zustand/shallow";
 import { ROUTES } from "../../constants/ROUTES";
 import { timeframeServiceClient } from "../../services/timeframe";
 import "./PageContainer.css";
@@ -20,11 +21,13 @@ const locationTitleMap = {
 };
 
 export function PageContainer({ children }: { children: React.ReactNode }) {
-  const { timeRange, namespace, connectionName } = useOctantStore((store) => {
-    const { timeRange, namespace, connectionName } = store;
+  const { timeRange, namespace, connectionName } = useOctantStore(
+    useShallow((store) => {
+      const { timeRange, namespace, connectionName } = store;
 
-    return { timeRange: String(timeRange), namespace, connectionName };
-  });
+      return { timeRange: String(timeRange), namespace, connectionName };
+    }),
+  );
 
   const setState = useOctantStore((store) => store.setState);
   const [location] = useLocation();
