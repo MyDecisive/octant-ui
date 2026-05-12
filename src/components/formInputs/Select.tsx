@@ -46,6 +46,7 @@ export function Select({
       className={classNames("mdai-select-container", className)}
       fullWidth
       variant="outlined"
+      disabled={disabled}
     >
       {label && <InputLabel id={"select-label-id"}>{label}</InputLabel>}
       <MuiSelect
@@ -60,7 +61,9 @@ export function Select({
         IconComponent={KeyboardArrowDown}
         renderValue={(value) => {
           const valueOption = options.find((opt) => opt.value === value);
-          return <RichMenuItem value={value} {...valueOption} />;
+          return (
+            <RichMenuItem disabled={disabled} value={value} {...valueOption} />
+          );
         }}
         MenuProps={{
           className: "mdai-select-menu-options-container",
@@ -71,6 +74,7 @@ export function Select({
             className="mdai-select-menu-item"
             key={value}
             label={label}
+            disabled={disabled}
             chip={chip}
             value={value}
             helperText={optionHelperText}
