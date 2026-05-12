@@ -64,6 +64,7 @@ export function SetupSmarthub() {
             if (latestRes) {
               setInstallError(
                 latestRes.details
+                  .filter(({ message }) => !!message)
                   .map(({ name, message }) => `${name}: ${message}`)
                   .join("\n"),
               );
@@ -85,6 +86,7 @@ export function SetupSmarthub() {
       if (latestError) {
         setInstallError(
           latestError.details
+            .filter(({ message }) => !!message)
             .map(({ name, message }) => `${name}: ${message}`)
             .join("\n"),
         );

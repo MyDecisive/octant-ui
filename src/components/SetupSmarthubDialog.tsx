@@ -74,7 +74,9 @@ export function SetupSmarthubDialog({
       <DialogContent>
         <DialogContentText id="error-dialog-description">
           {content}
-          {errorInfo}
+          {errorInfo && (
+            <pre className="error-dialog-error-info-content">{errorInfo}</pre>
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions>{createActions(onClose, onContinue)}</DialogActions>
