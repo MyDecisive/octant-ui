@@ -16,12 +16,21 @@ type Story = StoryObj<typeof meta>;
 
 export const SimpleGreen: Story = {
   args: {
+    simple: true,
     status: "operational",
+    title: "Smarthub Infrastructure",
+  },
+};
+export const SimpleLoading: Story = {
+  args: {
+    simple: true,
+    status: "loading",
     title: "Smarthub Infrastructure",
   },
 };
 export const SimpleRed: Story = {
   args: {
+    simple: true,
     status: "error",
     title: "Smarthub Infrastructure",
     fix: {
@@ -56,6 +65,30 @@ export const ComplexGreen: Story = {
       {
         label: "Data integrity",
         health: true,
+      },
+    ],
+  },
+};
+export const ComplexLoading: Story = {
+  args: {
+    status: "loading",
+    title: "Datadog connection",
+    facets: [
+      {
+        label: "Clients connected",
+        loading: true,
+      },
+      {
+        label: "Receiving data",
+        loading: true,
+      },
+      {
+        label: "Sending data",
+        loading: true,
+      },
+      {
+        label: "Data integrity",
+        loading: true,
       },
     ],
   },

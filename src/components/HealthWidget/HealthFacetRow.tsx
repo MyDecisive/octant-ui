@@ -1,16 +1,16 @@
-import CancelIcon from "@mui/icons-material/Cancel";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { FixCard, type FixInfo } from "./FixCard";
+import { HealthFacetRowStatusIcon } from "./HealthFacetRowStatusIcon";
 
 export interface HealthFacet {
   label: string;
-  health: boolean;
+  health?: boolean;
+  loading?: boolean;
   fix?: FixInfo;
 }
 
-export function HealthFacetRow({ label, health, fix }: HealthFacet) {
+export function HealthFacetRow({ label, health, fix, loading }: HealthFacet) {
   return (
     <Stack className="health-facet-row-container" gap={1.25}>
       <Stack
@@ -20,11 +20,7 @@ export function HealthFacetRow({ label, health, fix }: HealthFacet) {
         alignItems={"center"}
       >
         <Typography className="health-facet-row-label">{label}</Typography>
-        {health ? (
-          <CheckCircleIcon color="success" />
-        ) : (
-          <CancelIcon color="error" />
-        )}
+        <HealthFacetRowStatusIcon health={health} loading={loading} />
       </Stack>
       {fix && <FixCard {...fix} />}
     </Stack>
