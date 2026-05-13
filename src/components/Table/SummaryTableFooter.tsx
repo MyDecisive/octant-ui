@@ -23,14 +23,14 @@ export function SummaryTableFooter({
       {...rest}
     >
       <Stack direction={"column"}>
-        <Typography bold variant="h5">
+        <Typography data-bold="true" variant="h5">
           Estimated Total Cost
         </Typography>
-        <Typography bold variant="caption">{`For - ${label}`}</Typography>
+        <Typography data-bold="true" variant="caption">{`For - ${label}`}</Typography>
       </Stack>
       {total != null && (
         <Typography
-          bold
+          data-bold="true"
           variant="h5"
         >{`$${total.toLocaleString()}`}</Typography>
       )}

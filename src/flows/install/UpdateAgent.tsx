@@ -63,7 +63,7 @@ export function UpdateAgent() {
         </ButtonRow>
       </FlowCenterColumn>
       <Stack className="right-column" gap={3}>
-        <Typography variant="body2" bold>
+        <Typography variant="body2" data-bold="true">
           Paste the following code snippets in your Datadog agent:
         </Typography>
         <Stack gap={1}>

@@ -47,7 +47,7 @@ export function RichTooltip({
             <Typography
               className={classNames("mui-rich-tooltip-title", titleClassName)}
               variant="body2"
-              bold
+              data-bold="true"
             >
               {title}
             </Typography>

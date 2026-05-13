@@ -12,7 +12,7 @@ const meta = {
   },
   args: {
     header: (
-      <Typography variant="body2" bold>
+      <Typography variant="body2" data-bold="true">
         How to fix
       </Typography>
     ),

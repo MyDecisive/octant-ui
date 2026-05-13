@@ -69,7 +69,7 @@ export function StatusCard({ label, lastSuccessful, rows }: StatusCardProps) {
           justifyContent={"space-between"}
           className="status-card-label-row"
         >
-          <Typography variant="body2" bold>
+          <Typography variant="body2" data-bold="true">
             {label}
           </Typography>
           <Typography
