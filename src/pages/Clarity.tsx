@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import type { Overall } from "@mydecisiveai/octant-client";
 import { useOctantStore } from "@store/octantStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { timeframeLabels } from "../utils/timeframeToPickerOptions";
 import "./Clarity.css";
@@ -46,14 +46,32 @@ function overallDataToSummaryRows(data: Overall | null): SummaryData[] {
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
-  const timeRangeLabel = useOctantStore(
-    useShallow((state) => timeframeLabels[state.timeRange]),
+  const { hasLogTimeframeData, hasTraceTimeframeData, timeRangeLabel } =
+    useOctantStore(
+      useShallow((state) => ({
+        hasLogTimeframeData: state.hasLogTimeframeData,
+        hasTraceTimeframeData: state.hasTraceTimeframeData,
+        timeRangeLabel: timeframeLabels[state.timeRange],
+      })),
   );
   const { logFilter, traceFilter } = useManageFilters();
-  const { data, logData, spanData, tableDataLoading } =
-    useManageClarityData(searchQuery);
+  const {
+    data,
+    hasLogData,
+    hasTraceData,
+    logData,
+    spanData,
+    tableDataLoading,
+    loading,
+  } = useManageClarityData(searchQuery);
   const normalizedSearchQuery = searchQuery.trim();
-  const hasClarityContent = logData.length > 0 || spanData.length > 0;
+  const canShowLogTab = hasLogTimeframeData !== false && hasLogData;
+  const canShowTraceTab = hasTraceTimeframeData !== false && hasTraceData;
+  const canRenderLogTab =
+    hasLogTimeframeData !== false && (hasLogData || loading);
+  const canRenderTraceTab =
+    hasTraceTimeframeData !== false && (hasTraceData || loading);
+  const hasClarityContent = loading || canShowLogTab || canShowTraceTab;
   const showResultCounts = normalizedSearchQuery.length > 0;
   const searchOptions = [
     ...new Set([
@@ -62,8 +80,19 @@ export function ClarityPage() {
     ]),
   ];
 
-  const tabs: TabItem[] = [
-    {
+  useEffect(() => {
+    if (activeTab === "logs" && !canShowLogTab && canShowTraceTab) {
+      setActiveTab("traces");
+    }
+    if (activeTab === "traces" && !canShowTraceTab && canShowLogTab) {
+      setActiveTab("logs");
+    }
+  }, [activeTab, canShowLogTab, canShowTraceTab]);
+
+  const tabs: TabItem[] = [];
+
+  if (canRenderLogTab) {
+    tabs.push({
       value: "logs",
       label: "Logs",
       resultCount: logData.length,
@@ -78,8 +107,11 @@ export function ClarityPage() {
           total={data?.log?.cost ? data?.log?.cost.toLocaleString() : "-"}
         />
       ),
-    },
-    {
+    });
+  }
+
+  if (canRenderTraceTab) {
+    tabs.push({
       value: "traces",
       label: "Traces",
       resultCount: spanData.length,
@@ -94,8 +126,8 @@ export function ClarityPage() {
           total={data?.trace?.cost ? data?.trace?.cost.toLocaleString() : "-"}
         />
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <Box className="main-content-container">
@@ -126,7 +158,7 @@ export function ClarityPage() {
             />
           </Stack>
           <Stack className="right-column" gap={1}>
-            {logData.length === 0 ? (
+            {!canShowLogTab ? (
               <FilterEmptyStateCard
                 title="Here is why you need logs"
                 description="Enable logs to see what is happening across your services."
@@ -148,7 +180,7 @@ export function ClarityPage() {
                 includeErr={logFilter.includeErr}
               />
             )}
-            {spanData.length === 0 ? (
+            {!canShowTraceTab ? (
               <FilterEmptyStateCard
                 title="Here is why you need traces"
                 description="Enable traces to see what's actually happening."

@@ -7,13 +7,43 @@ import type { LogData, SpanData } from "./constants";
 
 const tablePageSize = 100;
 
+function truncateDecimal(value: number, decimalPlaces = 2) {
+  const factor = 10 ** decimalPlaces;
+  return Math.trunc(value * factor) / factor;
+}
+
+function normalizeOverallMetric(metric: Overall["log"]) {
+  if (!metric) return undefined;
+
+  return {
+    ...metric,
+    received: truncateDecimal(metric.received),
+    sent: truncateDecimal(metric.sent),
+    filtered: truncateDecimal(metric.filtered),
+    costRate: truncateDecimal(metric.costRate),
+    pct: truncateDecimal(metric.pct),
+    cost: truncateDecimal(metric.cost),
+  };
+}
+
+function normalizeOverall(data?: Overall): Overall | null {
+  if (!data) return null;
+
+  return {
+    ...data,
+    cost: truncateDecimal(data.cost),
+    log: normalizeOverallMetric(data.log),
+    trace: normalizeOverallMetric(data.trace),
+  };
+}
+
 function logToRow({ name, sent, pct, cost }: Log, index: number): LogData {
   return {
     id: name || `log-${index.toString()}`,
     name,
-    sent,
-    percent: pct,
-    cost,
+    sent: truncateDecimal(sent),
+    percent: truncateDecimal(pct),
+    cost: truncateDecimal(cost),
   };
 }
 
@@ -24,10 +54,10 @@ function spanToRow(
   return {
     id: name || `span-${index.toString()}`,
     span: name,
-    breadth,
-    invocations,
-    depth,
-    cost,
+    breadth: truncateDecimal(breadth),
+    invocations: truncateDecimal(invocations),
+    depth: truncateDecimal(depth),
+    cost: truncateDecimal(cost),
   };
 }
 
@@ -52,10 +82,15 @@ export function useManageClarityData(searchQuery = "") {
     async function fetchOverallData() {
       if (!namespace) {
         setOverallData(null);
+        setLogData([]);
+        setSpanData([]);
         return;
       }
 
       setOverallLoading(true);
+      setOverallData(null);
+      setLogData([]);
+      setSpanData([]);
 
       try {
         const overallResponse = await budgetServiceClient.overall({
@@ -64,7 +99,7 @@ export function useManageClarityData(searchQuery = "") {
         });
 
         if (!ignore) {
-          setOverallData(overallResponse.data ?? null);
+          setOverallData(normalizeOverall(overallResponse.data));
         }
       } catch {
         if (!ignore) {
@@ -88,7 +123,16 @@ export function useManageClarityData(searchQuery = "") {
     let ignore = false;
 
     async function fetchTableData() {
-      if (!connectionName || !namespace) {
+      if (!connectionName || !namespace || !overallData) {
+        setLogData([]);
+        setSpanData([]);
+        return;
+      }
+
+      const shouldFetchLogs = (overallData.log?.sent ?? 0) > 0;
+      const shouldFetchTraces = (overallData.trace?.sent ?? 0) > 0;
+
+      if (!shouldFetchLogs && !shouldFetchTraces) {
         setLogData([]);
         setSpanData([]);
         return;
@@ -96,33 +140,38 @@ export function useManageClarityData(searchQuery = "") {
 
       setTableDataLoading(true);
 
-      try {
-        const request = {
-          connectionName,
-          namespace,
-          timeframe: timeRange,
-          size: tablePageSize,
-          pageToken: "",
-          search: searchQuery.trim(),
-        };
-        const [logResponse, traceResponse] = await Promise.all([
-          budgetServiceClient.log(request),
-          budgetServiceClient.trace(request),
-        ]);
+      const request = {
+        connectionName,
+        namespace,
+        timeframe: timeRange,
+        size: tablePageSize,
+        pageToken: "",
+        search: searchQuery.trim(),
+      };
 
-        if (!ignore) {
-          setLogData(logResponse.data.map(logToRow));
-          setSpanData(traceResponse.data.map(spanToRow));
-        }
-      } catch {
-        if (!ignore) {
+      const [logResponse, traceResponse] = await Promise.allSettled([
+        shouldFetchLogs
+          ? budgetServiceClient.log(request)
+          : Promise.resolve(null),
+        shouldFetchTraces
+          ? budgetServiceClient.trace(request)
+          : Promise.resolve(null),
+      ]);
+
+      if (!ignore) {
+        if (logResponse.status === "fulfilled") {
+          setLogData(logResponse.value?.data.map(logToRow) ?? []);
+        } else {
           setLogData([]);
+        }
+
+        if (traceResponse.status === "fulfilled") {
+          setSpanData(traceResponse.value?.data.map(spanToRow) ?? []);
+        } else {
           setSpanData([]);
         }
-      } finally {
-        if (!ignore) {
-          setTableDataLoading(false);
-        }
+
+        setTableDataLoading(false);
       }
     }
 
@@ -131,7 +180,7 @@ export function useManageClarityData(searchQuery = "") {
     return () => {
       ignore = true;
     };
-  }, [connectionName, namespace, searchQuery, timeRange]);
+  }, [connectionName, namespace, overallData, searchQuery, timeRange]);
 
   return {
     loading: overallLoading || tableDataLoading,
@@ -140,5 +189,7 @@ export function useManageClarityData(searchQuery = "") {
     data: overallData,
     logData,
     spanData,
+    hasLogData: (overallData?.log?.sent ?? 0) > 0,
+    hasTraceData: (overallData?.trace?.sent ?? 0) > 0,
   };
 }

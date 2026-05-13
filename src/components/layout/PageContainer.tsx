@@ -40,26 +40,45 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
   const title = locationTitleMap[location];
 
   useEffect(() => {
-    if (pickerOptions.length < 1) {
-      async function fetchPickerOptions() {
-        const {
-          statuses,
-          // TODO: figure out how best to use these flags
-          // trace,
-          // log,
-        } = await timeframeServiceClient.timeframeStatus({
-          namespace,
-          connectionName,
-        });
+    let ignore = false;
+
+    async function fetchPickerOptions() {
+      if (!connectionName || !namespace) {
+        setPickerOptions([]);
+        setState("hasLogTimeframeData", undefined);
+        setState("hasTraceTimeframeData", undefined);
+        return;
+      }
+
+      try {
+        const { statuses, trace, log } =
+          await timeframeServiceClient.timeframeStatus({
+            namespace,
+            connectionName,
+          });
 
         const options = timeframeToPickerOptions(statuses);
 
-        setPickerOptions(options);
+        if (!ignore) {
+          setState("hasLogTimeframeData", log);
+          setState("hasTraceTimeframeData", trace);
+          setPickerOptions(options);
+        }
+      } catch {
+        if (!ignore) {
+          setPickerOptions([]);
+          setState("hasLogTimeframeData", undefined);
+          setState("hasTraceTimeframeData", undefined);
+        }
       }
-
-      void fetchPickerOptions();
     }
-  }, [pickerOptions, namespace, connectionName]);
+
+    void fetchPickerOptions();
+
+    return () => {
+      ignore = true;
+    };
+  }, [connectionName, namespace, setState]);
 
   return (
     <Box className="page-container">

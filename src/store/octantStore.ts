@@ -6,6 +6,8 @@ import { persist } from "zustand/middleware";
 interface OctantState {
   timeRange: Timeframe;
   connectionName?: string;
+  hasLogTimeframeData?: boolean;
+  hasTraceTimeframeData?: boolean;
   namespace?: string;
 }
 
