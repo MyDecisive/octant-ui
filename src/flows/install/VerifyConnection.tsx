@@ -53,25 +53,43 @@ function connectionStatusResponseToHealthWidgetProps(
       ],
     };
   }
+  if (loading) {
+    return {
+      status: "loading",
+      facets: [
+        {
+          label: "Clients connected",
+          loading: true,
+        },
+        {
+          label: "Receiving data",
+          loading: true,
+        },
+        {
+          label: "Sending data",
+          loading: true,
+        },
+        {
+          label: "Data integrity",
+          loading: true,
+        },
+      ],
+    };
+  }
 
   return {
-    status: "loading",
     facets: [
       {
         label: "Clients connected",
-        loading: true,
       },
       {
         label: "Receiving data",
-        loading: true,
       },
       {
         label: "Sending data",
-        loading: true,
       },
       {
         label: "Data integrity",
-        loading: true,
       },
     ],
   };
@@ -97,13 +115,21 @@ export function VerifyConnection() {
 
   const handleCheckConnectionStatus = useCallback(
     async (validatorRunId: string | null) => {
-      if (!validatorRunId) return;
       setLoading(true);
       try {
+        let id: string | undefined;
+        if (!validatorRunId) {
+          id = await createOrGetValidatorRunId({
+            connectionName: connectionName!,
+            namespace: namespace,
+          });
+
+          setRunId(id);
+        }
         const connectionStatusResponse =
           await connectionServiceClient.getConnectionStatus({
             scope: { connectionName, namespace },
-            validatorRunId,
+            validatorRunId: validatorRunId ?? id,
           });
         setConnectionStatus(connectionStatusResponse);
       } catch (e: unknown) {
@@ -124,6 +150,7 @@ export function VerifyConnection() {
     let ignore = false;
 
     async function fetchValidatorRunId(attempt: number) {
+      if (ignore) return;
       if (attempt >= 3) {
         // TODO: better error message?
         setError("Something went wrong with trying to spin up a validator");
@@ -139,19 +166,24 @@ export function VerifyConnection() {
         await new Promise((resolve) => {
           timeoutRef.current = setTimeout(resolve, 90_000);
         });
-        if (!ignore) {
+        if (!ignore && validatorRunId) {
           setRunId(validatorRunId);
 
           void handleCheckConnectionStatus(validatorRunId);
+          ignore = true;
         }
-      } catch {
+      } catch (e) {
+        console.warn("error in fetchValidatorRunId ", e);
         if (!ignore) void fetchValidatorRunId(attempt + 1);
+        else setError("Error fetching validator run Id");
       } finally {
         setLoading(false);
       }
     }
 
-    void fetchValidatorRunId(0);
+    if (!runId) {
+      void fetchValidatorRunId(0);
+    }
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       ignore = true;
@@ -162,7 +194,7 @@ export function VerifyConnection() {
         },
       });
     };
-  }, [connectionName, namespace, handleCheckConnectionStatus]);
+  }, [connectionName, namespace, handleCheckConnectionStatus, runId]);
 
   const healthWidgetProps = connectionStatusResponseToHealthWidgetProps(
     loading,
