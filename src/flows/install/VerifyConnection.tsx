@@ -54,31 +54,26 @@ function connectionStatusResponseToHealthWidgetProps(
     };
   }
 
-  if (loading)
-    return {
-      status: "loading",
-      facets: [
-        {
-          label: "Clients connected",
-          loading: true,
-        },
-        {
-          label: "Receiving data",
-          loading: true,
-        },
-        {
-          label: "Sending data",
-          loading: true,
-        },
-        {
-          label: "Data integrity",
-          loading: true,
-        },
-      ],
-    };
-
   return {
     status: "loading",
+    facets: [
+      {
+        label: "Clients connected",
+        loading: true,
+      },
+      {
+        label: "Receiving data",
+        loading: true,
+      },
+      {
+        label: "Sending data",
+        loading: true,
+      },
+      {
+        label: "Data integrity",
+        loading: true,
+      },
+    ],
   };
 }
 
