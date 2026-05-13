@@ -142,7 +142,7 @@ export function VerifyConnection() {
           namespace: namespace,
         });
         await new Promise((resolve) => {
-          timeoutRef.current = setTimeout(resolve, 60_000);
+          timeoutRef.current = setTimeout(resolve, 90_000);
         });
         if (!ignore) {
           setRunId(validatorRunId);
