@@ -8,7 +8,7 @@ import { HealthWidgetTitle } from "./HealthWidgetTitle";
 
 export interface HealthWidgetProps {
   title: string;
-  status: "error" | "operational" | "loading";
+  status?: "error" | "operational" | "loading";
   fix?: FixInfo;
   facets?: HealthFacet[];
   simple?: boolean;

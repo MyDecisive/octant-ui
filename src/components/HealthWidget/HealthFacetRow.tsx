@@ -20,7 +20,11 @@ export function HealthFacetRow({ label, health, fix, loading }: HealthFacet) {
         alignItems={"center"}
       >
         <Typography className="health-facet-row-label">{label}</Typography>
-        <HealthFacetRowStatusIcon health={health} loading={loading} />
+        {health === undefined && loading === undefined ? (
+          <Typography className="health-facet-row-label">-</Typography>
+        ) : (
+          <HealthFacetRowStatusIcon health={health} loading={loading} />
+        )}
       </Stack>
       {fix && <FixCard {...fix} />}
     </Stack>
