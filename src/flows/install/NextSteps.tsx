@@ -5,12 +5,12 @@ import { ViewTitle } from "@components/ViewTitle";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { useLocation } from "wouter";
-import { ROUTES } from "../../constants/ROUTES";
+import { ROUTES } from "../../constants/routing";
 import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 import { NextStepsCopy as copy } from "../../copy/install/NextSteps.copy";
 
 export function NextSteps() {
-  const [, setLocation] = useLocation();
+  const [, navigate] = useLocation();
   const { loading, fetchAndDownload } = useFetchManifestsAndDownload();
 
   const handleDownloadManifestsClick = () => fetchAndDownload();
@@ -29,7 +29,7 @@ export function NextSteps() {
         footer={
           <Button
             variant="text"
-            onClick={() => setLocation(ROUTES.CLARITY)}
+            onClick={() => navigate(ROUTES.CLARITY)}
             size="small"
             disableRipple
           >
