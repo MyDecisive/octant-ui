@@ -1,6 +1,5 @@
-import type { TelemetryTypes, ViewKey } from "@types";
+import type { TelemetryTypes } from "@types";
 import { create } from "zustand";
-import { VIEW_ORDER } from "../flows/install";
 
 interface AppStateForm {
   argoAgreement: boolean;
@@ -13,22 +12,15 @@ interface AppStateForm {
   connectionName?: string;
   mdaiVersion?: string;
 }
-interface Values {
-  activeView: ViewKey;
-  form: AppStateForm;
-}
-
 interface Actions {
-  setActiveView: (newView: ViewKey) => void;
   setFormField: (
     key: keyof AppStateForm,
     value: AppStateForm[keyof AppStateForm],
   ) => void;
   resetForm: () => void;
-  advanceInstallFlow: () => void;
 }
 
-type OctantConnectStore = Values & Actions;
+type OctantConnectStore = AppStateForm & Actions;
 
 function createDefaultConnectForm(): AppStateForm {
   return {
@@ -39,31 +31,8 @@ function createDefaultConnectForm(): AppStateForm {
   };
 }
 
-function createDefaultConnectState() {
-  return {
-    activeView: "argoInstall",
-    form: createDefaultConnectForm(),
-  };
-}
-
 export const useConnectStore = create<OctantConnectStore>()((set) => ({
-  ...createDefaultConnectState(),
-  setActiveView: (newView) =>
-    set((state) => ({ ...state, activeView: newView })),
-  setFormField: (key, value) =>
-    set((state) => ({ ...state, form: { ...state.form, [key]: value } })),
-  resetForm: () =>
-    set((state) => ({ ...state, form: createDefaultConnectForm() })),
-  advanceInstallFlow: () => {
-    set((state) => {
-      const currentView = state.activeView;
-      const currentViewIdx = VIEW_ORDER.indexOf(currentView);
-
-      const nextView = VIEW_ORDER[currentViewIdx + 1];
-      return {
-        ...state,
-        activeView: nextView,
-      };
-    });
-  },
+  ...createDefaultConnectForm(),
+  setFormField: (key, value) => set((state) => ({ ...state, [key]: value })),
+  resetForm: () => set(() => createDefaultConnectForm()),
 }));

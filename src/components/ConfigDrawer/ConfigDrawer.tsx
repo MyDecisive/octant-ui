@@ -16,16 +16,12 @@ interface ConfigDrawerProps {
 
 export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
   const { telemetryTypes, url, apiKey, connectionName } = useConnectStore(
-    useShallow((state) => {
-      const { telemetryTypes, url, apiKey, connectionName } = state.form;
-
-      return {
-        telemetryTypes,
-        url,
-        apiKey,
-        connectionName,
-      };
-    }),
+    useShallow(({ telemetryTypes, url, apiKey, connectionName }) => ({
+      telemetryTypes,
+      url,
+      apiKey,
+      connectionName,
+    })),
   );
 
   const linesForRender = createUpdatedConfigLines(

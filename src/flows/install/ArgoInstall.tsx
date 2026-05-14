@@ -7,7 +7,7 @@ import { useConnectStore } from "@store/connectStore";
 import { DeployArgoCopy as copy} from "../../copy/install/ArgoInstall.copy";
 
 export function ArgoInstall() {
-  const argoAgreement = useConnectStore((state) => state.form.argoAgreement);
+  const argoAgreement = useConnectStore((state) => state.argoAgreement);
   const setFormField = useConnectStore((state) => state.setFormField);
 
   return (

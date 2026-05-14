@@ -77,8 +77,8 @@ export function TestAndValidateButton({
   const [attemptCount, setAttemptCount] = useState(0);
 
   const { connectionName } = useConnectStore(
-    useShallow((state) => ({
-      connectionName: state.form.connectionName,
+    useShallow(({ connectionName }) => ({
+      connectionName,
     })),
   );
 

@@ -15,11 +15,11 @@ export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(false);
 
   const { telemetryTypes, connectionName, url, namespace } = useConnectStore(
-    useShallow((state) => ({
-      connectionName: state.form.connectionName,
-      url: state.form.url,
-      namespace: state.form.namespace,
-      telemetryTypes: state.form.telemetryTypes,
+    useShallow(({ connectionName, url, namespace, telemetryTypes }) => ({
+      connectionName,
+      url,
+      namespace,
+      telemetryTypes,
     })),
   );
   const { locationUrl, code } = createForwardDataSnippets({

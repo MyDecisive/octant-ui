@@ -108,9 +108,9 @@ export function VerifyConnection() {
   const timeoutRef = useRef<number | null>(null);
 
   const { connectionName, namespace } = useConnectStore(
-    useShallow((state) => ({
-      connectionName: state.form.connectionName,
-      namespace: state.form.namespace,
+    useShallow(({ connectionName, namespace }) => ({
+      connectionName,
+      namespace,
     })),
   );
 

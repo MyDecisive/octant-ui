@@ -21,9 +21,18 @@ function getManifestBlobPart(data: Uint8Array | string) {
 // TODO: Handle error state
 export function useFetchManifestsAndDownload() {
   const [loading, setLoading] = useState(false);
-  const form = useConnectStore(useShallow((state) => state.form));
+  const { connectionName, telemetryTypes, mdaiVersion, namespace } =
+    useConnectStore(
+      useShallow(
+        ({ connectionName, telemetryTypes, mdaiVersion, namespace }) => ({
+          connectionName,
+          telemetryTypes,
+          mdaiVersion,
+          namespace,
+        }),
+      ),
+    );
 
-  const { connectionName, telemetryTypes, mdaiVersion, namespace } = form;
   const timeoutRef = useRef<number | null>(null);
 
   const fetchAndDownload = useCallback(

@@ -25,20 +25,12 @@ export function ConnectToCluster() {
   const { callbacks, formIsValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
   const { argoUrl, accountToken, connectionName } = useConnectStore(
-    useShallow((state) => {
-      // Provide default empty string values so React recognizes the Inputs as controlled
-      const {
-        argoUrl = "",
-        accountToken = "",
-        connectionName = "",
-      } = state.form;
-
-      return {
-        argoUrl,
-        accountToken,
-        connectionName,
-      };
-    }),
+    // Provide default empty string values so React recognizes the Inputs as controlled
+    useShallow(({ argoUrl = "", accountToken = "", connectionName = "" }) => ({
+      argoUrl,
+      accountToken,
+      connectionName,
+    })),
   );
   const setFormField = useConnectStore(
     useShallow((state) => state.setFormField),

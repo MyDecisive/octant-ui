@@ -31,23 +31,22 @@ export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
   const { telemetryTypes, url, apiKey, connectionName, namespace } =
     useConnectStore(
-      useShallow((state) => {
-        // Provide default empty string values so React recognizes the Inputs as controlled
-        const {
+      useShallow(
+        ({
+          // Provide default empty string values so React recognizes the Inputs as controlled
           telemetryTypes,
           url = "",
           apiKey = "",
           connectionName,
           namespace,
-        } = state.form;
-        return {
+        }) => ({
           telemetryTypes,
           url,
           apiKey,
           connectionName,
           namespace,
-        };
-      }),
+        }),
+      ),
     );
   const setFormField = useConnectStore((state) => state.setFormField);
 

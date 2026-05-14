@@ -27,9 +27,9 @@ const formSpec: FormFields = {
 export function SetupSmarthub() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();
   const { callbacks, fieldErrors } = useFormValidation(formSpec);
-  const namespace = useConnectStore((state) => state.form.namespace);
-  const connectionName = useConnectStore((state) => state.form.connectionName);
-  const mdaiVersion = useConnectStore((state) => state.form.mdaiVersion);
+  const namespace = useConnectStore((state) => state.namespace);
+  const connectionName = useConnectStore((state) => state.connectionName);
+  const mdaiVersion = useConnectStore((state) => state.mdaiVersion);
   const setFormField = useConnectStore((state) => state.setFormField);
   const setState = useOctantStore((state) => state.setState);
 
