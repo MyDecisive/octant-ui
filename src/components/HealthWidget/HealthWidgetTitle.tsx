@@ -17,7 +17,7 @@ export function HealthWidgetTitle({
       <Typography variant="body1" bold>
         {title}
       </Typography>
-      <HeaderStatusChip status={status} />
+      {status && <HeaderStatusChip status={status} />}
     </Stack>
   );
 }
