@@ -9,8 +9,9 @@ import Typography from "@mui/material/Typography";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { createForwardDataSnippets } from "../createForwardDataSnippets";
 import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
+import { createForwardDataSnippets } from "./createForwardDataSnippets";
+
 export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(false);
 
@@ -53,9 +54,7 @@ export function UpdateAgent() {
         />
         <ButtonRow>
           <NextButton disabled={!confirmed} ctaTxt={copy.cta} />
-          <Typography variant="chipLabel">
-            {copy.timingTxt}
-          </Typography>
+          <Typography variant="chipLabel">{copy.timingTxt}</Typography>
         </ButtonRow>
       </FlowCenterColumn>
       <Stack className="right-column" gap={3}>

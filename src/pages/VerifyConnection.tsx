@@ -13,11 +13,11 @@ import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { VerifyConnection as copy } from "../copy/install/VerifyConnection.copy";
 import {
   connectionServiceClient,
   createOrGetValidatorRunId,
-} from "../../services/connection";
-import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
+} from "../services/connection";
 
 function connectionStatusResponseToHealthWidgetProps(
   loading: boolean,

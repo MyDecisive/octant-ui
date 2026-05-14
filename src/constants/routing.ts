@@ -1,10 +1,10 @@
-import { ArgoInstall } from "../flows/install/ArgoInstall";
-import { ConnectToCluster } from "../flows/install/ConnectToCluster";
-import { DeployCollector } from "../flows/install/DeployCollector";
-import { NextSteps } from "../flows/install/NextSteps";
-import { SetupSmarthub } from "../flows/install/SetupSmarthub";
-import { UpdateAgent } from "../flows/install/UpdateAgent";
-import { VerifyConnection } from "../flows/install/VerifyConnection";
+import { ArgoInstall } from "../pages/ArgoInstall";
+import { ConnectToCluster } from "../pages/ConnectToCluster";
+import { DeployCollector } from "../pages/DeployCollector";
+import { NextSteps } from "../pages/NextSteps/NextSteps";
+import { SetupSmarthub } from "../pages/SetupSmarthub";
+import { UpdateAgent } from "../pages/UpdateAgent/UpdateAgent";
+import { VerifyConnection } from "../pages/VerifyConnection";
 
 export const ROUTES = {
   SPLASH: "/",

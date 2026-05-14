@@ -15,10 +15,10 @@ import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState } from "react";
-import { SmarthubCopy as copy } from "../../copy/install/SetupSmarthub.copy";
-import { useFormValidation } from "../../fieldValidation/useFormValidation";
-import { validateRequired } from "../../fieldValidation/validateRequired";
-import { installServiceClient } from "../../services/install";
+import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
+import { useFormValidation } from "../fieldValidation/useFormValidation";
+import { validateRequired } from "../fieldValidation/validateRequired";
+import { installServiceClient } from "../services/install";
 
 const formSpec: FormFields = {
   namespace: [validateRequired],

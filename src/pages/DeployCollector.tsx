@@ -13,13 +13,13 @@ import type { FormFields, TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { useFormValidation } from "../../fieldValidation/useFormValidation";
-import { validateRequired } from "../../fieldValidation/validateRequired";
-import { validateTelemetryTypesSelection } from "../../fieldValidation/validateTelemetryTypesSelection";
-import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
-import { connectionServiceClient } from "../../services/connection";
-import { dDogServiceClient } from "../../services/ddog";
-import { DeployCollectorCopy as copy } from "../../copy/install/DeployCollector.copy";
+import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
+import { useFormValidation } from "../fieldValidation/useFormValidation";
+import { validateRequired } from "../fieldValidation/validateRequired";
+import { validateTelemetryTypesSelection } from "../fieldValidation/validateTelemetryTypesSelection";
+import { validateUrlInput } from "../fieldValidation/validateUrlInput";
+import { connectionServiceClient } from "../services/connection";
+import { dDogServiceClient } from "../services/ddog";
 
 const formSpec: FormFields = {
   telemetryTypes: [validateTelemetryTypesSelection],
@@ -141,10 +141,7 @@ export function DeployCollector() {
   return (
     <>
       <FlowCenterColumn>
-        <ViewTitle
-          title={copy.header}
-          description={copy.subheader}
-        />
+        <ViewTitle title={copy.header} description={copy.subheader} />
         <Typography variant="h6">{copy.sourceSection.title}</Typography>
 
         {/* Source field */}

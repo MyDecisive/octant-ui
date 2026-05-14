@@ -8,12 +8,12 @@ import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
-import { useFormValidation } from "../../fieldValidation/useFormValidation";
-import { validateMinLength } from "../../fieldValidation/validateMinLength";
-import { validateRequired } from "../../fieldValidation/validateRequired";
-import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
-import { argoCdServiceClient } from "../../services/argoCd";
-import { ConnectToClusterCopy as copy }  from "../../copy/install/ConnectToCluster.copy";
+import { ConnectToClusterCopy as copy } from "../copy/install/ConnectToCluster.copy";
+import { useFormValidation } from "../fieldValidation/useFormValidation";
+import { validateMinLength } from "../fieldValidation/validateMinLength";
+import { validateRequired } from "../fieldValidation/validateRequired";
+import { validateUrlInput } from "../fieldValidation/validateUrlInput";
+import { argoCdServiceClient } from "../services/argoCd";
 
 const formSpec: FormFields = {
   connectionName: [validateRequired, validateMinLength(5)],
@@ -76,19 +76,14 @@ export function ConnectToCluster() {
       return true;
       // eslint-disable-next-line
     } catch (_) {
-      setConnectionError(
-        copy.formError.genericError,
-      );
+      setConnectionError(copy.formError.genericError);
       return false;
     }
   };
 
   return (
     <FlowCenterColumn isForm>
-      <ViewTitle
-        title={copy.header}
-        description={copy.subheader}
-      />
+      <ViewTitle title={copy.header} description={copy.subheader} />
       <Input
         value={decodeURI(connectionName)}
         onChange={(e) =>
@@ -115,13 +110,13 @@ export function ConnectToCluster() {
         placeholder={copy.argoToken.placeholder}
         helperText={copy.argoToken.helpTxt}
       />
-      {connectionError &&
+      {connectionError && (
         <Alert
           severity="error"
           title={copy.formError.header}
           description={connectionError}
         />
-      }
+      )}
       <AsyncNextButton
         asyncFunction={testArgoConnection}
         canAsync={formIsValid}
