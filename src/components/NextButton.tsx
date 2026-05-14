@@ -1,15 +1,14 @@
 import Button from "@mui/material/Button";
-import { useConnectStore } from "@store/connectStore";
-import { VIEW_ORDER } from "../flows/install";
+import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 
-export function NextButton({ disabled, ctaTxt }: { disabled: boolean, ctaTxt?: string; }) {
-  const activeView = useConnectStore((state) => state.activeView);
-  const setActiveView = useConnectStore((state) => state.setActiveView);
-
-  const onClickProgress = () => {
-    const currentViewIdx = VIEW_ORDER.indexOf(activeView);
-    setActiveView(VIEW_ORDER[currentViewIdx + 1]);
-  };
+export function NextButton({
+  disabled,
+  ctaTxt,
+}: {
+  disabled: boolean;
+  ctaTxt?: string;
+}) {
+  const advanceInstallFlow = useAdvanceInstallAndConnect();
 
   return (
     <Button
@@ -17,7 +16,7 @@ export function NextButton({ disabled, ctaTxt }: { disabled: boolean, ctaTxt?: s
       variant="contained"
       size="small"
       type={"button"}
-      onClick={onClickProgress}
+      onClick={advanceInstallFlow}
       disabled={disabled}
       color={!disabled ? "primary" : "secondary"}
     >

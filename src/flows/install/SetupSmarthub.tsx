@@ -13,6 +13,7 @@ import {
 import { useConnectStore } from "@store/connectStore";
 import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
+import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState } from "react";
 import { SmarthubCopy as copy } from "../../copy/install/SetupSmarthub.copy";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
@@ -24,14 +25,12 @@ const formSpec: FormFields = {
 };
 
 export function SetupSmarthub() {
+  const advanceInstallFlow = useAdvanceInstallAndConnect();
   const { callbacks, fieldErrors } = useFormValidation(formSpec);
   const namespace = useConnectStore((state) => state.form.namespace);
   const connectionName = useConnectStore((state) => state.form.connectionName);
   const mdaiVersion = useConnectStore((state) => state.form.mdaiVersion);
   const setFormField = useConnectStore((state) => state.setFormField);
-  const advanceInstallFlow = useConnectStore(
-    (state) => state.advanceInstallFlow,
-  );
   const setState = useOctantStore((state) => state.setState);
 
   const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");
