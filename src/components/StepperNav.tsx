@@ -2,28 +2,28 @@ import Box from "@mui/material/Box";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
+import { useLocation, useParams } from "wouter";
+import { INSTALL_AND_CONNECT, ROUTES } from "../constants/routing";
 
-export function StepperNav({
-  activeStepIndex,
-  steps,
-  onStepClick,
-}: {
-  activeStepIndex: number;
-  steps: { title: string; id: string }[];
-  onStepClick: (stepKey: string) => void;
-}) {
+export function StepperNav() {
+  const [, params] = useParams<[boolean, { step: string }]>();
+  const [, navigate] = useLocation();
+  const activeStep = parseInt(params.step);
+
   return (
     <Box className="left-column">
-      <Stepper activeStep={activeStepIndex} orientation="vertical">
-        {steps.map(({ id, title }, index) => {
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {INSTALL_AND_CONNECT.map(({ label }, index) => {
           return (
-            <Step key={id} completed={index < activeStepIndex}>
+            <Step key={label} completed={index < activeStep}>
               <StepButton
                 color="inherit"
-                onClick={() => onStepClick(id)}
-                disabled={index > activeStepIndex}
+                onClick={() =>
+                  navigate(`${ROUTES.INSTALL}/${(index + 1).toString()}`)
+                }
+                disabled={index > activeStep} // TODO: refactor disabled logic
               >
-                {title}
+                {label}
               </StepButton>
             </Step>
           );

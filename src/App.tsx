@@ -1,27 +1,38 @@
-import { FlowContainer } from "@components/FlowContainer";
 import { FlowLayout } from "@components/layout/FlowLayout";
-import { Route, Router, Switch } from "wouter";
+import { StepperNav } from "@components/StepperNav";
+import { Redirect, Route, Router, Switch } from "wouter";
 import { Splash } from "./components/Splash";
-import { ROUTES } from "./constants/ROUTES";
+import {
+  FLOW_ROUTES,
+  INSTALL_AND_CONNECT,
+  PAGE_ROUTES,
+  ROUTES,
+} from "./constants/routing";
 import { ClarityPage } from "./pages/Clarity/Clarity";
 import { ConnectionsPage } from "./pages/Connections";
 import { SmarthubPage } from "./pages/Smarthub";
-
-const flowRoutes = new RegExp(/^\/(?:install)?$/);
-
-const pageRoutes = new RegExp(/^\/(clarity|system-health|smarthub|support)$/);
 
 function App() {
   return (
     <Router base={import.meta.env.BASE_URL}>
       <Switch>
-        <Route path={flowRoutes}>
+        <Route path={FLOW_ROUTES}>
           <FlowLayout>
             <Route path={ROUTES.SPLASH} component={Splash} />
-            <Route path={ROUTES.INSTALL} component={FlowContainer} />
+            <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
+            {INSTALL_AND_CONNECT.map(({ Component }, index) => (
+              <Route
+                key={`flow-step-${index.toLocaleString()}`}
+                path={`${ROUTES.INSTALL}/${(index + 1).toString()}`}
+                component={Component}
+              />
+            ))}
+            <Route path={ROUTES.INSTALL}>
+              <Redirect to="/install/1" />
+            </Route>
           </FlowLayout>
         </Route>
-        <Route path={pageRoutes}>
+        <Route path={PAGE_ROUTES}>
           <Switch>
             <Route path={ROUTES.CLARITY} component={ClarityPage} />
             <Route path={ROUTES.SYSTEMHEALTH} component={ConnectionsPage} />
