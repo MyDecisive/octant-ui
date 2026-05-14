@@ -3,7 +3,7 @@ import { AsyncNextButton } from "@components/AsyncNextButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useState, type ChangeEventHandler } from "react";
@@ -24,7 +24,7 @@ const formSpec: FormFields = {
 export function ConnectToCluster() {
   const { callbacks, formIsValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
-  const { argoUrl, accountToken, connectionName } = useConnectStore(
+  const { argoUrl, accountToken, connectionName } = useInstallAndConnectStore(
     // Provide default empty string values so React recognizes the Inputs as controlled
     useShallow(({ argoUrl = "", accountToken = "", connectionName = "" }) => ({
       argoUrl,
@@ -32,7 +32,7 @@ export function ConnectToCluster() {
       connectionName,
     })),
   );
-  const setFormField = useConnectStore(
+  const setFormField = useInstallAndConnectStore(
     useShallow((state) => state.setFormField),
   );
   const setState = useOctantStore((state) => state.setState);

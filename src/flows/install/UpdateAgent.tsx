@@ -6,7 +6,7 @@ import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { createForwardDataSnippets } from "../createForwardDataSnippets";
@@ -14,14 +14,15 @@ import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
 export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(false);
 
-  const { telemetryTypes, connectionName, url, namespace } = useConnectStore(
-    useShallow(({ connectionName, url, namespace, telemetryTypes }) => ({
-      connectionName,
-      url,
-      namespace,
-      telemetryTypes,
-    })),
-  );
+  const { telemetryTypes, connectionName, url, namespace } =
+    useInstallAndConnectStore(
+      useShallow(({ connectionName, url, namespace, telemetryTypes }) => ({
+        connectionName,
+        url,
+        namespace,
+        telemetryTypes,
+      })),
+    );
   const { locationUrl, code } = createForwardDataSnippets({
     connectionName: connectionName!,
     url: url!,

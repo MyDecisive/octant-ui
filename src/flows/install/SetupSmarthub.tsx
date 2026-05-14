@@ -10,7 +10,7 @@ import {
   InstallStatus,
   type GetInstallStatusResponse,
 } from "@mydecisiveai/octant-client";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
@@ -27,10 +27,12 @@ const formSpec: FormFields = {
 export function SetupSmarthub() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();
   const { callbacks, fieldErrors } = useFormValidation(formSpec);
-  const namespace = useConnectStore((state) => state.namespace);
-  const connectionName = useConnectStore((state) => state.connectionName);
-  const mdaiVersion = useConnectStore((state) => state.mdaiVersion);
-  const setFormField = useConnectStore((state) => state.setFormField);
+  const namespace = useInstallAndConnectStore((state) => state.namespace);
+  const connectionName = useInstallAndConnectStore(
+    (state) => state.connectionName,
+  );
+  const mdaiVersion = useInstallAndConnectStore((state) => state.mdaiVersion);
+  const setFormField = useInstallAndConnectStore((state) => state.setFormField);
   const setState = useOctantStore((state) => state.setState);
 
   const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");

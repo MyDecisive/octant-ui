@@ -5,7 +5,7 @@ import {
   DeploymentType,
   ManifestOutFormat,
 } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { connectionServiceClient } from "../../services/connection";
 
@@ -22,7 +22,7 @@ function getManifestBlobPart(data: Uint8Array | string) {
 export function useFetchManifestsAndDownload() {
   const [loading, setLoading] = useState(false);
   const { connectionName, telemetryTypes, mdaiVersion, namespace } =
-    useConnectStore(
+    useInstallAndConnectStore(
       useShallow(
         ({ connectionName, telemetryTypes, mdaiVersion, namespace }) => ({
           connectionName,

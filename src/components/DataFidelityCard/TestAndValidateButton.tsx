@@ -1,6 +1,6 @@
 import Button, { type ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import type { FidelityState } from "@types";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { useShallow } from "zustand/shallow";
@@ -76,7 +76,7 @@ export function TestAndValidateButton({
   // TODO: remove Demo code
   const [attemptCount, setAttemptCount] = useState(0);
 
-  const { connectionName } = useConnectStore(
+  const { connectionName } = useInstallAndConnectStore(
     useShallow(({ connectionName }) => ({
       connectionName,
     })),

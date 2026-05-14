@@ -20,7 +20,7 @@ interface Actions {
   resetForm: () => void;
 }
 
-type OctantConnectStore = AppStateForm & Actions;
+type InstallAndConnectStore = AppStateForm & Actions;
 
 function createDefaultConnectForm(): AppStateForm {
   return {
@@ -31,8 +31,10 @@ function createDefaultConnectForm(): AppStateForm {
   };
 }
 
-export const useConnectStore = create<OctantConnectStore>()((set) => ({
-  ...createDefaultConnectForm(),
-  setFormField: (key, value) => set((state) => ({ ...state, [key]: value })),
-  resetForm: () => set(() => createDefaultConnectForm()),
-}));
+export const useInstallAndConnectStore = create<InstallAndConnectStore>()(
+  (set) => ({
+    ...createDefaultConnectForm(),
+    setFormField: (key, value) => set((state) => ({ ...state, [key]: value })),
+    resetForm: () => set(() => createDefaultConnectForm()),
+  }),
+);

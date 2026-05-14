@@ -1,6 +1,6 @@
 import { Accordion } from "@components/Accordion";
 import Stack from "@mui/material/Stack";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import classNames from "classnames";
 import { useShallow } from "zustand/shallow";
 import {
@@ -15,14 +15,15 @@ interface ConfigDrawerProps {
 }
 
 export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
-  const { telemetryTypes, url, apiKey, connectionName } = useConnectStore(
-    useShallow(({ telemetryTypes, url, apiKey, connectionName }) => ({
-      telemetryTypes,
-      url,
-      apiKey,
-      connectionName,
-    })),
-  );
+  const { telemetryTypes, url, apiKey, connectionName } =
+    useInstallAndConnectStore(
+      useShallow(({ telemetryTypes, url, apiKey, connectionName }) => ({
+        telemetryTypes,
+        url,
+        apiKey,
+        connectionName,
+      })),
+    );
 
   const linesForRender = createUpdatedConfigLines(
     telemetryTypes,

@@ -10,7 +10,7 @@ import { ConnectError } from "@connectrpc/connect";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import {
@@ -107,7 +107,7 @@ export function VerifyConnection() {
 
   const timeoutRef = useRef<number | null>(null);
 
-  const { connectionName, namespace } = useConnectStore(
+  const { connectionName, namespace } = useInstallAndConnectStore(
     useShallow(({ connectionName, namespace }) => ({
       connectionName,
       namespace,
