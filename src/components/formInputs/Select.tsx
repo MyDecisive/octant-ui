@@ -15,6 +15,7 @@ export interface SelectOption {
   label?: string;
   helperText?: string;
   chip?: ChipProps;
+  disabled?: boolean;
   value: string;
 }
 
@@ -69,17 +70,25 @@ export function Select({
           className: "mdai-select-menu-options-container",
         }}
       >
-        {options.map(({ label, value, chip, helperText: optionHelperText }) => (
-          <RichMenuItem
-            className="mdai-select-menu-item"
-            key={value}
-            label={label}
-            disabled={disabled}
-            chip={chip}
-            value={value}
-            helperText={optionHelperText}
-          />
-        ))}
+        {options.map(
+          ({
+            label,
+            value,
+            chip,
+            disabled: optionDisabled,
+            helperText: optionHelperText,
+          }) => (
+            <RichMenuItem
+              className="mdai-select-menu-item"
+              key={value}
+              label={label}
+              disabled={disabled || optionDisabled}
+              chip={chip}
+              value={value}
+              helperText={optionHelperText}
+            />
+          ),
+        )}
       </MuiSelect>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
       {errorText && <FormHelperText color="error">{errorText}</FormHelperText>}

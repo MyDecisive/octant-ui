@@ -57,28 +57,47 @@ export function useManageFilters() {
     pctSampled: number,
     includeErr: boolean,
   ) => {
-    setFiltersLoading((state) => state.add(type));
+    setFiltersLoading((state) => new Set(state).add(type));
 
-    for await (const res of filterServiceClient.updateFilter({
-      data: {
-        type: toFilterType(type),
-        pctSampled,
-        includeErr,
-      },
-      namespace,
-      connectionName,
-    })) {
-      const status = res.status;
-      if (status === UpdateFilterResponse_Status.COMPLETED) {
-        break;
+    try {
+      for await (const res of filterServiceClient.updateFilter({
+        data: {
+          type: toFilterType(type),
+          pctSampled,
+          includeErr,
+        },
+        namespace,
+        connectionName,
+      })) {
+        const status = res.status;
+        if (status === UpdateFilterResponse_Status.COMPLETED) {
+          setFilters((state) => ({
+            logs: state?.logs ?? {
+              type: "logs",
+              pctSampled: 0,
+              includeErr: false,
+            },
+            traces: state?.traces ?? {
+              type: "traces",
+              pctSampled: 0,
+              includeErr: false,
+            },
+            [type]: {
+              type,
+              pctSampled,
+              includeErr,
+            },
+          }));
+          break;
+        }
       }
+    } finally {
+      setFiltersLoading((state) => {
+        const newState = new Set(state);
+        newState.delete(type);
+        return newState;
+      });
     }
-
-    setFiltersLoading((state) => {
-      const newState = new Set(state);
-      newState.delete(type);
-      return newState;
-    });
   };
 
   return {

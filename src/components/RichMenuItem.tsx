@@ -1,15 +1,13 @@
 import Chip, { type ChipProps } from "@mui/material/Chip";
-import MenuItem from "@mui/material/MenuItem";
+import MenuItem, { type MenuItemProps } from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import classNames from "classnames";
 
-interface RichMenuItemProps {
+interface RichMenuItemProps extends Omit<MenuItemProps, "children"> {
   label?: string;
   helperText?: string;
   chip?: ChipProps;
   value: string;
-  className?: string;
-  disabled?: boolean;
 }
 
 /**
@@ -23,9 +21,11 @@ export function RichMenuItem({
   value,
   disabled,
   className,
+  ...menuItemProps
 }: RichMenuItemProps) {
   return (
     <MenuItem
+      {...menuItemProps}
       disabled={disabled}
       className={classNames("mdai-rich-menu-item", className)}
       value={value}

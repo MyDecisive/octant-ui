@@ -16,7 +16,7 @@
   grid-column: span 4;
 }
 
-.clarity-timepicker {
+.clarity-timepicker.MuiFormControl-root {
   width: 340px;
 }
 
