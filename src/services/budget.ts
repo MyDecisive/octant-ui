@@ -3,6 +3,59 @@ import type { Log, Overall_Metric, Span } from "@mydecisiveai/octant-client";
 import { BudgetService } from "@mydecisiveai/octant-client";
 import { transport } from "./transport";
 
+const SERVICE_NAMES_FOR_MOCK = [
+  "catalog-service",
+  "product-service",
+  "search-service",
+  "user-service",
+  "auth-service",
+  "cart-service",
+  "checkout-service",
+  "pricing-service",
+  "promotion-service",
+  "tax-service",
+  "inventory-service",
+  "shipping-service",
+  "payment-service",
+  "fraud-service",
+  "order-service",
+  "notification-service",
+  "fulfillment-service",
+  "returns-service",
+  "refund-service",
+  "customer-service",
+];
+
+const SPAN_NAMES_FOR_MOCK = [
+  "/apiv1/catalog/browse",
+  "/apiv1/product/details",
+  "/apiv1/product/search",
+  "/apiv1/user/profile",
+  "/apiv1/user/login",
+  "/apiv1/cart/add-item",
+  "/apiv1/checkout/start",
+  "/apiv1/checkout/pricing",
+  "/apiv1/checkout/promo",
+  "/apiv1/checkout/tax",
+  "/apiv1/product/availability",
+  "/apiv1/checkout/shipping",
+  "/apiv1/checkout/payment",
+  "/apiv1/checkout/fraud-check",
+  "/apiv1/order/create",
+  "/apiv1/order/confirmation",
+  "/apiv1/order/fulfillment",
+  "/apiv1/return/request",
+  "/apiv1/refund/process",
+  "/apiv1/customer/support",
+];
+
+function makePickRandomishString(arr: string[]) {
+  return function (seed: number) {
+    const hash = Math.abs(Math.sin(seed * 9301 + 49297) * 233280);
+    return arr[Math.floor(hash % arr.length)];
+  };
+}
+
 function createMockOverallMetric(
   overrides?: Partial<Overall_Metric>,
 ): Overall_Metric {
@@ -18,11 +71,14 @@ function createMockOverallMetric(
 }
 
 function createMockLogs(count = 50): Log[] {
+  const pickRandomishServiceName = makePickRandomishString(
+    SERVICE_NAMES_FOR_MOCK,
+  );
   return Array.from(
     { length: count },
     (_, i) =>
       ({
-        name: `/service-${i + 1}`,
+        name: pickRandomishServiceName(i),
         sent: parseFloat((Math.random() * 100).toFixed(2)),
         pct: parseFloat((Math.random() * 20).toFixed(2)),
         cost: parseFloat((Math.random() * 50).toFixed(2)),
@@ -31,11 +87,12 @@ function createMockLogs(count = 50): Log[] {
 }
 
 function createMockSpans(count = 50): Span[] {
+  const pickRandomishRootSpan = makePickRandomishString(SPAN_NAMES_FOR_MOCK);
   return Array.from(
     { length: count },
     (_, i) =>
       ({
-        name: `/trace-root-${i + 1}`,
+        name: pickRandomishRootSpan(i),
         breadth: parseFloat((Math.random() * 10).toFixed(2)),
         depth: parseFloat((Math.random() * 8).toFixed(2)),
         invocations: parseFloat((Math.random() * 1000).toFixed(2)),
