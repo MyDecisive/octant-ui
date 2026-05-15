@@ -76,9 +76,7 @@ const mockTransport = createRouterTransport(({ service }) => {
 
 export const connectionServiceClient = createClient(
   ConnectionService,
-  import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true"
-    ? mockTransport
-    : transport,
+  import.meta.env.VITE_USE_MOCKS === "true" ? mockTransport : transport,
 );
 
 const IN_PROGRESS_ERROR = "another operation is already in progress";

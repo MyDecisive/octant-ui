@@ -17,7 +17,5 @@ const mockTransport = createRouterTransport(({ service }) => {
 
 export const dDogServiceClient = createClient(
   DatadogService,
-  import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true"
-    ? mockTransport
-    : transport,
+  import.meta.env.VITE_USE_MOCKS === "true" ? mockTransport : transport,
 );

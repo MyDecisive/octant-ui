@@ -22,7 +22,5 @@ const mockTransport = createRouterTransport(({ service }) => {
 
 export const installServiceClient = createClient(
   InstallService,
-  import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true"
-    ? mockTransport
-    : transport,
+  import.meta.env.VITE_USE_MOCKS === "true" ? mockTransport : transport,
 );
