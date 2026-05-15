@@ -5,7 +5,7 @@ import { transport } from "./transport";
 const mockTransport = createRouterTransport(({ service }) => {
   service(InstallService, {
     installMDAIHub: (...args) => {
-      console.log("installMDAIHub.installMDAIHub ", args);
+      console.log("InstallService.installMDAIHub ", args);
       return {};
     },
     getInstallStatus: async function* (...args) {
