@@ -15,7 +15,7 @@ const mockTransport = createRouterTransport(({ service }) => {
   });
 });
 
-export const datadogServiceClient = createClient(
+export const dDogServiceClient = createClient(
   DatadogService,
   import.meta.env.DEV || import.meta.env.VITE_USE_MOCKS === "true"
     ? mockTransport
