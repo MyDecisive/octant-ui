@@ -1,6 +1,6 @@
 import { NoConnectionCard } from "@components/NoConnectionCard";
 import { Table } from "@components/Table/Table";
-import { Tabs, type TabItem } from "@components/Tabs/Tabs";
+import { Tabs } from "@components/Tabs/Tabs";
 import type { Overall } from "@mydecisiveai/octant-client";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
@@ -50,50 +50,9 @@ export function ClarityTabs({
     />
   );
 
-  const tabs: TabItem[] = [
-    {
-      value: "logs",
-      label: "Logs",
-      resultCount: logData.length,
-      children:
-        loading || hasLogData ? (
-          <Table<LogData>
-            label={"Logs - Top Talkers"}
-            columns={logsColumns}
-            rows={logData}
-            loading={tableDataLoading}
-            showToolbar
-            footerLabel={"Total estimated cost"}
-            total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
-          />
-        ) : (
-          tableEmptyState
-        ),
-    },
-    {
-      value: "traces",
-      label: "Traces",
-      resultCount: spanData.length,
-      children:
-        loading || hasTraceData ? (
-          <Table<SpanData>
-            label={"Traces - Top Talkers"}
-            columns={traceColumns}
-            rows={spanData}
-            loading={tableDataLoading}
-            showToolbar
-            footerLabel={"Total estimated cost"}
-            total={data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"}
-          />
-        ) : (
-          tableEmptyState
-        ),
-    },
-  ];
   return (
     <Tabs
       activeValue={activeTab}
-      items={tabs}
       loading={tableDataLoading}
       onChange={setActiveTab}
       search={{
@@ -103,6 +62,48 @@ export function ClarityTabs({
       }}
       showLoadingPopover
       showResultCounts={showResultCounts}
+      items={[
+        {
+          value: "logs",
+          label: "Logs",
+          resultCount: logData.length,
+          children:
+            loading || hasLogData ? (
+              <Table<LogData>
+                label={"Logs - Top Talkers"}
+                columns={logsColumns}
+                rows={logData}
+                loading={tableDataLoading}
+                showToolbar
+                footerLabel={"Total estimated cost"}
+                total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
+              />
+            ) : (
+              tableEmptyState
+            ),
+        },
+        {
+          value: "traces",
+          label: "Traces",
+          resultCount: spanData.length,
+          children:
+            loading || hasTraceData ? (
+              <Table<SpanData>
+                label={"Traces - Top Talkers"}
+                columns={traceColumns}
+                rows={spanData}
+                loading={tableDataLoading}
+                showToolbar
+                footerLabel={"Total estimated cost"}
+                total={
+                  data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"
+                }
+              />
+            ) : (
+              tableEmptyState
+            ),
+        },
+      ]}
     />
   );
 }
