@@ -30,7 +30,7 @@ export function SmarthubPage() {
       }}
       fixes={{
         header: (
-          <Typography variant="body2" bold>
+          <Typography variant="body2" data-bold="true">
             How to fix
           </Typography>
         ),

@@ -17,7 +17,7 @@ declare module "@mui/material/Typography" {
 
 declare module "@mui/material/Typography" {
   interface TypographyOwnProps {
-    bold?: boolean;
+    "data-bold"?: "true";
   }
 }
 
@@ -194,7 +194,7 @@ export const theme = createTheme({
           },
         },
         {
-          props: { bold: true },
+          props: { "data-bold": "true" },
           style: {
             fontWeight: 700,
           },

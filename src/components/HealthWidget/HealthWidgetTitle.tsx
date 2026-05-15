@@ -14,7 +14,7 @@ export function HealthWidgetTitle({
       alignContent={"center"}
       direction={"row"}
     >
-      <Typography variant="body1" bold>
+      <Typography variant="body1" data-bold="true">
         {title}
       </Typography>
       {status && <HeaderStatusChip status={status} />}

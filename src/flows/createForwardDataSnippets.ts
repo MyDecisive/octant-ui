@@ -7,15 +7,7 @@ interface ForwardDataSnippetOptions {
   telemetryTypes: TelemetryTypes[];
 }
 
-function createCollectorEndpoint({
-  connectionName,
-  namespace,
-}: {
-  connectionName: string;
-  namespace: string;
-}) {
-  return `http://${connectionName}-collector.${namespace}.svc.cluster.local:8126`;
-}
+const collectorEndpoint = "http://mdai-envoy.mdai.svc.cluster.local:8126";
 
 function createMetricsSnippets(collectorEndpoint: string) {
   return {
@@ -170,16 +162,9 @@ dogstatsd:
 }
 
 export function createForwardDataSnippets({
-  connectionName,
   url,
-  namespace = "mdai",
   telemetryTypes,
 }: ForwardDataSnippetOptions) {
-  const collectorEndpoint = createCollectorEndpoint({
-    connectionName,
-    namespace,
-  });
-
   const { mainSnippets, envSnippets } = telemetryTypes.reduce(
     (accum, type) => {
       const snippetCreator = dataTypeToSnippetCreatorsMap[type];
@@ -195,8 +180,7 @@ export function createForwardDataSnippets({
   );
 
   return {
-    locationUrl: `# COPY THE MYDECISIVE LOCATION: URL
-${collectorEndpoint}`,
+    locationUrl: `${collectorEndpoint}`,
     code: createTheThingsSnippet(
       url,
       mainSnippets.join("\n\n"),

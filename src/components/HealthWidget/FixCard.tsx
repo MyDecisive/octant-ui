@@ -22,7 +22,7 @@ export function FixCard({ label, description, actions }: FixInfo) {
         className="health-widget-fix-card-header"
         disableTypography
         title={
-          <Typography variant="body2" bold>
+          <Typography variant="body2" data-bold="true">
             {label}
           </Typography>
         }
