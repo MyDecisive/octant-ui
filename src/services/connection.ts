@@ -3,7 +3,7 @@ import {
   ConnectionService,
   type ConnectionScope,
 } from "@mydecisiveai/octant-client";
-import { transport } from "../api/transport";
+import { transport } from "./transport";
 
 export const connectionServiceClient = createClient(
   ConnectionService,
