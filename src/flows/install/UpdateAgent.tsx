@@ -63,15 +63,20 @@ export function UpdateAgent() {
         </ButtonRow>
       </FlowCenterColumn>
       <Stack className="right-column" gap={3}>
-        <Typography variant="body2" bold>
-          Paste the following code snippets in your Datadog agent:
-        </Typography>
         <Stack gap={1}>
           <Typography variant="body2">MyDecisive location URL</Typography>
-          <CodeSnippet code={locationUrl} maxHeight="150px" />
+          <CodeSnippet
+            code={locationUrl}
+            maxHeight="150px"
+            copyButton={false}
+          />
         </Stack>
+
+        <Typography variant="body2" data-bold="true">
+          Paste the following code snippets in your Datadog agent:
+        </Typography>
+
         <Stack gap={1}>
-          <Typography variant="body2">Then do this:</Typography>
           <CodeSnippet code={code} maxHeight="440px" />
         </Stack>
       </Stack>

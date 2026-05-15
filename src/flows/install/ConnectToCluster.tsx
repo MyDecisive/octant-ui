@@ -9,12 +9,13 @@ import type { FormFields } from "@types";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
+import { validateMinLength } from "../../fieldValidation/validateMinLength";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import { argoCdServiceClient } from "../../services/argoCd";
 
 const formSpec: FormFields = {
-  connectionName: [validateRequired],
+  connectionName: [validateRequired, validateMinLength(5)],
   argoUrl: [validateRequired, validateUrlInput],
   accountToken: [validateRequired],
 };
@@ -52,7 +53,16 @@ export function ConnectToCluster() {
   };
 
   const testArgoConnection = async () => {
-    if (!validateAll({ argoUrl, accountToken, connectionName })) return false;
+    if (
+      !validateAll({
+        argoUrl,
+        accountToken,
+        connectionName: decodeURI(connectionName),
+      })
+    ) {
+      return false;
+    }
+
     try {
       const result = await argoCdServiceClient.testConnection({
         argoAccountToken: accountToken,

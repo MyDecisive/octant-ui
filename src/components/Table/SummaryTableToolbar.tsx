@@ -19,7 +19,7 @@ export function SummaryTableToolbar({
   return (
     <Toolbar className={classNames("mdai-summary-table-toolbar")}>
       <Stack alignItems={"flex-end"} direction={"row"} gap={1}>
-        <Typography bold variant="h5">
+        <Typography data-bold="true" variant="h5">
           Overall estimated cost
         </Typography>
         <RichTooltip
@@ -48,7 +48,7 @@ export function SummaryTableToolbar({
         <Typography variant="caption" color="secondary">
           {timeRangeLabel}
         </Typography>
-        <Typography bold variant="h5">{`$${total}`}</Typography>
+        <Typography data-bold="true" variant="h5">{`$${total}`}</Typography>
       </Stack>
     </Toolbar>
   );
