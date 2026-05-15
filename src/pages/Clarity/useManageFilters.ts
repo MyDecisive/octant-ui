@@ -4,7 +4,7 @@ import { type Filter, type FilterTypes } from "@types";
 import { toFilterType } from "@utils/toFilterTypes";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { filterServiceClient } from "../services/filter";
+import { filterServiceClient } from "../../services/filter";
 
 const bothFilterTypes: FilterTypes[] = ["logs", "traces"];
 

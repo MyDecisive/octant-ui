@@ -5,11 +5,9 @@ import { Table } from "@components/Table/Table";
 import { Tabs, type TabItem } from "@components/Tabs/Tabs";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import type { Overall } from "@mydecisiveai/octant-client";
-import { useOctantStore } from "@store/octantStore";
-import { useEffect, useState } from "react";
-import { useShallow } from "zustand/shallow";
-import { timeframeLabels } from "../utils/timeframeToPickerOptions";
+import { useClarityStore } from "@store/clarityStore";
+import { useState } from "react";
+import { timeframeLabels } from "../../utils/timeframeToPickerOptions";
 import "./Clarity.css";
 import {
   logsColumns,
@@ -22,37 +20,17 @@ import {
 import { useManageClarityData } from "./useManageClarityData";
 import { useManageFilters } from "./useManageFilters";
 
-function overallDataToSummaryRows(data: Overall | null): SummaryData[] {
-  return [
-    {
-      id: "logs",
-      type: "logs",
-      cost: data?.log?.cost,
-      sent: data?.log?.sent,
-      rate: data?.log?.costRate,
-      pct: data?.log?.pct,
-    },
-    {
-      id: "traces",
-      type: "traces",
-      cost: data?.trace?.cost,
-      sent: data?.trace?.sent,
-      rate: data?.trace?.costRate,
-      pct: data?.trace?.pct,
-    },
-  ];
-}
-
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("logs");
-  const { hasLogTimeframeData, hasTraceTimeframeData, timeRangeLabel } =
-    useOctantStore(
-      useShallow((state) => ({
-        hasLogTimeframeData: state.hasLogTimeframeData,
-        hasTraceTimeframeData: state.hasTraceTimeframeData,
-        timeRangeLabel: timeframeLabels[state.timeRange],
-      })),
+  const hasLogTimeframeData = useClarityStore(
+    (state) => state.hasLogTimeframeData,
+  );
+  const hasTraceTimeframeData = useClarityStore(
+    (state) => state.hasTraceTimeframeData,
+  );
+  const timeRangeLabel = useClarityStore(
+    (state) => timeframeLabels[state.timeRange],
   );
   const { logFilter, traceFilter } = useManageFilters();
   const {
@@ -61,6 +39,7 @@ export function ClarityPage() {
     hasTraceData,
     logData,
     spanData,
+    summaryData,
     tableDataLoading,
     loading,
   } = useManageClarityData(searchQuery);
@@ -79,15 +58,6 @@ export function ClarityPage() {
       ...spanData.map(({ span }) => span),
     ]),
   ];
-
-  useEffect(() => {
-    if (activeTab === "logs" && !canShowLogTab && canShowTraceTab) {
-      setActiveTab("traces");
-    }
-    if (activeTab === "traces" && !canShowTraceTab && canShowLogTab) {
-      setActiveTab("logs");
-    }
-  }, [activeTab, canShowLogTab, canShowTraceTab]);
 
   const tabs: TabItem[] = [];
 
@@ -129,6 +99,11 @@ export function ClarityPage() {
     });
   }
 
+  const activeTabCanRender = tabs.some(({ value }) => value === activeTab);
+  const activeTabValue = activeTabCanRender
+    ? activeTab
+    : (tabs[0]?.value ?? "");
+
   return (
     <Box className="main-content-container">
       {hasClarityContent ? (
@@ -137,14 +112,14 @@ export function ClarityPage() {
             <Table<SummaryData>
               label={"Overall Estimated Cost"}
               columns={summaryColumns}
-              rows={overallDataToSummaryRows(data)}
+              rows={summaryData}
               showToolbar
               timeRangeLabel={timeRangeLabel}
               total={data?.cost ? data.cost.toLocaleString() : "-"}
               summaryTable
             />
             <Tabs
-              activeValue={activeTab}
+              activeValue={activeTabValue}
               items={tabs}
               loading={tableDataLoading}
               onChange={setActiveTab}

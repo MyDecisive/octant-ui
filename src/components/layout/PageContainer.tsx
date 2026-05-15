@@ -4,6 +4,8 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { Timeframe } from "@mydecisiveai/octant-client";
+import { useClarityStore } from "@store/clarityStore";
 import { useOctantStore } from "@store/octantStore";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useState } from "react";
@@ -20,21 +22,27 @@ const locationTitleMap = {
 };
 
 export function PageContainer({ children }: { children: React.ReactNode }) {
-  const { timeRange, namespace, connectionName } = useOctantStore(
+  const { namespace, connectionName } = useOctantStore(
     useShallow((store) => {
-      const { timeRange, namespace, connectionName } = store;
+      const { namespace, connectionName } = store;
 
-      return { timeRange: String(timeRange), namespace, connectionName };
+      return { namespace, connectionName };
     }),
   );
-
-  const setState = useOctantStore((store) => store.setState);
+  const { setState: setClarityState, timeRange } = useClarityStore(
+    useShallow((state) => ({
+      setState: state.setState,
+      timeRange: state.timeRange,
+    })),
+  );
+  const selectedTimeRange = String(timeRange);
   const [location] = useLocation();
 
   const [pickerOptions, setPickerOptions] = useState<SelectOption[]>([]);
 
-  const setSelectedRange = (newRange: string) =>
-    setState("timeRange", parseInt(newRange));
+  const setSelectedRange = (newRange: string) => {
+    setClarityState("timeRange", Number(newRange) as Timeframe);
+  };
 
   const showTimepicker = location === ROUTES.CLARITY;
   const title = locationTitleMap[location];
@@ -45,8 +53,8 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
     async function fetchPickerOptions() {
       if (!connectionName || !namespace) {
         setPickerOptions([]);
-        setState("hasLogTimeframeData", undefined);
-        setState("hasTraceTimeframeData", undefined);
+        setClarityState("hasLogTimeframeData", undefined);
+        setClarityState("hasTraceTimeframeData", undefined);
         return;
       }
 
@@ -60,15 +68,15 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
         const options = timeframeToPickerOptions(statuses);
 
         if (!ignore) {
-          setState("hasLogTimeframeData", log);
-          setState("hasTraceTimeframeData", trace);
+          setClarityState("hasLogTimeframeData", log);
+          setClarityState("hasTraceTimeframeData", trace);
           setPickerOptions(options);
         }
       } catch {
         if (!ignore) {
           setPickerOptions([]);
-          setState("hasLogTimeframeData", undefined);
-          setState("hasTraceTimeframeData", undefined);
+          setClarityState("hasLogTimeframeData", undefined);
+          setClarityState("hasTraceTimeframeData", undefined);
         }
       }
     }
@@ -78,7 +86,7 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
     return () => {
       ignore = true;
     };
-  }, [connectionName, namespace, setState]);
+  }, [connectionName, namespace, setClarityState]);
 
   return (
     <Box className="page-container">
@@ -95,7 +103,7 @@ export function PageContainer({ children }: { children: React.ReactNode }) {
             </Typography>
             {showTimepicker && (
               <Select
-                selected={timeRange}
+                selected={selectedTimeRange}
                 onChange={(e) => setSelectedRange(e.target.value)}
                 options={pickerOptions}
                 className="mdai-timepicker"

@@ -4,7 +4,7 @@ import { PageContainer } from "@components/layout/PageContainer";
 import { Route, Router, Switch } from "wouter";
 import { Splash } from "./components/Splash";
 import { ROUTES } from "./constants/ROUTES";
-import { ClarityPage } from "./pages/Clarity";
+import { ClarityPage } from "./pages/Clarity/Clarity";
 import { ConnectionsPage } from "./pages/Connections";
 import { SmarthubPage } from "./pages/Smarthub";
 

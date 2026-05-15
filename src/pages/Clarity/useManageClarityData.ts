@@ -1,49 +1,41 @@
 import type { Log, Overall, Span } from "@mydecisiveai/octant-client";
+import { useClarityStore } from "@store/clarityStore";
 import { useOctantStore } from "@store/octantStore";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { budgetServiceClient } from "../services/budget";
-import type { LogData, SpanData } from "./constants";
+import { budgetServiceClient } from "../../services/budget";
+import type { LogData, SpanData, SummaryData } from "./constants";
 
 const tablePageSize = 100;
 
-function truncateDecimal(value: number, decimalPlaces = 2) {
-  const factor = 10 ** decimalPlaces;
-  return Math.trunc(value * factor) / factor;
-}
-
-function normalizeOverallMetric(metric: Overall["log"]) {
-  if (!metric) return undefined;
-
-  return {
-    ...metric,
-    received: truncateDecimal(metric.received),
-    sent: truncateDecimal(metric.sent),
-    filtered: truncateDecimal(metric.filtered),
-    costRate: truncateDecimal(metric.costRate),
-    pct: truncateDecimal(metric.pct),
-    cost: truncateDecimal(metric.cost),
-  };
-}
-
-function normalizeOverall(data?: Overall): Overall | null {
-  if (!data) return null;
-
-  return {
-    ...data,
-    cost: truncateDecimal(data.cost),
-    log: normalizeOverallMetric(data.log),
-    trace: normalizeOverallMetric(data.trace),
-  };
+function overallToSummaryRows(data: Overall | null): SummaryData[] {
+  return [
+    {
+      id: "logs",
+      type: "logs",
+      cost: data?.log?.cost,
+      sent: data?.log?.sent,
+      rate: data?.log?.costRate,
+      pct: data?.log?.pct,
+    },
+    {
+      id: "traces",
+      type: "traces",
+      cost: data?.trace?.cost,
+      sent: data?.trace?.sent,
+      rate: data?.trace?.costRate,
+      pct: data?.trace?.pct,
+    },
+  ];
 }
 
 function logToRow({ name, sent, pct, cost }: Log, index: number): LogData {
   return {
     id: name || `log-${index.toString()}`,
     name,
-    sent: truncateDecimal(sent),
-    percent: truncateDecimal(pct),
-    cost: truncateDecimal(cost),
+    sent,
+    percent: pct,
+    cost,
   };
 }
 
@@ -54,27 +46,36 @@ function spanToRow(
   return {
     id: name || `span-${index.toString()}`,
     span: name,
-    breadth: truncateDecimal(breadth),
-    invocations: truncateDecimal(invocations),
-    depth: truncateDecimal(depth),
-    cost: truncateDecimal(cost),
+    breadth,
+    invocations,
+    depth,
+    cost,
   };
 }
 
 export function useManageClarityData(searchQuery = "") {
-  const { connectionName, namespace, timeRange } = useOctantStore(
+  const { connectionName, namespace } = useOctantStore(
     useShallow((state) => ({
       connectionName: state.connectionName,
-      timeRange: state.timeRange,
       namespace: state.namespace,
     })),
   );
+  const timeRange = useClarityStore((state) => state.timeRange);
 
   const [overallData, setOverallData] = useState<Overall | null>(null);
   const [logData, setLogData] = useState<LogData[]>([]);
   const [spanData, setSpanData] = useState<SpanData[]>([]);
   const [overallLoading, setOverallLoading] = useState(false);
   const [tableDataLoading, setTableDataLoading] = useState(false);
+
+  console.log(
+    overallData,
+    logData,
+    spanData,
+    overallData,
+    overallLoading,
+    tableDataLoading,
+  );
 
   useEffect(() => {
     let ignore = false;
@@ -99,7 +100,8 @@ export function useManageClarityData(searchQuery = "") {
         });
 
         if (!ignore) {
-          setOverallData(normalizeOverall(overallResponse.data));
+          console.log(overallResponse);
+          setOverallData(overallResponse.data ?? null);
         }
       } catch {
         if (!ignore) {
@@ -128,6 +130,8 @@ export function useManageClarityData(searchQuery = "") {
         setSpanData([]);
         return;
       }
+
+      console.log(overallData);
 
       const shouldFetchLogs = (overallData.log?.sent ?? 0) > 0;
       const shouldFetchTraces = (overallData.trace?.sent ?? 0) > 0;
@@ -187,6 +191,7 @@ export function useManageClarityData(searchQuery = "") {
     overallLoading,
     tableDataLoading,
     data: overallData,
+    summaryData: overallToSummaryRows(overallData),
     logData,
     spanData,
     hasLogData: (overallData?.log?.sent ?? 0) > 0,

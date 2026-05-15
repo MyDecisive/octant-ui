@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { NoConnectionCard } from "../components/NoConnectionCard";
-import "../pages/Clarity.css";
+import "../pages/Clarity/Clarity.css";
 
 const meta = {
   title: "Components/NoConnectionCard",

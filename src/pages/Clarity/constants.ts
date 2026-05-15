@@ -1,8 +1,48 @@
-import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import { ProgressLineWithLabel } from "@components/ProgressLineWithLabel";
+import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 import { createElement } from "react";
+
+function roundNumber(value: number, decimalPlaces = 0) {
+  const factor = 10 ** decimalPlaces;
+  return Math.round(value * factor) / factor;
+}
+
+export function formatNumber(value: number | undefined) {
+  if (value === undefined) {
+    return "-";
+  }
+
+  return roundNumber(value).toLocaleString();
+}
+
+function formatNumberWithDecimals(
+  value: number | undefined,
+  decimalPlaces: number,
+) {
+  if (value === undefined) {
+    return "-";
+  }
+
+  return roundNumber(value, decimalPlaces).toLocaleString();
+}
+
+function formatCurrency(value: number | undefined) {
+  if (value === undefined) {
+    return "-";
+  }
+
+  return `$${formatNumber(value)}`;
+}
+
+function formatPercent(value: number | undefined) {
+  if (value === undefined) {
+    return "-";
+  }
+
+  return `${formatNumber(value)} %`;
+}
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
@@ -12,20 +52,23 @@ export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
     headerName: "Span breadth",
     field: "breadth",
+    valueFormatter: formatNumber,
   },
   {
     headerName: "Invocations",
     field: "invocations",
+    valueFormatter: formatNumber,
   },
   {
     headerName: "Span depth",
     field: "depth",
+    valueFormatter: formatNumber,
   },
   {
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
+    valueFormatter: formatCurrency,
     align: "right",
     headerAlign: "right",
   },
@@ -38,26 +81,6 @@ export interface SpanData extends BaseRowDefinition {
   depth: number;
   cost: number;
 }
-
-export function createDummySpanData() {
-  const data: SpanData[] = [];
-
-  for (let index = 0; index < 40; index++) {
-    const row: SpanData = {
-      id: `row-${index.toString()}`,
-      span: `/Service${index.toString()}`,
-      breadth: index % 10,
-      invocations: index % 7,
-      depth: index % 9,
-      cost: index * Math.floor(Math.random() * 10),
-    };
-    data.push(row);
-  }
-
-  return data;
-}
-
-export const spanData = createDummySpanData();
 
 export interface LogData extends BaseRowDefinition {
   name: string;
@@ -75,6 +98,7 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Logs sent (GB)",
     field: "sent",
     type: "number",
+    valueFormatter: formatNumber,
   },
   {
     headerName: "% of Total",
@@ -89,30 +113,11 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
+    valueFormatter: formatCurrency,
     align: "right",
     headerAlign: "right",
   },
 ]);
-
-export function createDummyLogData() {
-  const data: LogData[] = [];
-
-  for (let index = 0; index < 40; index++) {
-    const row: LogData = {
-      id: `row-${index.toString()}`,
-      name: `service ${index.toString()}`,
-      sent: index % 10,
-      percent: Math.floor(Math.random() * 100),
-      cost: index * Math.floor(Math.random() * 10),
-    };
-    data.push(row);
-  }
-
-  return data;
-}
-
-export const logData = createDummyLogData();
 
 export interface SummaryData extends BaseRowDefinition {
   type: "logs" | "traces";
@@ -129,7 +134,7 @@ function summaryValueFormatter(
   if (value === undefined) {
     return "-";
   }
-  return `${value.toLocaleString()} ${type === "logs" ? "GB" : "MM Events"}`;
+  return `${formatNumber(value)} ${type === "logs" ? "GB" : "MM Events"}`;
 }
 
 function summaryRateFormatter(
@@ -139,7 +144,7 @@ function summaryRateFormatter(
   if (value === undefined) {
     return "-";
   }
-  return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
+  return `$${formatNumberWithDecimals(value, 2)}/${type === "logs" ? "GB" : "MM Events"}`;
 }
 
 export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
@@ -167,23 +172,13 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     headerName: "% of Total",
     headerClassName: "bold",
     field: "pct",
-    valueFormatter: (value: number | undefined) => {
-      if (value === undefined) {
-        return "-";
-      }
-      return `${value} %`;
-    },
+    valueFormatter: formatPercent,
   },
   {
     headerName: "Est. Cost",
     headerClassName: "bold",
     field: "cost",
-    valueFormatter: (value: number | undefined) => {
-      if (value === undefined) {
-        return "-";
-      }
-      return `$${value}`;
-    },
+    valueFormatter: formatCurrency,
     cellClassName: "bold",
   },
 ] as GridColDef<SummaryData>[]);
