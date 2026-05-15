@@ -1,6 +1,6 @@
 import { createClient, createRouterTransport } from "@connectrpc/connect";
 import type { Log, Overall_Metric, Span } from "@mydecisiveai/octant-client";
-import { BudgetService } from "@mydecisiveai/octant-client";
+import { BudgetService, Timeframe } from "@mydecisiveai/octant-client";
 import { transport } from "./transport";
 
 const SERVICE_NAMES_FOR_MOCK = [
@@ -103,13 +103,28 @@ function createMockSpans(count = 50): Span[] {
 
 const mockTransport = createRouterTransport(({ service }) => {
   service(BudgetService, {
-    overall: (...args) => {
-      console.log("BudgetService.overall", args);
+    overall: (request) => {
+      console.log("BudgetService.overall", request);
+      const multiplier =
+        request.timeframe === Timeframe.TIMEFRAME_MTD ? 12 : 1;
+
       return {
         data: {
-          cost: 98.56,
-          log: createMockOverallMetric({ pct: 62.5, cost: 44.24 }),
-          trace: createMockOverallMetric({ pct: 37.5, cost: 54.32 }),
+          cost: 98.56 * multiplier,
+          log: createMockOverallMetric({
+            received: 120.5 * multiplier,
+            sent: 98.3 * multiplier,
+            filtered: 22.2 * multiplier,
+            pct: 62.5,
+            cost: 44.24 * multiplier,
+          }),
+          trace: createMockOverallMetric({
+            received: 120.5 * multiplier,
+            sent: 98.3 * multiplier,
+            filtered: 22.2 * multiplier,
+            pct: 37.5,
+            cost: 54.32 * multiplier,
+          }),
         },
       };
     },
