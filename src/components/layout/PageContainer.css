@@ -22,8 +22,8 @@
   box-shadow: none;
 }
 
-.page-header-container.MuiCard-root .mdai-timepicker {
-  width: 340px;
+.page-header-content.MuiStack-root {
+  min-height: 40px;
 }
 
 .page-title.MuiTypography-root {

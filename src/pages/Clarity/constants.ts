@@ -1,8 +1,30 @@
-import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import { ProgressLineWithLabel } from "@components/ProgressLineWithLabel";
+import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 import { createElement } from "react";
+
+interface FormatNumberOptions {
+  decimalPlaces?: number;
+  prefix?: string;
+  suffix?: string;
+}
+
+export function formatNumber(
+  value: number | undefined,
+  { decimalPlaces = 0, prefix = "", suffix = "" }: FormatNumberOptions = {},
+) {
+  if (value === undefined) {
+    return "-";
+  }
+
+  const formattedValue = value.toLocaleString(undefined, {
+    maximumFractionDigits: decimalPlaces,
+  });
+  return `${prefix}${formattedValue}${suffix}`;
+}
+
+const formatWholeNumber = (value: number | undefined) => formatNumber(value);
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
@@ -12,20 +34,24 @@ export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
     headerName: "Span breadth",
     field: "breadth",
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "Invocations",
     field: "invocations",
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "Span depth",
     field: "depth",
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { prefix: "$" }),
     align: "right",
     headerAlign: "right",
   },
@@ -38,26 +64,6 @@ export interface SpanData extends BaseRowDefinition {
   depth: number;
   cost: number;
 }
-
-export function createDummySpanData() {
-  const data: SpanData[] = [];
-
-  for (let index = 0; index < 40; index++) {
-    const row: SpanData = {
-      id: `row-${index.toString()}`,
-      span: `/Service${index.toString()}`,
-      breadth: index % 10,
-      invocations: index % 7,
-      depth: index % 9,
-      cost: index * Math.floor(Math.random() * 10),
-    };
-    data.push(row);
-  }
-
-  return data;
-}
-
-export const spanData = createDummySpanData();
 
 export interface LogData extends BaseRowDefinition {
   name: string;
@@ -75,6 +81,7 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Logs sent (GB)",
     field: "sent",
     type: "number",
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "% of Total",
@@ -89,30 +96,12 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { prefix: "$" }),
     align: "right",
     headerAlign: "right",
   },
 ]);
-
-export function createDummyLogData() {
-  const data: LogData[] = [];
-
-  for (let index = 0; index < 40; index++) {
-    const row: LogData = {
-      id: `row-${index.toString()}`,
-      name: `service ${index.toString()}`,
-      sent: index % 10,
-      percent: Math.floor(Math.random() * 100),
-      cost: index * Math.floor(Math.random() * 10),
-    };
-    data.push(row);
-  }
-
-  return data;
-}
-
-export const logData = createDummyLogData();
 
 export interface SummaryData extends BaseRowDefinition {
   type: "logs" | "traces";
@@ -126,20 +115,20 @@ function summaryValueFormatter(
   value: number | undefined,
   { type }: SummaryData,
 ) {
-  if (value === undefined) {
-    return "-";
-  }
-  return `${value.toLocaleString()} ${type === "logs" ? "GB" : "MM Events"}`;
+  return formatNumber(value, {
+    suffix: ` ${type === "logs" ? "GB" : "MM Events"}`,
+  });
 }
 
 function summaryRateFormatter(
   value: number | undefined,
   { type }: SummaryData,
 ) {
-  if (value === undefined) {
-    return "-";
-  }
-  return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
+  return formatNumber(value, {
+    decimalPlaces: 2,
+    prefix: "$",
+    suffix: `/${type === "logs" ? "GB" : "MM Events"}`,
+  });
 }
 
 export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
@@ -167,23 +156,15 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     headerName: "% of Total",
     headerClassName: "bold",
     field: "pct",
-    valueFormatter: (value: number | undefined) => {
-      if (value === undefined) {
-        return "-";
-      }
-      return `${value} %`;
-    },
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { suffix: " %" }),
   },
   {
     headerName: "Est. Cost",
     headerClassName: "bold",
     field: "cost",
-    valueFormatter: (value: number | undefined) => {
-      if (value === undefined) {
-        return "-";
-      }
-      return `$${value}`;
-    },
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { prefix: "$" }),
     cellClassName: "bold",
   },
 ] as GridColDef<SummaryData>[]);

@@ -1,9 +1,14 @@
-import type { GridColDef } from "@mui/x-data-grid";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { BaseRowDefinition } from "@types";
-import { ProgressLineWithLabel } from "../components/ProgressLineWithLabel";
-import { createColumnDefinitionsForDataTable } from "../components/Table/createColumnDefinitionsForDataTable";
 import { Table } from "../components/Table/Table";
+import {
+  formatNumber,
+  logsColumns,
+  summaryColumns,
+  traceColumns,
+  type LogData,
+  type SpanData,
+  type SummaryData,
+} from "../pages/Clarity/constants";
 
 const meta = {
   title: "Display/Table",
@@ -20,52 +25,17 @@ type LogStory = StoryObj<Meta<typeof Table<LogData>>>;
 type SpanStory = StoryObj<Meta<typeof Table<SpanData>>>;
 type SummaryStory = StoryObj<Meta<typeof Table<SummaryData>>>;
 
-const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
-  {
-    headerName: "Root spans",
-    field: "span",
-  },
-  {
-    headerName: "Span breadth",
-    field: "breadth",
-  },
-  {
-    headerName: "Invocations",
-    field: "invocations",
-  },
-  {
-    headerName: "Span depth",
-    field: "depth",
-  },
-  {
-    headerName: "Estimated cost",
-    field: "cost",
-    cellClassName: "bold",
-    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
-    align: "right",
-    headerAlign: "right",
-  },
-]);
-
-interface SpanData extends BaseRowDefinition {
-  span: string;
-  breadth: number;
-  invocations: number;
-  depth: number;
-  cost: number;
-}
-
 function createDummySpanData() {
   const data: SpanData[] = [];
 
   for (let index = 0; index < 40; index++) {
     const row: SpanData = {
       id: `row-${index.toString()}`,
-      span: `/Service${index.toString()}`,
-      breadth: index % 10,
-      invocations: index % 7,
-      depth: index % 9,
-      cost: index * Math.floor(Math.random() * 10),
+      span: `/Service-${index.toString()}`,
+      breadth: 1.1234 + index * 0.3311,
+      invocations: 125.9876 + index * 42.4321,
+      depth: 2.8765 + (index % 9) * 0.2456,
+      cost: 4.5678 + index * 1.2345,
     };
     data.push(row);
   }
@@ -82,43 +52,9 @@ export const Traces: SpanStory = {
     rows: spanRows,
     showToolbar: true,
     footerLabel: "Total estimated cost",
-    total: spanRows.reduce((sum, { cost }) => sum + cost, 0).toLocaleString(),
+    total: formatNumber(spanRows.reduce((sum, { cost }) => sum + cost, 0)),
   },
 };
-
-interface LogData extends BaseRowDefinition {
-  name: string;
-  sent: number;
-  percent: number;
-  cost: number;
-}
-
-const logsColumns = createColumnDefinitionsForDataTable<LogData>([
-  {
-    headerName: "service name",
-    field: "name",
-  },
-  {
-    headerName: "Logs sent (GB)",
-    field: "sent",
-    type: "number",
-  },
-  {
-    headerName: "% of Total",
-    field: "percent",
-    renderCell: ({ value }) => (
-      <ProgressLineWithLabel value={value as number} showLabel />
-    ),
-  },
-  {
-    headerName: "Estimated cost",
-    field: "cost",
-    cellClassName: "bold",
-    valueFormatter: (value: number) => `$${value.toLocaleString()}`,
-    align: "right",
-    headerAlign: "right",
-  },
-]);
 
 function createDummyLogData() {
   const data: LogData[] = [];
@@ -126,10 +62,10 @@ function createDummyLogData() {
   for (let index = 0; index < 40; index++) {
     const row: LogData = {
       id: `row-${index.toString()}`,
-      name: `service ${index.toString()}`,
-      sent: index % 10,
-      percent: Math.floor(Math.random() * 100),
-      cost: index * Math.floor(Math.random() * 10),
+      name: `service-${index.toString()}`,
+      sent: 12.3456 + index * 3.2109,
+      percent: Math.min(100, 1.2345 + index * 2.3456),
+      cost: 2.3456 + index * 0.9876,
     };
     data.push(row);
   }
@@ -146,87 +82,26 @@ export const Logs: LogStory = {
     rows: logRows,
     showToolbar: true,
     footerLabel: "Total estimated cost",
-    total: logRows.reduce((sum, { cost }) => sum + cost, 0).toLocaleString(),
+    total: formatNumber(logRows.reduce((sum, { cost }) => sum + cost, 0)),
   },
 };
-
-interface SummaryData extends BaseRowDefinition {
-  type: "logs" | "traces";
-  cost: number;
-  received: number;
-  sent: number;
-  rate: number;
-  percent: number;
-}
-
-function summaryValueFormatter(value: number, { type }: SummaryData) {
-  return `${value.toLocaleString()} ${type === "logs" ? "GB" : "MM Events"}`;
-}
-
-function summaryRateFormatter(value: number, { type }: SummaryData) {
-  return `$${value.toLocaleString()}/${type === "logs" ? "GB" : "MM Events"}`;
-}
-
-const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
-  {
-    headerName: "Type",
-    field: "type",
-    headerClassName: "bold",
-    cellClassName: "bold",
-    valueFormatter: (value: string) =>
-      `${value[0].toLocaleUpperCase()}${value.slice(1)}`,
-  },
-  {
-    headerName: "Received",
-    headerClassName: "bold",
-    field: "received",
-    valueFormatter: summaryValueFormatter,
-  },
-  {
-    headerName: "Sent",
-    headerClassName: "bold",
-    field: "sent",
-    valueFormatter: summaryValueFormatter,
-  },
-  {
-    headerName: "Rate",
-    headerClassName: "bold",
-    field: "rate",
-    valueFormatter: summaryRateFormatter,
-  },
-  {
-    headerName: "% of Total",
-    headerClassName: "bold",
-    field: "percent",
-    valueFormatter: (value: number) => `${value} %`,
-  },
-  {
-    headerName: "Est. Cost",
-    headerClassName: "bold",
-    field: "cost",
-    valueFormatter: (value: number) => `$${value}`,
-    cellClassName: "bold",
-  },
-] as GridColDef<SummaryData>[]);
 
 const summaryData: SummaryData[] = [
   {
     id: "logs",
     type: "logs",
-    cost: 700,
-    received: 100,
-    sent: 100,
-    rate: 0.1,
-    percent: 70,
+    cost: 87.9345,
+    sent: 320.5678,
+    rate: 0.2245,
+    pct: 68.4567,
   },
   {
     id: "traces",
     type: "traces",
-    cost: 300,
-    received: 4.2,
-    sent: 4.2,
-    rate: 1.27,
-    percent: 30,
+    cost: 40.4987,
+    sent: 75.3344,
+    rate: 0.5376,
+    pct: 31.5432,
   },
 ];
 
@@ -237,7 +112,9 @@ export const Summary: SummaryStory = {
     rows: summaryData,
     showToolbar: true,
     footerLabel: "the last 24h",
-    total: summaryData.reduce((sum, { cost }) => sum + cost, 0).toLocaleString(),
+    total: formatNumber(
+      summaryData.reduce((sum, { cost }) => sum + (cost ?? 0), 0),
+    ),
     summaryTable: true,
   },
 };
