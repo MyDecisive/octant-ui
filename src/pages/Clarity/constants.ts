@@ -12,19 +12,20 @@ interface FormatNumberOptions {
 
 export function formatNumber(
   value: number | undefined,
-  { decimalPlaces = 0, prefix = "", suffix = "" }: FormatNumberOptions = {},
+  { decimalPlaces = 2, prefix = "", suffix = "" }: FormatNumberOptions = {},
 ) {
   if (value === undefined) {
     return "-";
   }
 
   const formattedValue = value.toLocaleString(undefined, {
+    minimumFractionDigits: decimalPlaces,
     maximumFractionDigits: decimalPlaces,
   });
   return `${prefix}${formattedValue}${suffix}`;
 }
 
-const formatWholeNumber = (value: number | undefined) => formatNumber(value);
+const formatDecimalNumber = (value: number | undefined) => formatNumber(value);
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
@@ -34,17 +35,17 @@ export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
     headerName: "Span breadth",
     field: "breadth",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatDecimalNumber,
   },
   {
     headerName: "Invocations",
     field: "invocations",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatDecimalNumber,
   },
   {
     headerName: "Span depth",
     field: "depth",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatDecimalNumber,
   },
   {
     headerName: "Estimated cost",
@@ -81,7 +82,7 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Logs sent (GB)",
     field: "sent",
     type: "number",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatDecimalNumber,
   },
   {
     headerName: "% of Total",
@@ -157,7 +158,7 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     headerClassName: "bold",
     field: "pct",
     valueFormatter: (value: number | undefined) =>
-      formatNumber(value, { suffix: " %" }),
+      formatNumber(value, { decimalPlaces: 0, suffix: " %" }),
   },
   {
     headerName: "Est. Cost",
