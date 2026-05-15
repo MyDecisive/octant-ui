@@ -16,6 +16,10 @@
   grid-column: span 4;
 }
 
+.clarity-timepicker {
+  width: 340px;
+}
+
 .main-content-container.MuiBox-root
   > .no-connection-card-container.MuiCard-root {
   grid-column: 4 / span 6;

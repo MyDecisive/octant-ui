@@ -3,8 +3,6 @@ import { create } from "zustand";
 
 interface ClarityState {
   timeRange: Timeframe;
-  hasLogTimeframeData?: boolean;
-  hasTraceTimeframeData?: boolean;
 }
 
 interface Actions {

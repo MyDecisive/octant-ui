@@ -39,5 +39,6 @@ export function timeframeToPickerOptions(
       value: String(timeframe),
       label: timeframeLabels[timeframe],
       chip: codeToChip[status],
+      disabled: status !== TimeframeStatusResponse_Code.OK,
     }));
 }

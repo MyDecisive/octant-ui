@@ -26,21 +26,26 @@ export function useManageFilters() {
     async function fetchFilters() {
       setFiltersLoading(new Set<FilterTypes>(bothFilterTypes));
 
-      const [logFilterResponse, traceFilterResponse] = await Promise.all(
-        bothFilterTypes.map((type) =>
-          filterServiceClient.getFilter({
-            connectionName,
-            namespace,
-            type: toFilterType(type),
-          }),
-        ),
-      );
+      try {
+        const [logFilterResponse, traceFilterResponse] = await Promise.all(
+          bothFilterTypes.map((type) =>
+            filterServiceClient.getFilter({
+              connectionName,
+              namespace,
+              type: toFilterType(type),
+            }),
+          ),
+        );
 
-      setFilters({
-        logs: logFilterResponse.data! as unknown as Filter,
-        traces: traceFilterResponse.data! as unknown as Filter,
-      });
-      setFiltersLoading(new Set());
+        setFilters({
+          logs: logFilterResponse.data! as unknown as Filter,
+          traces: traceFilterResponse.data! as unknown as Filter,
+        });
+      } catch {
+        setFilters(null);
+      } finally {
+        setFiltersLoading(new Set());
+      }
     }
     if (filters === null) {
       void fetchFilters();

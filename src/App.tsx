@@ -1,6 +1,5 @@
 import { FlowContainer } from "@components/FlowContainer";
 import { FlowLayout } from "@components/layout/FlowLayout";
-import { PageContainer } from "@components/layout/PageContainer";
 import { Route, Router, Switch } from "wouter";
 import { Splash } from "./components/Splash";
 import { ROUTES } from "./constants/ROUTES";
@@ -23,13 +22,11 @@ function App() {
           </FlowLayout>
         </Route>
         <Route path={pageRoutes}>
-          <PageContainer>
-            <Switch>
-              <Route path={ROUTES.CLARITY} component={ClarityPage} />
-              <Route path={ROUTES.CONNECTIONS} component={ConnectionsPage} />
-              <Route path={ROUTES.SMARTHUB} component={SmarthubPage} />
-            </Switch>
-          </PageContainer>
+          <Switch>
+            <Route path={ROUTES.CLARITY} component={ClarityPage} />
+            <Route path={ROUTES.CONNECTIONS} component={ConnectionsPage} />
+            <Route path={ROUTES.SMARTHUB} component={SmarthubPage} />
+          </Switch>
         </Route>
       </Switch>
     </Router>
