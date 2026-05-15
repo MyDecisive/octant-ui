@@ -30,9 +30,9 @@ export const Default: Story = {
   args: {
     title: "Log Filtering",
     unit: "GB",
-    received: 100,
-    sent: 50,
-    filtered: 50,
+    received: 89.12345,
+    sent: 32.501245,
+    filtered: 50.2,
     onApplyFilter: (volume, persist) => {
       console.log("apply trace filter changes ", { volume, persist });
       return new Promise((resolve) => resolve());
