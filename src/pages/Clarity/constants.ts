@@ -2,29 +2,12 @@ import { ProgressLineWithLabel } from "@components/ProgressLineWithLabel";
 import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
+import { formatNumber } from "@utils/formatNumber";
 import { createElement } from "react";
 
-interface FormatNumberOptions {
-  decimalPlaces?: number;
-  prefix?: string;
-  suffix?: string;
-}
-
-export function formatNumber(
-  value: number | undefined,
-  { decimalPlaces = 0, prefix = "", suffix = "" }: FormatNumberOptions = {},
-) {
-  if (value === undefined) {
-    return "-";
-  }
-
-  const formattedValue = value.toLocaleString(undefined, {
-    maximumFractionDigits: decimalPlaces,
-  });
-  return `${prefix}${formattedValue}${suffix}`;
-}
-
-const formatWholeNumber = (value: number | undefined) => formatNumber(value);
+const formatCurrency = (value: number | undefined) =>
+  formatNumber(value, { minimumDecimalPlaces: 2, prefix: "$" });
+const formatMetricNumber = (value: number | undefined) => formatNumber(value);
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
@@ -34,24 +17,23 @@ export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
     headerName: "Span breadth",
     field: "breadth",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatMetricNumber,
   },
   {
     headerName: "Invocations",
     field: "invocations",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatMetricNumber,
   },
   {
     headerName: "Span depth",
     field: "depth",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatMetricNumber,
   },
   {
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: (value: number | undefined) =>
-      formatNumber(value, { prefix: "$" }),
+    valueFormatter: formatCurrency,
     align: "right",
     headerAlign: "right",
   },
@@ -81,7 +63,7 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Logs sent (GB)",
     field: "sent",
     type: "number",
-    valueFormatter: formatWholeNumber,
+    valueFormatter: formatMetricNumber,
   },
   {
     headerName: "% of Total",
@@ -96,8 +78,7 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: (value: number | undefined) =>
-      formatNumber(value, { prefix: "$" }),
+    valueFormatter: formatCurrency,
     align: "right",
     headerAlign: "right",
   },
@@ -126,6 +107,7 @@ function summaryRateFormatter(
 ) {
   return formatNumber(value, {
     decimalPlaces: 2,
+    minimumDecimalPlaces: 2,
     prefix: "$",
     suffix: `/${type === "logs" ? "GB" : "MM Events"}`,
   });
@@ -157,14 +139,13 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     headerClassName: "bold",
     field: "pct",
     valueFormatter: (value: number | undefined) =>
-      formatNumber(value, { suffix: " %" }),
+      formatNumber(value, { decimalPlaces: 0, suffix: " %" }),
   },
   {
     headerName: "Est. Cost",
     headerClassName: "bold",
     field: "cost",
-    valueFormatter: (value: number | undefined) =>
-      formatNumber(value, { prefix: "$" }),
+    valueFormatter: formatCurrency,
     cellClassName: "bold",
   },
 ] as GridColDef<SummaryData>[]);

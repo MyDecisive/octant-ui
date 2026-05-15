@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Table } from "../components/Table/Table";
+import { formatNumber } from "../utils/formatNumber";
 import {
-  formatNumber,
   logsColumns,
   summaryColumns,
   traceColumns,

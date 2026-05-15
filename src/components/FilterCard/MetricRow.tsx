@@ -1,5 +1,6 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { formatNumber } from "@utils/formatNumber";
 
 export function MetricRow({
   label,
@@ -20,7 +21,7 @@ export function MetricRow({
       <Typography variant="chipLabel" className="filter-card-metric-row-label">
         {label}
       </Typography>
-      <Typography variant="body1">{value ?? "-"}</Typography>
+      <Typography variant="body1">{formatNumber(value)}</Typography>
       <Typography
         className="filter-card-metric-row-unit"
         color="secondary"
