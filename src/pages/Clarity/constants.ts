@@ -4,45 +4,27 @@ import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 import { createElement } from "react";
 
-function roundNumber(value: number, decimalPlaces = 0) {
-  const factor = 10 ** decimalPlaces;
-  return Math.round(value * factor) / factor;
+interface FormatNumberOptions {
+  decimalPlaces?: number;
+  prefix?: string;
+  suffix?: string;
 }
 
-export function formatNumber(value: number | undefined) {
-  if (value === undefined) {
-    return "-";
-  }
-
-  return roundNumber(value).toLocaleString();
-}
-
-function formatNumberWithDecimals(
+export function formatNumber(
   value: number | undefined,
-  decimalPlaces: number,
+  { decimalPlaces = 0, prefix = "", suffix = "" }: FormatNumberOptions = {},
 ) {
   if (value === undefined) {
     return "-";
   }
 
-  return roundNumber(value, decimalPlaces).toLocaleString();
+  const formattedValue = value.toLocaleString(undefined, {
+    maximumFractionDigits: decimalPlaces,
+  });
+  return `${prefix}${formattedValue}${suffix}`;
 }
 
-function formatCurrency(value: number | undefined) {
-  if (value === undefined) {
-    return "-";
-  }
-
-  return `$${formatNumber(value)}`;
-}
-
-function formatPercent(value: number | undefined) {
-  if (value === undefined) {
-    return "-";
-  }
-
-  return `${formatNumber(value)} %`;
-}
+const formatWholeNumber = (value: number | undefined) => formatNumber(value);
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
@@ -52,23 +34,24 @@ export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
     headerName: "Span breadth",
     field: "breadth",
-    valueFormatter: formatNumber,
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "Invocations",
     field: "invocations",
-    valueFormatter: formatNumber,
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "Span depth",
     field: "depth",
-    valueFormatter: formatNumber,
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: formatCurrency,
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { prefix: "$" }),
     align: "right",
     headerAlign: "right",
   },
@@ -98,7 +81,7 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Logs sent (GB)",
     field: "sent",
     type: "number",
-    valueFormatter: formatNumber,
+    valueFormatter: formatWholeNumber,
   },
   {
     headerName: "% of Total",
@@ -113,7 +96,8 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerName: "Estimated cost",
     field: "cost",
     cellClassName: "bold",
-    valueFormatter: formatCurrency,
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { prefix: "$" }),
     align: "right",
     headerAlign: "right",
   },
@@ -131,20 +115,20 @@ function summaryValueFormatter(
   value: number | undefined,
   { type }: SummaryData,
 ) {
-  if (value === undefined) {
-    return "-";
-  }
-  return `${formatNumber(value)} ${type === "logs" ? "GB" : "MM Events"}`;
+  return formatNumber(value, {
+    suffix: ` ${type === "logs" ? "GB" : "MM Events"}`,
+  });
 }
 
 function summaryRateFormatter(
   value: number | undefined,
   { type }: SummaryData,
 ) {
-  if (value === undefined) {
-    return "-";
-  }
-  return `$${formatNumberWithDecimals(value, 2)}/${type === "logs" ? "GB" : "MM Events"}`;
+  return formatNumber(value, {
+    decimalPlaces: 2,
+    prefix: "$",
+    suffix: `/${type === "logs" ? "GB" : "MM Events"}`,
+  });
 }
 
 export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
@@ -172,13 +156,15 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
     headerName: "% of Total",
     headerClassName: "bold",
     field: "pct",
-    valueFormatter: formatPercent,
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { suffix: " %" }),
   },
   {
     headerName: "Est. Cost",
     headerClassName: "bold",
     field: "cost",
-    valueFormatter: formatCurrency,
+    valueFormatter: (value: number | undefined) =>
+      formatNumber(value, { prefix: "$" }),
     cellClassName: "bold",
   },
 ] as GridColDef<SummaryData>[]);
