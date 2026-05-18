@@ -17,7 +17,7 @@ import {
   connectionServiceClient,
   createOrGetValidatorRunId,
 } from "../../services/connection";
-import { VerifyConnectionCopy as copy } from "../../copy/VerifyConnection.copy";
+import { VerifyConnectionCopy as copy } from "../../copy/install/VerifyConnection.copy";
 
 function connectionStatusResponseToHealthWidgetProps(
   loading: boolean,

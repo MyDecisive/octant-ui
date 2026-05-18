@@ -13,7 +13,7 @@ import { validateMinLength } from "../../fieldValidation/validateMinLength";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import { argoCdServiceClient } from "../../services/argoCd";
-import { ConnectToClusterCopy as copy }  from "../../copy/ConnectToCluster.copy";
+import { ConnectToClusterCopy as copy }  from "../../copy/install/ConnectToCluster.copy";
 
 const formSpec: FormFields = {
   connectionName: [validateRequired, validateMinLength(5)],

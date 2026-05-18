@@ -7,7 +7,7 @@ import Chip from "@mui/material/Chip";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/ROUTES";
 import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
-import { NextStepsCopy as copy } from "../../copy/NextSteps.copy";
+import { NextStepsCopy as copy } from "../../copy/install/NextSteps.copy";
 
 export function NextSteps() {
   const [, setLocation] = useLocation();

@@ -8,7 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import type { ReactNode } from "react";
 import "./SetupSmarthubDialog.css";
-import { SmarthubCopy as copy } from "../copy/SetupSmarthub.copy";
+import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
 
 interface SetupSmarthubDialogProps {
   open: boolean;

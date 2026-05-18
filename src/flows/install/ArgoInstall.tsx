@@ -4,7 +4,7 @@ import { ViewTitle } from "@components/ViewTitle";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useConnectStore } from "@store/connectStore";
-import { DeployArgoCopy as copy} from "../../copy/ArgoInstall.copy";
+import { DeployArgoCopy as copy} from "../../copy/install/ArgoInstall.copy";
 
 export function ArgoInstall() {
   const argoAgreement = useConnectStore((state) => state.form.argoAgreement);

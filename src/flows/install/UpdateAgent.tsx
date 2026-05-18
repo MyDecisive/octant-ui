@@ -10,7 +10,7 @@ import { useConnectStore } from "@store/connectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { createForwardDataSnippets } from "../createForwardDataSnippets";
-import { UpdateAgentCopy as copy } from "../../copy/UpdateAgent.copy";
+import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
 export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(false);
 

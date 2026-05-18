@@ -11,7 +11,7 @@ import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/ROUTES";
 import "./Splash.css";
-import { SplashCopy as copy } from "../copy/Splash.copy";
+import { SplashCopy as copy } from "../copy/install/Splash.copy";
 
 const ROWS = [
   {

@@ -20,7 +20,7 @@ import { validateTelemetryTypesSelection } from "../../fieldValidation/validateT
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
-import { DeployCollectorCopy as copy } from "../../copy/DeployCollector.copy";
+import { DeployCollectorCopy as copy } from "../../copy/install/DeployCollector.copy";
 
 const formSpec: FormFields = {
   telemetryTypes: [validateTelemetryTypesSelection],

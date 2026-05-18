@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { installServiceClient } from "../../services/install";
-import { SmarthubCopy as copy } from "../../copy/SetupSmarthub.copy";
+import { SmarthubCopy as copy } from "../../copy/install/SetupSmarthub.copy";
 
 const formSpec: FormFields = {
   namespace: [validateRequired],
