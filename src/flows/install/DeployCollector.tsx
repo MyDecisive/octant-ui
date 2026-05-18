@@ -5,7 +5,6 @@ import { Input } from "@components/formInputs/Input";
 import { Select } from "@components/formInputs/Select";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";

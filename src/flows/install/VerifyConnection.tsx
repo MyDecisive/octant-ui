@@ -29,8 +29,8 @@ function connectionStatusResponseToHealthWidgetProps(
 
     const status =
       receivingData && sendingData && dataIntegrity && clientsConnected
-        ? copy.status.operational
-        : copy.status.error;
+        ? "operational"
+        : "error";
 
     return {
       status,

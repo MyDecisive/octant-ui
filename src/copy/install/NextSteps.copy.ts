@@ -12,7 +12,6 @@ interface INextStepsCopy {
   tile1: Tile;
   tile2: Tile;
   tile3: Tile;
-  tile4: Tile;
 }
 
 export const NextStepsCopy: INextStepsCopy = {
