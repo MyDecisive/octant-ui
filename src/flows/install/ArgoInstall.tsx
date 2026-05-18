@@ -4,6 +4,7 @@ import { ViewTitle } from "@components/ViewTitle";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useConnectStore } from "@store/connectStore";
+import DeployArgoCopy from "../../copy/ArgoInstall.copy";
 
 export function ArgoInstall() {
   const argoAgreement = useConnectStore((state) => state.form.argoAgreement);
@@ -12,8 +13,8 @@ export function ArgoInstall() {
   return (
     <FlowCenterColumn>
       <ViewTitle
-        title="Install via ArgoCD"
-        description="Octant will install and create Argo apps to deploy the Smarthub and all your settings"
+        title={DeployArgoCopy.header}
+        description={DeployArgoCopy.subheader}
       />
 
       <FormControlLabel
@@ -26,9 +27,12 @@ export function ArgoInstall() {
             disableRipple
           />
         }
-        label="I understand and consent this application to make changes to the development environment."
+        label={DeployArgoCopy.checkboxTxt}
       />
-      <NextButton disabled={!argoAgreement} />
+      <NextButton
+        ctaTxt={DeployArgoCopy.cta}
+        disabled={!argoAgreement}
+      />
     </FlowCenterColumn>
   );
 }
