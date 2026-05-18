@@ -1,6 +1,5 @@
 import { PageNav } from "@components/PageNav";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useLocation } from "wouter";
@@ -8,9 +7,10 @@ import { ROUTES } from "../../constants/ROUTES";
 import "./PageContainer.css";
 
 const locationTitleMap = {
-  [ROUTES.CLARITY]: "CLARITY",
-  [ROUTES.CONNECTIONS]: "CONNECTIONS",
-  [ROUTES.SMARTHUB]: "SMARTHUB",
+  [ROUTES.CLARITY]: "Clarity",
+  [ROUTES.SYSTEMHEALTH]: "System Health",
+  [ROUTES.SETTINGS]: "Settings",
+  [ROUTES.SUPPORT]: "Support",
 };
 
 interface PageContainerProps {
@@ -26,20 +26,13 @@ export function PageContainer({ children, headerActions }: PageContainerProps) {
     <Box className="page-container">
       <PageNav />
       <Stack className="page-main-content-container">
-        <Card className="page-header-container">
-          <Stack
-            className="page-header-content"
-            justifyContent={"space-between"}
-            alignItems={"center"}
-            direction={"row"}
-          >
-            <Typography variant="h2" className="page-title">
-              {title}
-            </Typography>
-            {headerActions}
-          </Stack>
-        </Card>
-        {children}
+        <Stack direction={"row"} className="page-header-container">
+          <Typography variant="h2" className="page-title">
+            {title}
+          </Typography>
+          {headerActions}
+        </Stack>
+        <Box className="page-content-container">{children}</Box>
       </Stack>
     </Box>
   );

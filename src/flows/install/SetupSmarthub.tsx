@@ -1,5 +1,6 @@
 import { AsyncNextButton } from "@components/AsyncNextButton";
 import { Input } from "@components/formInputs/Input";
+import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { SetupSmarthubDialog } from "@components/SetupSmarthubDialog";
 import { ViewTitle } from "@components/ViewTitle";
@@ -13,10 +14,10 @@ import { useConnectStore } from "@store/connectStore";
 import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useState } from "react";
+import { SmarthubCopy as copy } from "../../copy/install/SetupSmarthub.copy";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { installServiceClient } from "../../services/install";
-import { SmarthubCopy as copy } from "../../copy/install/SetupSmarthub.copy";
 
 const formSpec: FormFields = {
   namespace: [validateRequired],
@@ -97,7 +98,9 @@ export function SetupSmarthub() {
 
       return false;
     } catch (e) {
-      setInstallError(e instanceof Error ? e.message : copy.genericFormErrorTxt);
+      setInstallError(
+        e instanceof Error ? e.message : copy.genericFormErrorTxt,
+      );
       return false;
     }
   };
@@ -109,10 +112,7 @@ export function SetupSmarthub() {
 
   return (
     <FlowCenterColumn isForm>
-      <ViewTitle
-        title={copy.header}
-        description={copy.subheader}
-      />
+      <ViewTitle title={copy.header} description={copy.subheader} />
       <Stack gap={1}>
         <Typography>{copy.nsHeader}</Typography>
         <Input
@@ -131,13 +131,16 @@ export function SetupSmarthub() {
         onContinue={handleContinueFromDialog}
         errorInfo={installError}
       />
-      <AsyncNextButton
-        isSubmit
-        asyncFunction={handleInstall}
-        canAsync={!fieldErrors.namespace}
-        loadingText={copy.loadingTxt}
-        text={copy.cta.initial}
-      />
+      <ButtonRow>
+        <AsyncNextButton
+          isSubmit
+          asyncFunction={handleInstall}
+          canAsync={!fieldErrors.namespace}
+          loadingText={copy.loadingTxt}
+          text={copy.cta.initial}
+        />
+        <Typography variant="chipLabel">{copy.infoTxt}</Typography>
+      </ButtonRow>
     </FlowCenterColumn>
   );
 }

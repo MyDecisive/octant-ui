@@ -2,6 +2,7 @@ export const ROUTES = {
   SPLASH: "/",
   INSTALL: "/install",
   CLARITY: "/clarity",
-  CONNECTIONS: "/connections",
-  SMARTHUB: "/smarthub",
+  SYSTEMHEALTH: "/system-health",
+  SETTINGS: "/smarthub",
+  SUPPORT: "/support",
 };
