@@ -14,7 +14,8 @@ interface IConnectToCluster {
   argoToken: ConnectInputs;
   formError: {
     header: string;
-    body: string;
+    genericError: string;
+    argoSpecificError: string;
     ctaTxt: string;
   };
   ctaTxt: {
@@ -59,7 +60,8 @@ export const ConnectToClusterCopy: IConnectToCluster = {
     // IC2-13
     header: "Connection Failed",
     // IC2-14
-    body: "Octant could not reach your ArgoCD instance. Please verify your URL, token permissions, and network/firewall rules",
+    genericError: "Octant could not reach your ArgoCD instance. Please verify your URL, token permissions, and network/firewall rules",
+    argoSpecificError: "Credentials are invalid. Please regenerate your token, check your URL, and try again.",
     // IC2-15
     ctaTxt: "View troubleshooting guide",
   },

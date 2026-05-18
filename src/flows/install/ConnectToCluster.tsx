@@ -71,9 +71,7 @@ export function ConnectToCluster() {
       });
 
       if (!result.success) {
-        setConnectionError(
-          "Credentials are invalid. Please regenerate your token, check your URL, and try again.",
-        );
+        setConnectionError(copy.formError.argoSpecificError);
         return false;
       }
 
@@ -87,7 +85,7 @@ export function ConnectToCluster() {
       // eslint-disable-next-line
     } catch (_) {
       setConnectionError(
-        "We hit an issue setting up your ArgoCD connection. Please double check your entries and try again.",
+        copy.formError.genericError,
       );
       return false;
     }
@@ -125,11 +123,18 @@ export function ConnectToCluster() {
         placeholder={copy.argoToken.placeholder}
         helperText={copy.argoToken.helpTxt}
       />
-      {connectionError && <Alert severity="error" title={connectionError} />}
+      {connectionError &&
+        <Alert
+          severity="error"
+          title={copy.formError.header}
+          description={connectionError}
+        />
+      }
       <AsyncNextButton
         asyncFunction={testArgoConnection}
         canAsync={formIsValid}
-        loadingText={"Connecting"}
+        loadingText={copy.ctaTxt.activated}
+        text={copy.ctaTxt.initial}
         isSubmit
       />
     </FlowCenterColumn>
