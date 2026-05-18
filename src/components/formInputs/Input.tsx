@@ -9,7 +9,7 @@ import {
 } from "react";
 import { hasValidationError } from "../../fieldValidation/hasValidationError";
 
-interface InputProps extends Omit<TextFieldProps<"outlined">, "variant"> {
+export interface InputProps extends Omit<TextFieldProps<"outlined">, "variant"> {
   tooltip?: string;
   success?: boolean;
   validate?: (value?: string) => InputValidationErrors;
