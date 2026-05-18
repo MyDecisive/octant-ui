@@ -20,29 +20,7 @@ import { validateTelemetryTypesSelection } from "../../fieldValidation/validateT
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
-
-const dataSourceOptions: {
-  label: string;
-  value: string;
-}[] = [{ label: "Datadog", value: "datadog" }];
-
-const telemetryTypeOptions: {
-  label: string;
-  value: TelemetryTypes;
-}[] = [
-  {
-    label: "Metrics",
-    value: "metrics",
-  },
-  {
-    label: "Logs",
-    value: "logs",
-  },
-  {
-    label: "Traces",
-    value: "traces",
-  },
-];
+import { DeployCollectorCopy as copy } from "../../copy/DeployCollector.copy";
 
 const formSpec: FormFields = {
   telemetryTypes: [validateTelemetryTypesSelection],
@@ -115,26 +93,24 @@ export function DeployCollector() {
     <>
       <FlowCenterColumn>
         <ViewTitle
-          title="Get ready to deploy the collector"
-          description="Tell us how and where you would like to send your data from
-                Datadog. Don’t worry, you can always modify this configuration
-                later."
+          title={copy.header}
+          description={copy.subheader}
         />
-        <Typography variant="h6">Source</Typography>
+        <Typography variant="h6">{copy.sourceSection.title}</Typography>
 
         <Select
-          label="Data source"
-          selected="datadog"
+          label={copy.sourceSection.dropdown.label}
+          selected={copy.sourceSection.dropdown.selected}
           size="small"
           disabled
-          options={dataSourceOptions}
+          options={copy.sourceSection.dropdown.options}
           onChange={() => null}
         />
 
         <CheckboxGroup
-          label="Which data types do you want to track?"
+          label={copy.sourceSection.datatypes.label}
           {...callbacks.telemetryTypes}
-          options={telemetryTypeOptions}
+          options={copy.sourceSection.datatypes.options}
           selected={telemetryTypes}
           onChange={(checked) =>
             setFormField("telemetryTypes", checked as TelemetryTypes[])
@@ -143,10 +119,12 @@ export function DeployCollector() {
           onBlur={handleBlur}
         />
 
-        <Typography variant="h6">Destination</Typography>
+        <Typography variant="h6">{copy.destinationSection.title}</Typography>
         <Typography variant="body1">
-          To get the API key you’ll need to log in to your Datadog account. To
-          identify which Datadog site you’re on, visit their{" "}
+          {copy.destinationSection.subtitle}
+          To get the API key you'll need to log in to your Datadog account. To
+          identify which Datadog site you're on, visit their{" "}
+          {/* TODO: not sure if we should comment out
           <Link
             href={
               "https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site"
@@ -155,22 +133,23 @@ export function DeployCollector() {
             rel="noopener noreferrer"
           >
             docs
-          </Link>{" "}
+          </Link>{" "} */}
         </Typography>
         <Select
-          label="Data destination"
-          selected="datadog"
+          label={copy.destinationSection.dropdown.label}
+          selected={copy.destinationSection.dropdown.selected}
           size="small"
           disabled
-          options={dataSourceOptions}
+          options={copy.destinationSection.dropdown.options}
           onChange={() => null}
         />
         <Input
           value={url}
           onChange={(e) => setFormField("url", e.target.value)}
           {...callbacks.url}
-          placeholder="Destination URL"
-          tooltip={"Log into your Datadog account to acquire the API key"}
+          placeholder={copy.destinationSection.destinationUrl.placeholder}
+          helperText={copy.destinationSection.destinationUrl.helperText}
+          tooltip={copy.destinationSection.destinationUrl.tooltip}
           onFocus={() => setFocusedField("url")}
           onBlur={handleBlur}
         />
@@ -178,15 +157,17 @@ export function DeployCollector() {
           value={apiKey}
           onChange={(e) => setFormField("apiKey", e.target.value)}
           {...callbacks.apiKey}
-          placeholder="Datadog API key"
+          placeholder={copy.destinationSection.destinationApiKey.placeholder}
           onFocus={() => setFocusedField("apiKey")}
           onBlur={handleBlur}
+          helperText={copy.destinationSection.destinationApiKey.helperText}
+          tooltip={copy.destinationSection.destinationApiKey.tooltip}
         />
         <AsyncNextButton
           asyncFunction={handleDeployButtonClick}
           canAsync={isFormValid}
-          text="Deploy"
-          loadingText="Deploying"
+          text={copy.cta.initial}
+          loadingText={copy.cta.activated}
         />
       </FlowCenterColumn>
       <ConfigDrawer focusedField={focusedField} className="right-column" />
