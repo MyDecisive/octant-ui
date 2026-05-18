@@ -4,7 +4,7 @@ import { ViewTitle } from "@components/ViewTitle";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useConnectStore } from "@store/connectStore";
-import DeployArgoCopy from "../../copy/ArgoInstall.copy";
+import { DeployArgoCopy as copy} from "../../copy/ArgoInstall.copy";
 
 export function ArgoInstall() {
   const argoAgreement = useConnectStore((state) => state.form.argoAgreement);
@@ -13,8 +13,8 @@ export function ArgoInstall() {
   return (
     <FlowCenterColumn>
       <ViewTitle
-        title={DeployArgoCopy.header}
-        description={DeployArgoCopy.subheader}
+        title={copy.header}
+        description={copy.subheader}
       />
 
       <FormControlLabel
@@ -27,10 +27,10 @@ export function ArgoInstall() {
             disableRipple
           />
         }
-        label={DeployArgoCopy.checkboxTxt}
+        label={copy.checkboxTxt}
       />
       <NextButton
-        ctaTxt={DeployArgoCopy.cta}
+        ctaTxt={copy.cta}
         disabled={!argoAgreement}
       />
     </FlowCenterColumn>

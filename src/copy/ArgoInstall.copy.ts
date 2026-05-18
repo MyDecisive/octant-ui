@@ -5,7 +5,7 @@ interface IDeployArgo {
   cta: string;
 }
 
-const DeployArgoCopy: IDeployArgo = {
+export const DeployArgoCopy: IDeployArgo = {
   // IC1-01
   header: "Deploy via ArgoCD",
   // IC1-02
@@ -15,5 +15,3 @@ const DeployArgoCopy: IDeployArgo = {
   // IC1-04
   cta: "Next",
 };
-
-export default DeployArgoCopy;

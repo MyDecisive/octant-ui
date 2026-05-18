@@ -7,7 +7,7 @@ interface ISplashCopy {
   cta: string;
 }
 
-const SplashCopy: ISplashCopy = {
+export const SplashCopy: ISplashCopy = {
   // SS-01
   header: "Welcome to Octant",
   // SS-02
@@ -21,5 +21,3 @@ const SplashCopy: ISplashCopy = {
   // SS-06
   cta: "Let's Build"
 };
-
-export default SplashCopy;

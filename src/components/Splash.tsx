@@ -11,20 +11,20 @@ import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/ROUTES";
 import "./Splash.css";
-import SplashCopy from "../copy/Splash.copy";
+import { SplashCopy as copy } from "../copy/Splash.copy";
 
 const ROWS = [
   {
     Icon: RocketLaunchRoundedIcon,
-    text: SplashCopy.rocket,
+    text: copy.rocket,
   },
   {
     Icon: MiscellaneousServicesRoundedIcon,
-    text: SplashCopy.gear,
+    text: copy.gear,
   },
   {
     Icon: CableRoundedIcon,
-    text: SplashCopy.wire,
+    text: copy.wire,
   },
 ];
 
@@ -39,10 +39,10 @@ export function Splash() {
         title={
           <Stack direction="row" gap="10px" alignItems={"center"}>
             <Octobuddy />
-            {SplashCopy.header}
+            {copy.header}
           </Stack>
         }
-        description={SplashCopy.subheader}
+        description={copy.subheader}
       />
       <Stack direction="column" gap={2}>
         {ROWS.map(({ Icon, text }, index) => (
@@ -66,7 +66,7 @@ export function Splash() {
         type={"button"}
         onClick={onClickProgress}
       >
-        {SplashCopy.cta}
+        {copy.cta}
       </Button>
     </FlowCenterColumn>
   );
