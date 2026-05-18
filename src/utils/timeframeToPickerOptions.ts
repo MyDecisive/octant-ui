@@ -4,12 +4,12 @@ import {
   TimeframeStatusResponse_Code,
   type TimeframeStatusResponse_Status,
 } from "@mydecisiveai/octant-client";
-
+import { ClarityCopy as cc } from "../copy/clarity/Clarity.copy";
 export const timeframeLabels: Record<Timeframe, string> = {
   [Timeframe.TIMEFRAME_UNSPECIFIED]: "Unspecified",
-  [Timeframe.TIMEFRAME_24HR]: "Today",
-  [Timeframe.TIMEFRAME_MTD]: "Month to date",
-  [Timeframe.TIMEFRAME_LM]: "Last month",
+  [Timeframe.TIMEFRAME_24HR]: cc.timerange.timerangeOptions.T24H,
+  [Timeframe.TIMEFRAME_MTD]: cc.timerange.timerangeOptions.T30D,
+  [Timeframe.TIMEFRAME_LM]: cc.timerange.timerangeOptions.TP30D,
 };
 
 const codeToChip: Record<
@@ -19,12 +19,12 @@ const codeToChip: Record<
   [TimeframeStatusResponse_Code.UNSPECIFIED]: undefined,
   [TimeframeStatusResponse_Code.OK]: undefined,
   [TimeframeStatusResponse_Code.NO_DATA]: {
-    label: "Processing",
+    label: cc.timerange.status.processing,
     color: "default",
     size: "small",
   },
   [TimeframeStatusResponse_Code.NOT_ENOUGH]: {
-    label: "Processing",
+    label: cc.timerange.status.processing,
     color: "default",
     size: "small",
   },

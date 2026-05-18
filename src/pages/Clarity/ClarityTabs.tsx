@@ -10,6 +10,7 @@ import {
   type LogData,
   type SpanData,
 } from "./constants";
+import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 
 interface ClarityTabsProps {
   data: Overall | null;
@@ -42,13 +43,6 @@ export function ClarityTabs({
       ...spanData.map(({ span }) => span),
     ]),
   ];
-  const tableEmptyState = (
-    <NoConnectionCard
-      title="Looks like there's a connection issue"
-      description="Let's review and manage your pipeline to make sure everything is connected."
-      actionLabel="Review in System Health"
-    />
-  );
 
   return (
     <Tabs
@@ -70,16 +64,23 @@ export function ClarityTabs({
           children:
             loading || hasLogData ? (
               <Table<LogData>
-                label={"Logs - Top Talkers"}
+                label={ClarityCopy.logsTable.title}
                 columns={logsColumns}
                 rows={logData}
                 loading={tableDataLoading}
                 showToolbar
-                footerLabel={"Total estimated cost"}
+                footerLabel={ClarityCopy.logsTable.tec}
                 total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
               />
             ) : (
-              tableEmptyState
+              <NoConnectionCard
+                title={ClarityCopy.logsTable.connectionIssue.header
+                }
+                description={ClarityCopy.logsTable.connectionIssue.body
+                }
+                actionLabel={ClarityCopy.logsTable.connectionIssue.cta
+                }
+              />
             ),
         },
         {
@@ -89,18 +90,25 @@ export function ClarityTabs({
           children:
             loading || hasTraceData ? (
               <Table<SpanData>
-                label={"Traces - Top Talkers"}
+                label={ClarityCopy.traceTable.title}
                 columns={traceColumns}
                 rows={spanData}
                 loading={tableDataLoading}
                 showToolbar
-                footerLabel={"Total estimated cost"}
+                footerLabel={ClarityCopy.traceTable.tec}
                 total={
                   data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"
                 }
               />
             ) : (
-              tableEmptyState
+              <NoConnectionCard
+                title={ClarityCopy.traceTable.connectionIssue.header
+                }
+                description={ClarityCopy.traceTable.connectionIssue.body
+                }
+                actionLabel={ClarityCopy.traceTable.connectionIssue.cta
+                }
+              />
             ),
         },
       ]}

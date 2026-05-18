@@ -13,6 +13,7 @@ import { summaryColumns, type SummaryData } from "./constants";
 import { useManageClarityData } from "./useManageClarityData";
 import { useManageFilters } from "./useManageFilters";
 import { useManageTimeframes } from "./useManageTimeframes";
+import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +50,7 @@ export function ClarityPage() {
             onChange={(event) => setSelectedTimeRange(event.target.value)}
             options={pickerOptions}
             className="clarity-timepicker"
-            label="Time range"
+            label={cc.timerange.label}
             size="small"
           />
         ) : undefined
@@ -60,7 +61,7 @@ export function ClarityPage() {
           <>
             <Stack gap={3} className="left-column">
               <Table<SummaryData>
-                label={"Overall Estimated Cost"}
+                label={cc.overall.title}
                 columns={summaryColumns}
                 rows={summaryData}
                 showToolbar
@@ -83,9 +84,9 @@ export function ClarityPage() {
             <Stack className="right-column" gap={1}>
               {!hasAvailableLogData ? (
                 <FilterEmptyStateCard
-                  title="Here is why you need logs"
-                  description="Enable logs to see what is happening across your services."
-                  actionLabel="Turn on logs"
+                  title={cc.logFilter.emptyState.title}
+                  description={cc.logFilter.emptyState.subtitle}
+                  actionLabel={cc.logFilter.emptyState.cta}
                   onAction={() => {
                     console.log("turn on logs");
                   }}
@@ -93,7 +94,7 @@ export function ClarityPage() {
               ) : (
                 <FilterCard
                   onApplyFilter={logFilter.updateLogsFilter}
-                  title={"Log filters"}
+                  title={cc.logFilter.title}
                   unit={"GB"}
                   received={data?.log?.received}
                   sent={data?.log?.sent}
@@ -105,9 +106,9 @@ export function ClarityPage() {
               )}
               {!hasAvailableTraceData ? (
                 <FilterEmptyStateCard
-                  title="Here is why you need traces"
-                  description="Enable traces to see what's actually happening."
-                  actionLabel="Turn on traces"
+                  title={cc.traceFilter.emptyState.title}
+                  description={cc.traceFilter.emptyState.subtitle}
+                  actionLabel={cc.traceFilter.emptyState.cta}
                   onAction={() => {
                     console.log("turn on traces");
                   }}
@@ -115,7 +116,7 @@ export function ClarityPage() {
               ) : (
                 <FilterCard
                   onApplyFilter={traceFilter.updateTracesFilter}
-                  title={"Traces filters"}
+                  title={cc.traceFilter.title}
                   unit={"MM Spans"}
                   received={data?.trace?.received}
                   sent={data?.trace?.sent}
@@ -129,9 +130,9 @@ export function ClarityPage() {
           </>
         ) : (
           <NoConnectionCard
-            title="Looks like there's a connection issue"
-            description="We may not have visibility into your data. Let's review and manage your pipeline to make sure everything is connected."
-            actionLabel="Go to Connections"
+            title={cc.overallErrorState.header}
+            description={cc.overallErrorState.body}
+            actionLabel={cc.overallErrorState.cta}
           />
         )}
       </Box>
