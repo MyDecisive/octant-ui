@@ -7,6 +7,7 @@ import Chip from "@mui/material/Chip";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/ROUTES";
 import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
+import { NextStepsCopy as copy } from "../../copy/NextSteps.copy";
 
 export function NextSteps() {
   const [, setLocation] = useLocation();
@@ -17,14 +18,14 @@ export function NextSteps() {
   return (
     <FlowCenterColumn>
       <ViewTitle
-        title="Next steps"
-        description="You’re all set. When you’re ready, feel free to check out our labs catalog or manage your Argo changes."
+        title={copy.header}
+        description={copy.subtitle}
       />
 
       <SimpleCard
-        title="Start budgeting now"
-        description="{sales-y description goes here}"
-        headerAction={<Chip color="info" label="Recommended" size="small" />}
+        title={copy.tile1.title}
+        description={copy.tile1.description}
+        headerAction={<Chip color="info" label={copy.tile1.pill} size="small" />}
         footer={
           <Button
             variant="text"
@@ -32,13 +33,13 @@ export function NextSteps() {
             size="small"
             disableRipple
           >
-            Go to Clarity
+            {copy.tile1.cta}
           </Button>
         }
       />
       <SimpleCard
-        title="Migrate Smarthub into production"
-        description="Ready to go live? Follow our step-by-step guide to safely migrate Smarthub from your current environment into production."
+        title={copy.tile2.title}
+        description={copy.tile2.description}
         footer={
           <Button
             variant="text"
@@ -48,13 +49,13 @@ export function NextSteps() {
             size="small"
             disableRipple
           >
-            See our docs
+            {copy.tile2.cta}
           </Button>
         }
       />
       <SimpleCard
-        title="Commit your changes to Source control"
-        description="Your manifests are ready. Push them to your repository to make the configuration official and version-controlled."
+        title={copy.tile3.title}
+        description={copy.tile3.description}
         footer={
           <ButtonRow>
             <Button
@@ -64,7 +65,7 @@ export function NextSteps() {
               onClick={void handleDownloadManifestsClick}
               loading={loading}
             >
-              Download .zip first
+              {copy.tile2.cta}
             </Button>
             <Button
               variant="text"
@@ -75,7 +76,7 @@ export function NextSteps() {
               size="small"
               disableRipple
             >
-              Go to docs
+              {copy.tile2.cta2}
             </Button>
           </ButtonRow>
         }
