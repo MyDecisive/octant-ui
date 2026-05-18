@@ -13,6 +13,7 @@ import { validateMinLength } from "../../fieldValidation/validateMinLength";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
 import { argoCdServiceClient } from "../../services/argoCd";
+import { ConnectToClusterCopy as copy }  from "../../copy/ConnectToCluster.copy";
 
 const formSpec: FormFields = {
   connectionName: [validateRequired, validateMinLength(5)],
@@ -95,8 +96,8 @@ export function ConnectToCluster() {
   return (
     <FlowCenterColumn isForm>
       <ViewTitle
-        title="Connect to your Kubernetes Cluster"
-        description="<Provide ArgoCD somethings and validate connection>"
+        title={copy.header}
+        description={copy.subheader}
       />
       <Input
         value={decodeURI(connectionName)}
@@ -104,31 +105,25 @@ export function ConnectToCluster() {
           setFormField("connectionName", encodeURI(e.target.value))
         }
         {...callbacks.connectionName}
-        placeholder="Name this connection"
-        helperText="We recommend providing a name that can be easily referenced later, e.g., datadog-io"
+        placeholder={copy.nameThisConnection.label}
+        helperText={copy.nameThisConnection.helpTxt}
       />
       <Input
         value={argoUrl}
         onChange={handleUrlChange}
         {...callbacks.argoUrl}
-        label="ArgoCD Cluster URL"
-        placeholder="e.g. https://www.main.com"
-        tooltip={
-          "Target Argo URL is where these changes will live in your version control platform. Please make sure this Argo URL changes as your promote this change through your SDLC environments."
-        }
-        helperText={
-          "The dedicated branch that Argo CD will track and sync from"
-        }
+        label={copy.argoUrl.label}
+        placeholder={copy.argoUrl.placeholder}
+        tooltip={copy.argoUrl.tooltip}
+        helperText={copy.argoUrl.helpTxt}
       />
       <Input
         value={accountToken}
         onChange={handleTokenChange}
         {...callbacks.accountToken}
-        label="ArgoCD API token"
-        placeholder="argocd.token.xxxxxxxx"
-        helperText={
-          "Generate this in Argo CD under Settings/Accounts/generate token"
-        }
+        label={copy.argoToken.label}
+        placeholder={copy.argoToken.placeholder}
+        helperText={copy.argoToken.helpTxt}
       />
       {connectionError && <Alert severity="error" title={connectionError} />}
       <AsyncNextButton
