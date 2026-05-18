@@ -1,4 +1,4 @@
-interface IUpdateAgentCopy {
+type UpdateAgentConfig = {
   header: string;
   subheader: string;
   ack: string;
@@ -6,9 +6,9 @@ interface IUpdateAgentCopy {
   timingTxt: string;
   myDecisiveLocation: string;
   datadogCodeBlock: string;
-}
+};
 
-export const UpdateAgentCopy: IUpdateAgentCopy = {
+export const UpdateAgentCopy = {
   // IC5-01
   header: "Configure the Datadog Agent",
   // IC5-02
@@ -23,4 +23,4 @@ export const UpdateAgentCopy: IUpdateAgentCopy = {
   datadogCodeBlock: "Example Datadog Agent Configuration",
   // IC5-09
   myDecisiveLocation: "SmartHub Internal Endpoint",
-};
+} satisfies UpdateAgentConfig;

@@ -1,4 +1,4 @@
-interface IVerifyConnectionCopy {
+type VerifyConnectionConfig = {
   header: string;
   connection: string;
   status: {
@@ -8,7 +8,7 @@ interface IVerifyConnectionCopy {
   };
 }
 
-export const VerifyConnectionCopy: IVerifyConnectionCopy = {
+export const VerifyConnection = {
   // IC6-01
   header: "Testing data flow in our Smarthub",
   // IC6-02
@@ -21,4 +21,4 @@ export const VerifyConnectionCopy: IVerifyConnectionCopy = {
     // IC6-03
     success: "operational",
   },
-};
+} satisfies VerifyConnectionConfig;

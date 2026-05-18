@@ -1,7 +1,6 @@
 import type { InputProps } from "@components/formInputs/Input";
-import type { TelemetryTypes } from "@types";
 
-interface DeployCollectorCopy {
+type DeployCollectorConfig = {
   header: string;
   subheader: string;
   sourceSection: {
@@ -16,23 +15,12 @@ interface DeployCollectorCopy {
     };
     datatypes: {
       label: string;
-      options: {
-        label: string;
-        value: TelemetryTypes;
-      }[];
     };
   };
   destinationSection: {
     title: string;
     subtitle: string;
-    dropdown: {
-      label: string;
-      selected: string;
-      options: {
-        label: string;
-        value: string;
-      }[];
-    };
+    vendorDropdownLabel: string;
     destinationUrl: InputProps;
     destinationApiKey: InputProps;
   };
@@ -47,7 +35,7 @@ interface DeployCollectorCopy {
   };
 }
 
-export const DeployCollectorCopy: DeployCollectorCopy = {
+export const DeployCollectorCopy = {
   // IC4-01
   header: "Configure Telemetry Routing",
   // IC4-02
@@ -71,37 +59,15 @@ export const DeployCollectorCopy: DeployCollectorCopy = {
     datatypes: {
       // IC4-06
       label: "Which telemetry types do you want to manage?",
-      options: [
-        {
-          // IC4-08
-          label: "Logs",
-          value: "logs",
-        },
-        {
-          // IC4-09
-          label: "Traces",
-          value: "traces",
-        },
-      ],
-    },
+    }
   },
   destinationSection: {
     // IC4-10
     title: "Data destination",
     // IC4-11
     subtitle: "Route data to your downstream observability platform.",
-    dropdown: {
-      // IC4-12
-      label: "Vendor destination",
-      selected: "datadog",
-      options: [
-        {
-          // IC4-13
-          label: "Datadog",
-          value: "datadog",
-        },
-      ],
-    },
+    // IC4-12
+    vendorDropdownLabel: "Vendor destination",
     destinationUrl: {
       // IC4-14
       placeholder: "Destination URL",
@@ -133,4 +99,4 @@ export const DeployCollectorCopy: DeployCollectorCopy = {
     open: "View YAML Config",
     close: "Hide YAML Config",
   },
-};
+} satisfies DeployCollectorConfig;
