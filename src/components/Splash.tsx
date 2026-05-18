@@ -11,19 +11,20 @@ import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/ROUTES";
 import "./Splash.css";
+import SplashCopy from "../copy/Splash.copy";
 
 const ROWS = [
   {
     Icon: RocketLaunchRoundedIcon,
-    text: "Install ArgoCD and connect to your dev environment",
+    text: SplashCopy.rocket,
   },
   {
     Icon: MiscellaneousServicesRoundedIcon,
-    text: "Set up your Smarthub",
+    text: SplashCopy.gear,
   },
   {
     Icon: CableRoundedIcon,
-    text: "Connect to your data source and destination",
+    text: SplashCopy.wire,
   },
 ];
 
@@ -38,10 +39,10 @@ export function Splash() {
         title={
           <Stack direction="row" gap="10px" alignItems={"center"}>
             <Octobuddy />
-            Get started with Octant
+            {SplashCopy.header}
           </Stack>
         }
-        description="[Easy OTel in Minutes!]"
+        description={SplashCopy.subheader}
       />
       <Stack direction="column" gap={2}>
         {ROWS.map(({ Icon, text }, index) => (
@@ -65,7 +66,7 @@ export function Splash() {
         type={"button"}
         onClick={onClickProgress}
       >
-        Let's get going
+        {SplashCopy.cta}
       </Button>
     </FlowCenterColumn>
   );
