@@ -8,6 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import type { ReactNode } from "react";
 import "./SetupSmarthubDialog.css";
+import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
 
 interface SetupSmarthubDialogProps {
   open: boolean;
@@ -21,13 +22,13 @@ const contentByStatus = {
   error: {
     title: {
       icon: <ErrorOutlineRoundedIcon color="error" />,
-      text: "Install failed",
+      text: copy.errModal.header,
     },
-    content: `Unknown issue. Check our <troubleshooting guide [insert docs link]> for support. When you’re ready, come back and try installing again.`,
+    content: copy.errModal.body,
     createActions: (onClose: () => void) => (
       <>
         <Button onClick={onClose} variant="text">
-          I'm back and ready to retry install
+          {copy.errModal.cta}
         </Button>
       </>
     ),
@@ -35,16 +36,16 @@ const contentByStatus = {
   warn: {
     title: {
       icon: <WarningAmberIcon color="warning" />,
-      text: "Still waiting",
+      text: copy.warnModal.header,
     },
-    content: `We're still not sure whether or not things are running correctly. What would you like to do?`,
+    content: copy.warnModal.body,
     createActions: (onClose: () => void, onContinue?: () => void) => (
       <>
         <Button onClick={onClose} variant="text">
-          Keep waiting
+          {copy.warnModal.cta1}
         </Button>
         <Button onClick={onContinue} variant="contained">
-          It's ok, let's keep going
+          {copy.warnModal.cta2}
         </Button>
       </>
     ),

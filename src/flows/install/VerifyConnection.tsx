@@ -17,6 +17,7 @@ import {
   connectionServiceClient,
   createOrGetValidatorRunId,
 } from "../../services/connection";
+import { VerifyConnectionCopy as copy } from "../../copy/install/VerifyConnection.copy";
 
 function connectionStatusResponseToHealthWidgetProps(
   loading: boolean,
@@ -203,8 +204,8 @@ export function VerifyConnection() {
 
   return (
     <FlowCenterColumn>
-      <ViewTitle title="Verify Datadog connection and test data flow" />
-      <HealthWidget title="Datadog connection" {...healthWidgetProps} />
+      <ViewTitle title={copy.header} />
+      <HealthWidget title={copy.connection} {...healthWidgetProps} />
       <ButtonRow>
         <NextButton disabled={connectionStatus === null} />
         {(healthWidgetProps.status === "error" || error) && (

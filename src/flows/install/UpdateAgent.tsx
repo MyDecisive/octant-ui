@@ -10,7 +10,7 @@ import { useConnectStore } from "@store/connectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { createForwardDataSnippets } from "../createForwardDataSnippets";
-
+import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
 export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(false);
 
@@ -33,15 +33,10 @@ export function UpdateAgent() {
     <>
       <FlowCenterColumn>
         <ViewTitle
-          title="Update Datadog agent and test data flow in our Smarthub"
+          title={copy.header}
           description={
             <Typography variant="body2" color="secondary">
-              Update your Datadog agent config in your Kubernetes cluster or
-              Argo CD project and restart it with the updated manifest changes.
-              <br />
-              <br />
-              To update, you’ll need to copy and paste the code snippet of the
-              data type(s) you previously selected.
+              {copy.subheader}
             </Typography>
           }
         />
@@ -51,20 +46,20 @@ export function UpdateAgent() {
           options={[
             {
               value: "confirmed",
-              label: "I have updated the Datadog agent and I am ready to test",
+              label: copy.ack,
             },
           ]}
         />
         <ButtonRow>
-          <NextButton disabled={!confirmed} />
+          <NextButton disabled={!confirmed} ctaTxt={copy.cta} />
           <Typography variant="chipLabel">
-            This process will take about 5 minutes.
+            {copy.timingTxt}
           </Typography>
         </ButtonRow>
       </FlowCenterColumn>
       <Stack className="right-column" gap={3}>
         <Stack gap={1}>
-          <Typography variant="body2">MyDecisive location URL</Typography>
+          <Typography variant="body2">{copy.myDecisiveLocation}</Typography>
           <CodeSnippet
             code={locationUrl}
             maxHeight="150px"
@@ -73,7 +68,7 @@ export function UpdateAgent() {
         </Stack>
 
         <Typography variant="body2" data-bold="true">
-          Paste the following code snippets in your Datadog agent:
+          {copy.datadogCodeBlock}
         </Typography>
 
         <Stack gap={1}>

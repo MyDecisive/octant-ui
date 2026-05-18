@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useFormValidation } from "../../fieldValidation/useFormValidation";
 import { validateRequired } from "../../fieldValidation/validateRequired";
 import { installServiceClient } from "../../services/install";
+import { SmarthubCopy as copy } from "../../copy/install/SetupSmarthub.copy";
 
 const formSpec: FormFields = {
   namespace: [validateRequired],
@@ -96,7 +97,7 @@ export function SetupSmarthub() {
 
       return false;
     } catch (e) {
-      setInstallError(e instanceof Error ? e.message : "Something went wrong");
+      setInstallError(e instanceof Error ? e.message : copy.genericFormErrorTxt);
       return false;
     }
   };
@@ -109,17 +110,18 @@ export function SetupSmarthub() {
   return (
     <FlowCenterColumn isForm>
       <ViewTitle
-        title="Set up and install your Smarthub"
-        description="Tell us where you’d like the Smarthub to live and how you want us to preserve important data for you. When you’re ready, we'll run a quick test to make sure the hub is running smoothly in your environment."
+        title={copy.header}
+        description={copy.subheader}
       />
       <Stack gap={1}>
-        <Typography>Namespace</Typography>
+        <Typography>{copy.nsHeader}</Typography>
         <Input
-          label="Kubernetes namespace"
+          label={copy.k8sNsInput.label}
           value={namespace}
           {...callbacks.namespace}
-          placeholder="mdai"
+          placeholder={copy.k8sNsInput.placeholder}
           onChange={(e) => setFormField("namespace", e.target.value)}
+          helperText={copy.k8sNsInput.helperText}
         />
       </Stack>
       <SetupSmarthubDialog
@@ -133,7 +135,8 @@ export function SetupSmarthub() {
         isSubmit
         asyncFunction={handleInstall}
         canAsync={!fieldErrors.namespace}
-        loadingText={"Installing"}
+        loadingText={copy.loadingTxt}
+        text={copy.cta.initial}
       />
     </FlowCenterColumn>
   );

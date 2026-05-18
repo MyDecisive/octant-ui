@@ -10,6 +10,7 @@ import { SliderControl } from "../formInputs/SliderControl";
 import "./FilterCard.css";
 import { FilterCardTitle } from "./FilterCardTitle";
 import { MetricRow } from "./MetricRow";
+import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 
 interface FilterCardProps {
   title: string;
@@ -71,14 +72,14 @@ export function FilterCard({
       content={
         <Stack gap={2}>
           <Stack gap={1}>
-            <MetricRow label={"Received"} value={received} unit={unit} />
-            <MetricRow label={"Sent"} value={sent} unit={unit} />
-            <MetricRow label={"Filtered"} value={filtered} unit={unit} />
+            <MetricRow label={ClarityCopy.logFilter.rows.ingested} value={received} unit={unit} />
+            <MetricRow label={ClarityCopy.logFilter.rows.routed} value={sent} unit={unit} />
+            <MetricRow label={ClarityCopy.logFilter.rows.dropped} value={filtered} unit={unit} />
           </Stack>
           <Divider />
           <SliderControl
             value={sampleRate}
-            label="Reduce log volume by"
+            label={ClarityCopy.logFilter.slider}
             valueUnits="%"
             size="small"
             onChangeCommitted={handleRateChange}
@@ -89,7 +90,7 @@ export function FilterCard({
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography variant="chipLabel">Always keep errors</Typography>
+            <Typography variant="chipLabel">{ClarityCopy.logFilter.toggle}</Typography>
             <Switch checked={persist} onChange={handlePersistChange} />
           </Stack>
           <Divider />
@@ -107,7 +108,7 @@ export function FilterCard({
               color="inherit"
               size="small"
             >
-              Cancel
+              {ClarityCopy.logFilter.ctas.cancel}
             </Button>
             <Button
               disabled={noValueHasBeenChanged}
@@ -116,7 +117,7 @@ export function FilterCard({
               variant="text"
               size="small"
             >
-              Apply
+              {ClarityCopy.logFilter.ctas.apply}
             </Button>
           </Stack>
         </Stack>

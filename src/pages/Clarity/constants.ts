@@ -4,6 +4,7 @@ import type { GridColDef } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 import { formatNumber } from "@utils/formatNumber";
 import { createElement } from "react";
+import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 
 const formatCurrency = (value: number | undefined) =>
   formatNumber(value, { minimumDecimalPlaces: 2, prefix: "$" });
@@ -11,26 +12,26 @@ const formatMetricNumber = (value: number | undefined) => formatNumber(value);
 
 export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   {
-    headerName: "Root spans",
+    headerName: ClarityCopy.traceTable.columns.rootSpans,
     field: "span",
   },
   {
-    headerName: "Span breadth",
+    headerName: ClarityCopy.traceTable.columns.spanBreadth,
     field: "breadth",
     valueFormatter: formatMetricNumber,
   },
   {
-    headerName: "Invocations",
+    headerName: ClarityCopy.traceTable.columns.invocations,
     field: "invocations",
     valueFormatter: formatMetricNumber,
   },
   {
-    headerName: "Span depth",
+    headerName: ClarityCopy.traceTable.columns.spanDepth,
     field: "depth",
     valueFormatter: formatMetricNumber,
   },
   {
-    headerName: "Estimated cost",
+    headerName: ClarityCopy.traceTable.columns.estimatedCost,
     field: "cost",
     cellClassName: "bold",
     valueFormatter: formatCurrency,
@@ -56,17 +57,17 @@ export interface LogData extends BaseRowDefinition {
 
 export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
   {
-    headerName: "service name",
+    headerName: ClarityCopy.logsTable.columns.service,
     field: "name",
   },
   {
-    headerName: "Logs sent (GB)",
+    headerName: ClarityCopy.logsTable.columns.sent,
     field: "sent",
     type: "number",
     valueFormatter: formatMetricNumber,
   },
   {
-    headerName: "% of Total",
+    headerName: ClarityCopy.logsTable.columns.pTotal,
     field: "percent",
     renderCell: ({ value }) =>
       createElement(ProgressLineWithLabel, {
@@ -75,7 +76,7 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
       }),
   },
   {
-    headerName: "Estimated cost",
+    headerName: ClarityCopy.logsTable.columns.estimatedCost,
     field: "cost",
     cellClassName: "bold",
     valueFormatter: formatCurrency,
@@ -115,7 +116,7 @@ function summaryRateFormatter(
 
 export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
   {
-    headerName: "Type",
+    headerName: ClarityCopy.overall.columns.type,
     field: "type",
     headerClassName: "bold",
     cellClassName: "bold",
@@ -123,26 +124,26 @@ export const summaryColumns = createColumnDefinitionsForDataTable<SummaryData>([
       `${value[0].toLocaleUpperCase()}${value.slice(1)}`,
   },
   {
-    headerName: "Sent",
+    headerName: ClarityCopy.overall.columns.export,
     headerClassName: "bold",
     field: "sent",
     valueFormatter: summaryValueFormatter,
   },
   {
-    headerName: "Rate",
+    headerName: ClarityCopy.overall.columns.rate,
     headerClassName: "bold",
     field: "rate",
     valueFormatter: summaryRateFormatter,
   },
   {
-    headerName: "% of Total",
+    headerName: ClarityCopy.overall.columns.pTotal,
     headerClassName: "bold",
     field: "pct",
     valueFormatter: (value: number | undefined) =>
       formatNumber(value, { decimalPlaces: 0, suffix: " %" }),
   },
   {
-    headerName: "Est. Cost",
+    headerName: ClarityCopy.overall.columns.total,
     headerClassName: "bold",
     field: "cost",
     valueFormatter: formatCurrency,
