@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 import { useConnectStore } from "@store/connectStore";
 import { VIEW_ORDER } from "../flows/install";
 
-export function NextButton({ disabled, ctaTxt }: { disabled: boolean, ctaTxt: string; }) {
+export function NextButton({ disabled, ctaTxt }: { disabled: boolean, ctaTxt?: string; }) {
   const activeView = useConnectStore((state) => state.activeView);
   const setActiveView = useConnectStore((state) => state.setActiveView);
 
