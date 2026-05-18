@@ -1,5 +1,7 @@
+import { FullscreenLoader } from "@components/FullscreenLoader";
 import { FlowLayout } from "@components/layout/FlowLayout";
 import { StepperNav } from "@components/StepperNav";
+import { useDetectProgress } from "@utils/useDetectProgress";
 import { Redirect, Route, Router, Switch } from "wouter";
 import { Splash } from "./components/Splash";
 import {
@@ -13,6 +15,12 @@ import { ConnectionsPage } from "./pages/Connections";
 import { SmarthubPage } from "./pages/Smarthub";
 
 function App() {
+  const { loading, maxAllowedRoute } = useDetectProgress();
+
+  if (loading) {
+    return <FullscreenLoader />;
+  }
+
   return (
     <Router base={import.meta.env.BASE_URL}>
       <Switch>
@@ -20,13 +28,23 @@ function App() {
           <FlowLayout>
             <Route path={ROUTES.SPLASH} component={Splash} />
             <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
-            {INSTALL_AND_CONNECT.map(({ Component }, index) => (
-              <Route
-                key={`flow-step-${index.toLocaleString()}`}
-                path={`${ROUTES.INSTALL}/${(index + 1).toString()}`}
-                component={Component}
-              />
-            ))}
+            {INSTALL_AND_CONNECT.map(({ Component }, index) => {
+              const stepPath = `${ROUTES.INSTALL}/${(index + 1).toString()}`;
+              return (
+                <Route
+                  key={`flow-step-${index.toLocaleString()}`}
+                  path={stepPath}
+                >
+                  {maxAllowedRoute &&
+                  maxAllowedRoute !== ROUTES.SPLASH &&
+                  stepPath > maxAllowedRoute ? (
+                    <Redirect to={maxAllowedRoute} />
+                  ) : (
+                    <Component />
+                  )}
+                </Route>
+              );
+            })}
             <Route path={ROUTES.INSTALL}>
               <Redirect to="/install/1" />
             </Route>
