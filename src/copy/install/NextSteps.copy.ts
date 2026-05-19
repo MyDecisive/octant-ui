@@ -1,12 +1,12 @@
-interface Tile {
+type Tile = {
   title: string;
   description: string;
   pill?: string;
-  cta: string;
-  cta2?: string;
+  ctaPrimary: string;
+  ctaSecondary?: string;
 }
 
-interface INextStepsCopy {
+type NextStepsConfig = {
   header: string;
   subtitle: string;
   tile1: Tile;
@@ -14,7 +14,7 @@ interface INextStepsCopy {
   tile3: Tile;
 }
 
-export const NextStepsCopy: INextStepsCopy = {
+export const NextStepsCopy = {
   // IC7-01
   header: "Next Steps",
   // IC7-02
@@ -27,7 +27,7 @@ export const NextStepsCopy: INextStepsCopy = {
     // IC7-05
     pill: "Recommended",
     // IC7-03
-    cta: "Go to Clarity",
+    ctaPrimary: "Go to Clarity",
   },
   tile2: {
     // IC7-06
@@ -35,7 +35,7 @@ export const NextStepsCopy: INextStepsCopy = {
     // IC7-07
     description: "Ready to go live? Follow our step-by-step guide to safely migrate Smarthub from your current environment into production.",
     // IC7-08
-    cta: "See our docs",
+    ctaPrimary: "See our docs",
   },
   tile3: {
     // IC7-09
@@ -43,8 +43,8 @@ export const NextStepsCopy: INextStepsCopy = {
     // IC7-10
     description: "Your manifests are ready. Push them to your repository to make the configuration official and version-controlled.",
     // IC7-11
-    cta: "Download .zip first",
+    ctaPrimary: "Download .zip first",
     // IC7-12
-    cta2: "Go to Docs",
+    ctaSecondary: "Go to Docs",
   },
-};
+} satisfies NextStepsConfig;

@@ -72,14 +72,14 @@ export function FilterCard({
       content={
         <Stack gap={2}>
           <Stack gap={1}>
-            <MetricRow label={ClarityCopy.logFilter.rows.ingested} value={received} unit={unit} />
-            <MetricRow label={ClarityCopy.logFilter.rows.routed} value={sent} unit={unit} />
-            <MetricRow label={ClarityCopy.logFilter.rows.dropped} value={filtered} unit={unit} />
+            <MetricRow label={ClarityCopy.filterCard.rows.ingested} value={received} unit={unit} />
+            <MetricRow label={ClarityCopy.filterCard.rows.routed} value={sent} unit={unit} />
+            <MetricRow label={ClarityCopy.filterCard.rows.dropped} value={filtered} unit={unit} />
           </Stack>
           <Divider />
           <SliderControl
             value={sampleRate}
-            label={ClarityCopy.logFilter.slider}
+            label={ClarityCopy.filterCard.slider}
             valueUnits="%"
             size="small"
             onChangeCommitted={handleRateChange}
@@ -90,7 +90,7 @@ export function FilterCard({
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography variant="chipLabel">{ClarityCopy.logFilter.toggle}</Typography>
+            <Typography variant="chipLabel">{ClarityCopy.filterCard.toggle}</Typography>
             <Switch checked={persist} onChange={handlePersistChange} />
           </Stack>
           <Divider />
@@ -108,7 +108,7 @@ export function FilterCard({
               color="inherit"
               size="small"
             >
-              {ClarityCopy.logFilter.ctas.cancel}
+              {ClarityCopy.filterCard.ctas.cancel}
             </Button>
             <Button
               disabled={noValueHasBeenChanged}
@@ -117,7 +117,7 @@ export function FilterCard({
               variant="text"
               size="small"
             >
-              {ClarityCopy.logFilter.ctas.apply}
+              {ClarityCopy.filterCard.ctas.apply}
             </Button>
           </Stack>
         </Stack>

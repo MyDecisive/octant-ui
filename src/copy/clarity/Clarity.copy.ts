@@ -23,16 +23,19 @@ type TelemetryRowsCopy = {
   dropped: string;
 };
 
-type FilterCopy = {
-  title: string;
+type FilterCard = {
   status: FilterStatusCopy;
   rows: TelemetryRowsCopy;
   slider: string;
   toggle: string;
   ctas: {
-    cancel: string;
     apply: string;
+    cancel: string;
   };
+};
+
+type FilterCopy = {
+  title: string;
   emptyState: EmptyStateCopy;
 };
 
@@ -90,6 +93,7 @@ type ClarityCopyConfig = {
       t: string;
     };
   };
+  filterCard: FilterCard;
   logFilter: FilterCopy;
   traceFilter: FilterCopy;
   search: InputProps;
@@ -157,33 +161,44 @@ export const ClarityCopy = {
       t: "Traces",
     },
   },
-  logFilter: defineFilterCopy({
-    // CH-24
-    title: "Log filters",
+  filterCard: {
     status: {
       // CH-25
+      // CH-38
       na: "None applied",
       // CH-26
+      // CH-39
       ke: "Keep errors",
     },
     rows: {
       // CH-27
+      // CH-40
       ingested: "Ingested",
       // CH-28
+      // CH-41
       routed: "Routed",
       // CH-29
+      // CH-42
       dropped: "Dropped",
     },
     // CH-30
+    // CH-43
     slider: "Sampling Rate",
     // CH-31
+    // CH-44
     toggle: "Always keep errors",
     ctas: {
       // CH-32
+      // CH-45
       cancel: "Cancel",
       // CH-33
+      // CH-46
       apply: "Apply",
     },
+  },
+  logFilter: defineFilterCopy({
+    // CH-24
+    title: "Log filters",
     emptyState: {
       // CH-34
       title: "Logs not configured",
@@ -197,30 +212,6 @@ export const ClarityCopy = {
   traceFilter: defineFilterCopy({
     // CH-37
     title: "Trace filters",
-    status: {
-      // CH-38
-      na: "None applied",
-      // CH-39
-      ke: "Keep errors",
-    },
-    rows: {
-      // CH-40
-      ingested: "Ingested",
-      // CH-41
-      routed: "Routed",
-      // CH-42
-      dropped: "Dropped",
-    },
-    // CH-43
-    slider: "Sampling Rate",
-    // CH-44
-    toggle: "Always keep errors",
-    ctas: {
-      // CH-45
-      cancel: "Cancel",
-      // CH-46
-      apply: "Apply",
-    },
     emptyState: {
       // CH-47
       title: "Traces not configured",

@@ -1,6 +1,6 @@
 import type { InputProps } from "@components/formInputs/Input";
 
-interface SmartHub {
+type SmartHubConfig = {
   header: string;
   subheader: string;
   nsHeader: string;
@@ -20,12 +20,12 @@ interface SmartHub {
   warnModal: {
     header: string;
     body: string;
-    cta1: string;
-    cta2: string;
+    ctaClose: string;
+    ctaContinue: string;
   };
 }
 
-export const SmarthubCopy: SmartHub = {
+export const SmarthubCopy = {
   // IC3-01
   header: "Deploy Smarthub",
   // IC3-02
@@ -64,10 +64,10 @@ export const SmarthubCopy: SmartHub = {
     // IC3-??
     body: "We're still not sure whether or not things are running correctly. What would you like to do?",
     // IC3-??
-    cta1: "Keep waiting",
+    ctaContinue: "Keep waiting",
     // IC3-??
-    cta2: "It's ok, let's keep going",
+    ctaClose: "It's ok, let's keep going",
   },
   // IC3-??
   genericFormErrorTxt: "Something went wrong.",
-};
+} satisfies SmartHubConfig;

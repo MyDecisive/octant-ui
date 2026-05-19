@@ -88,6 +88,57 @@ export function DeployCollector() {
     }
   };
 
+  const fields = {
+    source: {
+      label: copy.sourceSection.dropdown.label,
+      selected: "datadog",
+    },
+    datatypes: {
+      label: copy.sourceSection.datatypes.label,
+      options: [
+        {
+          // IC4-07
+          label: "Metrics",
+          value: "metrics",
+        },
+        {
+          // IC4-08
+          label: "Logs",
+          value: "logs",
+        },
+        {
+          // IC4-09
+          label: "Traces",
+          value: "traces",
+        },
+      ],
+    },
+    destination: {
+      vendorDropdown: {
+        label: copy.destinationSection.vendorDropdownLabel,
+        selected: "datadog",
+        options: [
+          {
+            // IC4-13
+            label: "Datadog",
+            value: "datadog"
+          },
+        ],
+      },
+      url: {
+        placeholder: copy.destinationSection.destinationUrl.placeholder,
+        helperText: copy.destinationSection.destinationUrl.helperText,
+      },
+      apiKey: {
+        placeholder: copy.destinationSection.destinationApiKey.placeholder,
+        helperText: copy.destinationSection.destinationApiKey.helperText,
+        tooltip: copy.destinationSection.destinationApiKey.tooltip,
+
+      },
+    },
+
+  };
+
   return (
     <>
       <FlowCenterColumn>
@@ -97,19 +148,21 @@ export function DeployCollector() {
         />
         <Typography variant="h6">{copy.sourceSection.title}</Typography>
 
+        {/* Source field */}
         <Select
-          label={copy.sourceSection.dropdown.label}
-          selected={copy.sourceSection.dropdown.selected}
+          label={fields.source.label}
+          selected={fields.source.selected}
           size="small"
           disabled
           options={copy.sourceSection.dropdown.options}
           onChange={() => null}
         />
 
+        {/* Data Types Checkboxes */}
         <CheckboxGroup
-          label={copy.sourceSection.datatypes.label}
+          label={fields.datatypes.label}
           {...callbacks.telemetryTypes}
-          options={copy.sourceSection.datatypes.options}
+          options={fields.datatypes.options}
           selected={telemetryTypes}
           onChange={(checked) =>
             setFormField("telemetryTypes", checked as TelemetryTypes[])
@@ -118,12 +171,15 @@ export function DeployCollector() {
           onBlur={handleBlur}
         />
 
-        <Typography variant="h6">{copy.destinationSection.title}</Typography>
+        <Typography variant="h6">
+          {copy.destinationSection.title}
+        </Typography>
+
         <Typography variant="body1">
           {copy.destinationSection.subtitle}
+          {/* TODO: not sure if we should comment out
           To get the API key you'll need to log in to your Datadog account. To
           identify which Datadog site you're on, visit their{" "}
-          {/* TODO: not sure if we should comment out
           <Link
             href={
               "https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site"
@@ -134,33 +190,39 @@ export function DeployCollector() {
             docs
           </Link>{" "} */}
         </Typography>
+        {/* Source field */}
+
+        {/* Vendor Dropdown */}
         <Select
-          label={copy.destinationSection.dropdown.label}
-          selected={copy.destinationSection.dropdown.selected}
+          label={fields.destination.vendorDropdown.label}
+          selected={fields.destination.vendorDropdown.selected}
           size="small"
           disabled
-          options={copy.destinationSection.dropdown.options}
+          options={fields.destination.vendorDropdown.options}
           onChange={() => null}
         />
+
+        {/* Destination Url */}
         <Input
           value={url}
-          onChange={(e) => setFormField("url", e.target.value)}
+
           {...callbacks.url}
-          placeholder={copy.destinationSection.destinationUrl.placeholder}
-          helperText={copy.destinationSection.destinationUrl.helperText}
-          tooltip={copy.destinationSection.destinationUrl.tooltip}
+          placeholder={fields.destination.url.placeholder}
+          helperText={fields.destination.url.helperText}
           onFocus={() => setFocusedField("url")}
           onBlur={handleBlur}
         />
+
+        {/* Destination Api Key */}
         <Input
           value={apiKey}
           onChange={(e) => setFormField("apiKey", e.target.value)}
           {...callbacks.apiKey}
-          placeholder={copy.destinationSection.destinationApiKey.placeholder}
+          placeholder={fields.destination.apiKey.placeholder}
           onFocus={() => setFocusedField("apiKey")}
           onBlur={handleBlur}
-          helperText={copy.destinationSection.destinationApiKey.helperText}
-          tooltip={copy.destinationSection.destinationApiKey.tooltip}
+          helperText={fields.destination.apiKey.helperText}
+          tooltip={fields.destination.apiKey.tooltip}
         />
         <AsyncNextButton
           asyncFunction={handleDeployButtonClick}

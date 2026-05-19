@@ -1,4 +1,4 @@
-interface ISplashCopy {
+type SplashConfig = {
   header: string;
   subheader: string;
   rocket: string;
@@ -7,7 +7,7 @@ interface ISplashCopy {
   cta: string;
 }
 
-export const SplashCopy: ISplashCopy = {
+export const SplashCopy = {
   // SS-01
   header: "Welcome to Octant",
   // SS-02
@@ -20,4 +20,4 @@ export const SplashCopy: ISplashCopy = {
   wire: "Route your data.",
   // SS-06
   cta: "Let's Build"
-};
+} satisfies SplashConfig;

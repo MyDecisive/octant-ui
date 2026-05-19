@@ -42,10 +42,10 @@ const contentByStatus = {
     createActions: (onClose: () => void, onContinue?: () => void) => (
       <>
         <Button onClick={onClose} variant="text">
-          {copy.warnModal.cta1}
+          {copy.warnModal.ctaClose}
         </Button>
         <Button onClick={onContinue} variant="contained">
-          {copy.warnModal.cta2}
+          {copy.warnModal.ctaContinue}
         </Button>
       </>
     ),

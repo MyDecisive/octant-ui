@@ -33,7 +33,7 @@ export function NextSteps() {
             size="small"
             disableRipple
           >
-            {copy.tile1.cta}
+            {copy.tile1.ctaPrimary}
           </Button>
         }
       />
@@ -49,7 +49,7 @@ export function NextSteps() {
             size="small"
             disableRipple
           >
-            {copy.tile2.cta}
+            {copy.tile2.ctaPrimary}
           </Button>
         }
       />
@@ -65,7 +65,7 @@ export function NextSteps() {
               onClick={void handleDownloadManifestsClick}
               loading={loading}
             >
-              {copy.tile2.cta}
+              {copy.tile3.ctaPrimary}
             </Button>
             <Button
               variant="text"
@@ -76,7 +76,7 @@ export function NextSteps() {
               size="small"
               disableRipple
             >
-              {copy.tile2.cta2}
+              {copy.tile3.ctaSecondary}
             </Button>
           </ButtonRow>
         }

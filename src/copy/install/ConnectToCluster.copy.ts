@@ -6,7 +6,7 @@ interface ConnectInputs {
   tooltip?: string;
 };
 
-interface IConnectToCluster {
+interface ConnectToClusterConfig {
   header: string;
   subheader: string;
   nameThisConnection: ConnectInputs;
@@ -24,7 +24,7 @@ interface IConnectToCluster {
   };
 }
 
-export const ConnectToClusterCopy: IConnectToCluster = {
+export const ConnectToClusterCopy = {
   // IC2-01
   header: "Connect to your Kubernetes Cluster",
   // IC2-02
@@ -71,4 +71,4 @@ export const ConnectToClusterCopy: IConnectToCluster = {
     // IC2-17
     activated: "Connecting to your cluster...",
   },
-};
+} satisfies ConnectToClusterConfig;

@@ -1,11 +1,11 @@
-interface IDeployArgo {
+type DeployArgoConfig = {
   header: string;
   subheader: string;
   checkboxTxt: string;
   cta: string;
 }
 
-export const DeployArgoCopy: IDeployArgo = {
+export const DeployArgoCopy = {
   // IC1-01
   header: "Deploy via ArgoCD",
   // IC1-02
@@ -14,4 +14,4 @@ export const DeployArgoCopy: IDeployArgo = {
   checkboxTxt: "I authorize Octant to create and manage ArgoCD applications in my cluster.",
   // IC1-04
   cta: "Next",
-};
+} satisfies DeployArgoConfig;
