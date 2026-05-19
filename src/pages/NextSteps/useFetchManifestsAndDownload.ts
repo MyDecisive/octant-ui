@@ -33,7 +33,7 @@ export function useFetchManifestsAndDownload() {
       ),
     );
 
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchAndDownload = useCallback(
     async (onStart?: () => void, onEnd?: () => void) => {

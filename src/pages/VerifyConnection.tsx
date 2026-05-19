@@ -105,7 +105,7 @@ export function VerifyConnection() {
 
   const [error, setError] = useState<string | null>(null);
 
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { connectionName, namespace } = useInstallAndConnectStore(
     useShallow(({ connectionName, namespace }) => ({
