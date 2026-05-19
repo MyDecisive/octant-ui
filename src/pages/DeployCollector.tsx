@@ -96,11 +96,6 @@ export function DeployCollector() {
       label: copy.sourceSection.datatypes.label,
       options: [
         {
-          // IC4-07
-          label: "Metrics",
-          value: "metrics",
-        },
-        {
           // IC4-08
           label: "Logs",
           value: "logs",
@@ -120,7 +115,7 @@ export function DeployCollector() {
           {
             // IC4-13
             label: "Datadog",
-            value: "datadog"
+            value: "datadog",
           },
         ],
       },
@@ -132,10 +127,8 @@ export function DeployCollector() {
         placeholder: copy.destinationSection.destinationApiKey.placeholder,
         helperText: copy.destinationSection.destinationApiKey.helperText,
         tooltip: copy.destinationSection.destinationApiKey.tooltip,
-
       },
     },
-
   };
 
   return (
@@ -167,9 +160,7 @@ export function DeployCollector() {
           onBlur={handleBlur}
         />
 
-        <Typography variant="h6">
-          {copy.destinationSection.title}
-        </Typography>
+        <Typography variant="h6">{copy.destinationSection.title}</Typography>
 
         <Typography variant="body1">
           {copy.destinationSection.subtitle}
@@ -201,7 +192,6 @@ export function DeployCollector() {
         {/* Destination Url */}
         <Input
           value={url}
-
           {...callbacks.url}
           placeholder={fields.destination.url.placeholder}
           helperText={fields.destination.url.helperText}
