@@ -36,7 +36,7 @@
 .column-container.MuiBox-root > .left-column {
   grid-column: 1 / span 3;
   max-height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 .column-container.MuiBox-root > .right-column {
   grid-column: 9 / span 4;
