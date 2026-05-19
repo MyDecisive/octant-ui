@@ -18,7 +18,9 @@ export const ROUTES = {
 
 export const FLOW_ROUTES = new RegExp(/^\/(?:install(?:\/\d+)?)?$/);
 
-export const PAGE_ROUTES = new RegExp(/^\/(clarity|connections|smarthub)$/);
+export const PAGE_ROUTES = new RegExp(
+  /^\/(clarity|system-health|settings|support)$/,
+);
 
 export const INSTALL_AND_CONNECT = [
   {
