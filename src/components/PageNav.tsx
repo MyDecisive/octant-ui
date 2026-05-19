@@ -1,33 +1,34 @@
-import ApiIcon from "@mui/icons-material/Api";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import PowerIcon from "@mui/icons-material/Power";
-import { Button } from "@mui/material";
+import MonitorHeartRounded from "@mui/icons-material/MonitorHeartRounded";
+import SettingsRounded from "@mui/icons-material/SettingsRounded";
+import SupportRounded from "@mui/icons-material/SupportRounded";
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import classNames from "classnames";
 import { useLocation } from "wouter";
-import Octobuddy from "../assets/logo-black.svg?react";
+import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/ROUTES";
 import "./PageNav.css";
 const navButtons = [
-  {
-    label: "Octant",
-    href: ROUTES.SPLASH,
-    Icon: ApiIcon,
-  },
   {
     label: "Clarity",
     href: ROUTES.CLARITY,
     Icon: FilterListIcon,
   },
   {
-    label: "Connections",
-    href: ROUTES.CONNECTIONS,
-    Icon: PowerIcon,
+    label: "System Health",
+    href: ROUTES.SYSTEMHEALTH,
+    Icon: MonitorHeartRounded,
   },
   {
-    label: "SmartHub",
-    href: ROUTES.SMARTHUB,
-    Icon: Octobuddy,
+    label: "Settings",
+    href: ROUTES.SETTINGS,
+    Icon: SettingsRounded,
+  },
+  {
+    label: "Support",
+    href: ROUTES.SUPPORT,
+    Icon: SupportRounded,
   },
 ];
 
@@ -36,6 +37,15 @@ export function PageNav() {
 
   return (
     <Stack className="mdai-page-nav-container" gap={2}>
+      <Button
+        className="mdai-page-nav-header"
+        variant="nav"
+        key="Octant"
+        onClick={() => setLocation(ROUTES.SPLASH)}
+        startIcon={<Octobuddy />}
+      >
+        Octant
+      </Button>
       {navButtons.map(({ label, href, Icon }) => (
         <Button
           className={classNames({

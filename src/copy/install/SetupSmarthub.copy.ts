@@ -1,6 +1,6 @@
 import type { InputProps } from "@components/formInputs/Input";
 
-interface ISmartHub {
+interface SmartHub {
   header: string;
   subheader: string;
   nsHeader: string;
@@ -11,6 +11,7 @@ interface ISmartHub {
   };
   genericFormErrorTxt: string;
   loadingTxt: string;
+  infoTxt: string;
   errModal: {
     header: string;
     body: string;
@@ -24,11 +25,12 @@ interface ISmartHub {
   };
 }
 
-export const SmarthubCopy: ISmartHub = {
+export const SmarthubCopy: SmartHub = {
   // IC3-01
   header: "Deploy Smarthub",
   // IC3-02
-  subheader: "Specify the Kubernetes namespace where Octant will deploy the Smarthub engine and its associated resources. If the namespace does not exist, ArgoCD will create it.",
+  subheader:
+    "Specify the Kubernetes namespace where Octant will deploy the Smarthub engine and its associated resources. If the namespace does not exist, ArgoCD will create it.",
   // IC3-03
   nsHeader: "Kubernetes Namespace",
   k8sNsInput: {
@@ -46,7 +48,8 @@ export const SmarthubCopy: ISmartHub = {
     initial: "Deploy to Cluster",
   },
   // IC3-13
-  loadingTxt: "Syncing resources via ArgoCD. This usually takes 2-10 minutes depending on your cluster.",
+  loadingTxt: "Syncing resources via ArgoCD",
+  infoTxt: "This usually takes 2-10 minutes",
   errModal: {
     // IC3-10
     header: "Deployment Failed",

@@ -9,7 +9,7 @@ import { SmarthubPage } from "./pages/Smarthub";
 
 const flowRoutes = new RegExp(/^\/(?:install)?$/);
 
-const pageRoutes = new RegExp(/^\/(clarity|connections|smarthub)$/);
+const pageRoutes = new RegExp(/^\/(clarity|system-health|smarthub|support)$/);
 
 function App() {
   return (
@@ -24,8 +24,9 @@ function App() {
         <Route path={pageRoutes}>
           <Switch>
             <Route path={ROUTES.CLARITY} component={ClarityPage} />
-            <Route path={ROUTES.CONNECTIONS} component={ConnectionsPage} />
-            <Route path={ROUTES.SMARTHUB} component={SmarthubPage} />
+            <Route path={ROUTES.SYSTEMHEALTH} component={ConnectionsPage} />
+            <Route path={ROUTES.SETTINGS} component={SmarthubPage} />
+            <Route path={ROUTES.SUPPORT} component={SmarthubPage} />
           </Switch>
         </Route>
       </Switch>

@@ -1,13 +1,39 @@
 .MuiStack-root.mdai-page-nav-container {
-  width: 64px;
-  background-color: #e8e8e8;
-  height: 100%;
+  background-color: #fff;
+  padding: calc(var(--mdai-spacing-unit) * 3)
+    calc(var(--mdai-spacing-unit) * 1.5);
 }
 
-.MuiStack-root.mdai-page-nav-container > .MuiButton-root.splash {
-  margin-bottom: calc((var(--mdai-spacing-unit) * 2));
+.MuiStack-root.mdai-page-nav-container > .MuiButton-root {
+  justify-content: flex-start;
+  min-height: 36px;
+  color: rgba(0, 0, 0, 0.56);
+}
+
+.MuiStack-root.mdai-page-nav-container > .mdai-page-nav-header.MuiButton-root {
+  margin-bottom: calc(var(--mdai-spacing-unit) * 2);
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
 }
 
 .MuiStack-root.mdai-page-nav-container > .MuiButton-root.active {
-  background-color: #d3d3d3;
+  background-color: #ededed;
+  color: var(--mdai-purple);
+}
+
+.MuiStack-root.mdai-page-nav-container
+  > .MuiButton-root
+  .MuiButton-startIcon
+  > svg {
+  width: 18px;
+  height: 18px;
+}
+
+.MuiStack-root.mdai-page-nav-container
+  > .mdai-page-nav-header.MuiButton-root
+  .MuiButton-startIcon
+  > svg {
+  width: 30px;
+  height: 30px;
 }
