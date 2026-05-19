@@ -97,11 +97,6 @@ export function DeployCollector() {
       label: copy.sourceSection.datatypes.label,
       options: [
         {
-          // IC4-07
-          label: "Metrics",
-          value: "metrics",
-        },
-        {
           // IC4-08
           label: "Logs",
           value: "logs",
