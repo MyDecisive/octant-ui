@@ -195,6 +195,7 @@ export function DeployCollector() {
           {...callbacks.url}
           placeholder={fields.destination.url.placeholder}
           helperText={fields.destination.url.helperText}
+          onChange={(e) => setFormField("url", e.target.value)}
           onFocus={() => setFocusedField("url")}
           onBlur={handleBlur}
         />
