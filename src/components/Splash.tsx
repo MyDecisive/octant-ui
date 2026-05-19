@@ -9,7 +9,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
-import { ROUTES } from "../constants/ROUTES";
+import { ROUTES } from "../constants/routing";
 import "./Splash.css";
 import { SplashCopy as copy } from "../copy/install/Splash.copy";
 

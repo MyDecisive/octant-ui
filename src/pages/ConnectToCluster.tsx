@@ -3,17 +3,17 @@ import { AsyncNextButton } from "@components/AsyncNextButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
-import { useFormValidation } from "../../fieldValidation/useFormValidation";
-import { validateMinLength } from "../../fieldValidation/validateMinLength";
-import { validateRequired } from "../../fieldValidation/validateRequired";
-import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
-import { argoCdServiceClient } from "../../services/argoCd";
-import { ConnectToClusterCopy as copy }  from "../../copy/install/ConnectToCluster.copy";
+import { ConnectToClusterCopy as copy } from "../copy/install/ConnectToCluster.copy";
+import { useFormValidation } from "../fieldValidation/useFormValidation";
+import { validateMinLength } from "../fieldValidation/validateMinLength";
+import { validateRequired } from "../fieldValidation/validateRequired";
+import { validateUrlInput } from "../fieldValidation/validateUrlInput";
+import { argoCdServiceClient } from "../services/argoCd";
 
 const formSpec: FormFields = {
   connectionName: [validateRequired, validateMinLength(5)],
@@ -24,23 +24,15 @@ const formSpec: FormFields = {
 export function ConnectToCluster() {
   const { callbacks, formIsValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
-  const { argoUrl, accountToken, connectionName } = useConnectStore(
-    useShallow((state) => {
-      // Provide default empty string values so React recognizes the Inputs as controlled
-      const {
-        argoUrl = "",
-        accountToken = "",
-        connectionName = "",
-      } = state.form;
-
-      return {
-        argoUrl,
-        accountToken,
-        connectionName,
-      };
-    }),
+  const { argoUrl, accountToken, connectionName } = useInstallAndConnectStore(
+    // Provide default empty string values so React recognizes the Inputs as controlled
+    useShallow(({ argoUrl = "", accountToken = "", connectionName = "" }) => ({
+      argoUrl,
+      accountToken,
+      connectionName,
+    })),
   );
-  const setFormField = useConnectStore(
+  const setFormField = useInstallAndConnectStore(
     useShallow((state) => state.setFormField),
   );
   const setState = useOctantStore((state) => state.setState);
@@ -84,19 +76,14 @@ export function ConnectToCluster() {
       return true;
       // eslint-disable-next-line
     } catch (_) {
-      setConnectionError(
-        copy.formError.genericError,
-      );
+      setConnectionError(copy.formError.genericError);
       return false;
     }
   };
 
   return (
     <FlowCenterColumn isForm>
-      <ViewTitle
-        title={copy.header}
-        description={copy.subheader}
-      />
+      <ViewTitle title={copy.header} description={copy.subheader} />
       <Input
         value={decodeURI(connectionName)}
         onChange={(e) =>
@@ -123,13 +110,13 @@ export function ConnectToCluster() {
         placeholder={copy.argoToken.placeholder}
         helperText={copy.argoToken.helpTxt}
       />
-      {connectionError &&
+      {connectionError && (
         <Alert
           severity="error"
           title={copy.formError.header}
           description={connectionError}
         />
-      }
+      )}
       <AsyncNextButton
         asyncFunction={testArgoConnection}
         canAsync={formIsValid}

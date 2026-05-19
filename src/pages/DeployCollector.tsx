@@ -8,18 +8,18 @@ import { ViewTitle } from "@components/ViewTitle";
 import Typography from "@mui/material/Typography";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import type { FormFields, TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { useFormValidation } from "../../fieldValidation/useFormValidation";
-import { validateRequired } from "../../fieldValidation/validateRequired";
-import { validateTelemetryTypesSelection } from "../../fieldValidation/validateTelemetryTypesSelection";
-import { validateUrlInput } from "../../fieldValidation/validateUrlInput";
-import { connectionServiceClient } from "../../services/connection";
-import { dDogServiceClient } from "../../services/ddog";
-import { DeployCollectorCopy as copy } from "../../copy/install/DeployCollector.copy";
+import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
+import { useFormValidation } from "../fieldValidation/useFormValidation";
+import { validateRequired } from "../fieldValidation/validateRequired";
+import { validateTelemetryTypesSelection } from "../fieldValidation/validateTelemetryTypesSelection";
+import { validateUrlInput } from "../fieldValidation/validateUrlInput";
+import { connectionServiceClient } from "../services/connection";
+import { dDogServiceClient } from "../services/ddog";
 
 const formSpec: FormFields = {
   telemetryTypes: [validateTelemetryTypesSelection],
@@ -30,26 +30,25 @@ const formSpec: FormFields = {
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
   const { telemetryTypes, url, apiKey, connectionName, namespace } =
-    useConnectStore(
-      useShallow((state) => {
-        // Provide default empty string values so React recognizes the Inputs as controlled
-        const {
+    useInstallAndConnectStore(
+      useShallow(
+        ({
+          // Provide default empty string values so React recognizes the Inputs as controlled
           telemetryTypes,
           url = "",
           apiKey = "",
           connectionName,
           namespace,
-        } = state.form;
-        return {
+        }) => ({
           telemetryTypes,
           url,
           apiKey,
           connectionName,
           namespace,
-        };
-      }),
+        }),
+      ),
     );
-  const setFormField = useConnectStore((state) => state.setFormField);
+  const setFormField = useInstallAndConnectStore((state) => state.setFormField);
 
   const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
 
@@ -97,11 +96,6 @@ export function DeployCollector() {
       label: copy.sourceSection.datatypes.label,
       options: [
         {
-          // IC4-07
-          label: "Metrics",
-          value: "metrics",
-        },
-        {
           // IC4-08
           label: "Logs",
           value: "logs",
@@ -121,7 +115,7 @@ export function DeployCollector() {
           {
             // IC4-13
             label: "Datadog",
-            value: "datadog"
+            value: "datadog",
           },
         ],
       },
@@ -133,19 +127,14 @@ export function DeployCollector() {
         placeholder: copy.destinationSection.destinationApiKey.placeholder,
         helperText: copy.destinationSection.destinationApiKey.helperText,
         tooltip: copy.destinationSection.destinationApiKey.tooltip,
-
       },
     },
-
   };
 
   return (
     <>
       <FlowCenterColumn>
-        <ViewTitle
-          title={copy.header}
-          description={copy.subheader}
-        />
+        <ViewTitle title={copy.header} description={copy.subheader} />
         <Typography variant="h6">{copy.sourceSection.title}</Typography>
 
         {/* Source field */}
@@ -171,9 +160,7 @@ export function DeployCollector() {
           onBlur={handleBlur}
         />
 
-        <Typography variant="h6">
-          {copy.destinationSection.title}
-        </Typography>
+        <Typography variant="h6">{copy.destinationSection.title}</Typography>
 
         <Typography variant="body1">
           {copy.destinationSection.subtitle}
@@ -205,7 +192,6 @@ export function DeployCollector() {
         {/* Destination Url */}
         <Input
           value={url}
-
           {...callbacks.url}
           placeholder={fields.destination.url.placeholder}
           helperText={fields.destination.url.helperText}

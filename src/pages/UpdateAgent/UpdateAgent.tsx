@@ -6,22 +6,24 @@ import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { createForwardDataSnippets } from "../createForwardDataSnippets";
 import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
+import { createForwardDataSnippets } from "./createForwardDataSnippets";
+
 export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(false);
 
-  const { telemetryTypes, connectionName, url, namespace } = useConnectStore(
-    useShallow((state) => ({
-      connectionName: state.form.connectionName,
-      url: state.form.url,
-      namespace: state.form.namespace,
-      telemetryTypes: state.form.telemetryTypes,
-    })),
-  );
+  const { telemetryTypes, connectionName, url, namespace } =
+    useInstallAndConnectStore(
+      useShallow(({ connectionName, url, namespace, telemetryTypes }) => ({
+        connectionName,
+        url,
+        namespace,
+        telemetryTypes,
+      })),
+    );
   const { locationUrl, code } = createForwardDataSnippets({
     connectionName: connectionName!,
     url: url!,
@@ -52,9 +54,7 @@ export function UpdateAgent() {
         />
         <ButtonRow>
           <NextButton disabled={!confirmed} ctaTxt={copy.cta} />
-          <Typography variant="chipLabel">
-            {copy.timingTxt}
-          </Typography>
+          <Typography variant="chipLabel">{copy.timingTxt}</Typography>
         </ButtonRow>
       </FlowCenterColumn>
       <Stack className="right-column" gap={3}>

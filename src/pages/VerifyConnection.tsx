@@ -10,14 +10,14 @@ import { ConnectError } from "@connectrpc/connect";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { VerifyConnection as copy } from "../copy/install/VerifyConnection.copy";
 import {
   connectionServiceClient,
   createOrGetValidatorRunId,
-} from "../../services/connection";
-import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
+} from "../services/connection";
 
 function connectionStatusResponseToHealthWidgetProps(
   loading: boolean,
@@ -105,12 +105,12 @@ export function VerifyConnection() {
 
   const [error, setError] = useState<string | null>(null);
 
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { connectionName, namespace } = useConnectStore(
-    useShallow((state) => ({
-      connectionName: state.form.connectionName,
-      namespace: state.form.namespace,
+  const { connectionName, namespace } = useInstallAndConnectStore(
+    useShallow(({ connectionName, namespace }) => ({
+      connectionName,
+      namespace,
     })),
   );
 

@@ -5,7 +5,7 @@ import {
   DeploymentType,
   ManifestOutFormat,
 } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { useConnectStore } from "@store/connectStore";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { connectionServiceClient } from "../../services/connection";
 
@@ -21,10 +21,19 @@ function getManifestBlobPart(data: Uint8Array | string) {
 // TODO: Handle error state
 export function useFetchManifestsAndDownload() {
   const [loading, setLoading] = useState(false);
-  const form = useConnectStore(useShallow((state) => state.form));
+  const { connectionName, telemetryTypes, mdaiVersion, namespace } =
+    useInstallAndConnectStore(
+      useShallow(
+        ({ connectionName, telemetryTypes, mdaiVersion, namespace }) => ({
+          connectionName,
+          telemetryTypes,
+          mdaiVersion,
+          namespace,
+        }),
+      ),
+    );
 
-  const { connectionName, telemetryTypes, mdaiVersion, namespace } = form;
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchAndDownload = useCallback(
     async (onStart?: () => void, onEnd?: () => void) => {
