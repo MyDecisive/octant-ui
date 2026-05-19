@@ -3,6 +3,6 @@ export const ROUTES = {
   INSTALL: "/install",
   CLARITY: "/clarity",
   SYSTEMHEALTH: "/system-health",
-  SETTINGS: "/smarthub",
+  SETTINGS: "/settings",
   SUPPORT: "/support",
 };
