@@ -52,11 +52,10 @@ export function useDetectProgress() {
         })) {
           switch (res.installStatus) {
             case InstallStatus.INSTALLED:
-              console.log("installed resourceDetails ", res.details);
               if (!ignore) {
                 setMdaiInstalled(true);
               }
-              break;
+              return;
             case InstallStatus.TIMEOUT:
               timeoutId = setTimeout(() => {
                 void getInstallStatus();
@@ -102,7 +101,7 @@ export function useDetectProgress() {
         dDogServiceClient
           .getDatadogIntegrations({})
           .then((res) => {
-            if (res?.names?.length && !ignore) {
+            if (res?.names && !ignore) {
               setDDogIntegrated(res.names.includes(connectionName));
             }
           })
@@ -114,7 +113,7 @@ export function useDetectProgress() {
         connectionServiceClient
           .getConnections({})
           .then((res) => {
-            if (res?.connectionNames?.length && !ignore) {
+            if (res?.connectionNames && !ignore) {
               setConnected(res.connectionNames.includes(connectionName));
             }
           })
@@ -138,12 +137,11 @@ export function useDetectProgress() {
   const loading =
     dDogIntegrated === null || mdaiInstalled === null || connected === null;
 
-  return {
-    loading,
-    maxAllowedRoute: determineMaxAllowedRoute(
-      mdaiInstalled,
-      dDogIntegrated,
-      connected,
-    ),
-  };
+  const maxAllowedRoute = determineMaxAllowedRoute(
+    mdaiInstalled,
+    dDogIntegrated,
+    connected,
+  );
+
+  return { loading, maxAllowedRoute };
 }
