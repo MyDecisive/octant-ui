@@ -15,7 +15,7 @@ import { ConnectionsPage } from "./pages/Connections";
 import { SmarthubPage } from "./pages/Smarthub";
 
 function App() {
-  const { loading, maxAllowedRoute } = useDetectProgress();
+  const { loading } = useDetectProgress();
 
   if (loading) {
     return <FullscreenLoader />;
@@ -28,20 +28,13 @@ function App() {
           <Route path={ROUTES.SPLASH} component={Splash} />
           <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
           {INSTALL_AND_CONNECT.map(({ Component }, index) => {
-            const stepPath = `${ROUTES.INSTALL}/${(index + 1).toString()}`;
+            const path = `${ROUTES.INSTALL}/${(index + 1).toString()}`;
             return (
               <Route
                 key={`flow-step-${index.toLocaleString()}`}
-                path={stepPath}
-              >
-                {maxAllowedRoute &&
-                maxAllowedRoute !== ROUTES.SPLASH &&
-                stepPath > maxAllowedRoute ? (
-                  <Redirect to={maxAllowedRoute} />
-                ) : (
-                  <Component />
-                )}
-              </Route>
+                path={path}
+                component={Component}
+              />
             );
           })}
           <Route path={ROUTES.INSTALL}>

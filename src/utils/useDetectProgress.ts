@@ -1,6 +1,7 @@
 import { InstallStatus } from "@mydecisiveai/octant-client";
 import { useOctantStore } from "@store/octantStore";
 import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
 import { ROUTES } from "../constants/routing";
 import { connectionServiceClient } from "../services/connection";
@@ -22,6 +23,7 @@ function determineMaxAllowedRoute(
 }
 
 export function useDetectProgress() {
+  const [, navigate] = useLocation();
   const { connectionName } = useOctantStore(
     useShallow(({ connectionName }) => ({
       connectionName,
@@ -34,7 +36,6 @@ export function useDetectProgress() {
   const [connected, setConnected] = useState<Trinary>(initialState);
 
   // TODO: Get Argo Connections
-
   useEffect(() => {
     let ignore = false;
     let timeoutId: number | null = null;
@@ -142,6 +143,12 @@ export function useDetectProgress() {
     dDogIntegrated,
     connected,
   );
+
+  useEffect(() => {
+    if (!loading && maxAllowedRoute) {
+      navigate(maxAllowedRoute, { replace: true });
+    }
+  }, [loading, maxAllowedRoute, navigate]);
 
   return { loading, maxAllowedRoute };
 }
