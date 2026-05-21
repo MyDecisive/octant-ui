@@ -60,6 +60,7 @@ export function ClarityTabs({
         {
           value: "logs",
           label: "Logs",
+          missingData: !loading && !hasLogData,
           resultCount: logData.length,
           children:
             loading || hasLogData ? (
@@ -86,6 +87,7 @@ export function ClarityTabs({
         {
           value: "traces",
           label: "Traces",
+          missingData: !loading && !hasTraceData,
           resultCount: spanData.length,
           children:
             loading || hasTraceData ? (
