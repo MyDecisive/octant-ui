@@ -27,7 +27,7 @@ export function UpdateAgent() {
   const { locationUrl, code } = createForwardDataSnippets({
     connectionName: connectionName!,
     url: url!,
-    namespace,
+    namespace: namespace!,
     telemetryTypes,
   });
 
