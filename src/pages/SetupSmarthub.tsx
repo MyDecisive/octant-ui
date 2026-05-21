@@ -27,13 +27,14 @@ const formSpec: FormFields = {
 export function SetupSmarthub() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();
   const { callbacks, fieldErrors } = useFormValidation(formSpec);
-  const namespace = useInstallAndConnectStore((state) => state.namespace);
   const connectionName = useInstallAndConnectStore(
     (state) => state.connectionName,
   );
   const mdaiVersion = useInstallAndConnectStore((state) => state.mdaiVersion);
   const setFormField = useInstallAndConnectStore((state) => state.setFormField);
-  const setState = useOctantStore((state) => state.setState);
+  const setOctantState = useOctantStore((state) => state.setState);
+
+  const [namespace, setNamespace] = useState<string>("mdai");
 
   const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");
   const [installError, setInstallError] = useState<string | null>(null);
@@ -60,7 +61,8 @@ export function SetupSmarthub() {
       })) {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
-            setState("namespace", namespace);
+            setOctantState("namespace", namespace);
+            setFormField("namespace", namespace);
             return true;
           case InstallStatus.TIMEOUT:
             setDialogStatus("warn");
@@ -107,7 +109,8 @@ export function SetupSmarthub() {
   };
 
   const handleContinueFromDialog = () => {
-    setState("namespace", namespace);
+    setOctantState("namespace", namespace);
+    setFormField("namespace", namespace);
     advanceInstallFlow();
   };
 
@@ -121,7 +124,7 @@ export function SetupSmarthub() {
           value={namespace}
           {...callbacks.namespace}
           placeholder={copy.k8sNsInput.placeholder}
-          onChange={(e) => setFormField("namespace", e.target.value)}
+          onChange={(e) => setNamespace(e.target.value)}
           helperText={copy.k8sNsInput.helperText}
         />
       </Stack>
