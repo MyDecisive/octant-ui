@@ -1,18 +1,21 @@
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import type { TooltipProps } from "@mui/material/Tooltip";
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import { SummaryTableToolbar } from "./SummaryTableToolbar";
 import "./Table.css";
 import { TableFooter } from "./TableFooter";
-import { TableToolbar } from "./TableToolbar";
+import { TableToolbar, type TableToolbarTooltip } from "./TableToolbar";
 
 declare module "@mui/x-data-grid" {
   interface ToolbarPropsOverrides {
     label: string;
+    summaryTable?: boolean;
+    tooltip?: TableToolbarTooltip;
+    tooltipPlacement?: TooltipProps["placement"];
     total: string;
     timeRangeLabel?: string;
   }
@@ -34,6 +37,8 @@ interface TableProps<T extends BaseRowDefinition> extends Omit<
   footerLabel?: string;
   footerClassName?: string;
   timeRangeLabel?: string;
+  toolbarTooltip?: TableToolbarTooltip;
+  toolbarTooltipPlacement?: TooltipProps["placement"];
   total?: string;
   summaryTable?: boolean;
 }
@@ -62,6 +67,8 @@ export function Table<T extends BaseRowDefinition>({
   summaryTable,
   className,
   timeRangeLabel,
+  toolbarTooltip,
+  toolbarTooltipPlacement,
   total,
   ...rest
 }: TableProps<T>) {
@@ -73,12 +80,15 @@ export function Table<T extends BaseRowDefinition>({
         autoHeight
         disableRowSelectionOnClick
         slots={{
-          toolbar: summaryTable ? SummaryTableToolbar : TableToolbar,
+          toolbar: TableToolbar,
           footer: summaryTable ? undefined : TableFooter,
         }}
         slotProps={{
           toolbar: {
             label,
+            summaryTable,
+            tooltip: toolbarTooltip,
+            tooltipPlacement: toolbarTooltipPlacement,
             total,
             timeRangeLabel,
           },

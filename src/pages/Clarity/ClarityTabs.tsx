@@ -4,13 +4,13 @@ import { Tabs } from "@components/Tabs/Tabs";
 import type { Overall } from "@mydecisiveai/octant-client";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
+import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 import {
   logsColumns,
   traceColumns,
   type LogData,
   type SpanData,
 } from "./constants";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 
 interface ClarityTabsProps {
   data: Overall | null;
@@ -66,6 +66,8 @@ export function ClarityTabs({
             loading || hasLogData ? (
               <Table<LogData>
                 label={ClarityCopy.logsTable.title}
+                toolbarTooltip={ClarityCopy.logsTable.tooltip}
+                toolbarTooltipPlacement="right"
                 columns={logsColumns}
                 rows={logData}
                 loading={tableDataLoading}
@@ -75,12 +77,9 @@ export function ClarityTabs({
               />
             ) : (
               <NoConnectionCard
-                title={ClarityCopy.logsTable.connectionIssue.header
-                }
-                description={ClarityCopy.logsTable.connectionIssue.body
-                }
-                actionLabel={ClarityCopy.logsTable.connectionIssue.cta
-                }
+                title={ClarityCopy.logsTable.connectionIssue.header}
+                description={ClarityCopy.logsTable.connectionIssue.body}
+                actionLabel={ClarityCopy.logsTable.connectionIssue.cta}
               />
             ),
         },
@@ -93,6 +92,8 @@ export function ClarityTabs({
             loading || hasTraceData ? (
               <Table<SpanData>
                 label={ClarityCopy.traceTable.title}
+                toolbarTooltip={ClarityCopy.traceTable.tooltip}
+                toolbarTooltipPlacement="right"
                 columns={traceColumns}
                 rows={spanData}
                 loading={tableDataLoading}
@@ -104,12 +105,9 @@ export function ClarityTabs({
               />
             ) : (
               <NoConnectionCard
-                title={ClarityCopy.traceTable.connectionIssue.header
-                }
-                description={ClarityCopy.traceTable.connectionIssue.body
-                }
-                actionLabel={ClarityCopy.traceTable.connectionIssue.cta
-                }
+                title={ClarityCopy.traceTable.connectionIssue.header}
+                description={ClarityCopy.traceTable.connectionIssue.body}
+                actionLabel={ClarityCopy.traceTable.connectionIssue.cta}
               />
             ),
         },

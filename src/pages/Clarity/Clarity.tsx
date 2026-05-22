@@ -66,6 +66,7 @@ export function ClarityPage() {
                 rows={summaryData}
                 showToolbar
                 timeRangeLabel={timeRangeLabel}
+                toolbarTooltip={cc.overall.tooltip}
                 total={data?.cost ? data.cost.toLocaleString() : "-"}
                 summaryTable
               />

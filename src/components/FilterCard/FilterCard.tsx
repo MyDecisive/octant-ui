@@ -82,7 +82,7 @@ export function FilterCard({
             label={ClarityCopy.filterCard.slider}
             valueUnits="%"
             size="small"
-            onChangeCommitted={handleRateChange}
+            onChange={handleRateChange}
           />
           <Divider />
           <Stack

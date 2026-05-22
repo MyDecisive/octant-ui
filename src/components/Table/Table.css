@@ -53,11 +53,9 @@
   justify-content: flex-start;
   border: none;
 }
-.mdai-summary-table-toolbar.MuiDataGrid-toolbar {
-  display: flex;
+.mdai-table-toolbar.MuiDataGrid-toolbar.mdai-summary-table-toolbar {
   justify-content: space-between;
   align-items: flex-end;
-  border: none;
 }
 
 .mdai-table-toolbar-label.MuiTypography-root {
@@ -82,10 +80,10 @@
   border-color: #0000001f;
 }
 
-.mdai-summary-table-tooltip-cta-button.MuiButton-root {
+.mdai-table-toolbar-tooltip-cta-button.MuiButton-root {
   color: #d500f9;
 }
 
-.mdai-summary-table-tooltip.MuiTooltip-tooltip {
+.mdai-table-toolbar-tooltip.MuiTooltip-tooltip {
   max-width: 369px;
 }

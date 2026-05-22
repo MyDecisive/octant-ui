@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Table } from "../components/Table/Table";
-import { formatNumber } from "../utils/formatNumber";
 import {
   logsColumns,
   summaryColumns,
@@ -9,12 +8,34 @@ import {
   type SpanData,
   type SummaryData,
 } from "../pages/Clarity/constants";
+import { formatNumber } from "../utils/formatNumber";
+
+const tooltipPlacementOptions = [
+  "bottom",
+  "bottom-end",
+  "bottom-start",
+  "left",
+  "left-end",
+  "left-start",
+  "right",
+  "right-end",
+  "right-start",
+  "top",
+  "top-end",
+  "top-start",
+];
 
 const meta = {
   title: "Display/Table",
   component: Table,
   parameters: {
     layout: "centered",
+  },
+  argTypes: {
+    toolbarTooltipPlacement: {
+      control: "select",
+      options: tooltipPlacementOptions,
+    },
   },
   args: {},
 } satisfies Meta<typeof Table>;
@@ -48,6 +69,10 @@ const spanRows = createDummySpanData();
 export const Traces: SpanStory = {
   args: {
     label: "Traces - Top Talkers",
+    toolbarTooltip: {
+      body: "Showing top 250 results. Refine your search to narrow down results.",
+    },
+    toolbarTooltipPlacement: "right",
     columns: traceColumns,
     rows: spanRows,
     showToolbar: true,
@@ -78,6 +103,10 @@ const logRows = createDummyLogData();
 export const Logs: LogStory = {
   args: {
     label: "Logs - Top Talkers",
+    toolbarTooltip: {
+      body: "Showing top 250 results. Refine your search to narrow down results.",
+    },
+    toolbarTooltipPlacement: "right",
     columns: logsColumns,
     rows: logRows,
     showToolbar: true,
@@ -112,6 +141,14 @@ export const Summary: SummaryStory = {
     rows: summaryData,
     showToolbar: true,
     footerLabel: "the last 24h",
+    toolbarTooltip: {
+      header: "Estimated data charges is based on average rates",
+      body: "This also reflects only the data sent to this hub. Your total costs may be higher.",
+      cta: "See full production costs",
+      ctaHref: "https://docs.mydecisive.ai/",
+      ctaExternal: true,
+    },
+    toolbarTooltipPlacement: "bottom",
     total: formatNumber(
       summaryData.reduce((sum, { cost }) => sum + (cost ?? 0), 0),
     ),

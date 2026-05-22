@@ -134,7 +134,7 @@ export const theme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: "#000",
+          backgroundColor: "#323232",
           padding: "8px 12px",
           "& .MuiStack-root.mui-rich-tooltip-actions-row > .MuiButton-text": {
             color: "#d500f9",
@@ -144,7 +144,7 @@ export const theme = createTheme({
           },
         },
         arrow: {
-          color: "#000",
+          color: "#323232",
         },
       },
     },
