@@ -122,7 +122,7 @@ export function VerifyConnection() {
         if (!validatorRunId) {
           id = await createOrGetValidatorRunId({
             connectionName: connectionName!,
-            namespace: namespace,
+            namespace: namespace!,
           });
 
           setRunId(id);
@@ -162,7 +162,7 @@ export function VerifyConnection() {
       try {
         const validatorRunId = await createOrGetValidatorRunId({
           connectionName: connectionName!,
-          namespace: namespace,
+          namespace: namespace!,
         });
         await new Promise((resolve) => {
           timeoutRef.current = setTimeout(resolve, 90_000);
