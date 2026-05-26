@@ -64,19 +64,30 @@ export function ClarityTabs({
           resultCount: logData.length,
           children:
             loading || hasLogData ? (
-              <Table<LogData>
-                label={ClarityCopy.logsTable.title}
-                toolbarTooltip={{
-                  ...ClarityCopy.logsTable.tooltip,
-                  placement: "right",
-                }}
-                columns={logsColumns}
-                rows={logData}
-                loading={tableDataLoading}
-                showToolbar
-                footerLabel={ClarityCopy.logsTable.tec}
-                total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
-              />
+              logData.length > 0 ? (
+                <Table<LogData>
+                  label={ClarityCopy.logsTable.title}
+                  toolbarTooltip={{
+                    ...ClarityCopy.logsTable.tooltip,
+                    placement: "right",
+                  }}
+                  columns={logsColumns}
+                  rows={logData}
+                  loading={tableDataLoading}
+                  showToolbar
+                  footerLabel={ClarityCopy.logsTable.tec}
+                  total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
+                />
+              ) : (
+                <NoConnectionCard
+                  title={"No results found"}
+                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
+                  actionLabel="Clear Search"
+                  onButtonClick={() => {
+                    setSearchQuery("");
+                  }}
+                />
+              )
             ) : (
               <NoConnectionCard
                 title={ClarityCopy.logsTable.connectionIssue.header}
@@ -92,21 +103,32 @@ export function ClarityTabs({
           resultCount: spanData.length,
           children:
             loading || hasTraceData ? (
-              <Table<SpanData>
-                label={ClarityCopy.traceTable.title}
-                toolbarTooltip={{
-                  ...ClarityCopy.traceTable.tooltip,
-                  placement: "right",
-                }}
-                columns={traceColumns}
-                rows={spanData}
-                loading={tableDataLoading}
-                showToolbar
-                footerLabel={ClarityCopy.traceTable.tec}
-                total={
-                  data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"
-                }
-              />
+              spanData.length > 0 ? (
+                <Table<SpanData>
+                  label={ClarityCopy.traceTable.title}
+                  toolbarTooltip={{
+                    ...ClarityCopy.traceTable.tooltip,
+                    placement: "right",
+                  }}
+                  columns={traceColumns}
+                  rows={spanData}
+                  loading={tableDataLoading}
+                  showToolbar
+                  footerLabel={ClarityCopy.traceTable.tec}
+                  total={
+                    data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"
+                  }
+                />
+              ) : (
+                <NoConnectionCard
+                  title={"No results found"}
+                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
+                  actionLabel="Clear Search"
+                  onButtonClick={() => {
+                    setSearchQuery("");
+                  }}
+                />
+              )
             ) : (
               <NoConnectionCard
                 title={ClarityCopy.traceTable.connectionIssue.header}
