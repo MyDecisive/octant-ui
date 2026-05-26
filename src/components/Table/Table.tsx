@@ -1,6 +1,5 @@
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import type { TooltipProps } from "@mui/material/Tooltip";
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
@@ -15,7 +14,6 @@ declare module "@mui/x-data-grid" {
     label: string;
     summaryTable?: boolean;
     tooltip?: TableToolbarTooltip;
-    tooltipPlacement?: TooltipProps["placement"];
     total: string;
     timeRangeLabel?: string;
   }
@@ -38,7 +36,6 @@ interface TableProps<T extends BaseRowDefinition> extends Omit<
   footerClassName?: string;
   timeRangeLabel?: string;
   toolbarTooltip?: TableToolbarTooltip;
-  toolbarTooltipPlacement?: TooltipProps["placement"];
   total?: string;
   summaryTable?: boolean;
 }
@@ -68,7 +65,6 @@ export function Table<T extends BaseRowDefinition>({
   className,
   timeRangeLabel,
   toolbarTooltip,
-  toolbarTooltipPlacement,
   total,
   ...rest
 }: TableProps<T>) {
@@ -88,7 +84,6 @@ export function Table<T extends BaseRowDefinition>({
             label,
             summaryTable,
             tooltip: toolbarTooltip,
-            tooltipPlacement: toolbarTooltipPlacement,
             total,
             timeRangeLabel,
           },

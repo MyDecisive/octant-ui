@@ -10,12 +10,13 @@ import classNames from "classnames";
 import type { ReactElement } from "react";
 
 export interface TableToolbarTooltip {
-  icon?: ReactElement;
+  targetIcon?: ReactElement;
   header?: string;
   body?: string;
   cta?: string;
   ctaHref?: string;
   ctaExternal?: boolean;
+  placement?: TooltipProps["placement"];
 }
 
 interface TableToolbarProps {
@@ -23,7 +24,6 @@ interface TableToolbarProps {
   summaryTable?: boolean;
   timeRangeLabel?: string;
   tooltip?: TableToolbarTooltip;
-  tooltipPlacement?: TooltipProps["placement"];
   total?: string;
 }
 
@@ -32,7 +32,6 @@ export function TableToolbar({
   summaryTable = false,
   timeRangeLabel,
   tooltip,
-  tooltipPlacement = "bottom",
   total,
 }: TableToolbarProps) {
   return (
@@ -42,12 +41,16 @@ export function TableToolbar({
       })}
     >
       <Stack alignItems="flex-end" direction="row" gap={1}>
-        <Typography variant="h5" className="mdai-table-toolbar-label">
+        <Typography
+          variant={summaryTable ? "h5" : "body2"}
+          className="mdai-table-toolbar-label"
+          data-bold="true"
+        >
           {label}
         </Typography>
         {tooltip && (
           <RichTooltip
-            placement={tooltipPlacement}
+            placement={tooltip.placement ?? "bottom"}
             slotProps={{
               tooltip: {
                 className: "mdai-table-toolbar-tooltip",
@@ -60,7 +63,11 @@ export function TableToolbar({
                 <Button
                   className="mdai-table-toolbar-tooltip-cta-button"
                   variant="text"
-                  endIcon={<ArrowOutwardRoundedIcon />}
+                  endIcon={
+                    tooltip.ctaExternal ? (
+                      <ArrowOutwardRoundedIcon />
+                    ) : undefined
+                  }
                   component="a"
                   href={tooltip.ctaHref ?? ""}
                   target={tooltip.ctaExternal ? "_blank" : undefined}
@@ -71,7 +78,9 @@ export function TableToolbar({
               )
             }
           >
-            {tooltip.icon ?? <ErrorOutlineRoundedIcon color="secondary" />}
+            {tooltip.targetIcon ?? (
+              <ErrorOutlineRoundedIcon color="secondary" />
+            )}
           </RichTooltip>
         )}
       </Stack>

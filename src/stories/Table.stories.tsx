@@ -32,11 +32,11 @@ const meta = {
     layout: "centered",
   },
   argTypes: {
-    toolbarTooltipPlacement: {
+    "toolbarTooltip.placement": {
       control: "select",
       options: tooltipPlacementOptions,
     },
-  },
+  } as Record<string, unknown>,
   args: {},
 } satisfies Meta<typeof Table>;
 
@@ -71,8 +71,8 @@ export const Traces: SpanStory = {
     label: "Traces - Top Talkers",
     toolbarTooltip: {
       body: "Showing top 250 results. Refine your search to narrow down results.",
+      placement: "right",
     },
-    toolbarTooltipPlacement: "right",
     columns: traceColumns,
     rows: spanRows,
     showToolbar: true,
@@ -105,8 +105,8 @@ export const Logs: LogStory = {
     label: "Logs - Top Talkers",
     toolbarTooltip: {
       body: "Showing top 250 results. Refine your search to narrow down results.",
+      placement: "right",
     },
-    toolbarTooltipPlacement: "right",
     columns: logsColumns,
     rows: logRows,
     showToolbar: true,
@@ -147,8 +147,8 @@ export const Summary: SummaryStory = {
       cta: "See full production costs",
       ctaHref: "https://docs.mydecisive.ai/",
       ctaExternal: true,
+      placement: "bottom",
     },
-    toolbarTooltipPlacement: "bottom",
     total: formatNumber(
       summaryData.reduce((sum, { cost }) => sum + (cost ?? 0), 0),
     ),

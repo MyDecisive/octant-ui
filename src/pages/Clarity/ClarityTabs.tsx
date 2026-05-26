@@ -66,8 +66,10 @@ export function ClarityTabs({
             loading || hasLogData ? (
               <Table<LogData>
                 label={ClarityCopy.logsTable.title}
-                toolbarTooltip={ClarityCopy.logsTable.tooltip}
-                toolbarTooltipPlacement="right"
+                toolbarTooltip={{
+                  ...ClarityCopy.logsTable.tooltip,
+                  placement: "right",
+                }}
                 columns={logsColumns}
                 rows={logData}
                 loading={tableDataLoading}
@@ -92,8 +94,10 @@ export function ClarityTabs({
             loading || hasTraceData ? (
               <Table<SpanData>
                 label={ClarityCopy.traceTable.title}
-                toolbarTooltip={ClarityCopy.traceTable.tooltip}
-                toolbarTooltipPlacement="right"
+                toolbarTooltip={{
+                  ...ClarityCopy.traceTable.tooltip,
+                  placement: "right",
+                }}
                 columns={traceColumns}
                 rows={spanData}
                 loading={tableDataLoading}
