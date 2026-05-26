@@ -5,7 +5,7 @@ import { InstallAndConnectContext } from "../contexts/InstallAndConnect";
 
 export interface InstallAndConnectFormFields {
   argoAgreement: boolean;
-  namespace: string;
+  namespace?: string;
   argoUrl?: string;
   accountToken?: string;
   telemetryTypes: TelemetryTypes[];
@@ -13,6 +13,7 @@ export interface InstallAndConnectFormFields {
   apiKey?: string;
   connectionName?: string;
   mdaiVersion?: string;
+  lastCompletedStep: number;
 }
 
 export interface InstallAndConnectFormState extends InstallAndConnectFormFields {
@@ -20,6 +21,7 @@ export interface InstallAndConnectFormState extends InstallAndConnectFormFields 
     key: keyof InstallAndConnectFormFields,
     value: InstallAndConnectFormFields[keyof InstallAndConnectFormFields],
   ) => void;
+  setPartialState: (newState: Partial<InstallAndConnectFormFields>) => void;
   resetForm: () => void;
 }
 
@@ -33,6 +35,7 @@ function createDefaultConnectForm(): InstallAndConnectFormFields {
     namespace: "mdai",
     telemetryTypes: [],
     mdaiVersion: "0.10.0",
+    lastCompletedStep: -1,
   };
 }
 
@@ -45,6 +48,8 @@ export const createInstallAndConnectStore = (
     ...defaultForm,
     ...initProps,
     setFormField: (key, value) => set((state) => ({ ...state, [key]: value })),
+    setPartialState: (newState: Partial<InstallAndConnectFormState>) =>
+      set((oldState) => ({ ...oldState, ...newState })),
     resetForm: () => set(() => createDefaultConnectForm()),
   }));
 };

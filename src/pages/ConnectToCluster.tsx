@@ -24,25 +24,28 @@ const formSpec: FormFields = {
 export function ConnectToCluster() {
   const { callbacks, formIsValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
-  const { argoUrl, accountToken, connectionName } = useInstallAndConnectStore(
-    // Provide default empty string values so React recognizes the Inputs as controlled
-    useShallow(({ argoUrl = "", accountToken = "", connectionName = "" }) => ({
-      argoUrl,
-      accountToken,
-      connectionName,
-    })),
+
+  const [argoUrl, setArgoUrl] = useState("");
+  const [accountToken, setAccountToken] = useState("");
+  const [connectionName, setConnectionName] = useState("");
+
+  const setPartialState = useInstallAndConnectStore(
+    useShallow((state) => state.setPartialState),
   );
-  const setFormField = useInstallAndConnectStore(
-    useShallow((state) => state.setFormField),
-  );
-  const setState = useOctantStore((state) => state.setState);
+  const setOctantState = useOctantStore((state) => state.setState);
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setFormField("argoUrl", e.target.value);
+    setArgoUrl(e.target.value);
   };
 
   const handleTokenChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setFormField("accountToken", e.target.value);
+    setAccountToken(e.target.value);
+  };
+
+  const handleConnectionNameChange: ChangeEventHandler<HTMLInputElement> = (
+    e,
+  ) => {
+    setConnectionName(encodeURI(e.target.value));
   };
 
   const testArgoConnection = async () => {
@@ -72,10 +75,10 @@ export function ConnectToCluster() {
         argoEndpoint: argoUrl,
         name: connectionName,
       });
-      setState("connectionName", connectionName);
+      setPartialState({ accountToken, argoUrl, connectionName });
+      setOctantState("connectionName", connectionName);
       return true;
-      // eslint-disable-next-line
-    } catch (_) {
+    } catch {
       setConnectionError(copy.formError.genericError);
       return false;
     }
@@ -86,9 +89,7 @@ export function ConnectToCluster() {
       <ViewTitle title={copy.header} description={copy.subheader} />
       <Input
         value={decodeURI(connectionName)}
-        onChange={(e) =>
-          setFormField("connectionName", encodeURI(e.target.value))
-        }
+        onChange={handleConnectionNameChange}
         {...callbacks.connectionName}
         placeholder={copy.nameThisConnection.label}
         helperText={copy.nameThisConnection.helpTxt}
