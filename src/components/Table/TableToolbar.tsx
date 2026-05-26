@@ -1,6 +1,6 @@
 import { RichTooltip } from "@components/RichTooltip";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
-import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import type { TooltipProps } from "@mui/material/Tooltip";
@@ -78,9 +78,7 @@ export function TableToolbar({
               )
             }
           >
-            {tooltip.targetIcon ?? (
-              <ErrorOutlineRoundedIcon color="secondary" />
-            )}
+            {tooltip.targetIcon ?? <InfoOutlined color="secondary" />}
           </RichTooltip>
         )}
       </Stack>
