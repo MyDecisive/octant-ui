@@ -32,9 +32,14 @@ export function deriveRedirectRoute(
 
 export function useDetectProgress() {
   const [currentPath, navigate] = useLocation();
-  const { connectionName, setState: setOctantState } = useOctantStore(
-    useShallow(({ connectionName, setState }) => ({
+  const {
+    connectionName,
+    namespace,
+    setState: setOctantState,
+  } = useOctantStore(
+    useShallow(({ connectionName, namespace, setState }) => ({
       connectionName,
+      namespace,
       setState,
     })),
   );
@@ -77,7 +82,9 @@ export function useDetectProgress() {
 
       if (installResult.status === "installed") {
         setInstallAndConnectField("lastCompletedStep", 3);
-        setOctantState("namespace", "****");
+        if (!namespace) {
+          setOctantState("namespace", "****");
+        }
       }
 
       if (ddogResult?.names?.includes(connectionName)) {
@@ -108,7 +115,13 @@ export function useDetectProgress() {
     return () => {
       ignore = true;
     };
-  }, [connectionName, hasRan, setInstallAndConnectField, setOctantState]);
+  }, [
+    connectionName,
+    namespace,
+    hasRan,
+    setInstallAndConnectField,
+    setOctantState,
+  ]);
 
   const redirectRoute = deriveRedirectRoute(currentPath, formState);
 
