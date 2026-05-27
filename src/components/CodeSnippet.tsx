@@ -1,8 +1,5 @@
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DoneIcon from "@mui/icons-material/Done";
+import { CopyButton } from "@components/CopyButton";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import { useState } from "react";
 import "./CodeSnippet.css";
 
 interface CodeSnippetProps {
@@ -16,42 +13,16 @@ export function CodeSnippet({
   copyButton = true,
   maxHeight = "100vh",
 }: CodeSnippetProps) {
-  const [isCopied, setIsCopied] = useState(false);
-
-  const copyCodeToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy: ", err);
-    }
-  };
-
   return (
     <Box className="code-snippet-container" sx={{ maxHeight: maxHeight }}>
       <Box className="code-snippet-content">
+        {copyButton && (
+          <CopyButton text={code} ariaLabel="Copy code to clipboard" />
+        )}
         <pre>
           <code>{code}</code>
         </pre>
       </Box>
-      {copyButton && (
-        <IconButton
-          onClick={() => {
-            void copyCodeToClipboard();
-          }}
-          size="small"
-          className="code-snippet-copy-button"
-          aria-label="Copy code to clipboard"
-          disableRipple
-        >
-          {isCopied ? (
-            <DoneIcon fontSize="small" />
-          ) : (
-            <ContentCopyIcon fontSize="small" />
-          )}
-        </IconButton>
-      )}
     </Box>
   );
 }

@@ -1,0 +1,8 @@
+.copy-button.MuiIconButton-root {
+  position: fixed;
+  right: calc(var(--mdai-spacing-unit) * 8);
+}
+
+.copy-button.MuiIconButton-root .MuiSvgIcon-root {
+  color: var(--mdai-light-grey);
+}

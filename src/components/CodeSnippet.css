@@ -1,5 +1,4 @@
 .code-snippet-container {
-  display: flex;
   position: relative;
   color: #ffffff;
   border-radius: 8px;
@@ -18,7 +17,6 @@
   min-height: 0;
   overflow-x: auto;
   overflow-y: auto;
-  padding-right: calc(var(--mdai-spacing-unit) * 9);
   scrollbar-width: none;
 }
 
@@ -31,23 +29,8 @@
   margin: calc(var(--mdai-spacing-unit) * 2);
 }
 
-.code-snippet-copy-button {
-  position: absolute;
-  width: 20px;
-  min-height: 30px;
-  background: transparent;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .code-snippet-copy-button .MuiTypography-root {
   color: var(--mdai-light-grey);
   white-space: nowrap;
   line-height: 1;
-}
-
-.code-snippet-copy-button .MuiSvgIcon-root {
-  color: var(--mdai-light-grey);
 }

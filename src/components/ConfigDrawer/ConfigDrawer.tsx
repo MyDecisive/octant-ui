@@ -1,4 +1,5 @@
 import { Accordion } from "@components/Accordion";
+import { CopyButton } from "@components/CopyButton";
 import Stack from "@mui/material/Stack";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import classNames from "classnames";
@@ -31,6 +32,7 @@ export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
     apiKey,
     connectionName,
   );
+  const codeForCopy = linesForRender.map(([, content]) => content).join("\n");
 
   return (
     <Stack
@@ -44,6 +46,10 @@ export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
         title={<pre className="config-drawer-line">Expand config view +</pre>}
         content={
           <>
+            <CopyButton
+              text={codeForCopy}
+              ariaLabel="Copy config to clipboard"
+            />
             {linesForRender.map(([key, content], index) => {
               const highlight =
                 key != undefined &&
