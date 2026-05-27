@@ -1,8 +1,12 @@
+import type { SelectOption } from "@components/formInputs/Select";
 import { Timeframe } from "@mydecisiveai/octant-client";
 import { create } from "zustand";
 
 interface ClarityState {
-  timeRange: Timeframe;
+  selectedTimeframe: Timeframe;
+  timeframeOptions: SelectOption[];
+  logData?: boolean;
+  traceData?: boolean;
 }
 
 interface Actions {
@@ -15,6 +19,7 @@ interface Actions {
 type ClarityStore = ClarityState & Actions;
 
 export const useClarityStore = create<ClarityStore>()((set) => ({
-  timeRange: Timeframe.TIMEFRAME_24HR,
+  selectedTimeframe: Timeframe.TIMEFRAME_24HR,
+  timeframeOptions: [],
   setState: (key, value) => set((state) => ({ ...state, [key]: value })),
 }));
