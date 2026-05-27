@@ -8,6 +8,7 @@ import type { ComponentProps } from "react";
 import { useState } from "react";
 
 interface TabsStoryArgs extends ComponentProps<typeof Tabs> {
+  missingData: boolean;
   resultCount: number;
 }
 
@@ -34,7 +35,7 @@ const meta: Meta<TabsStoryArgs> = {
   parameters: {
     layout: "centered",
     controls: {
-      include: ["loading", "showLoadingPopover", "resultCount"],
+      include: ["loading", "showLoadingPopover", "missingData", "resultCount"],
     },
     docs: {
       source: {
@@ -58,6 +59,9 @@ const meta: Meta<TabsStoryArgs> = {
     showLoadingPopover: {
       control: "boolean",
     },
+    missingData: {
+      control: "boolean",
+    },
     resultCount: {
       control: {
         type: "number",
@@ -71,6 +75,7 @@ const meta: Meta<TabsStoryArgs> = {
     items: [],
     onChange: () => undefined,
     loading: false,
+    missingData: false,
     showLoadingPopover: false,
     resultCount: 0,
   },
@@ -85,6 +90,7 @@ function RenderTabs(args: TabsStoryArgs) {
   const items: TabItem[] = tabs.map(({ label, value, filler }) => ({
     label,
     value,
+    missingData: args.missingData,
     resultCount: args.resultCount,
     children: (
       <Card sx={{ minWidth: 275, p: 5 }}>
@@ -127,6 +133,16 @@ export const ResultCount: Story = {
     loading: false,
     showLoadingPopover: false,
     resultCount: 17,
+  },
+  render: RenderTabs,
+};
+
+export const MissingData: Story = {
+  args: {
+    loading: false,
+    missingData: true,
+    showLoadingPopover: false,
+    resultCount: 0,
   },
   render: RenderTabs,
 };

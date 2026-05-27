@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import classNames from "classnames";
 import { useLocation } from "wouter";
-import Octobuddy from "../assets/logo-black.svg?react";
+import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";
 import "./PageNav.css";
 const navButtons = [

@@ -5,14 +5,15 @@ import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
 import type { BaseRowDefinition } from "@types";
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import { SummaryTableToolbar } from "./SummaryTableToolbar";
 import "./Table.css";
 import { TableFooter } from "./TableFooter";
-import { TableToolbar } from "./TableToolbar";
+import { TableToolbar, type TableToolbarTooltip } from "./TableToolbar";
 
 declare module "@mui/x-data-grid" {
   interface ToolbarPropsOverrides {
     label: string;
+    summaryTable?: boolean;
+    tooltip?: TableToolbarTooltip;
     total: string;
     timeRangeLabel?: string;
   }
@@ -34,6 +35,7 @@ interface TableProps<T extends BaseRowDefinition> extends Omit<
   footerLabel?: string;
   footerClassName?: string;
   timeRangeLabel?: string;
+  toolbarTooltip?: TableToolbarTooltip;
   total?: string;
   summaryTable?: boolean;
 }
@@ -62,6 +64,7 @@ export function Table<T extends BaseRowDefinition>({
   summaryTable,
   className,
   timeRangeLabel,
+  toolbarTooltip,
   total,
   ...rest
 }: TableProps<T>) {
@@ -73,12 +76,14 @@ export function Table<T extends BaseRowDefinition>({
         autoHeight
         disableRowSelectionOnClick
         slots={{
-          toolbar: summaryTable ? SummaryTableToolbar : TableToolbar,
+          toolbar: TableToolbar,
           footer: summaryTable ? undefined : TableFooter,
         }}
         slotProps={{
           toolbar: {
             label,
+            summaryTable,
+            tooltip: toolbarTooltip,
             total,
             timeRangeLabel,
           },

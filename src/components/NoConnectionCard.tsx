@@ -9,7 +9,7 @@ import "./NoConnectionCard.css";
 interface NoConnectionCardProps {
   title: ReactNode;
   description: ReactNode;
-  actionLabel: string;
+  actionLabel?: string;
   onButtonClick?: () => void;
 }
 

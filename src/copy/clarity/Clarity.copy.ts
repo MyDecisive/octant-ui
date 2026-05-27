@@ -1,9 +1,9 @@
 import type { InputProps } from "@components/formInputs/Input";
 
 type CopyState = {
-  header: string;
-  body: string;
-  cta: string;
+  header?: string;
+  body?: string;
+  cta?: string;
 };
 
 type EmptyStateCopy = {
@@ -41,6 +41,7 @@ type FilterCopy = {
 
 type BaseCostTableCopy<TColumns extends Record<string, string>> = {
   title: string;
+  tooltip: CopyState;
   columns: TColumns;
   pagination: string;
   tec: string;
@@ -231,6 +232,9 @@ export const ClarityCopy = {
   logsTable: defineCostTableCopy<LogTableColumnsCopy>({
     // CH-52
     title: "Top Log Sources by Cost",
+    tooltip: {
+      body: "Showing top 250 results. Refine your search to narrow down results.",
+    },
     columns: {
       // CH-53
       service: "Service / Source",
@@ -257,8 +261,7 @@ export const ClarityCopy = {
       // CH-62
       header: "Pipeline connection error",
       // CH-63
-      body:
-        "SmartHub isn't receiving any log data. Configure a log source in your pipeline settings to begin routing data to this environment.",
+      body: "SmartHub isn't receiving any log data. Configure a log source in your pipeline settings to begin routing data to this environment.",
       // CH-64
       cta: "Check System Health",
     },
@@ -266,6 +269,9 @@ export const ClarityCopy = {
   traceTable: defineCostTableCopy<TraceTableColumnsCopy>({
     // CH-65
     title: "Top Traces by Cost",
+    tooltip: {
+      body: "Showing top 250 results. Refine your search to narrow down results.",
+    },
     columns: {
       // CH-66
       rootSpans: "Root Spans (by Service)",
@@ -294,8 +300,7 @@ export const ClarityCopy = {
       // CH-76
       header: "Pipeline connection error",
       // CH-77
-      body:
-        "Traces are enabled, but SmartHub is not receiving data. Verify your agent configuration and check system health for dropped connections.",
+      body: "Traces are enabled, but SmartHub is not receiving data. Verify your agent configuration and check system health for dropped connections.",
       // CH-78
       cta: "Check System Health",
     },
@@ -304,8 +309,7 @@ export const ClarityCopy = {
     // CH-79
     header: "Pipeline connection error",
     // CH-80
-    body:
-      "No incoming data detected. Verify your pipeline configuration and agent connections to restore visibility.",
+    body: "No incoming data detected. Verify your pipeline configuration and agent connections to restore visibility.",
     // CH-81
     cta: "Check System Health",
   },

@@ -68,15 +68,6 @@ export function useManageClarityData(searchQuery = "") {
   const [overallLoading, setOverallLoading] = useState(false);
   const [tableDataLoading, setTableDataLoading] = useState(false);
 
-  console.log(
-    overallData,
-    logData,
-    spanData,
-    overallData,
-    overallLoading,
-    tableDataLoading,
-  );
-
   useEffect(() => {
     let ignore = false;
 
@@ -100,7 +91,6 @@ export function useManageClarityData(searchQuery = "") {
         });
 
         if (!ignore) {
-          console.log(overallResponse);
           setOverallData(overallResponse.data ?? null);
         }
       } catch {
@@ -130,8 +120,6 @@ export function useManageClarityData(searchQuery = "") {
         setSpanData([]);
         return;
       }
-
-      console.log(overallData);
 
       const shouldFetchLogs = (overallData.log?.sent ?? 0) > 0;
       const shouldFetchTraces = (overallData.trace?.sent ?? 0) > 0;
