@@ -10,7 +10,6 @@ import { useShallow } from "zustand/shallow";
 import { INSTALL_AND_CONNECT, ROUTES } from "../../constants/routing";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
-import { waitForInstallStatus } from "../../services/install";
 
 export function deriveRedirectRoute(
   currentPath: string,
@@ -71,42 +70,29 @@ export function useDetectProgress() {
         }
         return;
       }
-
-      const [installResult, ddogResult, connectionsResult] = await Promise.all([
-        waitForInstallStatus(connectionName),
+      // TODO: add get ARGOCD integration when that endpoint is done.
+      const [ddogResult, connection] = await Promise.all([
         dDogServiceClient.getDatadogIntegrations({}).catch(() => null),
-        connectionServiceClient.getConnections({}).catch(() => null),
+        connectionServiceClient
+          .getConnection({
+            connectionName,
+          })
+          .catch(() => null),
       ]);
 
       if (ignore) return;
-
-      if (installResult.status === "installed") {
-        setOctantState("hubInstalled", true);
-        setInstallAndConnectField("lastCompletedStep", 3);
-        if (!namespace) {
-          setOctantState("namespace", "****");
-        }
-      } else {
-        setOctantState("hubInstalled", false);
-      }
 
       if (ddogResult?.names?.includes(connectionName)) {
         setInstallAndConnectField("url", "**** datadog url ****");
       }
 
-      if (connectionsResult?.connectionNames?.includes(connectionName)) {
-        const connection = await connectionServiceClient.getConnection({
-          connectionName,
-        });
-        const { telemetryTypes } = connection.connectionData ?? {};
-        if (telemetryTypes) {
-          setInstallAndConnectField("lastCompletedStep", 4);
+      if (connection?.connectionData?.telemetryTypes) {
+        setInstallAndConnectField("lastCompletedStep", 4);
 
-          setInstallAndConnectField(
-            "telemetryTypes",
-            fromMLTTypes(telemetryTypes),
-          );
-        }
+        setInstallAndConnectField(
+          "telemetryTypes",
+          fromMLTTypes(connection?.connectionData.telemetryTypes),
+        );
       }
       setHasRan(true);
       setLoading(false);
