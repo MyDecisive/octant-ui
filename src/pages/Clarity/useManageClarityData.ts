@@ -60,7 +60,9 @@ export function useManageClarityData(searchQuery = "") {
       namespace: state.namespace,
     })),
   );
-  const timeRange = useClarityStore((state) => state.timeRange);
+  const timeRange = useClarityStore((state) => state.selectedTimeframe);
+  const hasLogTimeframeData = useClarityStore((state) => state.logData);
+  const hasTraceTimeframeData = useClarityStore((state) => state.traceData);
 
   const [overallData, setOverallData] = useState<Overall | null>(null);
   const [logData, setLogData] = useState<LogData[]>([]);
@@ -121,10 +123,7 @@ export function useManageClarityData(searchQuery = "") {
         return;
       }
 
-      const shouldFetchLogs = (overallData.log?.sent ?? 0) > 0;
-      const shouldFetchTraces = (overallData.trace?.sent ?? 0) > 0;
-
-      if (!shouldFetchLogs && !shouldFetchTraces) {
+      if (!hasLogTimeframeData && !hasTraceTimeframeData) {
         setLogData([]);
         setSpanData([]);
         return;
@@ -142,10 +141,10 @@ export function useManageClarityData(searchQuery = "") {
       };
 
       const [logResponse, traceResponse] = await Promise.allSettled([
-        shouldFetchLogs
+        hasLogTimeframeData
           ? budgetServiceClient.log(request)
           : Promise.resolve(null),
-        shouldFetchTraces
+        hasTraceTimeframeData
           ? budgetServiceClient.trace(request)
           : Promise.resolve(null),
       ]);
@@ -172,7 +171,15 @@ export function useManageClarityData(searchQuery = "") {
     return () => {
       ignore = true;
     };
-  }, [connectionName, namespace, overallData, searchQuery, timeRange]);
+  }, [
+    connectionName,
+    namespace,
+    overallData,
+    searchQuery,
+    timeRange,
+    hasTraceTimeframeData,
+    hasLogTimeframeData,
+  ]);
 
   return {
     loading: overallLoading || tableDataLoading,
@@ -182,7 +189,8 @@ export function useManageClarityData(searchQuery = "") {
     summaryData: overallToSummaryRows(overallData),
     logData,
     spanData,
-    hasLogData: (overallData?.log?.sent ?? 0) > 0,
-    hasTraceData: (overallData?.trace?.sent ?? 0) > 0,
+    hasLogData: (overallData?.log?.sent ?? 0) > 0 && !!hasLogTimeframeData,
+    hasTraceData:
+      (overallData?.trace?.sent ?? 0) > 0 && !!hasTraceTimeframeData,
   };
 }
