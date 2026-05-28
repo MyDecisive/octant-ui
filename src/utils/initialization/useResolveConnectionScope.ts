@@ -1,9 +1,13 @@
+import { ConnectError } from "@connectrpc/connect";
 import { useOctantStore } from "@store/octantStore";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { connectionServiceClient } from "../../services/connection";
 
 type ResolveStatus = "pending" | "resolved";
+
+const NO_CONNECTIONS_ERROR =
+  '[internal] failed to get connections: failed to get configmap mdai-octant-connections: configmaps "mdai-octant-connections" not found';
 
 export function useResolveConnectionScope() {
   const { connectionName, namespace, setState } = useOctantStore(
@@ -14,6 +18,7 @@ export function useResolveConnectionScope() {
     })),
   );
 
+  const [hasRan, setHasRan] = useState(false);
   const [status, setStatus] = useState<ResolveStatus>(
     connectionName && namespace ? "resolved" : "pending",
   );
@@ -23,6 +28,7 @@ export function useResolveConnectionScope() {
     if (connectionName && namespace) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setStatus("resolved");
+      setHasRan(true);
       return;
     }
 
@@ -48,19 +54,26 @@ export function useResolveConnectionScope() {
             }
           }
         }
-      } catch {
+      } catch (e) {
         // no connections found or network error — proceed without one
+        if (e instanceof ConnectError) {
+          if (e.message !== NO_CONNECTIONS_ERROR) {
+            throw e;
+          }
+        }
       } finally {
         if (!ignore) setStatus("resolved");
       }
     }
 
-    void resolve();
+    if (!hasRan) {
+      void resolve();
+    }
 
     return () => {
       ignore = true;
     };
-  }, [connectionName, namespace, setState]);
+  }, [connectionName, hasRan, namespace, setState]);
 
   return status === "pending";
 }

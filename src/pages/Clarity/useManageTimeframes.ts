@@ -1,17 +1,22 @@
 import { useClarityStore } from "@store/clarityStore";
+import { useCallback } from "react";
 import { useShallow } from "zustand/shallow";
 
 export function useManageTimeframes() {
-  const { setSelectedTimeframe, selectedTimeframe, timeframeOptions } =
-    useClarityStore(
-      useShallow(({ setState, selectedTimeframe, timeframeOptions }) => ({
-        setSelectedTimeframe: (nextTimeframe: string) => {
-          setState("selectedTimeframe", parseInt(nextTimeframe));
-        },
-        selectedTimeframe,
-        timeframeOptions,
-      })),
-    );
+  const { setState, selectedTimeframe, timeframeOptions } = useClarityStore(
+    useShallow(({ setState, selectedTimeframe, timeframeOptions }) => ({
+      setState,
+      selectedTimeframe,
+      timeframeOptions,
+    })),
+  );
+
+  const setSelectedTimeframe = useCallback(
+    (nextTimeframe: string) => {
+      setState("selectedTimeframe", parseInt(nextTimeframe));
+    },
+    [setState],
+  );
 
   return {
     selectedTimeframe,
