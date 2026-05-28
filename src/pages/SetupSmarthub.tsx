@@ -108,6 +108,7 @@ export function SetupSmarthub() {
     }
   };
 
+  // TODO: This is broken for some reason
   const handleContinueFromDialog = () => {
     setOctantState("namespace", namespace);
     setFormField("namespace", namespace);

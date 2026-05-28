@@ -19,6 +19,7 @@ export function useResolveConnectionScope() {
   );
 
   useEffect(() => {
+    // TODO: these should be verified if present instead of assuming they're legit
     if (connectionName && namespace) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setStatus("resolved");
