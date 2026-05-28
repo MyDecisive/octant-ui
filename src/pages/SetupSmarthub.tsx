@@ -61,6 +61,7 @@ export function SetupSmarthub() {
       })) {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
+            setOctantState("hubInstalled", true);
             setOctantState("namespace", namespace);
             setFormField("namespace", namespace);
             return true;
