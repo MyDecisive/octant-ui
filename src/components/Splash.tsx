@@ -10,8 +10,8 @@ import Typography from "@mui/material/Typography";
 import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";
-import "./Splash.css";
 import { SplashCopy as copy } from "../copy/install/Splash.copy";
+import "./Splash.css";
 
 const ROWS = [
   {
@@ -31,7 +31,7 @@ const ROWS = [
 export function Splash() {
   const [, setLocation] = useLocation();
   const onClickProgress = () => {
-    setLocation(ROUTES.INSTALL);
+    setLocation(`${ROUTES.INSTALL}/1`);
   };
   return (
     <FlowCenterColumn>
