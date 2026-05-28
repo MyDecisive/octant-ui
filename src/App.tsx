@@ -13,7 +13,7 @@ import {
 import { InstallAndConnectProvider } from "./contexts/InstallAndConnect.Provider";
 import { ClarityPage } from "./pages/Clarity/Clarity";
 import { SmarthubPage } from "./pages/Smarthub";
-import { SystemHealthPage } from "./pages/SystemHealth";
+import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
 function App() {
   const { resolving } = useResolveConnectionName();

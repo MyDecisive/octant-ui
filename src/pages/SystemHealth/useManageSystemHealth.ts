@@ -1,114 +1,18 @@
-import {
-  HealthWidget,
-  type HealthWidgetProps,
-} from "@components/HealthWidget/HealthWidget";
-import { ButtonRow } from "@components/layout/ButtonRow";
-import { PageContainer } from "@components/layout/PageContainer";
 import { ConnectError } from "@connectrpc/connect";
-import { Stack } from "@mui/material";
-import Button from "@mui/material/Button";
-import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
-import { useOctantStore, type ValidationSnapshot } from "@store/octantStore";
+import {
+  InstallStatus,
+  type GetConnectionStatusResponse,
+} from "@mydecisiveai/octant-client";
+import { type ValidationSnapshot, useOctantStore } from "@store/octantStore";
 import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { VerifyConnection as copy } from "../copy/install/VerifyConnection.copy";
 import {
   connectionServiceClient,
   createOrGetValidatorRunId,
-} from "../services/connection";
+} from "../../services/connection";
+import { installServiceClient } from "../../services/install";
 
-type ValidationStatus = Omit<ValidationSnapshot, "timestamp">;
-
-function connectionStatusResponseToHealthWidgetProps(
-  loading: boolean,
-  connectionStatus: ValidationStatus | null,
-): Omit<HealthWidgetProps, "title"> {
-  if (loading) {
-    return {
-      status: "loading",
-      facets: [
-        {
-          label: "Clients connected",
-          loading: true,
-        },
-        {
-          label: "Receiving data",
-          loading: true,
-        },
-        {
-          label: "Sending data",
-          loading: true,
-        },
-        {
-          label: "Data integrity",
-          loading: true,
-        },
-      ],
-    };
-  }
-
-  if (connectionStatus) {
-    const { receivingData, sendingData, dataIntegrity, clientsConnected } =
-      connectionStatus;
-
-    const status =
-      receivingData && sendingData && dataIntegrity && clientsConnected
-        ? "operational"
-        : "error";
-
-    return {
-      status,
-      facets: [
-        {
-          label: "Clients connected",
-          health: clientsConnected,
-        },
-        {
-          label: "Receiving data",
-          health: receivingData,
-        },
-        {
-          label: "Sending data",
-          health: sendingData,
-        },
-        {
-          label: "Data integrity",
-          health: dataIntegrity,
-          fix: dataIntegrity
-            ? undefined
-            : {
-                label: "Data integrity failed",
-                description:
-                  "Some telemetry does not match expected validation results.",
-                actions: [
-                  {
-                    text: "See Docs",
-                    href: "https://docs.mydecisive.ai/",
-                  },
-                ],
-              },
-        },
-      ],
-    };
-  }
-
-  return {
-    facets: [
-      {
-        label: "Clients connected",
-      },
-      {
-        label: "Receiving data",
-      },
-      {
-        label: "Sending data",
-      },
-      {
-        label: "Data integrity",
-      },
-    ],
-  };
-}
+export type ValidationStatus = Omit<ValidationSnapshot, "timestamp">;
 
 function toValidationSnapshot(
   connectionStatus: GetConnectionStatusResponse,
@@ -125,19 +29,14 @@ function toValidationSnapshot(
   };
 }
 
-function formatLastRun(timestamp?: string) {
-  if (!timestamp) return undefined;
-
-  return `Last run ${new Intl.DateTimeFormat(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(timestamp))}`;
-}
-
-export function SystemHealthPage() {
+export function useManageSystemHealth() {
   const [loading, setLoading] = useState(false);
   const [connectionStatus, setConnectionStatus] =
     useState<ValidationStatus | null>(null);
+  const [smarthubInstalled, setSmarthubInstalled] = useState<boolean | null>(
+    null,
+  );
+  const [smarthubLoading, setSmarthubLoading] = useState(false);
 
   const [validatorRun, setValidatorRun] = useState<{
     connectionName: string;
@@ -159,7 +58,7 @@ export function SystemHealthPage() {
       })),
     );
 
-  const displayedConnectionStatus: ValidationStatus | null =
+  const connectionStatusWithFallback: ValidationStatus | null =
     connectionStatus ?? validation ?? null;
 
   const currentRunId =
@@ -169,13 +68,13 @@ export function SystemHealthPage() {
       ? validatorRun.runId
       : null;
 
-  async function handleCheckConnectionStatus(validatorRunId: string | null) {
+  async function revalidate() {
     if (!connectionName || !namespace) return;
 
     setLoading(true);
     setError(null);
     try {
-      let id = validatorRunId ?? undefined;
+      let id = currentRunId ?? undefined;
       if (!id) {
         id = await createOrGetValidatorRunId({
           connectionName,
@@ -264,37 +163,62 @@ export function SystemHealthPage() {
     };
   }, [connectionName, namespace, setOctantState]);
 
-  const healthWidgetProps = connectionStatusResponseToHealthWidgetProps(
+  useEffect(() => {
+    let ignore = false;
+
+    async function fetchSmarthubStatus() {
+      await Promise.resolve();
+      if (ignore || !connectionName) return;
+
+      setSmarthubLoading(true);
+      try {
+        for await (const res of installServiceClient.getInstallStatus({
+          connectionName,
+        })) {
+          if (ignore) return;
+
+          switch (res.installStatus) {
+            case InstallStatus.INSTALLED:
+              setSmarthubInstalled(true);
+              return;
+            case InstallStatus.ERROR:
+            case InstallStatus.TIMEOUT:
+              setSmarthubInstalled(false);
+              return;
+            default:
+              continue;
+          }
+        }
+
+        if (!ignore) {
+          setSmarthubInstalled(false);
+        }
+      } catch (e) {
+        console.warn("error in fetchSmarthubStatus ", e);
+        if (!ignore) {
+          setSmarthubInstalled(false);
+        }
+      } finally {
+        if (!ignore) {
+          setSmarthubLoading(false);
+        }
+      }
+    }
+
+    void fetchSmarthubStatus();
+
+    return () => {
+      ignore = true;
+    };
+  }, [connectionName]);
+
+  return {
+    connectionStatus: connectionStatusWithFallback,
+    error,
     loading,
-    displayedConnectionStatus,
-  );
-  return (
-    <PageContainer>
-      <Stack gap={2} alignItems={"center"}>
-        <Stack gap={1}>
-          <HealthWidget
-            title={copy.connection}
-            timestamp={formatLastRun(validation?.timestamp)}
-            {...healthWidgetProps}
-          />
-          <ButtonRow>
-            {(healthWidgetProps.status === "error" || error) && (
-              <Button
-                variant="contained"
-                onClick={() => void handleCheckConnectionStatus(currentRunId)}
-              >
-                Revalidate
-              </Button>
-            )}
-          </ButtonRow>
-        </Stack>
-        <HealthWidget
-          title="Smarthub Infrastructure"
-          timestamp={formatLastRun(validation?.timestamp)}
-          simple
-          {...healthWidgetProps}
-        />
-      </Stack>
-    </PageContainer>
-  );
+    revalidate,
+    smarthubInstalled,
+    smarthubLoading,
+    validation,
+  };
 }
