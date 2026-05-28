@@ -8,6 +8,7 @@ import { HealthWidgetTitle } from "./HealthWidgetTitle";
 
 export interface HealthWidgetProps {
   title: string;
+  timestamp?: string;
   status?: "error" | "operational" | "loading";
   fix?: FixInfo;
   facets?: HealthFacet[];
@@ -16,6 +17,7 @@ export interface HealthWidgetProps {
 
 export function HealthWidget({
   title,
+  timestamp,
   status,
   fix,
   facets,
@@ -24,7 +26,13 @@ export function HealthWidget({
   return (
     <Accordion
       className="health-widget-container"
-      title={<HealthWidgetTitle title={title} status={status} />}
+      title={
+        <HealthWidgetTitle
+          title={title}
+          timestamp={timestamp}
+          status={status}
+        />
+      }
       {...(simple && {
         hideExpandIcon: true,
         summaryClassName: "no-close",

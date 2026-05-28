@@ -1,3 +1,7 @@
+.health-widget-container.MuiPaper-root.MuiAccordion-root {
+  width: 564px;
+}
+
 .health-widget-fix-card.MuiCard-root {
   background-color: #f5f5f5;
   background-image: none;

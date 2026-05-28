@@ -10,8 +10,9 @@ export interface FixInfo {
   label?: string;
   description?: ReactNode;
   actions?: {
-    onClick: () => void;
+    onClick?: () => void;
     text: string;
+    href?: string;
   }[];
 }
 
@@ -31,11 +32,23 @@ export function FixCard({ label, description, actions }: FixInfo) {
         {description}
       </CardContent>
       <CardActions className="health-widget-fix-card-actions">
-        {actions?.map(({ text, onClick }) => (
-          <Button key={text} onClick={onClick} variant="contained">
-            {text}
-          </Button>
-        ))}
+        {actions?.map(({ text, onClick, href }) =>
+          href ? (
+            <Button
+              key={text}
+              variant="contained"
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {text}
+            </Button>
+          ) : (
+            <Button key={text} onClick={onClick} variant="contained">
+              {text}
+            </Button>
+          ),
+        )}
       </CardActions>
     </Card>
   );

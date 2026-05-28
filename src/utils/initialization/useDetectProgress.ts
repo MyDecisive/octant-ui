@@ -95,12 +95,13 @@ export function useDetectProgress() {
         const connection = await connectionServiceClient.getConnection({
           connectionName,
         });
-        if (connection.telemetryTypes) {
+        const { telemetryTypes } = connection.connectionData ?? {};
+        if (telemetryTypes) {
           setInstallAndConnectField("lastCompletedStep", 4);
 
           setInstallAndConnectField(
             "telemetryTypes",
-            fromMLTTypes(connection.telemetryTypes),
+            fromMLTTypes(telemetryTypes),
           );
         }
       }

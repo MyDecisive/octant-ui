@@ -63,21 +63,23 @@ export function DeployCollector() {
       });
 
       await connectionServiceClient.createConnection({
-        scope: {
-          connectionName,
-          namespace,
-        },
-        telemetryTypes: toMLTTypes(telemetryTypes),
-        deployment: {
-          type: DeploymentType.ARGO_SIDELOAD,
-          integrationName: connectionName,
-        },
-        destinations: [
-          {
-            type: IntegrationType.DATADOG,
+        connectionData: {
+          scope: {
+            connectionName,
+            namespace,
+          },
+          telemetryTypes: toMLTTypes(telemetryTypes),
+          deployment: {
+            type: DeploymentType.ARGO_SIDELOAD,
             integrationName: connectionName,
           },
-        ],
+          destinations: [
+            {
+              type: IntegrationType.DATADOG,
+              integrationName: connectionName,
+            },
+          ],
+        },
       });
 
       return true;
