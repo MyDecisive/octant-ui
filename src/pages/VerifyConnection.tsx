@@ -1,7 +1,4 @@
-import {
-  HealthWidget,
-  type HealthWidgetProps,
-} from "@components/HealthWidget/HealthWidget";
+import { HealthWidget } from "@components/HealthWidget/HealthWidget";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { NextButton } from "@components/NextButton";
@@ -11,6 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
+import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { VerifyConnection as copy } from "../copy/install/VerifyConnection.copy";
@@ -18,83 +16,6 @@ import {
   connectionServiceClient,
   createOrGetValidatorRunId,
 } from "../services/connection";
-
-function connectionStatusResponseToHealthWidgetProps(
-  loading: boolean,
-  connectionStatus: GetConnectionStatusResponse | null,
-): Omit<HealthWidgetProps, "title"> {
-  if (connectionStatus) {
-    const { receivingData, sendingData, dataIntegrity, clientsConnected } =
-      connectionStatus;
-
-    const status =
-      receivingData && sendingData && dataIntegrity && clientsConnected
-        ? "operational"
-        : "error";
-
-    return {
-      status,
-      facets: [
-        {
-          label: "Clients connected",
-          health: clientsConnected,
-        },
-        {
-          label: "Receiving data",
-          health: receivingData,
-        },
-        {
-          label: "Sending data",
-          health: sendingData,
-        },
-        {
-          label: "Data integrity",
-          health: dataIntegrity,
-        },
-      ],
-    };
-  }
-  if (loading) {
-    return {
-      status: "loading",
-      facets: [
-        {
-          label: "Clients connected",
-          loading: true,
-        },
-        {
-          label: "Receiving data",
-          loading: true,
-        },
-        {
-          label: "Sending data",
-          loading: true,
-        },
-        {
-          label: "Data integrity",
-          loading: true,
-        },
-      ],
-    };
-  }
-
-  return {
-    facets: [
-      {
-        label: "Clients connected",
-      },
-      {
-        label: "Receiving data",
-      },
-      {
-        label: "Sending data",
-      },
-      {
-        label: "Data integrity",
-      },
-    ],
-  };
-}
 
 export function VerifyConnection() {
   const [loading, setLoading] = useState(false);
@@ -197,10 +118,10 @@ export function VerifyConnection() {
     };
   }, [connectionName, namespace, handleCheckConnectionStatus, runId]);
 
-  const healthWidgetProps = connectionStatusResponseToHealthWidgetProps(
+  const healthWidgetProps = connectionStatusToHealthWidgetProps({
     loading,
     connectionStatus,
-  );
+  });
 
   return (
     <FlowCenterColumn>

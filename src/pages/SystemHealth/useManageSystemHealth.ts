@@ -1,16 +1,15 @@
 import { ConnectError } from "@connectrpc/connect";
-import {
-  InstallStatus,
-  type GetConnectionStatusResponse,
-} from "@mydecisiveai/octant-client";
+import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
+import type { HealthWidgetProps } from "@components/HealthWidget/HealthWidget";
 import { type ValidationSnapshot, useOctantStore } from "@store/octantStore";
-import { useEffect, useRef, useState } from "react";
+import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
 import {
   connectionServiceClient,
   createOrGetValidatorRunId,
 } from "../../services/connection";
-import { installServiceClient } from "../../services/install";
 
 export type ValidationStatus = Omit<ValidationSnapshot, "timestamp">;
 
@@ -29,14 +28,46 @@ function toValidationSnapshot(
   };
 }
 
+function smarthubStatusToHealthWidgetProps(
+  installed: boolean | null,
+): Omit<HealthWidgetProps, "title"> {
+  if (installed === true) {
+    return { status: "operational" };
+  }
+
+  if (installed === false) {
+    return {
+      status: "error",
+      fix: {
+        label: "How to fix",
+        description:
+          "Smarthub could not be detected in the configured cluster. Review the installation steps and cluster configuration.",
+        actions: [
+          {
+            text: "See Docs",
+            href: "https://docs.mydecisive.ai/",
+          },
+        ],
+      },
+    };
+  }
+
+  return {};
+}
+
+function formatLastRun(timestamp?: string) {
+  if (!timestamp) return undefined;
+
+  return `Last run ${new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(timestamp))}`;
+}
+
 export function useManageSystemHealth() {
   const [loading, setLoading] = useState(false);
   const [connectionStatus, setConnectionStatus] =
     useState<ValidationStatus | null>(null);
-  const [smarthubInstalled, setSmarthubInstalled] = useState<boolean | null>(
-    null,
-  );
-  const [smarthubLoading, setSmarthubLoading] = useState(false);
 
   const [validatorRun, setValidatorRun] = useState<{
     connectionName: string;
@@ -48,27 +79,38 @@ export function useManageSystemHealth() {
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { connectionName, namespace, setOctantState, validation } =
+  const { connectionName, hubInstalled, namespace, setOctantState, validation } =
     useOctantStore(
-      useShallow(({ connectionName, namespace, setState, validation }) => ({
-        connectionName,
-        namespace,
-        setOctantState: setState,
-        validation,
-      })),
+      useShallow(
+        ({ connectionName, hubInstalled, namespace, setState, validation }) => ({
+          connectionName,
+          hubInstalled,
+          namespace,
+          setOctantState: setState,
+          validation,
+        }),
+      ),
     );
 
   const connectionStatusWithFallback: ValidationStatus | null =
     connectionStatus ?? validation ?? null;
 
-  const currentRunId =
-    validatorRun &&
-    validatorRun.connectionName === connectionName &&
-    validatorRun.namespace === namespace
-      ? validatorRun.runId
-      : null;
+  const timestamp = useMemo(
+    () => formatLastRun(validation?.timestamp),
+    [validation?.timestamp],
+  );
 
-  async function revalidate() {
+  const currentRunId = useMemo(
+    () =>
+      validatorRun &&
+      validatorRun.connectionName === connectionName &&
+      validatorRun.namespace === namespace
+        ? validatorRun.runId
+        : null,
+    [connectionName, namespace, validatorRun],
+  );
+
+  const revalidate = useCallback(async () => {
     if (!connectionName || !namespace) return;
 
     setLoading(true);
@@ -101,7 +143,7 @@ export function useManageSystemHealth() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [connectionName, currentRunId, namespace, setOctantState]);
 
   useEffect(() => {
     let ignore = false;
@@ -163,62 +205,37 @@ export function useManageSystemHealth() {
     };
   }, [connectionName, namespace, setOctantState]);
 
-  useEffect(() => {
-    let ignore = false;
+  const healthWidgetProps = useMemo(
+    () => ({
+      title: copy.connection,
+      timestamp,
+      ...connectionStatusToHealthWidgetProps({
+        loading,
+        connectionStatus: connectionStatusWithFallback,
+        preferLoading: true,
+      }),
+    }),
+    [connectionStatusWithFallback, loading, timestamp],
+  );
 
-    async function fetchSmarthubStatus() {
-      await Promise.resolve();
-      if (ignore || !connectionName) return;
+  const smarthubWidgetProps = useMemo(
+    () => ({
+      title: "Smarthub Infrastructure",
+      timestamp,
+      simple: true,
+      ...smarthubStatusToHealthWidgetProps(hubInstalled ?? null),
+    }),
+    [hubInstalled, timestamp],
+  );
 
-      setSmarthubLoading(true);
-      try {
-        for await (const res of installServiceClient.getInstallStatus({
-          connectionName,
-        })) {
-          if (ignore) return;
-
-          switch (res.installStatus) {
-            case InstallStatus.INSTALLED:
-              setSmarthubInstalled(true);
-              return;
-            case InstallStatus.ERROR:
-            case InstallStatus.TIMEOUT:
-              setSmarthubInstalled(false);
-              return;
-            default:
-              continue;
-          }
-        }
-
-        if (!ignore) {
-          setSmarthubInstalled(false);
-        }
-      } catch (e) {
-        console.warn("error in fetchSmarthubStatus ", e);
-        if (!ignore) {
-          setSmarthubInstalled(false);
-        }
-      } finally {
-        if (!ignore) {
-          setSmarthubLoading(false);
-        }
-      }
-    }
-
-    void fetchSmarthubStatus();
-
-    return () => {
-      ignore = true;
-    };
-  }, [connectionName]);
-
-  return {
-    connectionStatus: connectionStatusWithFallback,
-    error,
-    loading,
-    revalidate,
-    smarthubInstalled,
-    smarthubLoading,
-    validation,
-  };
+  return useMemo(
+    () => ({
+      healthWidgetProps,
+      revalidate,
+      showRevalidateButton:
+        !loading && (healthWidgetProps.status === "error" || !!error),
+      smarthubWidgetProps,
+    }),
+    [error, healthWidgetProps, loading, revalidate, smarthubWidgetProps],
+  );
 }

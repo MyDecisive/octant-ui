@@ -81,10 +81,13 @@ export function useDetectProgress() {
       if (ignore) return;
 
       if (installResult.status === "installed") {
+        setOctantState("hubInstalled", true);
         setInstallAndConnectField("lastCompletedStep", 3);
         if (!namespace) {
           setOctantState("namespace", "****");
         }
+      } else {
+        setOctantState("hubInstalled", false);
       }
 
       if (ddogResult?.names?.includes(connectionName)) {

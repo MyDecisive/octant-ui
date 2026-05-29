@@ -1,5 +1,6 @@
 import { Accordion } from "@components/Accordion";
 import Divider from "@mui/material/Divider";
+import classNames from "classnames";
 import { Fragment } from "react";
 import { FixCard, type FixInfo } from "./FixCard";
 import { HealthFacetRow, type HealthFacet } from "./HealthFacetRow";
@@ -13,6 +14,7 @@ export interface HealthWidgetProps {
   fix?: FixInfo;
   facets?: HealthFacet[];
   simple?: boolean;
+  containerClassName?: string;
 }
 
 export function HealthWidget({
@@ -22,10 +24,11 @@ export function HealthWidget({
   fix,
   facets,
   simple,
+  containerClassName,
 }: HealthWidgetProps) {
   return (
     <Accordion
-      className="health-widget-container"
+      className={classNames("health-widget-container", containerClassName)}
       title={
         <HealthWidgetTitle
           title={title}
