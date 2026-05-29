@@ -51,6 +51,7 @@ export function useInitClarity() {
 
         if (statuses.length) {
           const options = timeframeToPickerOptions(statuses);
+
           const firstSelectableTimeframe = statuses.find(
             ({ status, timeframe }) =>
               timeframe !== Timeframe.TIMEFRAME_UNSPECIFIED &&
@@ -62,6 +63,7 @@ export function useInitClarity() {
           } else if (options[0]?.value) {
             setState("selectedTimeframe", parseInt(options[0].value));
           }
+          setState("timeframeOptions", options);
         }
         setState("logData", log);
         setState("traceData", trace);
