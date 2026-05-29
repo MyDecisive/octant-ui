@@ -61,6 +61,7 @@ export function SetupSmarthub() {
       })) {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
+            setOctantState("hubInstalled", true);
             setOctantState("namespace", namespace);
             setFormField("namespace", namespace);
             return true;
@@ -108,6 +109,7 @@ export function SetupSmarthub() {
     }
   };
 
+  // TODO: This is broken for some reason
   const handleContinueFromDialog = () => {
     setOctantState("namespace", namespace);
     setFormField("namespace", namespace);

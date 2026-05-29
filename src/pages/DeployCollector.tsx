@@ -85,6 +85,7 @@ export function DeployCollector() {
       return true;
       // eslint-disable-next-line
     } catch (_) {
+      // TODO: We need error feedback in this component
       return false;
     }
   };

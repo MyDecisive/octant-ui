@@ -5,6 +5,7 @@ import {
   type TimeframeStatusResponse_Status,
 } from "@mydecisiveai/octant-client";
 import { ClarityCopy as cc } from "../copy/clarity/Clarity.copy";
+
 export const timeframeLabels: Record<Timeframe, string> = {
   [Timeframe.TIMEFRAME_UNSPECIFIED]: "Unspecified",
   [Timeframe.TIMEFRAME_24HR]: cc.timerange.timerangeOptions.T24H,

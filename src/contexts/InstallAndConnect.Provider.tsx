@@ -11,14 +11,20 @@ export function InstallAndConnectProvider({
   children,
   ...props
 }: PropsWithChildren<Partial<InstallAndConnectFormFields>>) {
-  const { connectionName, namespace } = useOctantStore(
-    useShallow(({ connectionName, namespace }) => ({
+  const { connectionName, hubInstalled, namespace } = useOctantStore(
+    useShallow(({ connectionName, namespace, hubInstalled }) => ({
       connectionName,
       namespace,
+      hubInstalled,
     })),
   );
   const [store] = useState(() =>
-    createInstallAndConnectStore({ ...props, connectionName, namespace }),
+    createInstallAndConnectStore({
+      ...props,
+      connectionName,
+      namespace,
+      lastCompletedStep: hubInstalled ? 3 : undefined,
+    }),
   );
 
   return (

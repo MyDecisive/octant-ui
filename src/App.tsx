@@ -1,7 +1,7 @@
 import { FullscreenLoader } from "@components/FullscreenLoader";
 import { FlowLayout } from "@components/layout/FlowLayout";
 import { StepperNav } from "@components/StepperNav";
-import { useResolveConnectionName } from "@utils/initialization/useResolveConnectionName";
+import { useInitOctant } from "@utils/initialization/useInitOctant";
 import { Redirect, Route, Switch } from "wouter";
 import { Splash } from "./components/Splash";
 import {
@@ -16,7 +16,7 @@ import { SmarthubPage } from "./pages/Smarthub";
 import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
 function App() {
-  const { resolving } = useResolveConnectionName();
+  const resolving = useInitOctant();
 
   if (resolving) {
     return <FullscreenLoader />;

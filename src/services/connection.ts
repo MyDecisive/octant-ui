@@ -1,3 +1,4 @@
+import type { MessageInitShape } from "@bufbuild/protobuf";
 import {
   ConnectError,
   createClient,
@@ -11,7 +12,6 @@ import {
   IntegrationType,
   MLTType,
 } from "@mydecisiveai/octant-client";
-import type { MessageInitShape } from "@bufbuild/protobuf";
 import { transport } from "./transport";
 
 type MockConnectionData = MessageInitShape<typeof ConnectionDataSchema>;
@@ -70,7 +70,10 @@ const mockTransport = createRouterTransport(({ service }) => {
       console.log("ConnectionService.createConnection", request);
       const { connectionData } = request;
       if (connectionData?.scope?.connectionName) {
-        mockConnections.set(connectionData.scope.connectionName, connectionData);
+        mockConnections.set(
+          connectionData.scope.connectionName,
+          connectionData,
+        );
       }
       return {};
     },

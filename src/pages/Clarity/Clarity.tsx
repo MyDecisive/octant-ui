@@ -1,31 +1,30 @@
 import { FilterCard } from "@components/FilterCard/FilterCard";
 import { FilterEmptyStateCard } from "@components/FilterCard/FilterEmptyStateCard";
 import { Select } from "@components/formInputs/Select";
+import { FullscreenLoader } from "@components/FullscreenLoader";
 import { PageContainer } from "@components/layout/PageContainer";
 import { NoConnectionCard } from "@components/NoConnectionCard";
 import { Table } from "@components/Table/Table";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import { useInitClarity } from "@utils/initialization/useInitClarity";
+import { timeframeLabels } from "@utils/timeframeToPickerOptions";
 import { useState } from "react";
+import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 import "./Clarity.css";
 import { ClarityTabs } from "./ClarityTabs";
 import { summaryColumns, type SummaryData } from "./constants";
 import { useManageClarityData } from "./useManageClarityData";
 import { useManageFilters } from "./useManageFilters";
 import { useManageTimeframes } from "./useManageTimeframes";
-import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 
 export function ClarityPage() {
+  const initializing = useInitClarity();
+
   const [searchQuery, setSearchQuery] = useState("");
   const { logFilter, traceFilter } = useManageFilters();
-  const {
-    hasLogTimeframeData,
-    hasTraceTimeframeData,
-    pickerOptions,
-    selectedTimeRange,
-    setSelectedTimeRange,
-    timeRangeLabel,
-  } = useManageTimeframes();
+  const { setSelectedTimeframe, selectedTimeframe, timeframeOptions } =
+    useManageTimeframes();
   const {
     data,
     hasLogData,
@@ -36,19 +35,29 @@ export function ClarityPage() {
     tableDataLoading,
     loading,
   } = useManageClarityData(searchQuery);
-  const hasAvailableLogData = hasLogTimeframeData && hasLogData;
-  const hasAvailableTraceData = hasTraceTimeframeData && hasTraceData;
-  const hasTableData = hasAvailableLogData || hasAvailableTraceData;
+  const hasTableData = hasLogData || hasTraceData;
   const hasClarityContent = loading || hasTableData;
+
+  const timeRangeLabel = timeframeLabels[selectedTimeframe];
+
+  const pickerFriendlySelectedTimeframe = String(selectedTimeframe);
+
+  if (initializing) {
+    return (
+      <PageContainer>
+        <FullscreenLoader />
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer
       headerActions={
         hasTableData ? (
           <Select
-            selected={selectedTimeRange}
-            onChange={(event) => setSelectedTimeRange(event.target.value)}
-            options={pickerOptions}
+            selected={pickerFriendlySelectedTimeframe}
+            onChange={(event) => setSelectedTimeframe(event.target.value)}
+            options={timeframeOptions}
             className="clarity-timepicker"
             label={cc.timerange.label}
             size="small"
@@ -72,8 +81,8 @@ export function ClarityPage() {
               />
               <ClarityTabs
                 data={data}
-                hasLogData={hasAvailableLogData}
-                hasTraceData={hasAvailableTraceData}
+                hasLogData={hasLogData}
+                hasTraceData={hasTraceData}
                 logData={logData}
                 loading={loading}
                 searchQuery={searchQuery}
@@ -83,7 +92,7 @@ export function ClarityPage() {
               />
             </Stack>
             <Stack className="right-column" gap={1}>
-              {!hasAvailableLogData ? (
+              {!hasLogData ? (
                 <FilterEmptyStateCard
                   title={cc.logFilter.emptyState.title}
                   description={cc.logFilter.emptyState.subtitle}
@@ -105,7 +114,7 @@ export function ClarityPage() {
                   includeErr={logFilter.includeErr}
                 />
               )}
-              {!hasAvailableTraceData ? (
+              {!hasTraceData ? (
                 <FilterEmptyStateCard
                   title={cc.traceFilter.emptyState.title}
                   description={cc.traceFilter.emptyState.subtitle}

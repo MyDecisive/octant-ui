@@ -12,9 +12,9 @@ export interface ValidationSnapshot {
 // TODO: When we get app state wired up, this is where meta info required for network calls should live
 interface OctantState {
   connectionName?: string;
-  hubInstalled?: boolean;
   namespace?: string;
   validation?: ValidationSnapshot;
+  hubInstalled?: boolean;
 }
 
 interface Actions {
@@ -33,7 +33,12 @@ export const useOctantStore = create<OctantStore>()(
     }),
     {
       name: "octant-store",
-      partialize: ({ connectionName, hubInstalled, namespace, validation }) => ({
+      partialize: ({
+        connectionName,
+        hubInstalled,
+        namespace,
+        validation,
+      }) => ({
         connectionName,
         hubInstalled,
         namespace,
