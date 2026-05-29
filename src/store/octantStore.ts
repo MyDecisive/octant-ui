@@ -1,10 +1,20 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export interface ValidationSnapshot {
+  receivingData: boolean;
+  sendingData: boolean;
+  dataIntegrity: boolean;
+  clientsConnected: boolean;
+  timestamp: string;
+}
+
 // TODO: When we get app state wired up, this is where meta info required for network calls should live
 interface OctantState {
   connectionName?: string;
+  hubInstalled?: boolean;
   namespace?: string;
+  validation?: ValidationSnapshot;
 }
 
 interface Actions {
@@ -23,9 +33,11 @@ export const useOctantStore = create<OctantStore>()(
     }),
     {
       name: "octant-store",
-      partialize: ({ connectionName, namespace }) => ({
+      partialize: ({ connectionName, hubInstalled, namespace, validation }) => ({
         connectionName,
+        hubInstalled,
         namespace,
+        validation,
       }),
     },
   ),

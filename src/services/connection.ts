@@ -5,34 +5,78 @@ import {
 } from "@connectrpc/connect";
 import {
   type ConnectionScope,
+  ConnectionDataSchema,
   ConnectionService,
+  DeploymentType,
   IntegrationType,
   MLTType,
 } from "@mydecisiveai/octant-client";
+import type { MessageInitShape } from "@bufbuild/protobuf";
 import { transport } from "./transport";
+
+type MockConnectionData = MessageInitShape<typeof ConnectionDataSchema>;
+
+const mockConnections = new Map<string, MockConnectionData>([
+  [
+    "datadog-prod",
+    {
+      scope: {
+        connectionName: "datadog-prod",
+        namespace: "default",
+      },
+      telemetryTypes: [MLTType.MLT_TYPE_LOG, MLTType.MLT_TYPE_TRACE],
+      deployment: {
+        type: DeploymentType.ARGO_SIDELOAD,
+        integrationName: "datadog-prod",
+      },
+      destinations: [
+        { type: IntegrationType.DATADOG, integrationName: "datadog-prod" },
+      ],
+    },
+  ],
+  [
+    "datadog-staging",
+    {
+      scope: {
+        connectionName: "datadog-staging",
+        namespace: "default",
+      },
+      telemetryTypes: [MLTType.MLT_TYPE_LOG],
+      deployment: {
+        type: DeploymentType.ARGO_SIDELOAD,
+        integrationName: "datadog-staging",
+      },
+      destinations: [
+        { type: IntegrationType.DATADOG, integrationName: "datadog-staging" },
+      ],
+    },
+  ],
+]);
 
 const mockTransport = createRouterTransport(({ service }) => {
   service(ConnectionService, {
     getConnections: (...args) => {
       console.log("ConnectionService.getConnections", args);
-      return { connectionNames: ["datadog-prod", "datadog-staging"] };
+      return { connectionNames: Array.from(mockConnections.keys()) };
     },
-    getConnection: (...args) => {
-      console.log("ConnectionService.getConnection", args);
+    getConnection: (request) => {
+      console.log("ConnectionService.getConnection", request);
+      const connectionData = mockConnections.get(request.connectionName);
       return {
-        telemetryTypes: [MLTType.MLT_TYPE_LOG, MLTType.MLT_TYPE_TRACE],
-        deploymentType: 0,
-        destinations: [
-          { type: IntegrationType.DATADOG, integrationName: "datadog-prod" },
-        ],
+        connectionData,
       };
     },
-    createConnection: (...args) => {
-      console.log("ConnectionService.createConnection", args);
+    createConnection: (request) => {
+      console.log("ConnectionService.createConnection", request);
+      const { connectionData } = request;
+      if (connectionData?.scope?.connectionName) {
+        mockConnections.set(connectionData.scope.connectionName, connectionData);
+      }
       return {};
     },
-    deleteConnection: (...args) => {
-      console.log("ConnectionService.deleteConnection", args);
+    deleteConnection: (request) => {
+      console.log("ConnectionService.deleteConnection", request);
+      mockConnections.delete(request.connectionName);
       return {};
     },
     getConnectionValidatorRunIds: (...args) => {

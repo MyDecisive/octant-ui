@@ -64,7 +64,16 @@ export function ClarityTabs({
           resultCount: logData.length,
           children:
             loading || hasLogData ? (
-              logData.length > 0 ? (
+              logData.length === 0 && searchQuery ? (
+                <NoConnectionCard
+                  title={"No results found"}
+                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
+                  actionLabel="Clear Search"
+                  onButtonClick={() => {
+                    setSearchQuery("");
+                  }}
+                />
+              ) : (
                 <Table<LogData>
                   label={ClarityCopy.logsTable.title}
                   toolbarTooltip={{
@@ -77,15 +86,6 @@ export function ClarityTabs({
                   showToolbar
                   footerLabel={ClarityCopy.logsTable.tec}
                   total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
-                />
-              ) : (
-                <NoConnectionCard
-                  title={"No results found"}
-                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
-                  actionLabel="Clear Search"
-                  onButtonClick={() => {
-                    setSearchQuery("");
-                  }}
                 />
               )
             ) : (
@@ -103,7 +103,16 @@ export function ClarityTabs({
           resultCount: spanData.length,
           children:
             loading || hasTraceData ? (
-              spanData.length > 0 ? (
+              spanData.length === 0 && searchQuery ? (
+                <NoConnectionCard
+                  title={"No results found"}
+                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
+                  actionLabel="Clear Search"
+                  onButtonClick={() => {
+                    setSearchQuery("");
+                  }}
+                />
+              ) : (
                 <Table<SpanData>
                   label={ClarityCopy.traceTable.title}
                   toolbarTooltip={{
@@ -118,15 +127,6 @@ export function ClarityTabs({
                   total={
                     data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"
                   }
-                />
-              ) : (
-                <NoConnectionCard
-                  title={"No results found"}
-                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
-                  actionLabel="Clear Search"
-                  onButtonClick={() => {
-                    setSearchQuery("");
-                  }}
                 />
               )
             ) : (

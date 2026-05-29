@@ -5,18 +5,22 @@ import type { HealthWidgetProps } from "./HealthWidget";
 
 export function HealthWidgetTitle({
   title,
+  timestamp,
   status,
-}: Pick<HealthWidgetProps, "title" | "status">) {
+}: Pick<HealthWidgetProps, "title" | "timestamp" | "status">) {
   return (
     <Stack
       className="health-widget-title-container"
       justifyContent={"space-between"}
-      alignContent={"center"}
+      alignItems={"center"}
       direction={"row"}
     >
-      <Typography variant="body1" data-bold="true">
-        {title}
-      </Typography>
+      <Stack>
+        <Typography variant="body1" data-bold="true">
+          {title}
+        </Typography>
+        {timestamp && <Typography variant="caption">{timestamp}</Typography>}
+      </Stack>
       {status && <HeaderStatusChip status={status} />}
     </Stack>
   );

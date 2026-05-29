@@ -81,10 +81,13 @@ export function useDetectProgress() {
       if (ignore) return;
 
       if (installResult.status === "installed") {
+        setOctantState("hubInstalled", true);
         setInstallAndConnectField("lastCompletedStep", 3);
         if (!namespace) {
           setOctantState("namespace", "****");
         }
+      } else {
+        setOctantState("hubInstalled", false);
       }
 
       if (ddogResult?.names?.includes(connectionName)) {
@@ -95,12 +98,13 @@ export function useDetectProgress() {
         const connection = await connectionServiceClient.getConnection({
           connectionName,
         });
-        if (connection.telemetryTypes) {
+        const { telemetryTypes } = connection.connectionData ?? {};
+        if (telemetryTypes) {
           setInstallAndConnectField("lastCompletedStep", 4);
 
           setInstallAndConnectField(
             "telemetryTypes",
-            fromMLTTypes(connection.telemetryTypes),
+            fromMLTTypes(telemetryTypes),
           );
         }
       }

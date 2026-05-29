@@ -12,8 +12,8 @@ import {
 } from "./constants/routing";
 import { InstallAndConnectProvider } from "./contexts/InstallAndConnect.Provider";
 import { ClarityPage } from "./pages/Clarity/Clarity";
-import { ConnectionsPage } from "./pages/Connections";
 import { SmarthubPage } from "./pages/Smarthub";
+import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
 function App() {
   const { resolving } = useResolveConnectionName();
@@ -47,7 +47,7 @@ function App() {
       <Route path={PAGE_ROUTES}>
         <Switch>
           <Route path={ROUTES.CLARITY} component={ClarityPage} />
-          <Route path={ROUTES.SYSTEMHEALTH} component={ConnectionsPage} />
+          <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
           <Route path={ROUTES.SETTINGS} component={SmarthubPage} />
           <Route path={ROUTES.SUPPORT} component={SmarthubPage} />
         </Switch>
