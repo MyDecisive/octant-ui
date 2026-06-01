@@ -13,6 +13,7 @@ import type { FormFields, TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { SECRET_VALUE_MASK } from "../constants/forms";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
 import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";
@@ -27,41 +28,92 @@ const formSpec: FormFields = {
   apiKey: [validateRequired],
 };
 
+const fields = {
+  source: {
+    label: copy.sourceSection.dropdown.label,
+    selected: "datadog",
+  },
+  datatypes: {
+    label: copy.sourceSection.datatypes.label,
+    options: [
+      {
+        // IC4-08
+        label: "Logs",
+        value: "logs",
+      },
+      {
+        // IC4-09
+        label: "Traces",
+        value: "traces",
+      },
+    ],
+  },
+  destination: {
+    vendorDropdown: {
+      label: copy.destinationSection.vendorDropdownLabel,
+      selected: "datadog",
+      options: [
+        {
+          // IC4-13
+          label: "Datadog",
+          value: "datadog",
+        },
+      ],
+    },
+    url: {
+      placeholder: copy.destinationSection.destinationUrl.placeholder,
+      helperText: copy.destinationSection.destinationUrl.helperText,
+    },
+    apiKey: {
+      placeholder: copy.destinationSection.destinationApiKey.placeholder,
+      helperText: copy.destinationSection.destinationApiKey.helperText,
+      tooltip: copy.destinationSection.destinationApiKey.tooltip,
+    },
+  },
+};
+
 export function DeployCollector() {
   const [focusedField, setFocusedField] = useState<string>();
-  const { telemetryTypes, url, apiKey, connectionName, namespace } =
-    useInstallAndConnectStore(
-      useShallow(
-        ({
-          // Provide default empty string values so React recognizes the Inputs as controlled
-          telemetryTypes,
-          url = "",
-          apiKey = "",
-          connectionName,
-          namespace,
-        }) => ({
-          telemetryTypes,
-          url,
-          apiKey,
-          connectionName,
-          namespace,
-        }),
-      ),
-    );
-  const setFormField = useInstallAndConnectStore((state) => state.setFormField);
+  const storeFormValues = useInstallAndConnectStore(
+    useShallow(
+      ({ telemetryTypes, url, apiKey, connectionName, namespace }) => ({
+        telemetryTypes,
+        url,
+        apiKey,
+        connectionName,
+        namespace,
+      }),
+    ),
+  );
+  const setPartialState = useInstallAndConnectStore(
+    (state) => state.setPartialState,
+  );
+
+  // Provide default empty string values so React recognizes the Inputs as controlled
+  const [
+    { telemetryTypes, url = "", apiKey = "", connectionName, namespace },
+    setForm,
+  ] = useState(storeFormValues);
 
   const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
 
   const handleBlur = () => setFocusedField(undefined);
 
+  const keyIsMasked = storeFormValues.apiKey === SECRET_VALUE_MASK;
+
   const handleDeployButtonClick = async () => {
+    // TODO: add validateAll here
+
+    if (apiKey === SECRET_VALUE_MASK || !apiKey) {
+      return true;
+    }
     try {
       await dDogServiceClient.saveDatadogIntegration({
         url,
         apiKey,
         name: connectionName,
       });
-
+      setPartialState({ url, apiKey });
       await connectionServiceClient.createConnection({
         connectionData: {
           scope: {
@@ -81,7 +133,7 @@ export function DeployCollector() {
           ],
         },
       });
-
+      setPartialState({ telemetryTypes });
       return true;
       // eslint-disable-next-line
     } catch (_) {
@@ -90,49 +142,10 @@ export function DeployCollector() {
     }
   };
 
-  const fields = {
-    source: {
-      label: copy.sourceSection.dropdown.label,
-      selected: "datadog",
-    },
-    datatypes: {
-      label: copy.sourceSection.datatypes.label,
-      options: [
-        {
-          // IC4-08
-          label: "Logs",
-          value: "logs",
-        },
-        {
-          // IC4-09
-          label: "Traces",
-          value: "traces",
-        },
-      ],
-    },
-    destination: {
-      vendorDropdown: {
-        label: copy.destinationSection.vendorDropdownLabel,
-        selected: "datadog",
-        options: [
-          {
-            // IC4-13
-            label: "Datadog",
-            value: "datadog",
-          },
-        ],
-      },
-      url: {
-        placeholder: copy.destinationSection.destinationUrl.placeholder,
-        helperText: copy.destinationSection.destinationUrl.helperText,
-      },
-      apiKey: {
-        placeholder: copy.destinationSection.destinationApiKey.placeholder,
-        helperText: copy.destinationSection.destinationApiKey.helperText,
-        tooltip: copy.destinationSection.destinationApiKey.tooltip,
-      },
-    },
-  };
+  const setFormField = (
+    key: keyof typeof storeFormValues,
+    value: (typeof storeFormValues)[keyof typeof storeFormValues],
+  ) => setForm((oldForm) => ({ ...oldForm, [key]: value }));
 
   return (
     <>
@@ -212,7 +225,11 @@ export function DeployCollector() {
           onFocus={() => setFocusedField("apiKey")}
           onBlur={handleBlur}
           helperText={fields.destination.apiKey.helperText}
-          tooltip={fields.destination.apiKey.tooltip}
+          tooltip={
+            keyIsMasked
+              ? "This field is masked because you have already completed this page. To update, just enter a new value. Leaving this field unchanged will use the previously entered value"
+              : fields.destination.apiKey.tooltip
+          }
         />
         <AsyncNextButton
           asyncFunction={handleDeployButtonClick}
