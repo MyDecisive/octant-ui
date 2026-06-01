@@ -7,6 +7,7 @@ import { fromMLTTypes } from "@utils/fromMltTypes";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
+import { SECRET_VALUE_MASK } from "../../constants/forms";
 import { INSTALL_AND_CONNECT, ROUTES } from "../../constants/routing";
 import { argoCdServiceClient } from "../../services/argoCd";
 import { connectionServiceClient } from "../../services/connection";
@@ -106,14 +107,14 @@ export function useDetectProgress() {
       if (argoCdIntegration) {
         const { argoEndpoint } = argoCdIntegration;
         setInstallAndConnectField("argoUrl", argoEndpoint);
-        setInstallAndConnectField("accountToken", "************************");
+        setInstallAndConnectField("accountToken", SECRET_VALUE_MASK);
         setInstallAndConnectField("lastCompletedStep", 2);
       }
 
       if (ddogIntegration) {
         const { url } = ddogIntegration;
         setInstallAndConnectField("url", url);
-        setInstallAndConnectField("apiKey", "************************");
+        setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
         setInstallAndConnectField("lastCompletedStep", 4);
       }
 
