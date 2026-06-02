@@ -1,4 +1,7 @@
-import { type Filter as ClientFilter } from "@mydecisiveai/octant-client";
+import {
+  type Filter as ClientFilter,
+  type ConnectionData,
+} from "@mydecisiveai/octant-client";
 import type { JSX } from "react";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
@@ -90,4 +93,16 @@ export interface Filter extends Pick<
   "includeErr" | "pctSampled"
 > {
   type: FilterTypes;
+}
+
+export interface UIConnectionScope {
+  connectionName?: string;
+  namespace?: string;
+}
+
+export interface UIConnectionData extends Pick<
+  ConnectionData,
+  "deployment" | "destinations" | "telemetryTypes"
+> {
+  scope?: UIConnectionScope;
 }

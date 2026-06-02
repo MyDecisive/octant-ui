@@ -1,4 +1,4 @@
-import type { ConnectionData } from "@mydecisiveai/octant-client";
+import type { UIConnectionData, UIConnectionScope } from "@types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -11,7 +11,7 @@ export interface ValidationSnapshot {
 }
 
 interface OctantState {
-  connection?: ConnectionData;
+  connection?: Partial<UIConnectionData>;
   validation?: ValidationSnapshot;
   hubInstalled?: boolean;
 }
@@ -21,6 +21,14 @@ interface Actions {
     key: keyof OctantState,
     value: OctantState[keyof OctantState],
   ) => void;
+  setInConnection: (
+    key: keyof UIConnectionData,
+    value: UIConnectionData[keyof UIConnectionData],
+  ) => void;
+  setInConnectionScope: (
+    key: keyof UIConnectionScope,
+    value: UIConnectionScope[keyof UIConnectionScope],
+  ) => void;
 }
 
 type OctantStore = OctantState & Actions;
@@ -29,6 +37,25 @@ export const useOctantStore = create<OctantStore>()(
   persist(
     (set) => ({
       setState: (key, value) => set((state) => ({ ...state, [key]: value })),
+      setInConnection: (key, value) =>
+        set((state) => ({
+          ...state,
+          connection: {
+            ...state.connection,
+            [key]: value,
+          },
+        })),
+      setInConnectionScope: (key, value) =>
+        set((state) => ({
+          ...state,
+          connection: {
+            ...state.connection,
+            scope: {
+              ...(state.connection?.scope || {}),
+              [key]: value,
+            },
+          },
+        })),
     }),
     {
       name: "octant-store",

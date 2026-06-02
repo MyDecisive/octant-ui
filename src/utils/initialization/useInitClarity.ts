@@ -1,10 +1,10 @@
 import {
   Timeframe,
   TimeframeStatusResponse_Code,
-  type ConnectionScope,
   type TimeframeStatusRequest,
 } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarityStore";
+import type { UIConnectionScope } from "@types";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
@@ -13,7 +13,7 @@ import { timeframeServiceClient } from "../../services/timeframe";
 export function useInitClarity({
   connectionScope,
 }: {
-  connectionScope?: ConnectionScope;
+  connectionScope?: UIConnectionScope;
 }) {
   const [loading, setLoading] = useState(false);
   const [hasRan, setHasRan] = useState(false);

@@ -1,5 +1,6 @@
 import type { SelectOption } from "@components/formInputs/Select";
-import { Timeframe, type ConnectionScope } from "@mydecisiveai/octant-client";
+import { Timeframe } from "@mydecisiveai/octant-client";
+import type { UIConnectionScope } from "@types";
 import { useContext } from "react";
 import { createStore, useStore } from "zustand";
 import { ClarityContext } from "../contexts/Clarity";
@@ -9,7 +10,7 @@ interface ClarityData {
   timeframeOptions: SelectOption[];
   logData?: boolean;
   traceData?: boolean;
-  connectionScope?: ConnectionScope;
+  connectionScope?: UIConnectionScope;
 }
 
 interface ClarityState extends ClarityData {
