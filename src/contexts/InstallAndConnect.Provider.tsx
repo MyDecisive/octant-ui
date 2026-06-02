@@ -17,7 +17,7 @@ export function InstallAndConnectProvider({
       useShallow(({ connection, hubInstalled }) => ({
         connectionName: connection?.scope?.connectionName,
         namespace: connection?.scope?.namespace,
-        telemetryTypes: fromMLTTypes(connection?.telemetryTypes || []),
+        telemetryTypes: connection?.telemetryTypes || [],
         hubInstalled,
       })),
     );
@@ -26,7 +26,7 @@ export function InstallAndConnectProvider({
       ...props,
       connectionName,
       namespace,
-      telemetryTypes,
+      telemetryTypes: fromMLTTypes(telemetryTypes),
       lastCompletedStep: hubInstalled ? 3 : undefined,
     }),
   );
