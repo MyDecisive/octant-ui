@@ -10,7 +10,6 @@ export interface ValidationSnapshot {
   timestamp: string;
 }
 
-// TODO: When we get app state wired up, this is where meta info required for network calls should live
 interface OctantState {
   connection?: ConnectionData;
   validation?: ValidationSnapshot;
