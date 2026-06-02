@@ -1,13 +1,11 @@
 import { FilterCard } from "@components/FilterCard/FilterCard";
 import { FilterEmptyStateCard } from "@components/FilterCard/FilterEmptyStateCard";
 import { Select } from "@components/formInputs/Select";
-import { FullscreenLoader } from "@components/FullscreenLoader";
 import { PageContainer } from "@components/layout/PageContainer";
 import { NoConnectionCard } from "@components/NoConnectionCard";
 import { Table } from "@components/Table/Table";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { useInitClarity } from "@utils/initialization/useInitClarity";
 import { timeframeLabels } from "@utils/timeframeToPickerOptions";
 import { useState } from "react";
 import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
@@ -19,8 +17,6 @@ import { useManageFilters } from "./useManageFilters";
 import { useManageTimeframes } from "./useManageTimeframes";
 
 export function ClarityPage() {
-  const initializing = useInitClarity();
-
   const [searchQuery, setSearchQuery] = useState("");
   const { logFilter, traceFilter } = useManageFilters();
   const { setSelectedTimeframe, selectedTimeframe, timeframeOptions } =
@@ -41,14 +37,6 @@ export function ClarityPage() {
   const timeRangeLabel = timeframeLabels[selectedTimeframe];
 
   const pickerFriendlySelectedTimeframe = String(selectedTimeframe);
-
-  if (initializing) {
-    return (
-      <PageContainer>
-        <FullscreenLoader />
-      </PageContainer>
-    );
-  }
 
   return (
     <PageContainer

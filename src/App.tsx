@@ -10,6 +10,7 @@ import {
   PAGE_ROUTES,
   ROUTES,
 } from "./constants/routing";
+import { ClarityProvider } from "./contexts/Clarity.Provider";
 import { InstallAndConnectProvider } from "./contexts/InstallAndConnect.Provider";
 import { ClarityPage } from "./pages/Clarity/Clarity";
 import { SmarthubPage } from "./pages/Smarthub";
@@ -46,7 +47,11 @@ function App() {
       </Route>
       <Route path={PAGE_ROUTES}>
         <Switch>
-          <Route path={ROUTES.CLARITY} component={ClarityPage} />
+          <Route path={ROUTES.CLARITY}>
+            <ClarityProvider>
+              <ClarityPage />
+            </ClarityProvider>
+          </Route>
           <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
           <Route path={ROUTES.SETTINGS} component={SmarthubPage} />
           <Route path={ROUTES.SUPPORT} component={SmarthubPage} />

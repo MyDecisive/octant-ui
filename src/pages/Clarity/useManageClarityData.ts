@@ -1,6 +1,5 @@
 import type { Log, Overall, Span } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarityStore";
-import { useOctantStore } from "@store/octantStore";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { budgetServiceClient } from "../../services/budget";
@@ -54,12 +53,14 @@ function spanToRow(
 }
 
 export function useManageClarityData(searchQuery = "") {
-  const { connectionName, namespace } = useOctantStore(
-    useShallow((state) => ({
-      connectionName: state.connectionName,
-      namespace: state.namespace,
+  const { connectionScope } = useClarityStore(
+    useShallow(({ connectionScope }) => ({
+      connectionScope,
     })),
   );
+
+  const { namespace, connectionName } = connectionScope || {};
+
   const timeRange = useClarityStore((state) => state.selectedTimeframe);
   const hasLogTimeframeData = useClarityStore((state) => state.logData);
   const hasTraceTimeframeData = useClarityStore((state) => state.traceData);
