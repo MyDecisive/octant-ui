@@ -9,29 +9,16 @@ type ResolveStatus = "pending" | "resolved";
 const NO_CONNECTIONS_ERROR =
   '[internal] failed to get connections: failed to get configmap mdai-octant-connections: configmaps "mdai-octant-connections" not found';
 
-export function useResolveConnectionScope() {
-  const { connectionName, namespace, setState } = useOctantStore(
-    useShallow(({ connectionName, namespace, setState }) => ({
-      connectionName,
-      namespace,
+export function useResolveConnection() {
+  const { setState } = useOctantStore(
+    useShallow(({ setState }) => ({
       setState,
     })),
   );
 
-  const [hasRan, setHasRan] = useState(false);
-  const [status, setStatus] = useState<ResolveStatus>(
-    connectionName && namespace ? "resolved" : "pending",
-  );
+  const [status, setStatus] = useState<ResolveStatus>("pending");
 
   useEffect(() => {
-    // TODO: these should be verified if present instead of assuming they're legit
-    if (!hasRan && connectionName && namespace) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setStatus("resolved");
-      setHasRan(true);
-      return;
-    }
-
     let ignore = false;
 
     async function resolve() {
@@ -41,17 +28,14 @@ export function useResolveConnectionScope() {
 
         if (connectionsRes.connectionNames.length > 0) {
           const fetchedConnectionName = connectionsRes.connectionNames[0];
-          setState("connectionName", fetchedConnectionName);
+
           if (fetchedConnectionName) {
             const namedConnectionRes =
               await connectionServiceClient.getConnection({
                 connectionName: fetchedConnectionName,
               });
-            const fetchedNamespace =
-              namedConnectionRes?.connectionData?.scope?.namespace;
-            if (fetchedNamespace) {
-              setState("namespace", fetchedNamespace);
-            }
+
+            setState("connection", namedConnectionRes.connectionData);
           }
         }
       } catch (e) {
@@ -64,19 +48,18 @@ export function useResolveConnectionScope() {
       } finally {
         if (!ignore) {
           setStatus("resolved");
-          setHasRan(true);
         }
       }
     }
 
-    if (!hasRan) {
+    if (status === "pending") {
       void resolve();
     }
 
     return () => {
       ignore = true;
     };
-  }, [connectionName, hasRan, namespace, setState]);
+  }, [status, setState]);
 
   return status === "pending";
 }
