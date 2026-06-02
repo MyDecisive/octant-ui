@@ -1,3 +1,4 @@
+import type { ConnectionData } from "@mydecisiveai/octant-client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -11,8 +12,7 @@ export interface ValidationSnapshot {
 
 // TODO: When we get app state wired up, this is where meta info required for network calls should live
 interface OctantState {
-  connectionName?: string;
-  namespace?: string;
+  connection?: ConnectionData;
   validation?: ValidationSnapshot;
   hubInstalled?: boolean;
 }
@@ -33,15 +33,7 @@ export const useOctantStore = create<OctantStore>()(
     }),
     {
       name: "octant-store",
-      partialize: ({
-        connectionName,
-        hubInstalled,
-        namespace,
-        validation,
-      }) => ({
-        connectionName,
-        hubInstalled,
-        namespace,
+      partialize: ({ validation }) => ({
         validation,
       }),
     },
