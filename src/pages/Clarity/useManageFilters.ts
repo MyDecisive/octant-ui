@@ -1,5 +1,5 @@
 import { UpdateFilterResponse_Status } from "@mydecisiveai/octant-client";
-import { useOctantStore } from "@store/octantStore";
+import { useClarityStore } from "@store/clarityStore";
 import { type Filter, type FilterTypes } from "@types";
 import { toFilterType } from "@utils/toFilterTypes";
 import { useEffect, useState } from "react";
@@ -9,10 +9,9 @@ import { filterServiceClient } from "../../services/filter";
 const bothFilterTypes: FilterTypes[] = ["logs", "traces"];
 
 export function useManageFilters() {
-  const { connectionName, namespace } = useOctantStore(
-    useShallow((state) => ({
-      connectionName: state.connectionName,
-      namespace: state.namespace,
+  const { connectionScope } = useClarityStore(
+    useShallow(({ connectionScope }) => ({
+      connectionScope,
     })),
   );
   const [filters, setFilters] = useState<Record<FilterTypes, Filter> | null>(
@@ -30,8 +29,7 @@ export function useManageFilters() {
         const [logFilterResponse, traceFilterResponse] = await Promise.all(
           bothFilterTypes.map((type) =>
             filterServiceClient.getFilter({
-              connectionName,
-              namespace,
+              ...connectionScope,
               type: toFilterType(type),
             }),
           ),
@@ -50,7 +48,7 @@ export function useManageFilters() {
     if (filters === null) {
       void fetchFilters();
     }
-  }, [connectionName, namespace, filters]);
+  }, [connectionScope, filters]);
 
   const handleApplyFilter = async (
     type: FilterTypes,
@@ -66,8 +64,7 @@ export function useManageFilters() {
           pctSampled,
           includeErr,
         },
-        namespace,
-        connectionName,
+        ...connectionScope,
       })) {
         const status = res.status;
         if (status === UpdateFilterResponse_Status.COMPLETED) {

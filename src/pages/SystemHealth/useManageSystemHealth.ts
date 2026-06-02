@@ -1,6 +1,6 @@
+import type { HealthWidgetProps } from "@components/HealthWidget/HealthWidget";
 import { ConnectError } from "@connectrpc/connect";
 import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
-import type { HealthWidgetProps } from "@components/HealthWidget/HealthWidget";
 import { type ValidationSnapshot, useOctantStore } from "@store/octantStore";
 import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -79,18 +79,21 @@ export function useManageSystemHealth() {
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { connectionName, hubInstalled, namespace, setOctantState, validation } =
-    useOctantStore(
-      useShallow(
-        ({ connectionName, hubInstalled, namespace, setState, validation }) => ({
-          connectionName,
-          hubInstalled,
-          namespace,
-          setOctantState: setState,
-          validation,
-        }),
-      ),
-    );
+  const {
+    connectionName,
+    hubInstalled,
+    namespace,
+    setOctantState,
+    validation,
+  } = useOctantStore(
+    useShallow(({ hubInstalled, connection, setState, validation }) => ({
+      hubInstalled,
+      connectionName: connection?.scope?.connectionName,
+      namespace: connection?.scope?.namespace,
+      setOctantState: setState,
+      validation,
+    })),
+  );
 
   const connectionStatusWithFallback: ValidationStatus | null =
     connectionStatus ?? validation ?? null;

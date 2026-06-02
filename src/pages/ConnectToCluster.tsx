@@ -41,7 +41,7 @@ export function ConnectToCluster() {
   const setPartialState = useInstallAndConnectStore(
     useShallow((state) => state.setPartialState),
   );
-  const setOctantState = useOctantStore((state) => state.setState);
+  const setOctantState = useOctantStore((state) => state.setInConnectionScope);
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setArgoUrl(e.target.value);
