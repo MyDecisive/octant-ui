@@ -4,6 +4,8 @@ import { Tabs } from "@components/Tabs/Tabs";
 import type { Overall } from "@mydecisiveai/octant-client";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
+import { useLocation } from "wouter";
+import { ROUTES } from "../../constants/routing";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 import {
   logsColumns,
@@ -36,6 +38,7 @@ export function ClarityTabs({
   tableDataLoading,
 }: ClarityTabsProps) {
   const [activeTab, setActiveTab] = useState("logs");
+  const [, setLocation] = useLocation();
   const showResultCounts = searchQuery.trim().length > 0;
   const searchOptions = [
     ...new Set([
@@ -64,15 +67,24 @@ export function ClarityTabs({
           resultCount: logData.length,
           children:
             loading || hasLogData ? (
-              logData.length === 0 && searchQuery ? (
-                <NoConnectionCard
+              logData.length === 0 ? (
+                searchQuery ? (<NoConnectionCard
                   title={"No results found"}
                   description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
                   actionLabel="Clear Search"
                   onButtonClick={() => {
                     setSearchQuery("");
                   }}
-                />
+                />) : (
+                (<NoConnectionCard
+                  title={"Data Unavailable"}
+                  description={`We couldn’t load your log data.  Let’s check to see if you have log filtering turned on before we look into other potential issues.`}
+                  actionLabel="Review in System Health"
+                  onButtonClick={() => {
+                    setLocation(ROUTES.SYSTEMHEALTH);
+                  }}
+                />)
+                )
               ) : (
                 <Table<LogData>
                   label={ClarityCopy.logsTable.title}
@@ -103,16 +115,24 @@ export function ClarityTabs({
           resultCount: spanData.length,
           children:
             loading || hasTraceData ? (
-              spanData.length === 0 && searchQuery ? (
-                <NoConnectionCard
+              spanData.length === 0 ? (
+                searchQuery ? (<NoConnectionCard
                   title={"No results found"}
                   description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
                   actionLabel="Clear Search"
                   onButtonClick={() => {
                     setSearchQuery("");
                   }}
-                />
-              ) : (
+                />) : (
+                (<NoConnectionCard
+                  title={"Data Unavailable"}
+                  description={`We couldn’t load your trace data.  Let’s check to see if you have trace filtering turned on before we look into other potential issues.`}
+                  actionLabel="Review in System Health"
+                  onButtonClick={() => {
+                    setLocation(ROUTES.SYSTEMHEALTH);
+                  }}
+                />)
+              )) : (
                 <Table<SpanData>
                   label={ClarityCopy.traceTable.title}
                   toolbarTooltip={{
