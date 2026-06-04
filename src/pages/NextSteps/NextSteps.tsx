@@ -70,6 +70,7 @@ export function NextSteps() {
           </Button>
         }
       />
+      {/* TODO: delete this last card when Settings page is ready */}
       <SimpleCard
         title={copy.tile3.title}
         description={copy.tile3.description}

@@ -8,6 +8,7 @@
   max-height: 100vh;
   min-width: 0;
   padding: var(--mdai-spacing-unit);
+  font-size: 0.75rem;
 }
 
 .code-snippet-content {

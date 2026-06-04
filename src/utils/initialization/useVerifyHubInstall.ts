@@ -7,8 +7,8 @@ type VerifyStatus = "pending" | "complete";
 
 export function useVerifyHubInstall(upstreamResolving: boolean) {
   const { connectionName, setState } = useOctantStore(
-    useShallow(({ connectionName, setState }) => ({
-      connectionName,
+    useShallow(({ connection, setState }) => ({
+      connectionName: connection?.scope?.connectionName,
 
       setState,
     })),

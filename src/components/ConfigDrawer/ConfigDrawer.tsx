@@ -3,6 +3,7 @@ import { CopyButton } from "@components/CopyButton";
 import Stack from "@mui/material/Stack";
 import type { TelemetryTypes } from "@types";
 import classNames from "classnames";
+import { useEffect } from "react";
 import {
   createUpdatedConfigLines,
   formKeyToConfigKeyMap,
@@ -40,6 +41,13 @@ export function ConfigDrawer({
   );
   const codeForCopy = linesForRender.map(([, content]) => content).join("\n");
 
+  useEffect(() => {
+    const lastCodeLine = document.getElementById("last-line");
+    if (lastCodeLine) {
+      lastCodeLine.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
   return (
     <Stack
       className={classNames("config-drawer-container", className)}
@@ -50,6 +58,7 @@ export function ConfigDrawer({
         className="config-drawer-accordion"
         hideExpandIcon
         title={<pre className="config-drawer-line">Expand config view +</pre>}
+        defaultExpanded
         content={
           <>
             <CopyButton
@@ -70,6 +79,11 @@ export function ConfigDrawer({
                 <pre
                   key={`${content?.trim()}${key?.trim()}${index.toLocaleString()}-config-line`}
                   className={className}
+                  id={
+                    index === linesForRender.length - 1
+                      ? "last-line"
+                      : undefined
+                  }
                 >
                   {content}
                 </pre>

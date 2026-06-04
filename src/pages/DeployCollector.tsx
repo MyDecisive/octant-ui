@@ -2,6 +2,8 @@ import { AsyncButton } from "@components/AsyncButton";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
+import { useOctantStore } from "@store/octantStore";
+import type { UIConnectionData } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";
@@ -17,7 +19,6 @@ export function DeployCollector() {
     useInstallAndConnectStore(
       useShallow(
         ({
-          // Provide default empty string values so React recognizes the Inputs as controlled
           telemetryTypes,
           url = "",
           apiKey = "",
@@ -33,6 +34,10 @@ export function DeployCollector() {
       ),
     );
   const setFormField = useInstallAndConnectStore((state) => state.setFormField);
+  const setPartialState = useInstallAndConnectStore(
+    (state) => state.setPartialState,
+  );
+  const setOctantState = useOctantStore((state) => state.setState);
 
   const handleDeployButtonClick = async () => {
     try {
@@ -47,25 +52,30 @@ export function DeployCollector() {
         });
       }
 
-      await connectionServiceClient.createConnection({
-        connectionData: {
-          scope: {
-            connectionName,
-            namespace,
-          },
-          telemetryTypes: toMLTTypes(telemetryTypes),
-          deployment: {
-            type: DeploymentType.ARGO_SIDELOAD,
-            integrationName: connectionName,
-          },
-          destinations: [
-            {
-              type: IntegrationType.DATADOG,
-              integrationName: connectionName,
-            },
-          ],
+      const connection: UIConnectionData = {
+        scope: {
+          connectionName,
+          namespace,
         },
+        telemetryTypes: toMLTTypes(telemetryTypes),
+        deployment: {
+          type: DeploymentType.ARGO_SIDELOAD,
+          integrationName: connectionName!,
+        },
+        destinations: [
+          {
+            type: IntegrationType.DATADOG,
+            integrationName: connectionName!,
+          },
+        ],
+      };
+
+      await connectionServiceClient.createConnection({
+        connectionData: connection,
       });
+
+      setOctantState("connection", connection);
+      setPartialState({ telemetryTypes, url, apiKey });
 
       return true;
       // eslint-disable-next-line

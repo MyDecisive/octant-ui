@@ -43,7 +43,9 @@ export function ConnectToCluster() {
   const setPartialState = useInstallAndConnectStore(
     useShallow((state) => state.setPartialState),
   );
-  const setOctantState = useOctantStore((state) => state.setState);
+  const setOctantConnectionScope = useOctantStore(
+    (state) => state.setInConnectionScope,
+  );
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setArgoUrl(e.target.value);
@@ -91,7 +93,7 @@ export function ConnectToCluster() {
         name: connectionName,
       });
       setPartialState({ accountToken, argoUrl, connectionName });
-      setOctantState("connectionName", connectionName);
+      setOctantConnectionScope("connectionName", connectionName);
       return true;
     } catch {
       setConnectionError(copy.formError.genericError);

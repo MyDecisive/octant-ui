@@ -33,6 +33,9 @@ export function SetupSmarthub() {
   const mdaiVersion = useInstallAndConnectStore((state) => state.mdaiVersion);
   const setFormField = useInstallAndConnectStore((state) => state.setFormField);
   const setOctantState = useOctantStore((state) => state.setState);
+  const setOctantConnectionScope = useOctantStore(
+    (state) => state.setInConnectionScope,
+  );
 
   const [namespace, setNamespace] = useState<string>("mdai");
 
@@ -62,7 +65,7 @@ export function SetupSmarthub() {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
             setOctantState("hubInstalled", true);
-            setOctantState("namespace", namespace);
+            setOctantConnectionScope("namespace", namespace);
             setFormField("namespace", namespace);
             return true;
           case InstallStatus.TIMEOUT:
@@ -111,7 +114,7 @@ export function SetupSmarthub() {
 
   // TODO: This is broken for some reason
   const handleContinueFromDialog = () => {
-    setOctantState("namespace", namespace);
+    setOctantConnectionScope("namespace", namespace);
     setFormField("namespace", namespace);
     advanceInstallFlow();
   };

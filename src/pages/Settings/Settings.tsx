@@ -19,7 +19,10 @@ import { DeployCollectorForm } from "../../components/DeployCollectorForm";
 import { SECRET_VALUE_MASK } from "../../constants/forms";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
-import { getSubmittedCollectorValue } from "../../utils/maskedDDValues";
+import {
+  getSubmittedCollectorValue,
+  isMaskedCollectorValue,
+} from "../../utils/maskedDDValues";
 import { useFetchManifestsAndDownload } from "../../utils/useFetchManifestsAndDownload";
 import { createForwardDataSnippets } from "../UpdateAgent/createForwardDataSnippets";
 import "./Settings.css";
@@ -47,15 +50,15 @@ export function Settings() {
     TelemetryTypes[]
   >([]);
   const [url, setUrl] = useState("");
+  const [savedUrl, setSavedUrl] = useState("");
   const [apiKey, setApiKey] = useState("");
-  const [hasDatadogIntegration, setHasDatadogIntegration] = useState(false);
   const [agentUpdateSnippets, setAgentUpdateSnippets] =
     useState<AgentUpdateSnippets | null>(null);
 
   const { connectionName, namespace } = useOctantStore(
-    useShallow(({ connectionName, namespace }) => ({
-      connectionName,
-      namespace,
+    useShallow(({ connection }) => ({
+      connectionName: connection?.scope?.connectionName,
+      namespace: connection?.scope?.namespace,
     })),
   );
   const { settingsStatus, showSettingsError, updateSettings } =
@@ -80,8 +83,8 @@ export function Settings() {
 
   const hasSettingsChanges =
     !telemetryTypesMatch(telemetryTypes, savedTelemetryTypes) ||
-    !!url.trim() ||
-    !!apiKey.trim();
+    url.trim() !== savedUrl.trim() ||
+    (!!apiKey.trim() && !isMaskedCollectorValue(apiKey));
   const loading = settingsStatus === "loading";
 
   useEffect(() => {
@@ -91,12 +94,16 @@ export function Settings() {
     const activeConnectionName = connectionName;
 
     async function loadSettingsDefaults() {
-      const [connection, datadogIntegrations] = await Promise.all([
-        connectionServiceClient
-          .getConnection({ connectionName: activeConnectionName })
-          .catch(() => null),
-        dDogServiceClient.getDatadogIntegrations({}).catch(() => null),
-      ]);
+      const [connection, datadogIntegrations, datadogIntegration] =
+        await Promise.all([
+          connectionServiceClient
+            .getConnection({ connectionName: activeConnectionName })
+            .catch(() => null),
+          dDogServiceClient.getDatadogIntegrations({}).catch(() => null),
+          dDogServiceClient
+            .getDatadogIntegrationByName({ name: activeConnectionName })
+            .catch(() => null),
+        ]);
 
       if (ignore) return;
 
@@ -107,9 +114,17 @@ export function Settings() {
         setSavedTelemetryTypes(nextTelemetryTypes);
       }
 
-      setHasDatadogIntegration(
-        !!datadogIntegrations?.names.includes(activeConnectionName),
-      );
+      const hasDatadogIntegration =
+        !!datadogIntegrations?.names.includes(activeConnectionName);
+
+      if (hasDatadogIntegration && datadogIntegration?.url) {
+        setUrl(datadogIntegration.url);
+        setSavedUrl(datadogIntegration.url);
+      }
+
+      if (hasDatadogIntegration) {
+        setApiKey(SECRET_VALUE_MASK);
+      }
     }
 
     void loadSettingsDefaults();
@@ -129,7 +144,9 @@ export function Settings() {
       telemetryTypes,
       savedTelemetryTypes,
     );
-    const submittedDatadogUrl = getSubmittedCollectorValue(url);
+    const submittedDatadogUrl =
+      url.trim() === savedUrl.trim() ? "" : getSubmittedCollectorValue(url);
+    const submittedDatadogApiKey = getSubmittedCollectorValue(apiKey);
 
     if (telemetryTypesChanged) {
       setAgentUpdateSnippets(
@@ -137,7 +154,7 @@ export function Settings() {
           connectionName,
           namespace,
           telemetryTypes,
-          url: submittedDatadogUrl || DATADOG_SITE_PLACEHOLDER,
+          url: submittedDatadogUrl || url || DATADOG_SITE_PLACEHOLDER,
         }),
       );
     }
@@ -147,7 +164,7 @@ export function Settings() {
       namespace,
       telemetryTypes,
       datadogUrl: submittedDatadogUrl,
-      datadogApiKey: getSubmittedCollectorValue(apiKey),
+      datadogApiKey: submittedDatadogApiKey,
     });
 
     if (!updated) {
@@ -155,9 +172,8 @@ export function Settings() {
     }
 
     setSavedTelemetryTypes(telemetryTypes);
-    setHasDatadogIntegration(true);
-    setUrl("");
-    setApiKey("");
+    setSavedUrl(url);
+    setApiKey(SECRET_VALUE_MASK);
 
     return true;
   };
@@ -211,10 +227,6 @@ export function Settings() {
           urlRequired={false}
           disabled={loading}
           submitEnabled={hasSettingsChanges}
-          urlPlaceholder={hasDatadogIntegration ? SECRET_VALUE_MASK : undefined}
-          apiKeyPlaceholder={
-            hasDatadogIntegration ? SECRET_VALUE_MASK : undefined
-          }
           renderSubmitAction={({ canSubmit, validate }) => (
             <AsyncButton
               asyncFunction={() => {
