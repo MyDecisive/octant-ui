@@ -9,11 +9,8 @@ import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
-import {
-  getSubmittedCollectorValue,
-  MASKED_DATADOG_API_KEY,
-  MASKED_DATADOG_URL,
-} from "../../utils/maskedDDValues";
+import { SECRET_VALUE_MASK } from "../../constants/forms";
+import { getSubmittedCollectorValue } from "../../utils/maskedDDValues";
 import { DeployCollectorForm } from "../DeployCollectorForm";
 import "./Settings.css";
 
@@ -132,11 +129,9 @@ export function Settings() {
           urlRequired={false}
           disabled={loading}
           submitEnabled={hasSettingsChanges}
-          urlPlaceholder={
-            hasDatadogIntegration ? MASKED_DATADOG_URL : undefined
-          }
+          urlPlaceholder={hasDatadogIntegration ? SECRET_VALUE_MASK : undefined}
           apiKeyPlaceholder={
-            hasDatadogIntegration ? MASKED_DATADOG_API_KEY : undefined
+            hasDatadogIntegration ? SECRET_VALUE_MASK : undefined
           }
           renderSubmitAction={({ canSubmit, validate }) => (
             <AsyncButton

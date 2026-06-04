@@ -8,10 +8,7 @@ import { useShallow } from "zustand/shallow";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
 import { connectionServiceClient } from "../services/connection";
 import { dDogServiceClient } from "../services/ddog";
-import {
-  getSubmittedCollectorValue,
-  isMaskedCollectorValue,
-} from "../utils/maskedDDValues";
+import { getSubmittedCollectorValue } from "../utils/maskedDDValues";
 import { DeployCollectorForm } from "./DeployCollectorForm";
 
 export function DeployCollector() {
@@ -39,10 +36,13 @@ export function DeployCollector() {
 
   const handleDeployButtonClick = async () => {
     try {
-      if (!isMaskedCollectorValue(url) && !isMaskedCollectorValue(apiKey)) {
+      const submittedUrl = getSubmittedCollectorValue(url);
+      const submittedApiKey = getSubmittedCollectorValue(apiKey);
+
+      if (submittedUrl && submittedApiKey) {
         await dDogServiceClient.saveDatadogIntegration({
-          url: getSubmittedCollectorValue(url),
-          apiKey: getSubmittedCollectorValue(apiKey),
+          url: submittedUrl,
+          apiKey: submittedApiKey,
           name: connectionName,
         });
       }

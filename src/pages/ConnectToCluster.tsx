@@ -9,6 +9,7 @@ import type { FormFields } from "@types";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
+import { SECRET_VALUE_MASK } from "../constants/forms";
 import { ConnectToClusterCopy as copy } from "../copy/install/ConnectToCluster.copy";
 import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateMinLength } from "../fieldValidation/validateMinLength";
@@ -27,9 +28,17 @@ export function ConnectToCluster() {
   const { callbacks, formIsValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
 
-  const [argoUrl, setArgoUrl] = useState("");
-  const [accountToken, setAccountToken] = useState("");
-  const [connectionName, setConnectionName] = useState("");
+  const { url, token, connName } = useInstallAndConnectStore(
+    useShallow(({ argoUrl, accountToken, connectionName }) => ({
+      url: argoUrl,
+      token: accountToken,
+      connName: connectionName,
+    })),
+  );
+
+  const [argoUrl, setArgoUrl] = useState(url ?? "");
+  const [accountToken, setAccountToken] = useState(token ?? "");
+  const [connectionName, setConnectionName] = useState(connName ?? "");
 
   const setPartialState = useInstallAndConnectStore(
     useShallow((state) => state.setPartialState),
@@ -50,6 +59,8 @@ export function ConnectToCluster() {
     setConnectionName(encodeURI(e.target.value));
   };
 
+  const tokenIsMasked = token === SECRET_VALUE_MASK;
+
   const testArgoConnection = async () => {
     if (
       !validateAll({
@@ -60,7 +71,9 @@ export function ConnectToCluster() {
     ) {
       return false;
     }
-
+    if (accountToken === SECRET_VALUE_MASK || !accountToken) {
+      return true;
+    }
     try {
       const result = await argoCdServiceClient.testConnection({
         argoAccountToken: accountToken,
@@ -112,6 +125,11 @@ export function ConnectToCluster() {
         label={copy.argoToken.label}
         placeholder={copy.argoToken.placeholder}
         helperText={copy.argoToken.helpTxt}
+        tooltip={
+          tokenIsMasked
+            ? "This field is masked because you have already completed this page. To update, just enter a new value. Leaving this field unchanged will use the previously entered value"
+            : undefined
+        }
       />
       {connectionError && (
         <Alert

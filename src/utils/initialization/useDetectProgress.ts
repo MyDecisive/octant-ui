@@ -7,10 +7,11 @@ import { fromMLTTypes } from "@utils/fromMltTypes";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
+import { SECRET_VALUE_MASK } from "../../constants/forms";
 import { INSTALL_AND_CONNECT, ROUTES } from "../../constants/routing";
+import { argoCdServiceClient } from "../../services/argoCd";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
-import { MASKED_DATADOG_API_KEY, MASKED_DATADOG_URL } from "../maskedDDValues";
 
 export function deriveRedirectRoute(
   currentPath: string,
@@ -71,21 +72,44 @@ export function useDetectProgress() {
         }
         return;
       }
-      // TODO: add get ARGOCD integration when that endpoint is done.
-      const [ddogResult, connection] = await Promise.all([
-        dDogServiceClient.getDatadogIntegrations({}).catch(() => null),
-        connectionServiceClient
-          .getConnection({
-            connectionName,
-          })
-          .catch(() => null),
-      ]);
+
+      // TODO: How do we resolve `namespace` if progress was only through step 3?
+      const [argoCdIntegration, ddogIntegration, connection] =
+        await Promise.all([
+          argoCdServiceClient
+            .getArgoIntegrations({})
+            .then((res) =>
+              res?.names?.includes(connectionName)
+                ? argoCdServiceClient.getArgoIntegrationByName({
+                    name: connectionName,
+                  })
+                : null,
+            )
+            .catch(() => null),
+
+          dDogServiceClient
+            .getDatadogIntegrations({})
+            .then((res) =>
+              res?.names?.includes(connectionName)
+                ? dDogServiceClient.getDatadogIntegrationByName({
+                    name: connectionName,
+                  })
+                : null,
+            )
+            .catch(() => null),
+
+          connectionServiceClient
+            .getConnection({ connectionName })
+            .catch(() => null),
+        ]);
 
       if (ignore) return;
 
-      if (ddogResult?.names?.includes(connectionName)) {
-        setInstallAndConnectField("url", MASKED_DATADOG_URL);
-        setInstallAndConnectField("apiKey", MASKED_DATADOG_API_KEY);
+      if (argoCdIntegration) {
+        const { argoEndpoint } = argoCdIntegration;
+        setInstallAndConnectField("argoUrl", argoEndpoint);
+        setInstallAndConnectField("accountToken", SECRET_VALUE_MASK);
+        setInstallAndConnectField("lastCompletedStep", 2);
       }
 
       if (connection?.connectionData?.telemetryTypes) {
@@ -93,9 +117,15 @@ export function useDetectProgress() {
 
         setInstallAndConnectField(
           "telemetryTypes",
-          fromMLTTypes(connection?.connectionData.telemetryTypes),
+          fromMLTTypes(connection.connectionData.telemetryTypes),
         );
+
+        if (ddogIntegration) {
+          setInstallAndConnectField("url", SECRET_VALUE_MASK);
+          setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
+        }
       }
+
       setHasRan(true);
       setLoading(false);
     }
