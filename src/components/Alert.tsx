@@ -6,15 +6,11 @@ interface AlertProps extends MuiAlertProps {
   description?: string;
 }
 
-export function Alert({ title, description, children, ...rest }: AlertProps) {
+export function Alert({ title, description, ...rest }: AlertProps) {
   return (
     <MuiAlert {...rest}>
-      {children ?? (
-        <>
-          {title && <AlertTitle>{title}</AlertTitle>}
-          {description}
-        </>
-      )}
+      {title && <AlertTitle>{title}</AlertTitle>}
+      {description}
     </MuiAlert>
   );
 }
