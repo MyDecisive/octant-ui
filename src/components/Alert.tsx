@@ -1,6 +1,4 @@
-import MuiAlert, {
-  type AlertProps as MuiAlertProps,
-} from "@mui/material/Alert";
+import MuiAlert, { type AlertProps as MuiAlertProps } from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 
 interface AlertProps extends MuiAlertProps {
@@ -8,11 +6,15 @@ interface AlertProps extends MuiAlertProps {
   description?: string;
 }
 
-export function Alert({ title, description, ...rest }: AlertProps) {
+export function Alert({ title, description, children, ...rest }: AlertProps) {
   return (
     <MuiAlert {...rest}>
-      {title && <AlertTitle>{title}</AlertTitle>}
-      {description}
+      {children ?? (
+        <>
+          {title && <AlertTitle>{title}</AlertTitle>}
+          {description}
+        </>
+      )}
     </MuiAlert>
   );
 }

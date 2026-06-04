@@ -47,6 +47,29 @@ const connections = new Map<string, MockConnectionData>([
   ],
 ]);
 
+export function setMockConnectionTelemetryTypes({
+  connectionName,
+  namespace,
+  telemetryTypes,
+}: {
+  connectionName: string;
+  namespace?: string;
+  telemetryTypes: MLTType[];
+}) {
+  const existingConnection = connections.get(connectionName);
+  const nextConnection: MockConnectionData = {
+    scope: {
+      connectionName,
+      namespace: namespace ?? existingConnection?.scope?.namespace ?? "default",
+    },
+    telemetryTypes,
+    deployment: existingConnection?.deployment,
+    destinations: existingConnection?.destinations,
+  };
+
+  connections.set(connectionName, nextConnection);
+}
+
 export const mockTransport = createRouterTransport(({ service }) => {
   service(ConnectionService, {
     getConnections: (...args) => {

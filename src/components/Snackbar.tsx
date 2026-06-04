@@ -1,11 +1,8 @@
 import CloseIcon from "@mui/icons-material/Close";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { Alert } from "@components/Alert";
 import IconButton from "@mui/material/IconButton";
 import MuiSnackbar from "@mui/material/Snackbar";
-import SnackbarContent from "@mui/material/SnackbarContent";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import classNames from "classnames";
 import type { ReactNode } from "react";
 import "./Snackbar.css";
 
@@ -32,6 +29,8 @@ export function Snackbar({
     if (reason === "clickaway") return;
     onClose?.();
   };
+  const alertVariant =
+    severity === "error" ? "snackbarError" : "snackbarNeutral";
 
   return (
     <MuiSnackbar
@@ -40,42 +39,34 @@ export function Snackbar({
       onClose={handleClose}
       className="mdai-snackbar"
     >
-      <SnackbarContent
-        className={classNames("mdai-snackbar-content", {
-          "mdai-snackbar-neutral": severity === "neutral",
-          "mdai-snackbar-error": severity === "error",
-        })}
-        message={
-          <Stack direction="row" gap={1.5} alignItems="center">
-            {severity === "error" && <ErrorOutlineIcon fontSize="small" />}
-            <Stack gap={0.5}>
-              {title && (
-                <Typography variant="body2" data-bold="true">
-                  {title}
-                </Typography>
-              )}
-              {(message || description) && (
-                <Typography variant="body2">
-                  {message ?? description}
-                </Typography>
+      <Alert
+        className="mdai-snackbar-alert"
+        variant={alertVariant}
+        severity={severity === "error" ? "error" : undefined}
+        icon={severity === "neutral" ? false : undefined}
+        title={title}
+        description={message ?? description}
+        action={
+          (action || onClose) && (
+            <Stack
+              className="mdai-snackbar-actions"
+              direction="row"
+              alignItems="center"
+              gap={2}
+            >
+              {action}
+              {onClose && (
+                <IconButton
+                  size="small"
+                  aria-label="Dismiss notification"
+                  onClick={onClose}
+                  disableRipple
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
               )}
             </Stack>
-          </Stack>
-        }
-        action={
-          <Stack direction="row" alignItems="center" gap={2}>
-            {action}
-            {onClose && (
-              <IconButton
-                size="small"
-                aria-label="Dismiss notification"
-                onClick={onClose}
-                disableRipple
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            )}
-          </Stack>
+          )
         }
       />
     </MuiSnackbar>

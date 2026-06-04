@@ -1,18 +1,35 @@
 import { AsyncButton } from "@components/AsyncButton";
+import { CodeSnippet } from "@components/CodeSnippet";
+import { Dialog } from "@components/Dialog";
 import { PageContainer } from "@components/layout/PageContainer";
-import { Stack } from "@mui/material";
+import { RichTooltip } from "@components/RichTooltip";
+import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
+import FileDownloadRounded from "@mui/icons-material/FileDownloadRounded";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useOctantStore } from "@store/octantStore";
 import { useSettingsStore } from "@store/settingsStore";
 import type { TelemetryTypes } from "@types";
 import { fromMLTTypes } from "@utils/fromMltTypes";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { SECRET_VALUE_MASK } from "../../constants/forms";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
-import { SECRET_VALUE_MASK } from "../../constants/forms";
 import { getSubmittedCollectorValue } from "../../utils/maskedDDValues";
+import { useFetchManifestsAndDownload } from "../../utils/useFetchManifestsAndDownload";
 import { DeployCollectorForm } from "../DeployCollectorForm";
+import { createForwardDataSnippets } from "../UpdateAgent/createForwardDataSnippets";
 import "./Settings.css";
+
+const DATADOG_SITE_PLACEHOLDER = "<datadog_site_url>";
+
+interface AgentUpdateSnippets {
+  locationUrl: string;
+  code: string;
+}
 
 function telemetryTypesMatch(
   currentTelemetryTypes: TelemetryTypes[],
@@ -32,6 +49,8 @@ export function Settings() {
   const [url, setUrl] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [hasDatadogIntegration, setHasDatadogIntegration] = useState(false);
+  const [agentUpdateSnippets, setAgentUpdateSnippets] =
+    useState<AgentUpdateSnippets | null>(null);
 
   const { connectionName, namespace } = useOctantStore(
     useShallow(({ connectionName, namespace }) => ({
@@ -47,6 +66,17 @@ export function Settings() {
         updateSettings,
       })),
     );
+  const { loading: manifestsLoading, fetchAndDownload } =
+    useFetchManifestsAndDownload({
+      connectionName,
+      namespace,
+      telemetryTypes,
+      mdaiVersion: "0.10.0",
+    });
+
+  const handleDownloadManifestsClick = () => {
+    void fetchAndDownload();
+  };
 
   const hasSettingsChanges =
     !telemetryTypesMatch(telemetryTypes, savedTelemetryTypes) ||
@@ -95,11 +125,28 @@ export function Settings() {
       return false;
     }
 
+    const telemetryTypesChanged = !telemetryTypesMatch(
+      telemetryTypes,
+      savedTelemetryTypes,
+    );
+    const submittedDatadogUrl = getSubmittedCollectorValue(url);
+
+    if (telemetryTypesChanged) {
+      setAgentUpdateSnippets(
+        createForwardDataSnippets({
+          connectionName,
+          namespace,
+          telemetryTypes,
+          url: submittedDatadogUrl || DATADOG_SITE_PLACEHOLDER,
+        }),
+      );
+    }
+
     const updated = await updateSettings({
       connectionName,
       namespace,
       telemetryTypes,
-      datadogUrl: getSubmittedCollectorValue(url),
+      datadogUrl: submittedDatadogUrl,
       datadogApiKey: getSubmittedCollectorValue(apiKey),
     });
 
@@ -111,11 +158,46 @@ export function Settings() {
     setHasDatadogIntegration(true);
     setUrl("");
     setApiKey("");
+
     return true;
   };
 
   return (
-    <PageContainer>
+    <PageContainer
+      headerActions={
+        <Stack direction={"row"} alignItems={"center"} gap={2}>
+          <Button
+            variant="secondary"
+            size="small"
+            disableRipple
+            onClick={handleDownloadManifestsClick}
+            loading={manifestsLoading}
+            startIcon={<FileDownloadRounded />}
+          >
+            Download manifests
+          </Button>
+          <RichTooltip
+            title="Commit changes to source control"
+            description="When you’re ready, push them to your repository to make the configuration official and version-controlled."
+            actions={
+              <Button
+                className="mdai-table-toolbar-tooltip-cta-button"
+                variant="text"
+                endIcon={<ArrowOutwardRoundedIcon />}
+                component="a"
+                href={""}
+                target="_blank"
+                rel="noreferrer"
+              >
+                See our docs for help
+              </Button>
+            }
+          >
+            <InfoOutlined color="secondary" />
+          </RichTooltip>
+        </Stack>
+      }
+    >
       <Stack direction={"row"} spacing={3} className="settings-form-container">
         <DeployCollectorForm
           telemetryTypes={telemetryTypes}
@@ -146,6 +228,37 @@ export function Settings() {
           )}
         />
       </Stack>
+      <Dialog
+        open={!!agentUpdateSnippets}
+        onClose={() => setAgentUpdateSnippets(null)}
+        closeOnBackdropClick={false}
+        title="Update your Datadog agent"
+        actions={
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => setAgentUpdateSnippets(null)}
+          >
+            I've updated my Datadog agent
+          </Button>
+        }
+      >
+        {agentUpdateSnippets && (
+          <Stack className="settings-agent-update-dialog-content" gap={2}>
+            <Typography variant="body2" color="secondary">
+              Update your Datadog agent config in your Kubernetes cluster or
+              Argo CD project and restart it with the updated manifest changes.
+            </Typography>
+            <Typography variant="body2" color="secondary">
+              To update, you’ll need to copy and paste the code snippet of the
+              data type(s) you previously selected.
+            </Typography>
+            <Stack gap={1}>
+              <CodeSnippet code={agentUpdateSnippets.code} maxHeight="320px" />
+            </Stack>
+          </Stack>
+        )}
+      </Dialog>
     </PageContainer>
   );
 }

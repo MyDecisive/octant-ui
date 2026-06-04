@@ -22,14 +22,6 @@ export function useResolveConnectionScope() {
   const [status, setStatus] = useState<ResolveStatus>("pending");
 
   useEffect(() => {
-    // TODO: these should be verified if present instead of assuming they're legit
-    if (!hasRan && connectionName && namespace) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setStatus("resolved");
-      setHasRan(true);
-      return;
-    }
-
     let ignore = false;
 
     async function resolve() {

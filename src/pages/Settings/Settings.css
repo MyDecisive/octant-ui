@@ -3,3 +3,7 @@
   padding: 0 190px;
   max-height: 1000px;
 }
+
+.settings-agent-update-dialog-content {
+  padding-bottom: var(--mdai-spacing-unit);
+}

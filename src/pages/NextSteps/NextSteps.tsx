@@ -4,28 +4,45 @@ import { SimpleCard } from "@components/SimpleCard";
 import { ViewTitle } from "@components/ViewTitle";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
+import { useShallow } from "zustand/shallow";
 import { ROUTES } from "../../constants/routing";
-import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 import { NextStepsCopy as copy } from "../../copy/install/NextSteps.copy";
+import { useFetchManifestsAndDownload } from "../../utils/useFetchManifestsAndDownload";
 
 export function NextSteps() {
   const [, navigate] = useLocation();
-  const { loading, fetchAndDownload } = useFetchManifestsAndDownload();
+  const { connectionName, mdaiVersion, namespace, telemetryTypes } =
+    useInstallAndConnectStore(
+      useShallow(({ connectionName, mdaiVersion, namespace, telemetryTypes }) => ({
+        connectionName,
+        mdaiVersion,
+        namespace,
+        telemetryTypes,
+      })),
+    );
+  const { loading, fetchAndDownload } = useFetchManifestsAndDownload({
+    connectionName,
+    mdaiVersion,
+    namespace,
+    telemetryTypes,
+  });
 
-  const handleDownloadManifestsClick = () => fetchAndDownload();
+  const handleDownloadManifestsClick = () => {
+    void fetchAndDownload();
+  };
 
   return (
     <FlowCenterColumn>
-      <ViewTitle
-        title={copy.header}
-        description={copy.subtitle}
-      />
+      <ViewTitle title={copy.header} description={copy.subtitle} />
 
       <SimpleCard
         title={copy.tile1.title}
         description={copy.tile1.description}
-        headerAction={<Chip color="info" label={copy.tile1.pill} size="small" />}
+        headerAction={
+          <Chip color="info" label={copy.tile1.pill} size="small" />
+        }
         footer={
           <Button
             variant="text"
@@ -62,7 +79,7 @@ export function NextSteps() {
               variant="text"
               size="small"
               disableRipple
-              onClick={void handleDownloadManifestsClick}
+              onClick={handleDownloadManifestsClick}
               loading={loading}
             >
               {copy.tile3.ctaPrimary}
