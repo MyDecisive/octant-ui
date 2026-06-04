@@ -106,8 +106,12 @@ function createUpToDateConfigYaml(
   url: string | undefined,
   apiKey: string | undefined,
   connectionName: string | undefined,
+  urlPlaceholder: string | undefined,
+  apiKeyPlaceholder: string | undefined,
 ) {
   const configObject = createInitialCollectorConfig();
+  const urlForRender = url || urlPlaceholder;
+  const apiKeyForRender = apiKey || apiKeyPlaceholder;
 
   const newPipelines = telemetryTypes.reduce<
     Partial<Record<TelemetryTypes, Pipeline>>
@@ -122,11 +126,11 @@ function createUpToDateConfigYaml(
 
   configObject.spec.config.service.pipelines = newPipelines;
 
-  if (url) {
-    configObject.spec.config.exporters.datadog.api.site = url;
+  if (urlForRender) {
+    configObject.spec.config.exporters.datadog.api.site = urlForRender;
   }
 
-  if (apiKey) {
+  if (apiKeyForRender) {
     configObject.spec.config.exporters.datadog.api.key = "${API_KEY}";
     configObject.spec.env = [
       {
@@ -170,12 +174,16 @@ export function createUpdatedConfigLines(
   url: string | undefined,
   apiKey: string | undefined,
   connectionName: string | undefined,
+  urlPlaceholder?: string,
+  apiKeyPlaceholder?: string,
 ) {
   const configObject = createUpToDateConfigYaml(
     telemetryTypes,
     url,
     apiKey,
     connectionName,
+    urlPlaceholder,
+    apiKeyPlaceholder,
   );
   const updatedLinesForRender = configObjectToLinesForRender(configObject);
 

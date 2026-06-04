@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState } from "react";
 
 interface AsyncButtonProps {
@@ -8,24 +7,25 @@ interface AsyncButtonProps {
   text?: string;
   loadingText?: string;
   isSubmit?: boolean;
+  onSuccess?: () => void;
 }
 
-export function AsyncNextButton({
+export function AsyncButton({
   asyncFunction,
   canAsync,
   text = "Next",
   loadingText,
   isSubmit,
+  onSuccess,
 }: AsyncButtonProps) {
   const [loading, setLoading] = useState(false);
-  const advanceInstallFlow = useAdvanceInstallAndConnect();
 
   const handleAsyncCall = () => {
     setLoading(true);
     void asyncFunction()
       .then((success) => {
         if (success) {
-          advanceInstallFlow();
+          onSuccess?.();
         }
       })
       .finally(() => {
@@ -44,7 +44,7 @@ export function AsyncNextButton({
       type={isSubmit ? "submit" : "button"}
       loadingPosition="start"
       onClick={handleAsyncCall}
-      disabled={!canAsync}
+      disabled={!canAsync || loading}
       color={buttonColor}
       loading={loading}
     >

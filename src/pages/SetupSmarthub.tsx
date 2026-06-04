@@ -1,4 +1,4 @@
-import { AsyncNextButton } from "@components/AsyncNextButton";
+import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
@@ -141,12 +141,13 @@ export function SetupSmarthub() {
         errorInfo={installError}
       />
       <ButtonRow>
-        <AsyncNextButton
+        <AsyncButton
           isSubmit
           asyncFunction={handleInstall}
           canAsync={!fieldErrors.namespace}
           loadingText={copy.loadingTxt}
           text={copy.cta.initial}
+          onSuccess={advanceInstallFlow}
         />
         <Typography variant="chipLabel">{copy.infoTxt}</Typography>
       </ButtonRow>

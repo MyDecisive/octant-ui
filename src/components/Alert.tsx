@@ -1,6 +1,4 @@
-import MuiAlert, {
-  type AlertProps as MuiAlertProps,
-} from "@mui/material/Alert";
+import MuiAlert, { type AlertProps as MuiAlertProps } from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 
 interface AlertProps extends MuiAlertProps {

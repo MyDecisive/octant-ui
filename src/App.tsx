@@ -13,6 +13,8 @@ import {
 import { ClarityProvider } from "./contexts/Clarity.Provider";
 import { InstallAndConnectProvider } from "./contexts/InstallAndConnect.Provider";
 import { ClarityPage } from "./pages/Clarity/Clarity";
+import { Settings } from "./pages/Settings/Settings";
+import { SettingsUpdateToasts } from "./pages/Settings/SettingsUpdateToasts";
 import { SmarthubPage } from "./pages/Smarthub";
 import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
@@ -24,40 +26,43 @@ function App() {
   }
 
   return (
-    <Switch>
-      <Route path={FLOW_ROUTES}>
-        <InstallAndConnectProvider>
-          <FlowLayout>
-            <Route path={ROUTES.SPLASH} component={Splash} />
-            <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
-            {INSTALL_AND_CONNECT.map(({ Component, path }, index) => {
-              return (
-                <Route
-                  key={`flow-step-${index.toLocaleString()}`}
-                  path={path}
-                  component={Component}
-                />
-              );
-            })}
-            <Route path={ROUTES.INSTALL}>
-              <Redirect to="/install/1" />
+    <>
+      <Switch>
+        <Route path={FLOW_ROUTES}>
+          <InstallAndConnectProvider>
+            <FlowLayout>
+              <Route path={ROUTES.SPLASH} component={Splash} />
+              <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
+              {INSTALL_AND_CONNECT.map(({ Component, path }, index) => {
+                return (
+                  <Route
+                    key={`flow-step-${index.toLocaleString()}`}
+                    path={path}
+                    component={Component}
+                  />
+                );
+              })}
+              <Route path={ROUTES.INSTALL}>
+                <Redirect to="/install/1" />
+              </Route>
+            </FlowLayout>
+          </InstallAndConnectProvider>
+        </Route>
+        <Route path={PAGE_ROUTES}>
+          <Switch>
+            <Route path={ROUTES.CLARITY}>
+              <ClarityProvider>
+                <ClarityPage />
+              </ClarityProvider>
             </Route>
-          </FlowLayout>
-        </InstallAndConnectProvider>
-      </Route>
-      <Route path={PAGE_ROUTES}>
-        <Switch>
-          <Route path={ROUTES.CLARITY}>
-            <ClarityProvider>
-              <ClarityPage />
-            </ClarityProvider>
-          </Route>
-          <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
-          <Route path={ROUTES.SETTINGS} component={SmarthubPage} />
-          <Route path={ROUTES.SUPPORT} component={SmarthubPage} />
-        </Switch>
-      </Route>
-    </Switch>
+            <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
+            <Route path={ROUTES.SETTINGS} component={Settings} />
+            <Route path={ROUTES.SUPPORT} component={SmarthubPage} />
+          </Switch>
+        </Route>
+      </Switch>
+      <SettingsUpdateToasts />
+    </>
   );
 }
 

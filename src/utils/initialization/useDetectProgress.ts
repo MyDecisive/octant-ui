@@ -20,7 +20,6 @@ export function deriveRedirectRoute(
   const restriction = currentPageConfig?.isAvailable;
   if (!restriction || restriction(storeState)) return null;
 
-  // find the last route the user has qualified for
   const lastQualified = INSTALL_AND_CONNECT.filter((pageConfig) =>
     pageConfig.isAvailable(storeState),
   ).at(-1);
@@ -61,12 +60,13 @@ export function useDetectProgress() {
     let ignore = false;
 
     async function runChecks() {
-      // TODO: How do we resolve `namespace` if progress was only through step 3?
       const [argoCdIntegration, ddogIntegration] = await Promise.all([
         argoCdServiceClient
           .getArgoIntegrations({})
           .then((res) => {
-            const fetchedConnectionName = res.names[0];
+            const fetchedConnectionName = connectionName ?? res.names[0];
+            if (!fetchedConnectionName) return null;
+
             return argoCdServiceClient.getArgoIntegrationByName({
               name: fetchedConnectionName,
             });
@@ -83,7 +83,7 @@ export function useDetectProgress() {
                   : null,
               )
               .catch(() => null)
-          : Promise.resolve(),
+          : Promise.resolve(null),
       ]);
 
       if (ignore) return;
@@ -98,8 +98,7 @@ export function useDetectProgress() {
       }
 
       if (ddogIntegration) {
-        const { url } = ddogIntegration;
-        setInstallAndConnectField("url", url);
+        setInstallAndConnectField("url", ddogIntegration.url);
         setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
         setInstallAndConnectField("lastCompletedStep", 4);
       }

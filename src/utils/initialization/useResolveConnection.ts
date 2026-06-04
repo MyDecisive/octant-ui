@@ -39,7 +39,6 @@ export function useResolveConnection() {
           }
         }
       } catch (e) {
-        // no connections found or network error — proceed without one
         console.error("Error resolving connection: ", e);
         if (e instanceof ConnectError) {
           if (e.message !== NO_CONNECTIONS_ERROR) {

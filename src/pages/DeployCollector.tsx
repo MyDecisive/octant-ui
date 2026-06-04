@@ -1,122 +1,57 @@
-import { AsyncNextButton } from "@components/AsyncNextButton";
-import { ConfigDrawer } from "@components/ConfigDrawer/ConfigDrawer";
-import { CheckboxGroup } from "@components/formInputs/CheckboxGroup";
-import { Input } from "@components/formInputs/Input";
-import { Select } from "@components/formInputs/Select";
-import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
-import { ViewTitle } from "@components/ViewTitle";
-import Typography from "@mui/material/Typography";
+import { AsyncButton } from "@components/AsyncButton";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
-import type { FormFields, TelemetryTypes, UIConnectionData } from "@types";
+import type { UIConnectionData } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
-import { useState } from "react";
+import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";
-import { SECRET_VALUE_MASK } from "../constants/forms";
+import { DeployCollectorForm } from "../components/DeployCollectorForm";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
-import { useFormValidation } from "../fieldValidation/useFormValidation";
-import { validateRequired } from "../fieldValidation/validateRequired";
-import { validateTelemetryTypesSelection } from "../fieldValidation/validateTelemetryTypesSelection";
-import { validateUrlInput } from "../fieldValidation/validateUrlInput";
 import { connectionServiceClient } from "../services/connection";
 import { dDogServiceClient } from "../services/ddog";
-
-const formSpec: FormFields = {
-  telemetryTypes: [validateTelemetryTypesSelection],
-  url: [validateRequired, validateUrlInput],
-  apiKey: [validateRequired],
-};
-
-const fields = {
-  source: {
-    label: copy.sourceSection.dropdown.label,
-    selected: "datadog",
-  },
-  datatypes: {
-    label: copy.sourceSection.datatypes.label,
-    options: [
-      {
-        // IC4-08
-        label: "Logs",
-        value: "logs",
-      },
-      {
-        // IC4-09
-        label: "Traces",
-        value: "traces",
-      },
-    ],
-  },
-  destination: {
-    vendorDropdown: {
-      label: copy.destinationSection.vendorDropdownLabel,
-      selected: "datadog",
-      options: [
-        {
-          // IC4-13
-          label: "Datadog",
-          value: "datadog",
-        },
-      ],
-    },
-    url: {
-      placeholder: copy.destinationSection.destinationUrl.placeholder,
-      helperText: copy.destinationSection.destinationUrl.helperText,
-    },
-    apiKey: {
-      placeholder: copy.destinationSection.destinationApiKey.placeholder,
-      helperText: copy.destinationSection.destinationApiKey.helperText,
-      tooltip: copy.destinationSection.destinationApiKey.tooltip,
-    },
-  },
-};
+import { getSubmittedCollectorValue } from "../utils/maskedDDValues";
 
 export function DeployCollector() {
-  const [focusedField, setFocusedField] = useState<string>();
-  const storeFormValues = useInstallAndConnectStore(
-    useShallow(
-      ({ telemetryTypes, url, apiKey, connectionName, namespace }) => ({
-        telemetryTypes,
-        url,
-        apiKey,
-        connectionName,
-        namespace,
-      }),
-    ),
-  );
+  const advanceInstallFlow = useAdvanceInstallAndConnect();
+  const { telemetryTypes, url, apiKey, connectionName, namespace } =
+    useInstallAndConnectStore(
+      useShallow(
+        ({
+          telemetryTypes,
+          url = "",
+          apiKey = "",
+          connectionName,
+          namespace,
+        }) => ({
+          telemetryTypes,
+          url,
+          apiKey,
+          connectionName,
+          namespace,
+        }),
+      ),
+    );
+  const setFormField = useInstallAndConnectStore((state) => state.setFormField);
   const setPartialState = useInstallAndConnectStore(
     (state) => state.setPartialState,
   );
-
   const setOctantState = useOctantStore((state) => state.setState);
 
-  // Provide default empty string values so React recognizes the Inputs as controlled
-  const [
-    { telemetryTypes, url = "", apiKey = "", connectionName, namespace },
-    setForm,
-  ] = useState(storeFormValues);
-
-  const { callbacks, formIsValid: isFormValid } = useFormValidation(formSpec);
-
-  const handleBlur = () => setFocusedField(undefined);
-
-  const keyIsMasked = storeFormValues.apiKey === SECRET_VALUE_MASK;
-
   const handleDeployButtonClick = async () => {
-    // TODO: add validateAll here
-
-    if (apiKey === SECRET_VALUE_MASK || !apiKey) {
-      return true;
-    }
     try {
-      await dDogServiceClient.saveDatadogIntegration({
-        url,
-        apiKey,
-        name: connectionName,
-      });
-      setPartialState({ url, apiKey });
+      const submittedUrl = getSubmittedCollectorValue(url);
+      const submittedApiKey = getSubmittedCollectorValue(apiKey);
+
+      if (submittedUrl && submittedApiKey) {
+        await dDogServiceClient.saveDatadogIntegration({
+          url: submittedUrl,
+          apiKey: submittedApiKey,
+          name: connectionName,
+        });
+      }
+
       const connection: UIConnectionData = {
         scope: {
           connectionName,
@@ -134,11 +69,14 @@ export function DeployCollector() {
           },
         ],
       };
+
       await connectionServiceClient.createConnection({
         connectionData: connection,
       });
+
       setOctantState("connection", connection);
-      setPartialState({ telemetryTypes });
+      setPartialState({ telemetryTypes, url, apiKey });
+
       return true;
       // eslint-disable-next-line
     } catch (_) {
@@ -147,103 +85,29 @@ export function DeployCollector() {
     }
   };
 
-  const setFormField = (
-    key: keyof typeof storeFormValues,
-    value: (typeof storeFormValues)[keyof typeof storeFormValues],
-  ) => setForm((oldForm) => ({ ...oldForm, [key]: value }));
-
   return (
-    <>
-      <FlowCenterColumn>
-        <ViewTitle title={copy.header} description={copy.subheader} />
-        <Typography variant="h6">{copy.sourceSection.title}</Typography>
-
-        {/* Source field */}
-        <Select
-          label={fields.source.label}
-          selected={fields.source.selected}
-          size="small"
-          disabled
-          options={copy.sourceSection.dropdown.options}
-          onChange={() => null}
-        />
-
-        {/* Data Types Checkboxes */}
-        <CheckboxGroup
-          label={fields.datatypes.label}
-          {...callbacks.telemetryTypes}
-          options={fields.datatypes.options}
-          selected={telemetryTypes}
-          onChange={(checked) =>
-            setFormField("telemetryTypes", checked as TelemetryTypes[])
-          }
-          onFocus={() => setFocusedField("telemetryTypes")}
-          onBlur={handleBlur}
-        />
-
-        <Typography variant="h6">{copy.destinationSection.title}</Typography>
-
-        <Typography variant="body2" color="secondary">
-          {copy.destinationSection.subtitle}
-          {/* TODO: not sure if we should comment out
-          To get the API key you'll need to log in to your Datadog account. To
-          identify which Datadog site you're on, visit their{" "}
-          <Link
-            href={
-              "https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site"
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            docs
-          </Link>{" "} */}
-        </Typography>
-        {/* Source field */}
-
-        {/* Vendor Dropdown */}
-        <Select
-          label={fields.destination.vendorDropdown.label}
-          selected={fields.destination.vendorDropdown.selected}
-          size="small"
-          disabled
-          options={fields.destination.vendorDropdown.options}
-          onChange={() => null}
-        />
-
-        {/* Destination Url */}
-        <Input
-          value={url}
-          {...callbacks.url}
-          placeholder={fields.destination.url.placeholder}
-          helperText={fields.destination.url.helperText}
-          onChange={(e) => setFormField("url", e.target.value)}
-          onFocus={() => setFocusedField("url")}
-          onBlur={handleBlur}
-        />
-
-        {/* Destination Api Key */}
-        <Input
-          value={apiKey}
-          onChange={(e) => setFormField("apiKey", e.target.value)}
-          {...callbacks.apiKey}
-          placeholder={fields.destination.apiKey.placeholder}
-          onFocus={() => setFocusedField("apiKey")}
-          onBlur={handleBlur}
-          helperText={fields.destination.apiKey.helperText}
-          tooltip={
-            keyIsMasked
-              ? "This field is masked because you have already completed this page. To update, just enter a new value. Leaving this field unchanged will use the previously entered value"
-              : fields.destination.apiKey.tooltip
-          }
-        />
-        <AsyncNextButton
-          asyncFunction={handleDeployButtonClick}
-          canAsync={isFormValid}
+    <DeployCollectorForm
+      telemetryTypes={telemetryTypes}
+      url={url}
+      apiKey={apiKey}
+      connectionName={connectionName}
+      onTelemetryTypesChange={(checked) =>
+        setFormField("telemetryTypes", checked)
+      }
+      onUrlChange={(nextUrl) => setFormField("url", nextUrl)}
+      onApiKeyChange={(nextApiKey) => setFormField("apiKey", nextApiKey)}
+      renderSubmitAction={({ canSubmit, validate }) => (
+        <AsyncButton
+          asyncFunction={() => {
+            if (!validate()) return Promise.resolve(false);
+            return handleDeployButtonClick();
+          }}
+          canAsync={canSubmit}
           text={copy.cta.initial}
           loadingText={copy.cta.activated}
+          onSuccess={advanceInstallFlow}
         />
-      </FlowCenterColumn>
-      <ConfigDrawer focusedField={focusedField} className="right-column" />
-    </>
+      )}
+    />
   );
 }

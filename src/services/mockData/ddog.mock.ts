@@ -39,8 +39,11 @@ export const mockTransport = createRouterTransport(({ service }) => {
       }
       return {};
     },
-    saveDatadogIntegration: (...args) => {
-      console.log("DatadogService.saveDatadogIntegration", args);
+    saveDatadogIntegration: (request) => {
+      console.log("DatadogService.saveDatadogIntegration", request);
+      if (request.name) {
+        integrations.set(request.name, { url: request.url });
+      }
       return {};
     },
   });
