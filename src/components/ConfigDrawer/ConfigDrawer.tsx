@@ -1,9 +1,8 @@
 import { Accordion } from "@components/Accordion";
 import { CopyButton } from "@components/CopyButton";
 import Stack from "@mui/material/Stack";
-import { useInstallAndConnectStore } from "@store/installAndConnectStore";
+import type { TelemetryTypes } from "@types";
 import classNames from "classnames";
-import { useShallow } from "zustand/shallow";
 import {
   createUpdatedConfigLines,
   formKeyToConfigKeyMap,
@@ -12,25 +11,32 @@ import "./ConfigDrawer.css";
 
 interface ConfigDrawerProps {
   focusedField: string | undefined;
+  telemetryTypes: TelemetryTypes[];
+  url?: string;
+  apiKey?: string;
+  urlPlaceholder?: string;
+  apiKeyPlaceholder?: string;
+  connectionName?: string;
   className?: string;
 }
 
-export function ConfigDrawer({ focusedField, className }: ConfigDrawerProps) {
-  const { telemetryTypes, url, apiKey, connectionName } =
-    useInstallAndConnectStore(
-      useShallow(({ telemetryTypes, url, apiKey, connectionName }) => ({
-        telemetryTypes,
-        url,
-        apiKey,
-        connectionName,
-      })),
-    );
-
+export function ConfigDrawer({
+  focusedField,
+  telemetryTypes,
+  url,
+  apiKey,
+  urlPlaceholder,
+  apiKeyPlaceholder,
+  connectionName,
+  className,
+}: ConfigDrawerProps) {
   const linesForRender = createUpdatedConfigLines(
     telemetryTypes,
     url,
     apiKey,
     connectionName,
+    urlPlaceholder,
+    apiKeyPlaceholder,
   );
   const codeForCopy = linesForRender.map(([, content]) => content).join("\n");
 

@@ -32,6 +32,7 @@ export function Input({
   error,
   validate,
   onValidation,
+  ...rest
 }: InputProps) {
   const [validationErrors, setValidationErrors] =
     useState<InputValidationErrors | null>(null);
@@ -78,6 +79,7 @@ export function Input({
       helperText={fieldHelperText}
       error={fieldError}
       fullWidth
+      {...rest}
       slotProps={{
         input: {
           endAdornment: (

@@ -10,6 +10,7 @@ import { useShallow } from "zustand/shallow";
 import { INSTALL_AND_CONNECT, ROUTES } from "../../constants/routing";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
+import { MASKED_DATADOG_API_KEY, MASKED_DATADOG_URL } from "../maskedDDValues";
 
 export function deriveRedirectRoute(
   currentPath: string,
@@ -83,7 +84,8 @@ export function useDetectProgress() {
       if (ignore) return;
 
       if (ddogResult?.names?.includes(connectionName)) {
-        setInstallAndConnectField("url", "**** datadog url ****");
+        setInstallAndConnectField("url", MASKED_DATADOG_URL);
+        setInstallAndConnectField("apiKey", MASKED_DATADOG_API_KEY);
       }
 
       if (connection?.connectionData?.telemetryTypes) {

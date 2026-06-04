@@ -1,0 +1,39 @@
+.mdai-snackbar.MuiSnackbar-root {
+  max-width: min(400px, calc(100vw - calc(var(--mdai-spacing-unit) * 6)));
+}
+
+.mdai-snackbar-content.MuiSnackbarContent-root {
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+  min-width: min(360px, calc(100vw - calc(var(--mdai-spacing-unit) * 6)));
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.mdai-snackbar-neutral.MuiSnackbarContent-root {
+  background-color: #2f2f2f;
+  color: #ffffff;
+}
+
+.mdai-snackbar-error.MuiSnackbarContent-root {
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+.mdai-snackbar-content.MuiSnackbarContent-root .MuiSnackbarContent-message {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+}
+
+.mdai-snackbar-content.MuiSnackbarContent-root .MuiSnackbarContent-action {
+  align-self: flex-start;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 0;
+}
+
+.mdai-snackbar-content.MuiSnackbarContent-root .MuiSvgIcon-root,
+.mdai-snackbar-content.MuiSnackbarContent-root .MuiButtonBase-root {
+  color: #ffffff;
+}

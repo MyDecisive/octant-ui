@@ -19,23 +19,32 @@ export function useResolveConnectionScope() {
   );
 
   const [hasRan, setHasRan] = useState(false);
-  const [status, setStatus] = useState<ResolveStatus>(
-    connectionName && namespace ? "resolved" : "pending",
-  );
+  const [status, setStatus] = useState<ResolveStatus>("pending");
 
   useEffect(() => {
-    // TODO: these should be verified if present instead of assuming they're legit
-    if (connectionName && namespace) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setStatus("resolved");
-      setHasRan(true);
-      return;
-    }
-
     let ignore = false;
 
     async function resolve() {
       try {
+        if (connectionName) {
+          const existingConnectionRes =
+            await connectionServiceClient.getConnection({
+              connectionName,
+            });
+
+          if (ignore) return;
+
+          const existingNamespace =
+            existingConnectionRes.connectionData?.scope?.namespace;
+
+          if (existingNamespace) {
+            setState("namespace", existingNamespace);
+            setHasRan(true);
+            setStatus("resolved");
+            return;
+          }
+        }
+
         const connectionsRes = await connectionServiceClient.getConnections({});
         if (ignore) return;
 
@@ -62,7 +71,10 @@ export function useResolveConnectionScope() {
           }
         }
       } finally {
-        if (!ignore) setStatus("resolved");
+        if (!ignore) {
+          setHasRan(true);
+          setStatus("resolved");
+        }
       }
     }
 

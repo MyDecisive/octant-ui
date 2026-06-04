@@ -1,11 +1,12 @@
 import { Alert } from "@components/Alert";
-import { AsyncNextButton } from "@components/AsyncNextButton";
+import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
+import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
 import { ConnectToClusterCopy as copy } from "../copy/install/ConnectToCluster.copy";
@@ -22,6 +23,7 @@ const formSpec: FormFields = {
 };
 
 export function ConnectToCluster() {
+  const advanceInstallFlow = useAdvanceInstallAndConnect();
   const { callbacks, formIsValid, validateAll } = useFormValidation(formSpec);
   const [connectionError, setConnectionError] = useState<string | undefined>();
 
@@ -118,12 +120,13 @@ export function ConnectToCluster() {
           description={connectionError}
         />
       )}
-      <AsyncNextButton
+      <AsyncButton
         asyncFunction={testArgoConnection}
         canAsync={formIsValid}
         loadingText={copy.ctaTxt.activated}
         text={copy.ctaTxt.initial}
         isSubmit
+        onSuccess={advanceInstallFlow}
       />
     </FlowCenterColumn>
   );

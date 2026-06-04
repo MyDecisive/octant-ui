@@ -20,6 +20,7 @@ interface CheckBoxGroupProps {
   onValidation?: (error: InputValidationErrors) => void;
   helperText?: string;
   error?: boolean;
+  disabled?: boolean;
 }
 
 export function CheckboxGroup({
@@ -31,6 +32,7 @@ export function CheckboxGroup({
   onBlur,
   helperText,
   error,
+  disabled,
   validate,
   onValidation,
 }: CheckBoxGroupProps) {
@@ -74,7 +76,12 @@ export function CheckboxGroup({
   );
 
   return (
-    <FormControl onFocus={onFocus} onBlur={handleBlur} error={fieldError}>
+    <FormControl
+      onFocus={onFocus}
+      onBlur={handleBlur}
+      error={fieldError}
+      disabled={disabled}
+    >
       {label && <FormLabel>{label}</FormLabel>}
       <FormGroup>
         {options.map(({ label, value }) => (
@@ -85,6 +92,7 @@ export function CheckboxGroup({
                 checked={selected.includes(value)}
                 onChange={handleCheckedChange}
                 value={value}
+                disabled={disabled}
                 disableRipple
               />
             }
