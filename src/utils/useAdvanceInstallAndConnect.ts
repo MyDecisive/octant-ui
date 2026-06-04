@@ -8,11 +8,16 @@ export function useAdvanceInstallAndConnect() {
   const [, navigate] = useLocation();
   const currentStepNumber = parseInt(params?.step ?? "0");
   const setFormField = useInstallAndConnectStore((state) => state.setFormField);
+  const lastCompletedStep = useInstallAndConnectStore(
+    (state) => state.lastCompletedStep,
+  );
 
   const advanceInstallAndConnectFlow = useCallback(() => {
-    setFormField("lastCompletedStep", currentStepNumber);
+    if (currentStepNumber > lastCompletedStep) {
+      setFormField("lastCompletedStep", currentStepNumber);
+    }
     navigate(`${ROUTES.INSTALL}/${currentStepNumber + 1}`);
-  }, [currentStepNumber, navigate, setFormField]);
+  }, [currentStepNumber, navigate, setFormField, lastCompletedStep]);
 
   return advanceInstallAndConnectFlow;
 }

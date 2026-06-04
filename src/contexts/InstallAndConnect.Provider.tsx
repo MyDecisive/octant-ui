@@ -12,15 +12,19 @@ export function InstallAndConnectProvider({
   children,
   ...props
 }: PropsWithChildren<Partial<InstallAndConnectFormFields>>) {
-  const { connectionName, hubInstalled, namespace, telemetryTypes } =
-    useOctantStore(
-      useShallow(({ connection, hubInstalled }) => ({
-        connectionName: connection?.scope?.connectionName,
-        namespace: connection?.scope?.namespace,
-        telemetryTypes: connection?.telemetryTypes || [],
-        hubInstalled,
-      })),
-    );
+  const {
+    connectionName,
+    hubInstalled,
+    namespace,
+    telemetryTypes = [],
+  } = useOctantStore(
+    useShallow(({ connection, hubInstalled }) => ({
+      connectionName: connection?.scope?.connectionName,
+      namespace: connection?.scope?.namespace,
+      telemetryTypes: connection?.telemetryTypes,
+      hubInstalled,
+    })),
+  );
   const [store] = useState(() =>
     createInstallAndConnectStore({
       ...props,
