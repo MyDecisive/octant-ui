@@ -1,6 +1,8 @@
 import {
   type Filter as ClientFilter,
   type ConnectionData,
+  type Deployment,
+  type TelemetryDestination,
 } from "@mydecisiveai/octant-client";
 import type { JSX } from "react";
 
@@ -100,9 +102,14 @@ export interface UIConnectionScope {
   namespace?: string;
 }
 
+type UIDeployment = Pick<Deployment, "type" | "integrationName">;
+type UIDestination = Pick<TelemetryDestination, "integrationName" | "type">;
+
 export interface UIConnectionData extends Pick<
   ConnectionData,
-  "deployment" | "destinations" | "telemetryTypes"
+  "telemetryTypes"
 > {
   scope?: UIConnectionScope;
+  deployment: UIDeployment;
+  destinations: UIDestination[];
 }

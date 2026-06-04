@@ -9,7 +9,8 @@ import Typography from "@mui/material/Typography";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
-import type { FormFields, TelemetryTypes } from "@types";
+import { useOctantStore } from "@store/octantStore";
+import type { FormFields, TelemetryTypes, UIConnectionData } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
@@ -89,6 +90,8 @@ export function DeployCollector() {
     (state) => state.setPartialState,
   );
 
+  const setOctantState = useOctantStore((state) => state.setState);
+
   // Provide default empty string values so React recognizes the Inputs as controlled
   const [
     { telemetryTypes, url = "", apiKey = "", connectionName, namespace },
@@ -114,25 +117,27 @@ export function DeployCollector() {
         name: connectionName,
       });
       setPartialState({ url, apiKey });
-      await connectionServiceClient.createConnection({
-        connectionData: {
-          scope: {
-            connectionName,
-            namespace,
-          },
-          telemetryTypes: toMLTTypes(telemetryTypes),
-          deployment: {
-            type: DeploymentType.ARGO_SIDELOAD,
-            integrationName: connectionName,
-          },
-          destinations: [
-            {
-              type: IntegrationType.DATADOG,
-              integrationName: connectionName,
-            },
-          ],
+      const connection: UIConnectionData = {
+        scope: {
+          connectionName,
+          namespace,
         },
+        telemetryTypes: toMLTTypes(telemetryTypes),
+        deployment: {
+          type: DeploymentType.ARGO_SIDELOAD,
+          integrationName: connectionName!,
+        },
+        destinations: [
+          {
+            type: IntegrationType.DATADOG,
+            integrationName: connectionName!,
+          },
+        ],
+      };
+      await connectionServiceClient.createConnection({
+        connectionData: connection,
       });
+      setOctantState("connection", connection);
       setPartialState({ telemetryTypes });
       return true;
       // eslint-disable-next-line
