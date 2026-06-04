@@ -8,6 +8,9 @@
 .simple-card-content.MuiCardContent-root {
   padding: 16px;
 }
+.simple-card-content.MuiCardContent-root:last-child {
+  padding: 16px;
+}
 
 .simple-card-main-content.MuiStack-root {
   width: 100%;
