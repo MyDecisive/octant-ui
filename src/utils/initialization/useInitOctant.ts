@@ -1,8 +1,8 @@
-import { useResolveConnectionScope } from "./useResolveConnectionScope";
+import { useResolveConnection } from "./useResolveConnection";
 import { useVerifyHubInstall } from "./useVerifyHubInstall";
 
 export function useInitOctant() {
-  const resolving = useResolveConnectionScope();
+  const resolving = useResolveConnection();
   const verifying = useVerifyHubInstall(resolving);
 
   return resolving || verifying;

@@ -45,7 +45,7 @@ export function useFormValidation(fields: FormFields) {
   }, [fields]);
 
   const formIsValid = fieldNames.every(
-    (name) => fieldErrors[name] === undefined,
+    (name) => fieldErrors[name] == undefined,
   );
 
   const validateAll = (values: Record<string, unknown>) => {

@@ -32,7 +32,7 @@ export function StepperNav() {
 
   return (
     <Box className="left-column">
-      <Stepper activeStep={activeStepIndex} orientation="vertical">
+      <Stepper activeStep={activeStepIndex} nonLinear orientation="vertical">
         {INSTALL_AND_CONNECT.map(({ label, path, isAvailable }, index) => {
           const stepNumber = index + 1;
           const previousStepNumber = index;
@@ -42,7 +42,11 @@ export function StepperNav() {
             !isAvailable(formState) || isNotStepAfterOneJustCompleted;
 
           return (
-            <Step key={label} completed={stepNumber <= lastCompletedStep}>
+            <Step
+              key={label}
+              active={index === activeStepIndex}
+              completed={stepNumber <= lastCompletedStep}
+            >
               <StepButton
                 color="inherit"
                 onClick={() => navigate(path)}

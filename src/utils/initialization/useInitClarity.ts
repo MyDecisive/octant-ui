@@ -1,37 +1,26 @@
 import {
   Timeframe,
   TimeframeStatusResponse_Code,
+  type TimeframeStatusRequest,
 } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarityStore";
-import { useOctantStore } from "@store/octantStore";
+import type { UIConnectionScope } from "@types";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
-import { ROUTES } from "../../constants/routing";
 import { timeframeServiceClient } from "../../services/timeframe";
 
-export function useInitClarity() {
-  const [, navigate] = useLocation();
-  const { connectionName, namespace, hubInstalled } = useOctantStore(
-    useShallow(({ connectionName, namespace, hubInstalled }) => ({
-      connectionName,
-      namespace,
-      hubInstalled,
-    })),
-  );
-
-  // TODO: This should probably be handled more gracefully.
-  if (!connectionName || !namespace || !hubInstalled) {
-    navigate(ROUTES.INSTALL);
-  }
-
+export function useInitClarity({
+  connectionScope,
+}: {
+  connectionScope?: UIConnectionScope;
+}) {
   const [loading, setLoading] = useState(false);
+  const [hasRan, setHasRan] = useState(false);
 
   const { setState } = useClarityStore(
-    useShallow(({ setState, selectedTimeframe }) => ({
+    useShallow(({ setState }) => ({
       setState,
-      selectedTimeframe,
     })),
   );
 
@@ -39,13 +28,16 @@ export function useInitClarity() {
     let ignore = false;
 
     async function fetchPickerOptions() {
+      setLoading(true);
       try {
         // TODO: Are these flags for log/trace indicative of selected data type?
         const { statuses, trace, log } =
-          await timeframeServiceClient.timeframeStatus({
-            namespace,
-            connectionName,
-          });
+          await timeframeServiceClient.timeframeStatus(
+            connectionScope as Pick<
+              TimeframeStatusRequest,
+              "connectionName" | "namespace"
+            >,
+          );
 
         if (ignore) return;
 
@@ -75,16 +67,19 @@ export function useInitClarity() {
       } finally {
         if (!ignore) {
           setLoading(false);
+          setHasRan(true);
         }
       }
     }
 
-    void fetchPickerOptions();
+    if (connectionScope && !hasRan) {
+      void fetchPickerOptions();
+    }
 
     return () => {
       ignore = true;
     };
-  }, [connectionName, namespace, setState]);
+  }, [connectionScope, hasRan, setState]);
 
   return loading;
 }
