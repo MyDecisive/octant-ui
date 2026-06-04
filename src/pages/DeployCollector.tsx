@@ -5,11 +5,11 @@ import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";
+import { DeployCollectorForm } from "../components/DeployCollectorForm";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
 import { connectionServiceClient } from "../services/connection";
 import { dDogServiceClient } from "../services/ddog";
 import { getSubmittedCollectorValue } from "../utils/maskedDDValues";
-import { DeployCollectorForm } from "./DeployCollectorForm";
 
 export function DeployCollector() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();

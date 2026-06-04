@@ -15,12 +15,12 @@ import type { TelemetryTypes } from "@types";
 import { fromMLTTypes } from "@utils/fromMltTypes";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { DeployCollectorForm } from "../../components/DeployCollectorForm";
 import { SECRET_VALUE_MASK } from "../../constants/forms";
 import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
 import { getSubmittedCollectorValue } from "../../utils/maskedDDValues";
 import { useFetchManifestsAndDownload } from "../../utils/useFetchManifestsAndDownload";
-import { DeployCollectorForm } from "../DeployCollectorForm";
 import { createForwardDataSnippets } from "../UpdateAgent/createForwardDataSnippets";
 import "./Settings.css";
 

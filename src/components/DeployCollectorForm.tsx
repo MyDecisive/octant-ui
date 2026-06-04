@@ -27,10 +27,6 @@ function validateOptionalDatadogApiKey(value?: string) {
     return undefined;
   }
 
-  if (value.length !== 32) {
-    return "Datadog API key must be 32 characters";
-  }
-
   return undefined;
 }
 
