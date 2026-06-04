@@ -178,7 +178,7 @@ export function DeployCollector() {
 
         <Typography variant="h6">{copy.destinationSection.title}</Typography>
 
-        <Typography variant="body1">
+        <Typography variant="body2" color="secondary">
           {copy.destinationSection.subtitle}
           {/* TODO: not sure if we should comment out
           To get the API key you'll need to log in to your Datadog account. To

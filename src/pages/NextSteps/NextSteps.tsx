@@ -6,8 +6,8 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/routing";
-import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 import { NextStepsCopy as copy } from "../../copy/install/NextSteps.copy";
+import { useFetchManifestsAndDownload } from "./useFetchManifestsAndDownload";
 
 export function NextSteps() {
   const [, navigate] = useLocation();
@@ -17,15 +17,14 @@ export function NextSteps() {
 
   return (
     <FlowCenterColumn>
-      <ViewTitle
-        title={copy.header}
-        description={copy.subtitle}
-      />
+      <ViewTitle title={copy.header} description={copy.subtitle} />
 
       <SimpleCard
         title={copy.tile1.title}
         description={copy.tile1.description}
-        headerAction={<Chip color="info" label={copy.tile1.pill} size="small" />}
+        headerAction={
+          <Chip color="info" label={copy.tile1.pill} size="small" />
+        }
         footer={
           <Button
             variant="text"
@@ -53,6 +52,7 @@ export function NextSteps() {
           </Button>
         }
       />
+      {/* TODO: delete this last card when Settings page is ready */}
       <SimpleCard
         title={copy.tile3.title}
         description={copy.tile3.description}

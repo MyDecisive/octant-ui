@@ -59,7 +59,9 @@ export function UpdateAgent() {
       </FlowCenterColumn>
       <Stack className="right-column" gap={3}>
         <Stack gap={1}>
-          <Typography variant="body2">{copy.myDecisiveLocation}</Typography>
+          <Typography variant="body2" data-bold="true">
+            {copy.myDecisiveLocation}
+          </Typography>
           <CodeSnippet
             code={locationUrl}
             maxHeight="150px"
@@ -67,11 +69,10 @@ export function UpdateAgent() {
           />
         </Stack>
 
-        <Typography variant="body2" data-bold="true">
-          {copy.datadogCodeBlock}
-        </Typography>
-
         <Stack gap={1}>
+          <Typography variant="body2" data-bold="true">
+            {copy.datadogCodeBlock}
+          </Typography>
           <CodeSnippet code={code} maxHeight="440px" />
         </Stack>
       </Stack>

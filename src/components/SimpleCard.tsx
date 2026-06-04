@@ -42,7 +42,9 @@ export function SimpleCard({
             }}
           />
           {children}
-          {footer && <CardActions className="simple-card-footer">{footer}</CardActions>}
+          {footer && (
+            <CardActions className="simple-card-footer">{footer}</CardActions>
+          )}
         </Stack>
       </CardContent>
     </Card>

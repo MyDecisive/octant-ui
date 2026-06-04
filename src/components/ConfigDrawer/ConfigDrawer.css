@@ -6,7 +6,7 @@
 
 pre.config-drawer-line {
   margin: 0;
-  font-size: calc(var(--mdai-spacing-unit) * 1.5);
+  font-size: 0.75rem;
   font-weight: 400;
   font-feature-settings:
     "liga" off,
