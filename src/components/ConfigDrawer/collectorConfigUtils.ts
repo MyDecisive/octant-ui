@@ -131,9 +131,7 @@ function createUpToDateConfigYaml(
   }
 
   if (apiKeyForRender) {
-    configObject.spec.config.exporters.datadog.api.key = apiKey
-      ? "${API_KEY}"
-      : apiKeyForRender;
+    configObject.spec.config.exporters.datadog.api.key = "${API_KEY}";
     configObject.spec.env = [
       {
         name: "API_KEY",

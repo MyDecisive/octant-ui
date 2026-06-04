@@ -4,7 +4,7 @@ import {
   type UpdateCollectorSettingsParams,
 } from "../services/settings";
 
-type SettingsStatus = "idle" | "loading" | "success" | "error";
+export type SettingsStatus = "idle" | "loading" | "success" | "error";
 
 interface SettingsState {
   status: SettingsStatus;

@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../../components/DeployCollectorForm";
 import { SECRET_VALUE_MASK } from "../../constants/forms";
-import { connectionServiceClient } from "../../services/connection";
 import { dDogServiceClient } from "../../services/ddog";
 import {
   getSubmittedCollectorValue,
@@ -55,12 +54,14 @@ export function Settings() {
   const [agentUpdateSnippets, setAgentUpdateSnippets] =
     useState<AgentUpdateSnippets | null>(null);
 
-  const { connectionName, namespace } = useOctantStore(
-    useShallow(({ connection }) => ({
-      connectionName: connection?.scope?.connectionName,
-      namespace: connection?.scope?.namespace,
-    })),
-  );
+  const { connectionName, connectionTelemetryTypes, namespace } =
+    useOctantStore(
+      useShallow(({ connection }) => ({
+        connectionName: connection?.scope?.connectionName,
+        connectionTelemetryTypes: connection?.telemetryTypes,
+        namespace: connection?.scope?.namespace,
+      })),
+    );
   const { settingsStatus, showSettingsError, updateSettings } =
     useSettingsStore(
       useShallow(({ showError, status, updateSettings }) => ({
@@ -94,22 +95,17 @@ export function Settings() {
     const activeConnectionName = connectionName;
 
     async function loadSettingsDefaults() {
-      const [connection, datadogIntegrations, datadogIntegration] =
-        await Promise.all([
-          connectionServiceClient
-            .getConnection({ connectionName: activeConnectionName })
-            .catch(() => null),
-          dDogServiceClient.getDatadogIntegrations({}).catch(() => null),
-          dDogServiceClient
-            .getDatadogIntegrationByName({ name: activeConnectionName })
-            .catch(() => null),
-        ]);
+      const [datadogIntegrations, datadogIntegration] = await Promise.all([
+        dDogServiceClient.getDatadogIntegrations({}).catch(() => null),
+        dDogServiceClient
+          .getDatadogIntegrationByName({ name: activeConnectionName })
+          .catch(() => null),
+      ]);
 
       if (ignore) return;
 
-      const savedTelemetryTypes = connection?.connectionData?.telemetryTypes;
-      if (savedTelemetryTypes) {
-        const nextTelemetryTypes = fromMLTTypes(savedTelemetryTypes);
+      if (connectionTelemetryTypes) {
+        const nextTelemetryTypes = fromMLTTypes(connectionTelemetryTypes);
         setTelemetryTypes(nextTelemetryTypes);
         setSavedTelemetryTypes(nextTelemetryTypes);
       }
@@ -132,7 +128,7 @@ export function Settings() {
     return () => {
       ignore = true;
     };
-  }, [connectionName]);
+  }, [connectionName, connectionTelemetryTypes]);
 
   const handleUpdateSettings = async () => {
     if (!connectionName || !namespace) {
@@ -255,21 +251,21 @@ export function Settings() {
           </Button>
         }
       >
-        {agentUpdateSnippets && (
-          <Stack className="settings-agent-update-dialog-content" gap={2}>
-            <Typography variant="body2" color="secondary">
-              Update your Datadog agent config in your Kubernetes cluster or
-              Argo CD project and restart it with the updated manifest changes.
-            </Typography>
-            <Typography variant="body2" color="secondary">
-              To update, you’ll need to copy and paste the code snippet of the
-              data type(s) you previously selected.
-            </Typography>
+        <Stack className="settings-agent-update-dialog-content" gap={2}>
+          <Typography variant="body2" color="secondary">
+            Update your Datadog agent config in your Kubernetes cluster or Argo
+            CD project and restart it with the updated manifest changes.
+          </Typography>
+          <Typography variant="body2" color="secondary">
+            To update, you’ll need to copy and paste the code snippet of the
+            data type(s) you previously selected.
+          </Typography>
+          {agentUpdateSnippets && (
             <Stack gap={1}>
               <CodeSnippet code={agentUpdateSnippets.code} maxHeight="320px" />
             </Stack>
-          </Stack>
-        )}
+          )}
+        </Stack>
       </Dialog>
     </PageContainer>
   );
