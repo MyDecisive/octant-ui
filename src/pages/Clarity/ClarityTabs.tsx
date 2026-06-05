@@ -44,12 +44,48 @@ export function ClarityTabs({
   const [activeTab, setActiveTab] = useState("logs");
   const [, setLocation] = useLocation();
   const showResultCounts = searchQuery.trim().length > 0;
+  
   const searchOptions = [
     ...new Set([
       ...logData.map(({ name }) => name),
       ...spanData.map(({ span }) => span),
     ]),
   ];
+
+  const renderEmptyState = (type: "logs" | "traces", percentSampled?: number) => {
+    const copy = type === "logs" ? ClarityCopy.logsEmptyStates : ClarityCopy.traceEmptyStates;
+
+    if (searchQuery) {
+      const { title, description, actionLabel } = copy.noResults(searchQuery);
+      return (
+        <NoConnectionCard
+          title={title}
+          description={description}
+          actionLabel={actionLabel}
+          onButtonClick={() => setSearchQuery("")}
+        />
+      );
+    }
+
+    if (percentSampled === 0) {
+      return (
+        <NoConnectionCard
+          title={copy.zeroSampling.title}
+          description={copy.zeroSampling.description}
+        />
+      );
+    }
+
+    const { title, description, actionLabel } = copy.filteringIssue;
+    return (
+      <NoConnectionCard
+        title={title}
+        description={description}
+        actionLabel={actionLabel}
+        onButtonClick={() => setLocation(ROUTES.SYSTEMHEALTH)}
+      />
+    );
+  };
 
   return (
     <Tabs
@@ -72,26 +108,7 @@ export function ClarityTabs({
           children:
             loading || hasLogData ? (
               logData.length === 0 ? (
-                searchQuery ? (<NoConnectionCard
-                  title={"No results found"}
-                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
-                  actionLabel="Clear Search"
-                  onButtonClick={() => {
-                    setSearchQuery("");
-                  }}
-                />) : logPercentSampled === 0 ? (<NoConnectionCard
-                  title={"Data Unavailable"}
-                  description="Looks like you’re not capturing any new data.  Increase the sampling of log volume to continue receiving data."
-                />) : (
-                (<NoConnectionCard
-                  title={"Data Unavailable"}
-                  description={`We couldn’t load your log data.  Let’s check to see if you have log filtering turned on before we look into other potential issues.`}
-                  actionLabel="Review in System Health"
-                  onButtonClick={() => {
-                    setLocation(ROUTES.SYSTEMHEALTH);
-                  }}
-                />)
-                )
+                renderEmptyState("logs", logPercentSampled)
               ) : (
                 <Table<LogData>
                   label={ClarityCopy.logsTable.title}
@@ -123,28 +140,8 @@ export function ClarityTabs({
           children:
             loading || hasTraceData ? (
               spanData.length === 0 ? (
-                searchQuery ? (<NoConnectionCard
-                  title={"No results found"}
-                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
-                  actionLabel="Clear Search"
-                  onButtonClick={() => {
-                    setSearchQuery("");
-                  }}
-                />) : tracePercentSampled === 0 ? (
-                (<NoConnectionCard
-                  title={"Data Unavailable"}
-                  description="Looks like you’re not capturing any new data.  Increase the sampling of log volume to continue receiving data."
-                />)
+                renderEmptyState("traces", tracePercentSampled)
               ) : (
-                (<NoConnectionCard
-                  title={"Data Unavailable"}
-                  description={`We couldn’t load your trace data.  Let’s check to see if you have trace filtering turned on before we look into other potential issues.`}
-                  actionLabel="Review in System Health"
-                  onButtonClick={() => {
-                    setLocation(ROUTES.SYSTEMHEALTH);
-                  }}
-                />)
-              )) : (
                 <Table<SpanData>
                   label={ClarityCopy.traceTable.title}
                   toolbarTooltip={{

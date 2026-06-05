@@ -12,6 +12,18 @@ type EmptyStateCopy = {
   cta: string;
 };
 
+type DynamicEmptyStateCopy = {
+  title: string;
+  description: string;
+  actionLabel?: string;
+};
+
+type TabEmptyStatesCopy = {
+  noResults: (query: string) => DynamicEmptyStateCopy;
+  zeroSampling: DynamicEmptyStateCopy;
+  filteringIssue: DynamicEmptyStateCopy;
+};
+
 type FilterStatusCopy = {
   na: string;
   ke: string;
@@ -100,6 +112,8 @@ type ClarityCopyConfig = {
   search: InputProps;
   logsTable: BaseCostTableCopy<LogTableColumnsCopy>;
   traceTable: BaseCostTableCopy<TraceTableColumnsCopy>;
+  logsEmptyStates: TabEmptyStatesCopy;
+  traceEmptyStates: TabEmptyStatesCopy;
   overallErrorState: CopyState;
 };
 
@@ -305,6 +319,38 @@ export const ClarityCopy = {
       cta: "Check System Health",
     },
   }),
+  logsEmptyStates: {
+    noResults: (query: string) => ({
+      title: "No results found",
+      description: `No matches for “${query}”. Check your spelling, or try a different keyword, or adjust your filters.`,
+      actionLabel: "Clear Search",
+    }),
+    zeroSampling: {
+      title: "Data Unavailable",
+      description: "Looks like you’re not capturing any new data. Increase the sampling of log volume to continue receiving data.",
+    },
+    filteringIssue: {
+      title: "Data Unavailable",
+      description: "We couldn’t load your log data. Let’s check to see if you have log filtering turned on before we look into other potential issues.",
+      actionLabel: "Review in System Health",
+    },
+  },
+  traceEmptyStates: {
+    noResults: (query: string) => ({
+      title: "No results found",
+      description: `No matches for “${query}”. Check your spelling, or try a different keyword, or adjust your filters.`,
+      actionLabel: "Clear Search",
+    }),
+    zeroSampling: {
+      title: "Data Unavailable",
+      description: "Looks like you’re not capturing any new data. Increase the sampling of trace volume to continue receiving data.",
+    },
+    filteringIssue: {
+      title: "Data Unavailable",
+      description: "We couldn’t load your trace data. Let’s check to see if you have trace filtering turned on before we look into other potential issues.",
+      actionLabel: "Review in System Health",
+    },
+  },
   overallErrorState: {
     // CH-79
     header: "Pipeline connection error",
