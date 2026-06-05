@@ -71,6 +71,8 @@ export function ClarityPage() {
                 data={data}
                 hasLogData={hasLogData}
                 hasTraceData={hasTraceData}
+                logPercentSampled={logFilter.pctSampled}
+                tracePercentSampled={traceFilter.pctSampled}
                 logData={logData}
                 loading={loading}
                 searchQuery={searchQuery}
