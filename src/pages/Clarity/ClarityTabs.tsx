@@ -79,6 +79,9 @@ export function ClarityTabs({
                   onButtonClick={() => {
                     setSearchQuery("");
                   }}
+                />) : logPercentSampled === 0 ? (<NoConnectionCard
+                  title={"Data Unavailable"}
+                  description="Looks like you’re not capturing any new data.  Increase the sampling of log volume to continue receiving data."
                 />) : (
                 (<NoConnectionCard
                   title={"Data Unavailable"}
@@ -127,7 +130,12 @@ export function ClarityTabs({
                   onButtonClick={() => {
                     setSearchQuery("");
                   }}
-                />) : (
+                />) : tracePercentSampled === 0 ? (
+                (<NoConnectionCard
+                  title={"Data Unavailable"}
+                  description="Looks like you’re not capturing any new data.  Increase the sampling of log volume to continue receiving data."
+                />)
+              ) : (
                 (<NoConnectionCard
                   title={"Data Unavailable"}
                   description={`We couldn’t load your trace data.  Let’s check to see if you have trace filtering turned on before we look into other potential issues.`}
