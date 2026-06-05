@@ -1,5 +1,4 @@
 .page-container.MuiBox-root {
-  max-width: 1440px;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -22,6 +21,8 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.219) transparent;
   display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .page-content-container.MuiBox-root::-webkit-scrollbar-track {
