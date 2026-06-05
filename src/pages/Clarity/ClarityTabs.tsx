@@ -18,6 +18,8 @@ interface ClarityTabsProps {
   data: Overall | null;
   hasLogData: boolean;
   hasTraceData: boolean;
+  logPercentSampled?: number;
+  tracePercentSampled?: number;
   logData: LogData[];
   loading: boolean;
   searchQuery: string;
@@ -30,6 +32,8 @@ export function ClarityTabs({
   data,
   hasLogData,
   hasTraceData,
+  logPercentSampled,
+  tracePercentSampled,
   logData,
   loading,
   searchQuery,
