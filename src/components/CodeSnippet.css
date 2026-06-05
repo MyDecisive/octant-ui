@@ -11,6 +11,13 @@
   font-size: 0.75rem;
 }
 
+.code-snippet-container .copy-button.MuiIconButton-root {
+  position: absolute;
+  top: var(--mdai-spacing-unit);
+  right: var(--mdai-spacing-unit);
+  z-index: 1;
+}
+
 .code-snippet-content {
   width: 100%;
   max-height: 100%;

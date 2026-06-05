@@ -22,6 +22,22 @@
   color: var(--mdai-purple);
 }
 
+.mdai-page-nav-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.mdai-page-nav-status-dot.healthy {
+  background-color: #4caf50;
+}
+
+.mdai-page-nav-status-dot.error {
+  background-color: #d32f2f;
+}
+
 .MuiStack-root.mdai-page-nav-container
   > .MuiButton-root
   .MuiButton-startIcon

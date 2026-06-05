@@ -10,6 +10,7 @@
   padding: var(--meta-y-side-padding) var(--meta-x-side-padding);
   overflow: hidden;
   height: 100%;
+  width: 100%;
 }
 
 .loader-container.MuiStack-root {
