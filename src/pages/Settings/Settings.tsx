@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../../components/DeployCollectorForm";
 import { SECRET_VALUE_MASK } from "../../constants/forms";
+import { SettingsCopy as copy } from "../../copy/settings/Settings.copy";
 import { dDogServiceClient } from "../../services/ddog";
 import {
   getSubmittedCollectorValue,
@@ -132,7 +133,7 @@ export function Settings() {
 
   const handleUpdateSettings = async () => {
     if (!connectionName || !namespace) {
-      showSettingsError("No active connection was found for these settings.");
+      showSettingsError(copy.updateSettings.missingConnectionError);
       return false;
     }
 
@@ -186,22 +187,22 @@ export function Settings() {
             loading={manifestsLoading}
             startIcon={<FileDownloadRounded />}
           >
-            Download manifests
+            {copy.headerActions.downloadManifests}
           </Button>
           <RichTooltip
-            title="Commit changes to source control"
-            description="When you’re ready, push them to your repository to make the configuration official and version-controlled."
+            title={copy.headerActions.gitOpsTooltip.title}
+            description={copy.headerActions.gitOpsTooltip.description}
             actions={
               <Button
                 className="mdai-table-toolbar-tooltip-cta-button"
                 variant="text"
                 endIcon={<ArrowOutwardRoundedIcon />}
                 component="a"
-                href={""}
+                href={copy.headerActions.gitOpsTooltip.href}
                 target="_blank"
                 rel="noreferrer"
               >
-                See our docs for help
+                {copy.headerActions.gitOpsTooltip.cta}
               </Button>
             }
           >
@@ -230,8 +231,8 @@ export function Settings() {
                 return handleUpdateSettings();
               }}
               canAsync={canSubmit}
-              text="Update settings"
-              loadingText="Updating settings"
+              text={copy.updateSettings.initial}
+              loadingText={copy.updateSettings.activated}
             />
           )}
         />
@@ -240,25 +241,23 @@ export function Settings() {
         open={!!agentUpdateSnippets}
         onClose={() => setAgentUpdateSnippets(null)}
         closeOnBackdropClick={false}
-        title="Update your Datadog agent"
+        title={copy.updateAgentDialog.title}
         actions={
           <Button
             variant="contained"
             size="small"
             onClick={() => setAgentUpdateSnippets(null)}
           >
-            I've updated my Datadog agent
+            {copy.updateAgentDialog.cta}
           </Button>
         }
       >
         <Stack className="settings-agent-update-dialog-content" gap={2}>
           <Typography variant="body2" color="secondary">
-            Update your Datadog agent config in your Kubernetes cluster or Argo
-            CD project and restart it with the updated manifest changes.
+            {copy.updateAgentDialog.description}
           </Typography>
           <Typography variant="body2" color="secondary">
-            To update, you’ll need to copy and paste the code snippet of the
-            data type(s) you previously selected.
+            {copy.updateAgentDialog.instructions}
           </Typography>
           {agentUpdateSnippets && (
             <Stack gap={1}>

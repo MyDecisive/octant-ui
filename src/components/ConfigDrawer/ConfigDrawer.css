@@ -2,6 +2,21 @@
   width: 100%;
   min-width: 0;
   height: 100%;
+  overflow: hidden;
+}
+
+.config-drawer-contents .copy-button.MuiIconButton-root {
+  position: absolute;
+  top: 40px;
+  right: var(--mdai-spacing-unit);
+}
+
+.config-drawer-code-container {
+  overflow: hidden;
+}
+
+.config-drawer-code {
+  overflow-y: auto;
 }
 
 pre.config-drawer-line {

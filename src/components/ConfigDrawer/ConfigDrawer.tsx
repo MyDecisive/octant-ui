@@ -1,9 +1,10 @@
 import { Accordion } from "@components/Accordion";
 import { CopyButton } from "@components/CopyButton";
+import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import type { TelemetryTypes } from "@types";
 import classNames from "classnames";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   createUpdatedConfigLines,
   formKeyToConfigKeyMap,
@@ -31,6 +32,8 @@ export function ConfigDrawer({
   connectionName,
   className,
 }: ConfigDrawerProps) {
+  const [expanded, setExpanded] = useState(true);
+  const codeContainerRef = useRef<HTMLDivElement>(null);
   const linesForRender = createUpdatedConfigLines(
     telemetryTypes,
     url,
@@ -42,11 +45,37 @@ export function ConfigDrawer({
   const codeForCopy = linesForRender.map(([, content]) => content).join("\n");
 
   useEffect(() => {
-    const lastCodeLine = document.getElementById("last-line");
-    if (lastCodeLine) {
-      lastCodeLine.scrollIntoView({ behavior: "smooth" });
+    if (!expanded || !codeContainerRef.current) {
+      return;
     }
-  }, []);
+
+    const scrollConfigToBottom = () => {
+      const scrollContainers = [
+        codeContainerRef.current,
+        codeContainerRef.current?.closest(".mdai-accordion-contents"),
+        codeContainerRef.current?.closest(".mdai-accordion-contents-container"),
+      ];
+
+      scrollContainers.forEach((container) => {
+        if (container instanceof HTMLElement) {
+          container.scrollTo({
+            top: container.scrollHeight,
+            behavior: "smooth",
+          });
+        }
+      });
+    };
+
+    const frame = requestAnimationFrame(() => {
+      scrollConfigToBottom();
+    });
+    const transitionFallback = window.setTimeout(scrollConfigToBottom, 250);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(transitionFallback);
+    };
+  }, [codeForCopy, expanded]);
 
   return (
     <Stack
@@ -56,40 +85,41 @@ export function ConfigDrawer({
     >
       <Accordion
         className="config-drawer-accordion"
+        contentContainerClassname="config-drawer-contents"
         hideExpandIcon
         title={<pre className="config-drawer-line">Expand config view +</pre>}
-        defaultExpanded
+        expanded={expanded}
+        onChange={(_, nextExpanded) => setExpanded(nextExpanded)}
         content={
-          <>
-            <CopyButton
-              text={codeForCopy}
-              ariaLabel="Copy config to clipboard"
-            />
-            {linesForRender.map(([key, content], index) => {
-              const highlight =
-                key != undefined &&
-                focusedField != undefined &&
-                key ===
-                  formKeyToConfigKeyMap[
-                    focusedField as keyof typeof formKeyToConfigKeyMap
-                  ];
+          <Stack direction={"row"} className="config-drawer-code-container">
+            <Box className="config-drawer-code" ref={codeContainerRef}>
+              {linesForRender.map(([key, content], index) => {
+                const highlight =
+                  key != undefined &&
+                  focusedField != undefined &&
+                  key ===
+                    formKeyToConfigKeyMap[
+                      focusedField as keyof typeof formKeyToConfigKeyMap
+                    ];
 
-              const className = `config-drawer-line${key != undefined ? ` ${key}` : ""}${highlight ? " highlight" : ""}`;
-              return (
-                <pre
-                  key={`${content?.trim()}${key?.trim()}${index.toLocaleString()}-config-line`}
-                  className={className}
-                  id={
-                    index === linesForRender.length - 1
-                      ? "last-line"
-                      : undefined
-                  }
-                >
-                  {content}
-                </pre>
-              );
-            })}
-          </>
+                const className = `config-drawer-line${key != undefined ? ` ${key}` : ""}${highlight ? " highlight" : ""}`;
+                return (
+                  <pre
+                    key={`${content?.trim()}${key?.trim()}${index.toLocaleString()}-config-line`}
+                    className={className}
+                  >
+                    {content}
+                  </pre>
+                );
+              })}
+            </Box>
+            {expanded && (
+              <CopyButton
+                text={codeForCopy}
+                ariaLabel="Copy config to clipboard"
+              />
+            )}
+          </Stack>
         }
       />
     </Stack>

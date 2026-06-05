@@ -22,7 +22,6 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.219) transparent;
   display: flex;
-  justify-content: center;
 }
 
 .page-content-container.MuiBox-root::-webkit-scrollbar-track {

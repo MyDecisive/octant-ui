@@ -1,4 +1,10 @@
-.system-health-content-container.MuiStack-root,
+.system-health-content-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.system-health-content.MuiStack-root,
 .system-health-widget-group.MuiStack-root,
 .system-health-widget.MuiPaper-root.MuiAccordion-root {
   width: 564px;
