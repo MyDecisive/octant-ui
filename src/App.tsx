@@ -15,7 +15,6 @@ import { InstallAndConnectProvider } from "./contexts/InstallAndConnect.Provider
 import { ClarityPage } from "./pages/Clarity/Clarity";
 import { Settings } from "./pages/Settings/Settings";
 import { SettingsUpdateToasts } from "./pages/Settings/SettingsUpdateToasts";
-import { SmarthubPage } from "./pages/Smarthub";
 import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
 function App() {
@@ -57,7 +56,7 @@ function App() {
             </Route>
             <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
             <Route path={ROUTES.SETTINGS} component={Settings} />
-            <Route path={ROUTES.SUPPORT} component={SmarthubPage} />
+            {/* <Route path={ROUTES.SUPPORT} component={SmarthubPage} /> */}
           </Switch>
         </Route>
       </Switch>
