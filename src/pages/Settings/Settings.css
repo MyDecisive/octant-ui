@@ -1,7 +1,9 @@
 .settings-form-container {
   width: 100%;
   padding: 0 190px;
+  min-height: 0;
   max-height: 1000px;
+  overflow: hidden;
 }
 
 .settings-agent-update-dialog-content {
