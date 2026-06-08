@@ -1,37 +1,14 @@
-import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewTitle } from "@components/ViewTitle";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
-import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
-import { useShallow } from "zustand/shallow";
 import { ROUTES } from "../../constants/routing";
 import { NextStepsCopy as copy } from "../../copy/install/NextSteps.copy";
-import { useFetchManifestsAndDownload } from "../../utils/useFetchManifestsAndDownload";
 
 export function NextSteps() {
   const [, navigate] = useLocation();
-  const { connectionName, mdaiVersion, namespace, telemetryTypes } =
-    useInstallAndConnectStore(
-      useShallow(({ connectionName, mdaiVersion, namespace, telemetryTypes }) => ({
-        connectionName,
-        mdaiVersion,
-        namespace,
-        telemetryTypes,
-      })),
-    );
-  const { loading, fetchAndDownload } = useFetchManifestsAndDownload({
-    connectionName,
-    mdaiVersion,
-    namespace,
-    telemetryTypes,
-  });
-
-  const handleDownloadManifestsClick = () => {
-    void fetchAndDownload();
-  };
 
   return (
     <FlowCenterColumn>
@@ -68,35 +45,6 @@ export function NextSteps() {
           >
             {copy.tile2.ctaPrimary}
           </Button>
-        }
-      />
-      {/* TODO: delete this last card when Settings page is ready */}
-      <SimpleCard
-        title={copy.tile3.title}
-        description={copy.tile3.description}
-        footer={
-          <ButtonRow>
-            <Button
-              variant="text"
-              size="small"
-              disableRipple
-              onClick={handleDownloadManifestsClick}
-              loading={loading}
-            >
-              {copy.tile3.ctaPrimary}
-            </Button>
-            <Button
-              variant="text"
-              color="secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.mydecisive.ai/"
-              size="small"
-              disableRipple
-            >
-              {copy.tile3.ctaSecondary}
-            </Button>
-          </ButtonRow>
         }
       />
     </FlowCenterColumn>
