@@ -1,4 +1,8 @@
-import { UpdateFilterResponse_Status } from "@mydecisiveai/octant-client";
+import {
+  FilterType,
+  UpdateFilterResponse_Status,
+  type GetFilterResponse,
+} from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarityStore";
 import { type Filter, type FilterTypes } from "@types";
 import { toFilterType } from "@utils/toFilterTypes";
@@ -8,15 +12,70 @@ import { filterServiceClient } from "../../services/filter";
 
 const bothFilterTypes: FilterTypes[] = ["logs", "traces"];
 
+interface ManagedFilter extends Partial<Filter> {
+  configured: boolean;
+}
+
+const defaultFilters: Record<FilterTypes, ManagedFilter> = {
+  logs: {
+    type: "logs",
+    configured: false,
+  },
+  traces: {
+    type: "traces",
+    configured: false,
+  },
+};
+
+function toFilterTypeName(type: FilterType): FilterTypes | undefined {
+  switch (type) {
+    case FilterType.LOG:
+      return "logs";
+    case FilterType.TRACE:
+      return "traces";
+    default:
+      return undefined;
+  }
+}
+
+function normalizeFilterResponse(
+  expectedType: FilterTypes,
+  response: GetFilterResponse,
+): ManagedFilter {
+  const dataType = response.data?.type;
+  const type = dataType ? toFilterTypeName(dataType) : undefined;
+
+  if (type !== expectedType) {
+    return defaultFilters[expectedType];
+  }
+
+  return {
+    type,
+    configured: true,
+    pctSampled: response.data?.pctSampled ?? 0,
+    includeErr: response.data?.includeErr ?? false,
+  };
+}
+
+function normalizeFilterResult(
+  expectedType: FilterTypes,
+  result: PromiseSettledResult<GetFilterResponse>,
+): ManagedFilter {
+  if (result.status === "rejected") {
+    return defaultFilters[expectedType];
+  }
+
+  return normalizeFilterResponse(expectedType, result.value);
+}
+
 export function useManageFilters() {
   const { connectionScope } = useClarityStore(
     useShallow(({ connectionScope }) => ({
       connectionScope,
     })),
   );
-  const [filters, setFilters] = useState<Record<FilterTypes, Filter> | null>(
-    null,
-  );
+  const [filters, setFilters] =
+    useState<Record<FilterTypes, ManagedFilter> | null>(null);
   const [filtersLoading, setFiltersLoading] = useState<Set<FilterTypes>>(
     new Set(),
   );
@@ -25,8 +84,8 @@ export function useManageFilters() {
     async function fetchFilters() {
       setFiltersLoading(new Set<FilterTypes>(bothFilterTypes));
 
-      try {
-        const [logFilterResponse, traceFilterResponse] = await Promise.all(
+      const [logFilterResponse, traceFilterResponse] =
+        await Promise.allSettled(
           bothFilterTypes.map((type) =>
             filterServiceClient.getFilter({
               ...connectionScope,
@@ -35,15 +94,11 @@ export function useManageFilters() {
           ),
         );
 
-        setFilters({
-          logs: logFilterResponse.data! as unknown as Filter,
-          traces: traceFilterResponse.data! as unknown as Filter,
-        });
-      } catch {
-        setFilters(null);
-      } finally {
-        setFiltersLoading(new Set());
-      }
+      setFilters({
+        logs: normalizeFilterResult("logs", logFilterResponse),
+        traces: normalizeFilterResult("traces", traceFilterResponse),
+      });
+      setFiltersLoading(new Set());
     }
     if (filters === null) {
       void fetchFilters();
@@ -71,16 +126,19 @@ export function useManageFilters() {
           setFilters((state) => ({
             logs: state?.logs ?? {
               type: "logs",
+              configured: false,
               pctSampled: 0,
               includeErr: false,
             },
             traces: state?.traces ?? {
               type: "traces",
+              configured: false,
               pctSampled: 0,
               includeErr: false,
             },
             [type]: {
               type,
+              configured: true,
               pctSampled,
               includeErr,
             },

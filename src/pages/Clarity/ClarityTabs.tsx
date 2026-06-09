@@ -1,11 +1,8 @@
-import { NoConnectionCard } from "@components/NoConnectionCard";
 import { Table } from "@components/Table/Table";
 import { Tabs } from "@components/Tabs/Tabs";
 import type { Overall } from "@mydecisiveai/octant-client";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import { useLocation } from "wouter";
-import { ROUTES } from "../../constants/routing";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 import {
   logsColumns,
@@ -13,15 +10,19 @@ import {
   type LogData,
   type SpanData,
 } from "./constants";
+import { TabsEmptyState } from "./TabsEmptyStates";
 
 interface ClarityTabsProps {
   data: Overall | null;
   hasLogData: boolean;
   hasTraceData: boolean;
+  logFilterConfigured: boolean;
   logPercentSampled?: number;
+  traceFilterConfigured: boolean;
   tracePercentSampled?: number;
   logData: LogData[];
   loading: boolean;
+  onRefreshData: () => void;
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   spanData: SpanData[];
@@ -32,19 +33,21 @@ export function ClarityTabs({
   data,
   hasLogData,
   hasTraceData,
+  logFilterConfigured,
   logPercentSampled,
+  traceFilterConfigured,
   tracePercentSampled,
   logData,
   loading,
+  onRefreshData,
   searchQuery,
   setSearchQuery,
   spanData,
   tableDataLoading,
 }: ClarityTabsProps) {
   const [activeTab, setActiveTab] = useState("logs");
-  const [, setLocation] = useLocation();
   const showResultCounts = searchQuery.trim().length > 0;
-  
+
   const searchOptions = [
     ...new Set([
       ...logData.map(({ name }) => name),
@@ -52,40 +55,22 @@ export function ClarityTabs({
     ]),
   ];
 
-  const renderEmptyState = (type: "logs" | "traces", percentSampled?: number) => {
-    const copy = type === "logs" ? ClarityCopy.logsEmptyStates : ClarityCopy.traceEmptyStates;
-
-    if (searchQuery) {
-      const { title, description, actionLabel } = copy.noResults(searchQuery);
-      return (
-        <NoConnectionCard
-          title={title}
-          description={description}
-          actionLabel={actionLabel}
-          onButtonClick={() => setSearchQuery("")}
-        />
-      );
-    }
-
-    if (percentSampled === 0) {
-      return (
-        <NoConnectionCard
-          title={copy.zeroSampling.title}
-          description={copy.zeroSampling.description}
-        />
-      );
-    }
-
-    const { title, description, actionLabel } = copy.filteringIssue;
-    return (
-      <NoConnectionCard
-        title={title}
-        description={description}
-        actionLabel={actionLabel}
-        onButtonClick={() => setLocation(ROUTES.SYSTEMHEALTH)}
-      />
-    );
-  };
+  const renderEmptyState = (
+    type: "logs" | "traces",
+    configured: boolean,
+    hasData: boolean,
+    percentSampled?: number,
+  ) => (
+    <TabsEmptyState
+      type={type}
+      configured={configured}
+      hasData={hasData}
+      percentSampled={percentSampled}
+      searchQuery={searchQuery}
+      onClearSearch={() => setSearchQuery("")}
+      onRefreshData={onRefreshData}
+    />
+  );
 
   return (
     <Tabs
@@ -103,12 +88,17 @@ export function ClarityTabs({
         {
           value: "logs",
           label: "Logs",
-          missingData: !loading && !hasLogData,
+          missingData: !loading && (!logFilterConfigured || !hasLogData),
           resultCount: logData.length,
           children:
-            loading || hasLogData ? (
+            loading || logFilterConfigured ? (
               logData.length === 0 ? (
-                renderEmptyState("logs", logPercentSampled)
+                renderEmptyState(
+                  "logs",
+                  logFilterConfigured,
+                  hasLogData,
+                  logPercentSampled,
+                )
               ) : (
                 <Table<LogData>
                   label={ClarityCopy.logsTable.title}
@@ -125,22 +115,23 @@ export function ClarityTabs({
                 />
               )
             ) : (
-              <NoConnectionCard
-                title={ClarityCopy.logsTable.connectionIssue.header}
-                description={ClarityCopy.logsTable.connectionIssue.body}
-                actionLabel={ClarityCopy.logsTable.connectionIssue.cta}
-              />
+              renderEmptyState("logs", logFilterConfigured, hasLogData)
             ),
         },
         {
           value: "traces",
           label: "Traces",
-          missingData: !loading && !hasTraceData,
+          missingData: !loading && (!traceFilterConfigured || !hasTraceData),
           resultCount: spanData.length,
           children:
-            loading || hasTraceData ? (
+            loading || traceFilterConfigured ? (
               spanData.length === 0 ? (
-                renderEmptyState("traces", tracePercentSampled)
+                renderEmptyState(
+                  "traces",
+                  traceFilterConfigured,
+                  hasTraceData,
+                  tracePercentSampled,
+                )
               ) : (
                 <Table<SpanData>
                   label={ClarityCopy.traceTable.title}
@@ -159,11 +150,7 @@ export function ClarityTabs({
                 />
               )
             ) : (
-              <NoConnectionCard
-                title={ClarityCopy.traceTable.connectionIssue.header}
-                description={ClarityCopy.traceTable.connectionIssue.body}
-                actionLabel={ClarityCopy.traceTable.connectionIssue.cta}
-              />
+              renderEmptyState("traces", traceFilterConfigured, hasTraceData)
             ),
         },
       ]}

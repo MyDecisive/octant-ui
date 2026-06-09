@@ -10,4 +10,7 @@ export const transport = createConnectTransport({
     getStringEnv(import.meta.env.VITE_API_BASE_URL) ??
     getStringEnv(import.meta.env.VITE_API_URL) ??
     "/api",
+  jsonOptions: {
+    alwaysEmitImplicit: true,
+  },
 });

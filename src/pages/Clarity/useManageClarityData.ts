@@ -52,7 +52,18 @@ function spanToRow(
   };
 }
 
-export function useManageClarityData(searchQuery = "") {
+interface UseManageClarityDataOptions {
+  logFilterConfigured: boolean;
+  traceFilterConfigured: boolean;
+}
+
+export function useManageClarityData(
+  searchQuery = "",
+  {
+    logFilterConfigured,
+    traceFilterConfigured,
+  }: UseManageClarityDataOptions,
+) {
   const { connectionScope } = useClarityStore(
     useShallow(({ connectionScope }) => ({
       connectionScope,
@@ -70,6 +81,7 @@ export function useManageClarityData(searchQuery = "") {
   const [spanData, setSpanData] = useState<SpanData[]>([]);
   const [overallLoading, setOverallLoading] = useState(false);
   const [tableDataLoading, setTableDataLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     let ignore = false;
@@ -112,7 +124,7 @@ export function useManageClarityData(searchQuery = "") {
     return () => {
       ignore = true;
     };
-  }, [namespace, timeRange]);
+  }, [namespace, refreshKey, timeRange]);
 
   useEffect(() => {
     let ignore = false;
@@ -124,7 +136,11 @@ export function useManageClarityData(searchQuery = "") {
         return;
       }
 
-      if (!hasLogTimeframeData && !hasTraceTimeframeData) {
+      const shouldFetchLogs = logFilterConfigured && !!hasLogTimeframeData;
+      const shouldFetchTraces =
+        traceFilterConfigured && !!hasTraceTimeframeData;
+
+      if (!shouldFetchLogs && !shouldFetchTraces) {
         setLogData([]);
         setSpanData([]);
         return;
@@ -142,10 +158,8 @@ export function useManageClarityData(searchQuery = "") {
       };
 
       const [logResponse, traceResponse] = await Promise.allSettled([
-        hasLogTimeframeData
-          ? budgetServiceClient.log(request)
-          : Promise.resolve(null),
-        hasTraceTimeframeData
+        shouldFetchLogs ? budgetServiceClient.log(request) : Promise.resolve(null),
+        shouldFetchTraces
           ? budgetServiceClient.trace(request)
           : Promise.resolve(null),
       ]);
@@ -180,6 +194,8 @@ export function useManageClarityData(searchQuery = "") {
     timeRange,
     hasTraceTimeframeData,
     hasLogTimeframeData,
+    logFilterConfigured,
+    traceFilterConfigured,
   ]);
 
   return {
@@ -190,8 +206,14 @@ export function useManageClarityData(searchQuery = "") {
     summaryData: overallToSummaryRows(overallData),
     logData,
     spanData,
-    hasLogData: (overallData?.log?.sent ?? 0) > 0 && !!hasLogTimeframeData,
+    hasLogData:
+      logFilterConfigured &&
+      (overallData?.log?.sent ?? 0) > 0 &&
+      !!hasLogTimeframeData,
     hasTraceData:
-      (overallData?.trace?.sent ?? 0) > 0 && !!hasTraceTimeframeData,
+      traceFilterConfigured &&
+      (overallData?.trace?.sent ?? 0) > 0 &&
+      !!hasTraceTimeframeData,
+    refreshData: () => setRefreshKey((state) => state + 1),
   };
 }

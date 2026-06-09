@@ -70,6 +70,10 @@ export function setMockConnectionTelemetryTypes({
   connections.set(connectionName, nextConnection);
 }
 
+export function getMockConnectionTelemetryTypes(connectionName: string) {
+  return connections.get(connectionName)?.telemetryTypes ?? [];
+}
+
 export const mockTransport = createRouterTransport(({ service }) => {
   service(ConnectionService, {
     getConnections: (...args) => {

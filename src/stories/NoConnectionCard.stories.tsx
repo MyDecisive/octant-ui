@@ -24,6 +24,7 @@ const meta = {
     description:
       "We may not have visibility into your data. Let's review and manage your pipeline to make sure everything is connected.",
     actionLabel: "Go to Connections",
+    onButtonClick: () => console.log("Go to Connections"),
   },
 } satisfies Meta<typeof NoConnectionCard>;
 
@@ -41,5 +42,28 @@ export const TableEmptyState: Story = {
     description:
       "Let's review and manage your pipeline to make sure everything is connected.",
     actionLabel: "Review in System Health",
+    onButtonClick: () => console.log("Review in System Health"),
+  },
+};
+
+export const WithAlertsAndLink: Story = {
+  args: {
+    title: "Data unavailable",
+    description:
+      "We couldn't load your log data. Let's check to see if you have log filtering turned on before we look into other potential issues.",
+    alerts: [
+      {
+        severity: "warning",
+        title:
+          "Sampling is set to 0%. Please set sampling to start seeing data.",
+      },
+    ],
+    actionLabel: "Refresh table",
+    link: {
+      label: "Report a bug",
+      href: "https://github.com/MyDecisive/octant/issues",
+      external: true,
+    },
+    onButtonClick: () => console.log("Refresh table"),
   },
 };
