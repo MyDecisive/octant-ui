@@ -82,6 +82,8 @@ export function useManageClarityData(
   const [overallLoading, setOverallLoading] = useState(false);
   const [tableDataLoading, setTableDataLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const canRequestLogData = logFilterConfigured && !!hasLogTimeframeData;
+  const canRequestTraceData = traceFilterConfigured && !!hasTraceTimeframeData;
 
   useEffect(() => {
     let ignore = false;
@@ -136,16 +138,6 @@ export function useManageClarityData(
         return;
       }
 
-      const shouldFetchLogs = logFilterConfigured && !!hasLogTimeframeData;
-      const shouldFetchTraces =
-        traceFilterConfigured && !!hasTraceTimeframeData;
-
-      if (!shouldFetchLogs && !shouldFetchTraces) {
-        setLogData([]);
-        setSpanData([]);
-        return;
-      }
-
       setTableDataLoading(true);
 
       const request = {
@@ -158,8 +150,10 @@ export function useManageClarityData(
       };
 
       const [logResponse, traceResponse] = await Promise.allSettled([
-        shouldFetchLogs ? budgetServiceClient.log(request) : Promise.resolve(null),
-        shouldFetchTraces
+        canRequestLogData
+          ? budgetServiceClient.log(request)
+          : Promise.resolve(null),
+        canRequestTraceData
           ? budgetServiceClient.trace(request)
           : Promise.resolve(null),
       ]);
@@ -194,8 +188,8 @@ export function useManageClarityData(
     timeRange,
     hasTraceTimeframeData,
     hasLogTimeframeData,
-    logFilterConfigured,
-    traceFilterConfigured,
+    canRequestLogData,
+    canRequestTraceData,
   ]);
 
   return {
@@ -206,14 +200,8 @@ export function useManageClarityData(
     summaryData: overallToSummaryRows(overallData),
     logData,
     spanData,
-    hasLogData:
-      logFilterConfigured &&
-      (overallData?.log?.sent ?? 0) > 0 &&
-      !!hasLogTimeframeData,
-    hasTraceData:
-      traceFilterConfigured &&
-      (overallData?.trace?.sent ?? 0) > 0 &&
-      !!hasTraceTimeframeData,
+    hasLogData: canRequestLogData && (overallData?.log?.sent ?? 0) > 0,
+    hasTraceData: canRequestTraceData && (overallData?.trace?.sent ?? 0) > 0,
     refreshData: () => setRefreshKey((state) => state + 1),
   };
 }
