@@ -1,6 +1,6 @@
 import type { Log, Overall, Span } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarityStore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { budgetServiceClient } from "../../services/budget";
 import type { LogData, SpanData, SummaryData } from "./constants";
@@ -74,52 +74,61 @@ export function useManageClarityData(
   const [spanData, setSpanData] = useState<SpanData[]>([]);
   const [overallLoading, setOverallLoading] = useState(false);
   const [tableDataLoading, setTableDataLoading] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
   const canRequestLogData = logDataTypeConfigured && !!hasLogTimeframeData;
-  const canRequestTraceData = traceDataTypeConfigured && !!hasTraceTimeframeData;
+  const canRequestTraceData =
+    traceDataTypeConfigured && !!hasTraceTimeframeData;
 
-  useEffect(() => {
-    let ignore = false;
+  const abortRef = useRef<AbortController | null>(null);
 
-    async function fetchOverallData() {
-      if (!namespace) {
-        setOverallData(null);
-        setLogData([]);
-        setSpanData([]);
-        return;
-      }
+  const fetchOverallData = useCallback(async () => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
 
-      setOverallLoading(true);
+    if (!namespace) {
       setOverallData(null);
       setLogData([]);
       setSpanData([]);
-
-      try {
-        const overallResponse = await budgetServiceClient.overall({
-          namespace,
-          timeframe: timeRange,
-        });
-
-        if (!ignore) {
-          setOverallData(overallResponse.data ?? null);
-        }
-      } catch {
-        if (!ignore) {
-          setOverallData(null);
-        }
-      } finally {
-        if (!ignore) {
-          setOverallLoading(false);
-        }
-      }
+      return;
     }
 
-    void fetchOverallData();
+    setOverallLoading(true);
+    setOverallData(null);
+    setLogData([]);
+    setSpanData([]);
 
+    try {
+      const overallResponse = await budgetServiceClient.overall(
+        {
+          namespace,
+          timeframe: timeRange,
+        },
+        {
+          signal: controller.signal,
+        },
+      );
+
+      if (!controller.signal.aborted) {
+        setOverallData(overallResponse.data ?? null);
+      }
+    } catch {
+      if (!controller.signal.aborted) {
+        setOverallData(null);
+      }
+    } finally {
+      if (!controller.signal.aborted) {
+        setOverallLoading(false);
+      }
+    }
+  }, [namespace, timeRange]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchOverallData();
     return () => {
-      ignore = true;
+      abortRef.current?.abort();
     };
-  }, [namespace, refreshKey, timeRange]);
+  }, [fetchOverallData]);
 
   useEffect(() => {
     let ignore = false;
@@ -195,6 +204,6 @@ export function useManageClarityData(
     spanData,
     hasLogData: canRequestLogData && (overallData?.log?.sent ?? 0) > 0,
     hasTraceData: canRequestTraceData && (overallData?.trace?.sent ?? 0) > 0,
-    refreshData: () => setRefreshKey((state) => state + 1),
+    refreshData: fetchOverallData,
   };
 }
