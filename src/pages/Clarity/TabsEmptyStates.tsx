@@ -14,7 +14,7 @@ interface TabsEmptyStateProps {
   configured: boolean;
   hasData: boolean;
   onClearSearch: () => void;
-  onRefreshData: () => void;
+  onRefreshData: () => Promise<void>;
   percentSampled?: number;
   searchQuery: string;
 }
@@ -71,7 +71,7 @@ function getEmptyStateCardProps({
   copy: typeof ClarityCopy.logsEmptyStates;
   hasData: boolean;
   onClearSearch: () => void;
-  onRefreshData: () => void;
+  onRefreshData: () => Promise<void>;
   onReviewSystemHealth: () => void;
   onSetupDataType: () => void;
   percentSampled?: number;
@@ -103,7 +103,7 @@ function getEmptyStateCardProps({
       ],
       actions: renderActions({
         primaryLabel: "Refresh table",
-        onPrimaryClick: onRefreshData,
+        onPrimaryClick: () => void onRefreshData(),
       }),
     };
   }
@@ -116,7 +116,7 @@ function getEmptyStateCardProps({
       description,
       actions: renderActions({
         primaryLabel: "Refresh table",
-        onPrimaryClick: onRefreshData,
+        onPrimaryClick: () => void onRefreshData(),
         secondaryAction: (
           <Button
             size="small"
@@ -151,7 +151,7 @@ function getEmptyStateCardProps({
     description: copy.filteringIssue.description,
     actions: renderActions({
       primaryLabel: "Refresh table",
-      onPrimaryClick: onRefreshData,
+      onPrimaryClick: () => void onRefreshData(),
     }),
   };
 }
