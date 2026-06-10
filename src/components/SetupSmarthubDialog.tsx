@@ -7,8 +7,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import type { ReactNode } from "react";
-import "./SetupSmarthubDialog.css";
 import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
+import "./SetupSmarthubDialog.css";
 
 interface SetupSmarthubDialogProps {
   open: boolean;
@@ -41,11 +41,11 @@ const contentByStatus = {
     content: copy.warnModal.body,
     createActions: (onClose: () => void, onContinue?: () => void) => (
       <>
-        <Button onClick={onClose} variant="text">
-          {copy.warnModal.ctaClose}
-        </Button>
-        <Button onClick={onContinue} variant="contained">
+        <Button onClick={onContinue} variant="text">
           {copy.warnModal.ctaContinue}
+        </Button>
+        <Button onClick={onClose} variant="contained">
+          {copy.warnModal.ctaClose}
         </Button>
       </>
     ),
