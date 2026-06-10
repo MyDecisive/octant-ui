@@ -23,7 +23,7 @@ type SmartHubConfig = {
     ctaClose: string;
     ctaContinue: string;
   };
-}
+};
 
 export const SmarthubCopy = {
   // IC3-01
@@ -64,9 +64,9 @@ export const SmarthubCopy = {
     // IC3-??
     body: "We're still not sure whether or not things are running correctly. What would you like to do?",
     // IC3-??
-    ctaContinue: "Keep waiting",
+    ctaContinue: "It's ok, let's keep going",
     // IC3-??
-    ctaClose: "It's ok, let's keep going",
+    ctaClose: "Keep waiting",
   },
   // IC3-??
   genericFormErrorTxt: "Something went wrong.",
