@@ -1,24 +1,18 @@
-import { Table } from "@components/Table/Table";
 import { Tabs } from "@components/Tabs/Tabs";
 import type { Overall } from "@mydecisiveai/octant-client";
+import { FilterTypes } from "@types";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
-import {
-  logsColumns,
-  traceColumns,
-  type LogData,
-  type SpanData,
-} from "./constants";
-import { TabsEmptyState } from "./TabsEmptyStates";
+import { ClarityTabTable } from "./ClarityTabTables";
+import type { LogData, SpanData } from "./constants";
 
 interface ClarityTabsProps {
   data: Overall | null;
   hasLogData: boolean;
   hasTraceData: boolean;
-  logFilterConfigured: boolean;
+  logDataTypeConfigured: boolean;
   logPercentSampled?: number;
-  traceFilterConfigured: boolean;
+  traceDataTypeConfigured: boolean;
   tracePercentSampled?: number;
   logData: LogData[];
   loading: boolean;
@@ -33,9 +27,9 @@ export function ClarityTabs({
   data,
   hasLogData,
   hasTraceData,
-  logFilterConfigured,
+  logDataTypeConfigured,
   logPercentSampled,
-  traceFilterConfigured,
+  traceDataTypeConfigured,
   tracePercentSampled,
   logData,
   loading,
@@ -45,7 +39,7 @@ export function ClarityTabs({
   spanData,
   tableDataLoading,
 }: ClarityTabsProps) {
-  const [activeTab, setActiveTab] = useState("logs");
+  const [activeTab, setActiveTab] = useState<string>(FilterTypes.LOG);
   const showResultCounts = searchQuery.trim().length > 0;
 
   const searchOptions = [
@@ -54,23 +48,6 @@ export function ClarityTabs({
       ...spanData.map(({ span }) => span),
     ]),
   ];
-
-  const renderEmptyState = (
-    type: "logs" | "traces",
-    configured: boolean,
-    hasData: boolean,
-    percentSampled?: number,
-  ) => (
-    <TabsEmptyState
-      type={type}
-      configured={configured}
-      hasData={hasData}
-      percentSampled={percentSampled}
-      searchQuery={searchQuery}
-      onClearSearch={() => setSearchQuery("")}
-      onRefreshData={onRefreshData}
-    />
-  );
 
   return (
     <Tabs
@@ -86,72 +63,44 @@ export function ClarityTabs({
       showResultCounts={showResultCounts}
       items={[
         {
-          value: "logs",
+          value: FilterTypes.LOG,
           label: "Logs",
-          missingData: !loading && (!logFilterConfigured || !hasLogData),
+          missingData: !loading && (!logDataTypeConfigured || !hasLogData),
           resultCount: logData.length,
-          children:
-            loading || logFilterConfigured ? (
-              logData.length === 0 ? (
-                renderEmptyState(
-                  "logs",
-                  logFilterConfigured,
-                  hasLogData,
-                  logPercentSampled,
-                )
-              ) : (
-                <Table<LogData>
-                  label={ClarityCopy.logsTable.title}
-                  toolbarTooltip={{
-                    ...ClarityCopy.logsTable.tooltip,
-                    placement: "right",
-                  }}
-                  columns={logsColumns}
-                  rows={logData}
-                  loading={tableDataLoading}
-                  showToolbar
-                  footerLabel={ClarityCopy.logsTable.tec}
-                  total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
-                />
-              )
-            ) : (
-              renderEmptyState("logs", logFilterConfigured, hasLogData)
-            ),
+          children: (
+            <ClarityTabTable
+              dataType={FilterTypes.LOG}
+              configured={logDataTypeConfigured}
+              data={data}
+              hasData={hasLogData}
+              loading={tableDataLoading}
+              onClearSearch={() => setSearchQuery("")}
+              onRefreshData={onRefreshData}
+              percentSampled={logPercentSampled}
+              rows={logData}
+              searchQuery={searchQuery}
+            />
+          ),
         },
         {
-          value: "traces",
+          value: FilterTypes.TRACE,
           label: "Traces",
-          missingData: !loading && (!traceFilterConfigured || !hasTraceData),
+          missingData: !loading && (!traceDataTypeConfigured || !hasTraceData),
           resultCount: spanData.length,
-          children:
-            loading || traceFilterConfigured ? (
-              spanData.length === 0 ? (
-                renderEmptyState(
-                  "traces",
-                  traceFilterConfigured,
-                  hasTraceData,
-                  tracePercentSampled,
-                )
-              ) : (
-                <Table<SpanData>
-                  label={ClarityCopy.traceTable.title}
-                  toolbarTooltip={{
-                    ...ClarityCopy.traceTable.tooltip,
-                    placement: "right",
-                  }}
-                  columns={traceColumns}
-                  rows={spanData}
-                  loading={tableDataLoading}
-                  showToolbar
-                  footerLabel={ClarityCopy.traceTable.tec}
-                  total={
-                    data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"
-                  }
-                />
-              )
-            ) : (
-              renderEmptyState("traces", traceFilterConfigured, hasTraceData)
-            ),
+          children: (
+            <ClarityTabTable
+              dataType={FilterTypes.TRACE}
+              configured={traceDataTypeConfigured}
+              data={data}
+              hasData={hasTraceData}
+              loading={tableDataLoading}
+              onClearSearch={() => setSearchQuery("")}
+              onRefreshData={onRefreshData}
+              percentSampled={tracePercentSampled}
+              rows={spanData}
+              searchQuery={searchQuery}
+            />
+          ),
         },
       ]}
     />

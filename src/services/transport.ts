@@ -1,8 +1,5 @@
 import { createConnectTransport } from "@connectrpc/connect-web";
-
-function getStringEnv(value: unknown): string | undefined {
-  return typeof value === "string" ? value : undefined;
-}
+import { getStringEnv } from "@utils/getStringEnv";
 
 export const transport = createConnectTransport({
   baseUrl:

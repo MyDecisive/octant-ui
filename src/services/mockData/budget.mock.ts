@@ -1,6 +1,7 @@
 import { createRouterTransport } from "@connectrpc/connect";
 import type { Log, Overall_Metric, Span } from "@mydecisiveai/octant-client";
 import { BudgetService, Timeframe } from "@mydecisiveai/octant-client";
+import { getStringEnv } from "@utils/getStringEnv";
 
 const SERVICE_NAMES_FOR_MOCK = [
   "catalog-service",
@@ -47,10 +48,6 @@ const SPAN_NAMES_FOR_MOCK = [
   "/apiv1/refund/process",
   "/apiv1/customer/support",
 ];
-
-function getStringEnv(value: unknown): string | undefined {
-  return typeof value === "string" ? value : undefined;
-}
 
 function shouldShowEmpty24HourMockData(timeframe: Timeframe) {
   return (

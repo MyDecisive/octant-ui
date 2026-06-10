@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { NoConnectionCard } from "../components/NoConnectionCard";
 import "../pages/Clarity/Clarity.css";
@@ -23,8 +24,26 @@ const meta = {
     title: "Looks like there's a connection issue",
     description:
       "We may not have visibility into your data. Let's review and manage your pipeline to make sure everything is connected.",
-    actionLabel: "Go to Connections",
-    onButtonClick: () => console.log("Go to Connections"),
+    actions: (
+      <>
+        <Button
+          variant="secondary"
+          size="small"
+          onClick={() => console.log("Refresh table")}
+        >
+          Refresh table
+        </Button>
+        <Button
+          href="https://github.com/MyDecisive/octant/issues"
+          rel="noopener noreferrer"
+          size="small"
+          target="_blank"
+          variant="text"
+        >
+          Report a bug
+        </Button>
+      </>
+    ),
   },
 } satisfies Meta<typeof NoConnectionCard>;
 
@@ -34,16 +53,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
-};
-
-export const TableEmptyState: Story = {
-  args: {
-    title: "Looks like there's a connection issue",
-    description:
-      "Let's review and manage your pipeline to make sure everything is connected.",
-    actionLabel: "Review in System Health",
-    onButtonClick: () => console.log("Review in System Health"),
-  },
 };
 
 export const WithAlertsAndLink: Story = {
@@ -58,12 +67,25 @@ export const WithAlertsAndLink: Story = {
           "Sampling is set to 0%. Please set sampling to start seeing data.",
       },
     ],
-    actionLabel: "Refresh table",
-    link: {
-      label: "Report a bug",
-      href: "https://github.com/MyDecisive/octant/issues",
-      external: true,
-    },
-    onButtonClick: () => console.log("Refresh table"),
+    actions: (
+      <>
+        <Button
+          variant="secondary"
+          size="small"
+          onClick={() => console.log("Refresh table")}
+        >
+          Refresh table
+        </Button>
+        <Button
+          href="https://github.com/MyDecisive/octant/issues"
+          rel="noopener noreferrer"
+          size="small"
+          target="_blank"
+          variant="text"
+        >
+          Report a bug
+        </Button>
+      </>
+    ),
   },
 };

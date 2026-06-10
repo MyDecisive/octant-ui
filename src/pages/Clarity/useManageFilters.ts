@@ -1,56 +1,41 @@
 import {
-  FilterType,
   UpdateFilterResponse_Status,
   type GetFilterResponse,
 } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarityStore";
-import { type Filter, type FilterTypes } from "@types";
+import { FilterTypes, type Filter } from "@types";
 import { toFilterType } from "@utils/toFilterTypes";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { filterServiceClient } from "../../services/filter";
 
-const bothFilterTypes: FilterTypes[] = ["logs", "traces"];
+const bothFilterTypes: FilterTypes[] = [FilterTypes.LOG, FilterTypes.TRACE];
 
 interface ManagedFilter extends Partial<Filter> {
   configured: boolean;
 }
 
 const defaultFilters: Record<FilterTypes, ManagedFilter> = {
-  logs: {
-    type: "logs",
+  [FilterTypes.LOG]: {
+    type: FilterTypes.LOG,
     configured: false,
   },
-  traces: {
-    type: "traces",
+  [FilterTypes.TRACE]: {
+    type: FilterTypes.TRACE,
     configured: false,
   },
 };
-
-function toFilterTypeName(type: FilterType): FilterTypes | undefined {
-  switch (type) {
-    case FilterType.LOG:
-      return "logs";
-    case FilterType.TRACE:
-      return "traces";
-    default:
-      return undefined;
-  }
-}
 
 function normalizeFilterResponse(
   expectedType: FilterTypes,
   response: GetFilterResponse,
 ): ManagedFilter {
-  const dataType = response.data?.type;
-  const type = dataType ? toFilterTypeName(dataType) : undefined;
-
-  if (type !== expectedType) {
+  if (!response.data) {
     return defaultFilters[expectedType];
   }
 
   return {
-    type,
+    type: expectedType,
     configured: true,
     pctSampled: response.data?.pctSampled ?? 0,
     includeErr: response.data?.includeErr ?? false,
@@ -74,36 +59,47 @@ export function useManageFilters() {
       connectionScope,
     })),
   );
-  const [filters, setFilters] =
-    useState<Record<FilterTypes, ManagedFilter> | null>(null);
+  const [filters, setFilters] = useState<Record<
+    FilterTypes,
+    ManagedFilter
+  > | null>(null);
   const [filtersLoading, setFiltersLoading] = useState<Set<FilterTypes>>(
     new Set(),
   );
+  const connectionName = connectionScope?.connectionName;
+  const namespace = connectionScope?.namespace;
 
   useEffect(() => {
+    if (!connectionName) return;
+
     async function fetchFilters() {
       setFiltersLoading(new Set<FilterTypes>(bothFilterTypes));
 
-      const [logFilterResponse, traceFilterResponse] =
-        await Promise.allSettled(
-          bothFilterTypes.map((type) =>
-            filterServiceClient.getFilter({
-              ...connectionScope,
-              type: toFilterType(type),
-            }),
-          ),
-        );
+      const [logFilterResponse, traceFilterResponse] = await Promise.allSettled(
+        bothFilterTypes.map((type) =>
+          filterServiceClient.getFilter({
+            connectionName,
+            namespace,
+            type: toFilterType(type),
+          }),
+        ),
+      );
 
       setFilters({
-        logs: normalizeFilterResult("logs", logFilterResponse),
-        traces: normalizeFilterResult("traces", traceFilterResponse),
+        [FilterTypes.LOG]: normalizeFilterResult(
+          FilterTypes.LOG,
+          logFilterResponse,
+        ),
+        [FilterTypes.TRACE]: normalizeFilterResult(
+          FilterTypes.TRACE,
+          traceFilterResponse,
+        ),
       });
       setFiltersLoading(new Set());
     }
-    if (filters === null) {
-      void fetchFilters();
-    }
-  }, [connectionScope, filters]);
+
+    void fetchFilters();
+  }, [connectionName, namespace]);
 
   const handleApplyFilter = async (
     type: FilterTypes,
@@ -124,14 +120,14 @@ export function useManageFilters() {
         const status = res.status;
         if (status === UpdateFilterResponse_Status.COMPLETED) {
           setFilters((state) => ({
-            logs: state?.logs ?? {
-              type: "logs",
+            [FilterTypes.LOG]: state?.[FilterTypes.LOG] ?? {
+              type: FilterTypes.LOG,
               configured: false,
               pctSampled: 0,
               includeErr: false,
             },
-            traces: state?.traces ?? {
-              type: "traces",
+            [FilterTypes.TRACE]: state?.[FilterTypes.TRACE] ?? {
+              type: FilterTypes.TRACE,
               configured: false,
               pctSampled: 0,
               includeErr: false,
@@ -157,16 +153,16 @@ export function useManageFilters() {
 
   return {
     logFilter: {
-      ...filters?.logs,
-      loading: filtersLoading.has("logs"),
+      ...filters?.[FilterTypes.LOG],
+      loading: filtersLoading.has(FilterTypes.LOG),
       updateLogsFilter: (pctSampled: number, includeErr: boolean) =>
-        handleApplyFilter("logs", pctSampled, includeErr),
+        handleApplyFilter(FilterTypes.LOG, pctSampled, includeErr),
     },
     traceFilter: {
-      ...filters?.traces,
-      loading: filtersLoading.has("traces"),
+      ...filters?.[FilterTypes.TRACE],
+      loading: filtersLoading.has(FilterTypes.TRACE),
       updateTracesFilter: (pctSampled: number, includeErr: boolean) =>
-        handleApplyFilter("traces", pctSampled, includeErr),
+        handleApplyFilter(FilterTypes.TRACE, pctSampled, includeErr),
     },
   };
 }

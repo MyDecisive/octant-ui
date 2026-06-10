@@ -13,6 +13,7 @@ import { useOctantStore } from "@store/octantStore";
 import { useSettingsStore } from "@store/settingsStore";
 import type { TelemetryTypes } from "@types";
 import { fromMLTTypes } from "@utils/fromMltTypes";
+import { toMLTTypes } from "@utils/toMltTypes";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../../components/DeployCollectorForm";
@@ -55,12 +56,13 @@ export function Settings() {
   const [agentUpdateSnippets, setAgentUpdateSnippets] =
     useState<AgentUpdateSnippets | null>(null);
 
-  const { connectionName, connectionTelemetryTypes, namespace } =
+  const { connectionName, connectionTelemetryTypes, namespace, setInConnection } =
     useOctantStore(
-      useShallow(({ connection }) => ({
+      useShallow(({ connection, setInConnection }) => ({
         connectionName: connection?.scope?.connectionName,
         connectionTelemetryTypes: connection?.telemetryTypes,
         namespace: connection?.scope?.namespace,
+        setInConnection,
       })),
     );
   const { settingsStatus, showSettingsError, updateSettings } =
@@ -169,6 +171,7 @@ export function Settings() {
     }
 
     setSavedTelemetryTypes(telemetryTypes);
+    setInConnection("telemetryTypes", toMLTTypes(telemetryTypes));
     setSavedUrl(url);
     setApiKey(SECRET_VALUE_MASK);
 

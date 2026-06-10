@@ -52,17 +52,10 @@ function spanToRow(
   };
 }
 
-interface UseManageClarityDataOptions {
-  logFilterConfigured: boolean;
-  traceFilterConfigured: boolean;
-}
-
 export function useManageClarityData(
   searchQuery = "",
-  {
-    logFilterConfigured,
-    traceFilterConfigured,
-  }: UseManageClarityDataOptions,
+  logDataTypeConfigured: boolean,
+  traceDataTypeConfigured: boolean,
 ) {
   const { connectionScope } = useClarityStore(
     useShallow(({ connectionScope }) => ({
@@ -82,8 +75,8 @@ export function useManageClarityData(
   const [overallLoading, setOverallLoading] = useState(false);
   const [tableDataLoading, setTableDataLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const canRequestLogData = logFilterConfigured && !!hasLogTimeframeData;
-  const canRequestTraceData = traceFilterConfigured && !!hasTraceTimeframeData;
+  const canRequestLogData = logDataTypeConfigured && !!hasLogTimeframeData;
+  const canRequestTraceData = traceDataTypeConfigured && !!hasTraceTimeframeData;
 
   useEffect(() => {
     let ignore = false;

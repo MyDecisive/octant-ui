@@ -5,8 +5,12 @@ import { PageContainer } from "@components/layout/PageContainer";
 import { Table } from "@components/Table/Table";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import { useOctantStore } from "@store/octantStore";
+import { FilterTypes } from "@types";
+import { fromMLTTypes } from "@utils/fromMltTypes";
 import { timeframeLabels } from "@utils/timeframeToPickerOptions";
 import { useState } from "react";
+import { useShallow } from "zustand/shallow";
 import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 import "./Clarity.css";
 import { ClarityTabs } from "./ClarityTabs";
@@ -18,8 +22,16 @@ import { useManageTimeframes } from "./useManageTimeframes";
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const { logFilter, traceFilter } = useManageFilters();
-  const logFilterConfigured = !!logFilter.configured;
-  const traceFilterConfigured = !!traceFilter.configured;
+  const connectionTelemetryTypes = useOctantStore(
+    useShallow(({ connection }) => connection?.telemetryTypes ?? []),
+  );
+  const selectedTelemetryTypes = fromMLTTypes(connectionTelemetryTypes);
+  const logDataTypeConfigured = selectedTelemetryTypes.includes(
+    FilterTypes.LOG,
+  );
+  const traceDataTypeConfigured = selectedTelemetryTypes.includes(
+    FilterTypes.TRACE,
+  );
   const { setSelectedTimeframe, selectedTimeframe, timeframeOptions } =
     useManageTimeframes();
   const {
@@ -32,10 +44,11 @@ export function ClarityPage() {
     tableDataLoading,
     loading,
     refreshData,
-  } = useManageClarityData(searchQuery, {
-    logFilterConfigured,
-    traceFilterConfigured,
-  });
+  } = useManageClarityData(
+    searchQuery,
+    logDataTypeConfigured,
+    traceDataTypeConfigured,
+  );
 
   const timeRangeLabel = timeframeLabels[selectedTimeframe];
 
@@ -72,9 +85,9 @@ export function ClarityPage() {
               hasLogData={hasLogData}
               hasTraceData={hasTraceData}
               logPercentSampled={logFilter.pctSampled}
-              logFilterConfigured={logFilterConfigured}
+              logDataTypeConfigured={logDataTypeConfigured}
               tracePercentSampled={traceFilter.pctSampled}
-              traceFilterConfigured={traceFilterConfigured}
+              traceDataTypeConfigured={traceDataTypeConfigured}
               logData={logData}
               loading={loading}
               onRefreshData={refreshData}
@@ -85,7 +98,7 @@ export function ClarityPage() {
             />
           </Stack>
           <Stack className="right-column" gap={1}>
-            {!logFilterConfigured ? (
+            {!logDataTypeConfigured ? (
               <FilterEmptyStateCard
                 title={cc.logFilter.emptyState.title}
                 description={cc.logFilter.emptyState.subtitle}
@@ -96,6 +109,7 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
+                key={`${FilterTypes.LOG}-${logFilter.pctSampled}-${logFilter.includeErr}`}
                 onApplyFilter={logFilter.updateLogsFilter}
                 title={cc.logFilter.title}
                 unit={"GB"}
@@ -107,7 +121,7 @@ export function ClarityPage() {
                 includeErr={logFilter.includeErr}
               />
             )}
-            {!traceFilterConfigured ? (
+            {!traceDataTypeConfigured ? (
               <FilterEmptyStateCard
                 title={cc.traceFilter.emptyState.title}
                 description={cc.traceFilter.emptyState.subtitle}
@@ -118,6 +132,7 @@ export function ClarityPage() {
               />
             ) : (
               <FilterCard
+                key={`${FilterTypes.TRACE}-${traceFilter.pctSampled}-${traceFilter.includeErr}`}
                 onApplyFilter={traceFilter.updateTracesFilter}
                 title={cc.traceFilter.title}
                 unit={"MM Spans"}

@@ -24,7 +24,7 @@ declare module "@mui/x-data-grid" {
   }
 }
 
-interface TableProps<T extends BaseRowDefinition> extends Omit<
+export interface TableProps<T extends BaseRowDefinition> extends Omit<
   DataGridProps,
   "rows" | "columns" | "label"
 > {

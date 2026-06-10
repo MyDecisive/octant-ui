@@ -1,16 +1,16 @@
 import { NoConnectionCard } from "@components/NoConnectionCard";
 import LinkOffRoundedIcon from "@mui/icons-material/LinkOffRounded";
-import type { ComponentProps } from "react";
+import Button from "@mui/material/Button";
+import { FilterTypes } from "@types";
+import type { ComponentProps, ReactNode } from "react";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/routing";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 
 type EmptyStateCardProps = ComponentProps<typeof NoConnectionCard>;
 
-type ClarityDataType = "logs" | "traces";
-
 interface TabsEmptyStateProps {
-  type: ClarityDataType;
+  dataType: FilterTypes;
   configured: boolean;
   hasData: boolean;
   onClearSearch: () => void;
@@ -19,17 +19,141 @@ interface TabsEmptyStateProps {
   searchQuery: string;
 }
 
-const reportBugLink: EmptyStateCardProps["link"] = {
-  label: "Report a bug",
-  href: "https://github.com/MyDecisive/octant/issues",
-  external: true,
-};
+function ReportBugButton() {
+  return (
+    <Button
+      href="https://github.com/MyDecisive/octant/issues"
+      rel="noopener noreferrer"
+      size="small"
+      target="_blank"
+      variant="text"
+      color="inherit"
+    >
+      Report a bug
+    </Button>
+  );
+}
 
-function renderNoConnectionCard({
-  link = reportBugLink,
-  ...props
-}: EmptyStateCardProps) {
-  return <NoConnectionCard {...props} link={link} />;
+function renderActions({
+  primaryLabel,
+  onPrimaryClick,
+  secondaryAction,
+}: {
+  primaryLabel?: string;
+  onPrimaryClick?: () => void;
+  secondaryAction?: ReactNode;
+}) {
+  return (
+    <>
+      {primaryLabel && onPrimaryClick && (
+        <Button variant="secondary" size="small" onClick={onPrimaryClick}>
+          {primaryLabel}
+        </Button>
+      )}
+      {secondaryAction ?? <ReportBugButton />}
+    </>
+  );
+}
+
+function getEmptyStateCardProps({
+  configured,
+  copy,
+  hasData,
+  onClearSearch,
+  onRefreshData,
+  onReviewSystemHealth,
+  onSetupDataType,
+  percentSampled,
+  searchQuery,
+  setupCopy,
+}: {
+  configured: boolean;
+  copy: typeof ClarityCopy.logsEmptyStates;
+  hasData: boolean;
+  onClearSearch: () => void;
+  onRefreshData: () => void;
+  onReviewSystemHealth: () => void;
+  onSetupDataType: () => void;
+  percentSampled?: number;
+  searchQuery: string;
+  setupCopy: typeof ClarityCopy.logFilter.emptyState;
+}): EmptyStateCardProps {
+  // Data type is not configured in settings.
+  if (!configured) {
+    return {
+      title: setupCopy.title,
+      description: setupCopy.subtitle,
+      actions: renderActions({
+        primaryLabel: setupCopy.cta,
+        onPrimaryClick: onSetupDataType,
+      }),
+    };
+  }
+
+  // Data type is configured, but sampling is 0% and no data is flowing.
+  if (!hasData && (percentSampled === undefined || percentSampled === 0)) {
+    return {
+      title: copy.zeroSampling.title,
+      description: copy.zeroSampling.description,
+      alerts: [
+        {
+          severity: "warning",
+          title: "Sampling is set to 0%",
+        },
+      ],
+      actions: renderActions({
+        primaryLabel: "Refresh table",
+        onPrimaryClick: onRefreshData,
+      }),
+    };
+  }
+
+  // Data type is configured and sampled, but no data is flowing.
+  if (!hasData) {
+    const { title, description, actionLabel } = copy.filteringIssue;
+    return {
+      title,
+      description,
+      actions: renderActions({
+        primaryLabel: "Refresh table",
+        onPrimaryClick: onRefreshData,
+        secondaryAction: (
+          <Button
+            size="small"
+            variant="text"
+            color="inherit"
+            onClick={onReviewSystemHealth}
+          >
+            {actionLabel ?? "Review in System Health"}
+          </Button>
+        ),
+      }),
+    };
+  }
+
+  // Data is available, but the current search has no matches.
+  if (searchQuery) {
+    const { title, description, actionLabel } = copy.noResults(searchQuery);
+    return {
+      title,
+      description,
+      icon: <LinkOffRoundedIcon fontSize="small" />,
+      actions: renderActions({
+        primaryLabel: actionLabel,
+        onPrimaryClick: onClearSearch,
+      }),
+    };
+  }
+
+  // Default fallback for an unexpected empty table state.
+  return {
+    title: copy.filteringIssue.title,
+    description: copy.filteringIssue.description,
+    actions: renderActions({
+      primaryLabel: "Refresh table",
+      onPrimaryClick: onRefreshData,
+    }),
+  };
 }
 
 export function TabsEmptyState({
@@ -39,76 +163,32 @@ export function TabsEmptyState({
   onRefreshData,
   percentSampled,
   searchQuery,
-  type,
+  dataType,
 }: TabsEmptyStateProps) {
   const [, setLocation] = useLocation();
   const copy =
-    type === "logs"
+    dataType === FilterTypes.LOG
       ? ClarityCopy.logsEmptyStates
       : ClarityCopy.traceEmptyStates;
   const setupCopy =
-    type === "logs"
+    dataType === FilterTypes.LOG
       ? ClarityCopy.logFilter.emptyState
       : ClarityCopy.traceFilter.emptyState;
 
-  // Data type is not configured in settings.
-  if (!configured) {
-    return renderNoConnectionCard({
-      title: setupCopy.title,
-      description: setupCopy.subtitle,
-      actionLabel: setupCopy.cta,
-      onButtonClick: () => setLocation(ROUTES.SETTINGS),
-    });
-  }
-
-  // Data type is configured, but sampling is 0% and no data is flowing.
-  if (!hasData && (percentSampled === undefined || percentSampled === 0)) {
-    return renderNoConnectionCard({
-      title: copy.zeroSampling.title,
-      description: copy.zeroSampling.description,
-      alerts: [
-        {
-          severity: "warning",
-          title: "Sampling is set to 0%",
-        },
-      ],
-      actionLabel: "Refresh table",
-      onButtonClick: onRefreshData,
-    });
-  }
-
-  // Data type is configured and sampled, but no data is flowing.
-  if (!hasData) {
-    const { title, description, actionLabel } = copy.filteringIssue;
-    return renderNoConnectionCard({
-      title,
-      description,
-      actionLabel: "Refresh table",
-      link: {
-        label: actionLabel ?? "Review in System Health",
-        onClick: () => setLocation(ROUTES.SYSTEMHEALTH),
-      },
-      onButtonClick: onRefreshData,
-    });
-  }
-
-  // Data is available, but the current search has no matches.
-  if (searchQuery) {
-    const { title, description, actionLabel } = copy.noResults(searchQuery);
-    return renderNoConnectionCard({
-      title,
-      description,
-      icon: <LinkOffRoundedIcon fontSize="small" />,
-      actionLabel,
-      onButtonClick: onClearSearch,
-    });
-  }
-
-  // Default fallback for an unexpected empty table state.
-  return renderNoConnectionCard({
-    title: copy.filteringIssue.title,
-    description: copy.filteringIssue.description,
-    actionLabel: "Refresh table",
-    onButtonClick: onRefreshData,
-  });
+  return (
+    <NoConnectionCard
+      {...getEmptyStateCardProps({
+        configured,
+        copy,
+        hasData,
+        onClearSearch,
+        onRefreshData,
+        onReviewSystemHealth: () => setLocation(ROUTES.SYSTEMHEALTH),
+        onSetupDataType: () => setLocation(ROUTES.SETTINGS),
+        percentSampled,
+        searchQuery,
+        setupCopy,
+      })}
+    />
+  );
 }
