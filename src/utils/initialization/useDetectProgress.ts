@@ -2,7 +2,7 @@ import {
   useInstallAndConnectStore,
   type InstallAndConnectFormFields,
 } from "@store/installAndConnectStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
 import { SECRET_VALUE_MASK } from "../../constants/forms";
@@ -53,13 +53,22 @@ export function useDetectProgress() {
     (state) => state.setFormField,
   );
 
-  const [hasRan, setHasRan] = useState(false);
+  const hasRan = useRef(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let ignore = false;
+    if (hasRan.current) {
+      return;
+    }
+    hasRan.current = true;
 
     async function runChecks() {
+      if (!connectionName) {
+        setLoading(false);
+        return;
+      }
+
+      // TODO: run connectionStatus to verify step 6?
       const [argoCdIntegration, ddogIntegration] = await Promise.all([
         argoCdServiceClient
           .getArgoIntegrations({})
@@ -72,21 +81,17 @@ export function useDetectProgress() {
             });
           })
           .catch(() => null),
-        connectionName
-          ? dDogServiceClient
-              .getDatadogIntegrations({})
-              .then((res) =>
-                res?.names?.includes(connectionName)
-                  ? dDogServiceClient.getDatadogIntegrationByName({
-                      name: connectionName,
-                    })
-                  : null,
-              )
-              .catch(() => null)
-          : Promise.resolve(null),
+        dDogServiceClient
+          .getDatadogIntegrations({})
+          .then((res) =>
+            res?.names?.includes(connectionName)
+              ? dDogServiceClient.getDatadogIntegrationByName({
+                  name: connectionName,
+                })
+              : null,
+          )
+          .catch(() => null),
       ]);
-
-      if (ignore) return;
 
       if (argoCdIntegration) {
         const { argoEndpoint } = argoCdIntegration;
@@ -103,18 +108,11 @@ export function useDetectProgress() {
         setInstallAndConnectField("lastCompletedStep", 4);
       }
 
-      setHasRan(true);
       setLoading(false);
     }
 
-    if (!hasRan) {
-      void runChecks();
-    }
-
-    return () => {
-      ignore = true;
-    };
-  }, [connectionName, hasRan, setInstallAndConnectField, lastCompletedStep]);
+    void runChecks();
+  }, [connectionName, setInstallAndConnectField, lastCompletedStep]);
 
   const redirectRoute = deriveRedirectRoute(currentPath, {
     connectionName,
