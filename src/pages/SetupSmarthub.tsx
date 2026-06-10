@@ -113,6 +113,7 @@ export function SetupSmarthub() {
   };
 
   const handleContinueFromDialog = () => {
+    setOctantState("hubInstalled", true);
     setOctantConnectionScope("namespace", namespace);
     setFormField("namespace", namespace);
     advanceInstallFlow();
