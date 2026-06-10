@@ -16,7 +16,7 @@ interface ClarityTabsProps {
   tracePercentSampled?: number;
   logData: LogData[];
   loading: boolean;
-  onRefreshData: () => void;
+  onRefreshData: () => Promise<void>;
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   spanData: SpanData[];
@@ -48,41 +48,6 @@ export function ClarityTabs({
       ...spanData.map(({ span }) => span),
     ]),
   ];
-
-  const renderEmptyState = (type: "logs" | "traces", percentSampled?: number) => {
-    const copy = type === "logs" ? ClarityCopy.logsEmptyStates : ClarityCopy.traceEmptyStates;
-
-    if (searchQuery) {
-      const { title, description, actionLabel } = copy.noResults(searchQuery);
-      return (
-        <NoConnectionCard
-          title={title}
-          description={description}
-          actionLabel={actionLabel}
-          onButtonClick={() => setSearchQuery("")}
-        />
-      );
-    }
-
-    if (percentSampled === 0) {
-      return (
-        <NoConnectionCard
-          title={copy.zeroSampling.title}
-          description={copy.zeroSampling.description}
-        />
-      );
-    }
-
-    const { title, description, actionLabel } = copy.filteringIssue;
-    return (
-      <NoConnectionCard
-        title={title}
-        description={description}
-        actionLabel={actionLabel}
-        onButtonClick={() => setLocation(ROUTES.SYSTEMHEALTH)}
-      />
-    );
-  };
 
   return (
     <Tabs

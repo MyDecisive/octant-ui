@@ -28,7 +28,7 @@ interface BaseClarityTabTableProps {
   hasData: boolean;
   loading: boolean;
   onClearSearch: () => void;
-  onRefreshData: () => void;
+  onRefreshData: () => Promise<void>;
   percentSampled?: number;
   searchQuery: string;
 }
