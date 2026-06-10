@@ -217,7 +217,7 @@ export const theme = createTheme({
           fontWeight: 400,
           [`& > .MuiAlert-action > .MuiButtonBase-root`]: {
             padding: "4px 5px",
-            color: "#5F2120",
+            color: "inherit",
           },
         },
       },
@@ -229,6 +229,16 @@ export const theme = createTheme({
             color: "#5F2120",
             [`& > .MuiAlert-icon`]: {
               color: "#D32F2F",
+            },
+          },
+        },
+        {
+          props: { severity: "warning" },
+          style: {
+            backgroundColor: "#FFF4E5",
+            color: "#663C00",
+            [`& > .MuiAlert-icon`]: {
+              color: "#EF6C00",
             },
           },
         },

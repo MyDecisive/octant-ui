@@ -10,7 +10,11 @@ export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
 export type IntegrationType = "datadog" | "argocd";
 export type TelemetryTypes = "logs" | "metrics" | "traces";
-export type FilterTypes = "logs" | "traces";
+export const FilterTypes = {
+  LOG: "logs",
+  TRACE: "traces",
+} as const;
+export type FilterTypes = (typeof FilterTypes)[keyof typeof FilterTypes];
 
 interface Destination {
   type: "datadog";

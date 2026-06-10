@@ -1,23 +1,22 @@
-import { NoConnectionCard } from "@components/NoConnectionCard";
-import { Table } from "@components/Table/Table";
 import { Tabs } from "@components/Tabs/Tabs";
 import type { Overall } from "@mydecisiveai/octant-client";
+import { FilterTypes } from "@types";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
-import {
-  logsColumns,
-  traceColumns,
-  type LogData,
-  type SpanData,
-} from "./constants";
+import { ClarityTabTable } from "./ClarityTabTables";
+import type { LogData, SpanData } from "./constants";
 
 interface ClarityTabsProps {
   data: Overall | null;
   hasLogData: boolean;
   hasTraceData: boolean;
+  logDataTypeConfigured: boolean;
+  logPercentSampled?: number;
+  traceDataTypeConfigured: boolean;
+  tracePercentSampled?: number;
   logData: LogData[];
   loading: boolean;
+  onRefreshData: () => void;
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   spanData: SpanData[];
@@ -28,21 +27,62 @@ export function ClarityTabs({
   data,
   hasLogData,
   hasTraceData,
+  logDataTypeConfigured,
+  logPercentSampled,
+  traceDataTypeConfigured,
+  tracePercentSampled,
   logData,
   loading,
+  onRefreshData,
   searchQuery,
   setSearchQuery,
   spanData,
   tableDataLoading,
 }: ClarityTabsProps) {
-  const [activeTab, setActiveTab] = useState("logs");
+  const [activeTab, setActiveTab] = useState<string>(FilterTypes.LOG);
   const showResultCounts = searchQuery.trim().length > 0;
+
   const searchOptions = [
     ...new Set([
       ...logData.map(({ name }) => name),
       ...spanData.map(({ span }) => span),
     ]),
   ];
+
+  const renderEmptyState = (type: "logs" | "traces", percentSampled?: number) => {
+    const copy = type === "logs" ? ClarityCopy.logsEmptyStates : ClarityCopy.traceEmptyStates;
+
+    if (searchQuery) {
+      const { title, description, actionLabel } = copy.noResults(searchQuery);
+      return (
+        <NoConnectionCard
+          title={title}
+          description={description}
+          actionLabel={actionLabel}
+          onButtonClick={() => setSearchQuery("")}
+        />
+      );
+    }
+
+    if (percentSampled === 0) {
+      return (
+        <NoConnectionCard
+          title={copy.zeroSampling.title}
+          description={copy.zeroSampling.description}
+        />
+      );
+    }
+
+    const { title, description, actionLabel } = copy.filteringIssue;
+    return (
+      <NoConnectionCard
+        title={title}
+        description={description}
+        actionLabel={actionLabel}
+        onButtonClick={() => setLocation(ROUTES.SYSTEMHEALTH)}
+      />
+    );
+  };
 
   return (
     <Tabs
@@ -58,84 +98,44 @@ export function ClarityTabs({
       showResultCounts={showResultCounts}
       items={[
         {
-          value: "logs",
+          value: FilterTypes.LOG,
           label: "Logs",
-          missingData: !loading && !hasLogData,
+          missingData: !loading && (!logDataTypeConfigured || !hasLogData),
           resultCount: logData.length,
-          children:
-            loading || hasLogData ? (
-              logData.length === 0 && searchQuery ? (
-                <NoConnectionCard
-                  title={"No results found"}
-                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
-                  actionLabel="Clear Search"
-                  onButtonClick={() => {
-                    setSearchQuery("");
-                  }}
-                />
-              ) : (
-                <Table<LogData>
-                  label={ClarityCopy.logsTable.title}
-                  toolbarTooltip={{
-                    ...ClarityCopy.logsTable.tooltip,
-                    placement: "right",
-                  }}
-                  columns={logsColumns}
-                  rows={logData}
-                  loading={tableDataLoading}
-                  showToolbar
-                  footerLabel={ClarityCopy.logsTable.tec}
-                  total={data?.log?.cost ? data.log.cost.toLocaleString() : "-"}
-                />
-              )
-            ) : (
-              <NoConnectionCard
-                title={ClarityCopy.logsTable.connectionIssue.header}
-                description={ClarityCopy.logsTable.connectionIssue.body}
-                actionLabel={ClarityCopy.logsTable.connectionIssue.cta}
-              />
-            ),
+          children: (
+            <ClarityTabTable
+              dataType={FilterTypes.LOG}
+              configured={logDataTypeConfigured}
+              data={data}
+              hasData={hasLogData}
+              loading={tableDataLoading}
+              onClearSearch={() => setSearchQuery("")}
+              onRefreshData={onRefreshData}
+              percentSampled={logPercentSampled}
+              rows={logData}
+              searchQuery={searchQuery}
+            />
+          ),
         },
         {
-          value: "traces",
+          value: FilterTypes.TRACE,
           label: "Traces",
-          missingData: !loading && !hasTraceData,
+          missingData: !loading && (!traceDataTypeConfigured || !hasTraceData),
           resultCount: spanData.length,
-          children:
-            loading || hasTraceData ? (
-              spanData.length === 0 && searchQuery ? (
-                <NoConnectionCard
-                  title={"No results found"}
-                  description={`No matches for “${searchQuery}”. Check your spelling, or try a different keyword, or adjust your filters`}
-                  actionLabel="Clear Search"
-                  onButtonClick={() => {
-                    setSearchQuery("");
-                  }}
-                />
-              ) : (
-                <Table<SpanData>
-                  label={ClarityCopy.traceTable.title}
-                  toolbarTooltip={{
-                    ...ClarityCopy.traceTable.tooltip,
-                    placement: "right",
-                  }}
-                  columns={traceColumns}
-                  rows={spanData}
-                  loading={tableDataLoading}
-                  showToolbar
-                  footerLabel={ClarityCopy.traceTable.tec}
-                  total={
-                    data?.trace?.cost ? data.trace.cost.toLocaleString() : "-"
-                  }
-                />
-              )
-            ) : (
-              <NoConnectionCard
-                title={ClarityCopy.traceTable.connectionIssue.header}
-                description={ClarityCopy.traceTable.connectionIssue.body}
-                actionLabel={ClarityCopy.traceTable.connectionIssue.cta}
-              />
-            ),
+          children: (
+            <ClarityTabTable
+              dataType={FilterTypes.TRACE}
+              configured={traceDataTypeConfigured}
+              data={data}
+              hasData={hasTraceData}
+              loading={tableDataLoading}
+              onClearSearch={() => setSearchQuery("")}
+              onRefreshData={onRefreshData}
+              percentSampled={tracePercentSampled}
+              rows={spanData}
+              searchQuery={searchQuery}
+            />
+          ),
         },
       ]}
     />

@@ -1,8 +1,5 @@
 import { createConnectTransport } from "@connectrpc/connect-web";
-
-function getStringEnv(value: unknown): string | undefined {
-  return typeof value === "string" ? value : undefined;
-}
+import { getStringEnv } from "@utils/getStringEnv";
 
 export const transport = createConnectTransport({
   baseUrl:
@@ -10,4 +7,7 @@ export const transport = createConnectTransport({
     getStringEnv(import.meta.env.VITE_API_BASE_URL) ??
     getStringEnv(import.meta.env.VITE_API_URL) ??
     "/api",
+  jsonOptions: {
+    alwaysEmitImplicit: true,
+  },
 });

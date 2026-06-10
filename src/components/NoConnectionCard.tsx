@@ -1,35 +1,57 @@
-import LinkOffRounded from "@mui/icons-material/LinkOffRounded";
-import Button from "@mui/material/Button";
+import { Alert } from "@components/Alert";
+import { Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import type { ReactNode } from "react";
+import Stack from "@mui/material/Stack";
+import type { ComponentProps, ReactNode } from "react";
+import DatabaseOff from "../assets/database-off.svg?react";
 import "./NoConnectionCard.css";
+
+type NoConnectionCardAlert = Pick<
+  ComponentProps<typeof Alert>,
+  "description" | "severity" | "title"
+>;
 
 interface NoConnectionCardProps {
   title: ReactNode;
   description: ReactNode;
-  actionLabel?: string;
-  onButtonClick?: () => void;
+  icon?: ReactNode;
+  alerts?: NoConnectionCardAlert[];
+  actions?: ReactNode;
 }
 
 export function NoConnectionCard({
-  actionLabel,
+  actions,
+  alerts,
   description,
-  onButtonClick,
   title,
+  icon = <DatabaseOff />,
 }: NoConnectionCardProps) {
   return (
     <Card className="no-connection-card-container">
       <CardContent className="no-connection-card-content">
-        <LinkOffRounded
-          aria-hidden="true"
-          className="no-connection-card-icon"
+        <CardHeader
+          className="no-connection-card-content-title"
+          title={
+            <Stack direction="row" spacing={2} alignItems="center">
+              {icon}
+              <Typography variant="h5">{title}</Typography>
+            </Stack>
+          }
+          subheader={description}
         />
-        <CardHeader title={title} subheader={description} />
-        <Button variant="secondary" size="small" onClick={onButtonClick}>
-          {actionLabel}
-        </Button>
+        {!!alerts?.length && (
+          <Stack className="no-connection-card-alerts" gap={1}>
+            {alerts.map((alert, index) => (
+              <Alert
+                key={`no-connection-card-alert-${index.toString()}`}
+                {...alert}
+              />
+            ))}
+          </Stack>
+        )}
+        {actions && <div className="no-connection-card-actions">{actions}</div>}
       </CardContent>
     </Card>
   );

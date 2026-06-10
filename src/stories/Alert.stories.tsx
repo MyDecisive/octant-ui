@@ -33,3 +33,11 @@ export const Default: Story = {
     ),
   },
 };
+
+export const Warning: Story = {
+  args: {
+    severity: "warning",
+    title: "Review configuration",
+    description: "Some data may be delayed while the pipeline catches up.",
+  },
+};
