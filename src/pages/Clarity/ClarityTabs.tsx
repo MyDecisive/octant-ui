@@ -49,6 +49,41 @@ export function ClarityTabs({
     ]),
   ];
 
+  const renderEmptyState = (type: "logs" | "traces", percentSampled?: number) => {
+    const copy = type === "logs" ? ClarityCopy.logsEmptyStates : ClarityCopy.traceEmptyStates;
+
+    if (searchQuery) {
+      const { title, description, actionLabel } = copy.noResults(searchQuery);
+      return (
+        <NoConnectionCard
+          title={title}
+          description={description}
+          actionLabel={actionLabel}
+          onButtonClick={() => setSearchQuery("")}
+        />
+      );
+    }
+
+    if (percentSampled === 0) {
+      return (
+        <NoConnectionCard
+          title={copy.zeroSampling.title}
+          description={copy.zeroSampling.description}
+        />
+      );
+    }
+
+    const { title, description, actionLabel } = copy.filteringIssue;
+    return (
+      <NoConnectionCard
+        title={title}
+        description={description}
+        actionLabel={actionLabel}
+        onButtonClick={() => setLocation(ROUTES.SYSTEMHEALTH)}
+      />
+    );
+  };
+
   return (
     <Tabs
       activeValue={activeTab}
