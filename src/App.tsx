@@ -18,9 +18,9 @@ import { SettingsUpdateToasts } from "./pages/Settings/SettingsUpdateToasts";
 import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
 function App() {
-  const resolving = useInitOctant();
+  const initializing = useInitOctant();
 
-  if (resolving) {
+  if (initializing) {
     return <FullscreenLoader />;
   }
 
