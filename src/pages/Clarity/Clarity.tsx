@@ -110,6 +110,7 @@ export function ClarityPage() {
             ) : (
               <FilterCard
                 key={`${FilterTypes.LOG}-${logFilter.pctSampled}-${logFilter.includeErr}`}
+                defaultExpanded={logDataTypeConfigured}
                 onApplyFilter={logFilter.updateLogsFilter}
                 title={cc.logFilter.title}
                 unit={"GB"}
@@ -133,6 +134,7 @@ export function ClarityPage() {
             ) : (
               <FilterCard
                 key={`${FilterTypes.TRACE}-${traceFilter.pctSampled}-${traceFilter.includeErr}`}
+                defaultExpanded={!logDataTypeConfigured}
                 onApplyFilter={traceFilter.updateTracesFilter}
                 title={cc.traceFilter.title}
                 unit={"MM Spans"}

@@ -14,6 +14,7 @@ import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 
 interface FilterCardProps {
   title: string;
+  defaultExpanded?: boolean;
   received?: number;
   sent?: number;
   filtered?: number;
@@ -26,6 +27,7 @@ interface FilterCardProps {
 
 export function FilterCard({
   title,
+  defaultExpanded,
   received,
   sent,
   filtered,
@@ -62,6 +64,7 @@ export function FilterCard({
   return (
     <Accordion
       className="filter-card-container"
+      defaultExpanded={defaultExpanded}
       title={
         <FilterCardTitle
           title={title}
