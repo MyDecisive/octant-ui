@@ -5,6 +5,7 @@ import {
   type TelemetryDestination,
 } from "@mydecisiveai/octant-client";
 import type { JSX } from "react";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "./constants/error";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
@@ -101,6 +102,7 @@ export interface Filter extends Pick<
   type: FilterTypes;
 }
 
+// UI versions of client types
 export interface UIConnectionScope {
   connectionName?: string;
   namespace?: string;
@@ -117,3 +119,22 @@ export interface UIConnectionData extends Pick<
   deployment: UIDeployment;
   destinations: UIDestination[];
 }
+
+// error modal types
+export type ErrorModalActs =
+  (typeof ERROR_MODAL_ACT)[keyof typeof ERROR_MODAL_ACT];
+export type ErrorModalSeverity =
+  (typeof ERROR_SEVERITY)[keyof typeof ERROR_SEVERITY];
+
+// Copy types
+export type ErrorModalCTA = {
+  text: string;
+  act: ErrorModalActs[];
+};
+export type ErrorModalContent = {
+  header: string;
+  severity: ErrorModalSeverity;
+  body?: string;
+  showNetworkError?: boolean;
+  actions: ErrorModalCTA[];
+};
