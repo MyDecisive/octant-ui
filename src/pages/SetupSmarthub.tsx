@@ -2,19 +2,21 @@ import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
-import { SetupSmarthubDialog } from "@components/SetupSmarthubDialog";
+import {
+  SetupSmarthubDialog,
+  type DialogErrorInfo,
+} from "@components/SetupSmarthubDialog";
 import { ViewTitle } from "@components/ViewTitle";
+import { ConnectError } from "@connectrpc/connect";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import {
-  InstallStatus,
-  type GetInstallStatusResponse,
-} from "@mydecisiveai/octant-client";
+import { InstallStatus } from "@mydecisiveai/octant-client";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
 import type { FormFields } from "@types";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState } from "react";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/error";
 import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
 import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";
@@ -39,14 +41,15 @@ export function SetupSmarthub() {
 
   const [namespace, setNamespace] = useState<string>("mdai");
 
-  const [dialogStatus, setDialogStatus] = useState<"error" | "warn">("warn");
-  const [installError, setInstallError] = useState<string | null>(null);
+  const [installError, setInstallError] = useState<DialogErrorInfo | null>(
+    null,
+  );
   const [showDialog, setShowDialog] = useState(false);
   const [hasInstalled, setHasInstalled] = useState(false);
 
   const handleInstall = async () => {
-    try {
-      if (!hasInstalled) {
+    if (!hasInstalled) {
+      try {
         await installServiceClient.installMDAIHub({
           namespace,
           connectionName,
@@ -54,11 +57,16 @@ export function SetupSmarthub() {
         });
 
         setHasInstalled(true);
+      } catch (e) {
+        setInstallError({
+          ...copy.installErrorModal,
+          networkErrorInfo: e instanceof ConnectError ? e.message : String(e),
+        });
+        setShowDialog(true);
+        return false;
       }
-
-      let latestRes: GetInstallStatusResponse | undefined = undefined;
-      let latestError: GetInstallStatusResponse | undefined = undefined;
-
+    }
+    try {
       for await (const res of installServiceClient.getInstallStatus({
         connectionName,
       })) {
@@ -69,54 +77,39 @@ export function SetupSmarthub() {
             setFormField("namespace", namespace);
             return true;
           case InstallStatus.TIMEOUT:
-            setDialogStatus("warn");
-            if (latestRes) {
-              setInstallError(
-                latestRes.details
-                  .filter(({ message }) => !!message)
-                  .map(({ name, message }) => `${name}: ${message}`)
-                  .join("\n"),
-              );
-            }
+            setInstallError(copy.installStatusTimeoutModal);
 
             setShowDialog(true);
 
             return false;
           case InstallStatus.ERROR:
-            latestError = res;
-            continue;
           default:
-            latestRes = res;
             continue;
         }
       }
 
-      setDialogStatus("error");
-      if (latestError) {
-        setInstallError(
-          latestError.details
-            .filter(({ message }) => !!message)
-            .map(({ name, message }) => `${name}: ${message}`)
-            .join("\n"),
-        );
-      }
+      setInstallError(copy.installStatusErrorModal);
 
       setShowDialog(true);
 
       return false;
     } catch (e) {
-      setInstallError(
-        e instanceof Error ? e.message : copy.genericFormErrorTxt,
-      );
+      setInstallError({
+        header: copy.genericFormErrorTxt,
+        severity: ERROR_SEVERITY.ERROR,
+        body:
+          e instanceof Error || e instanceof ConnectError
+            ? e.message
+            : String(e),
+        actions: [
+          {
+            text: "Close",
+            act: [ERROR_MODAL_ACT.CLOSE],
+          },
+        ],
+      });
       return false;
     }
-  };
-
-  const handleContinueFromDialog = () => {
-    setOctantState("hubInstalled", true);
-    setOctantConnectionScope("namespace", namespace);
-    setFormField("namespace", namespace);
-    advanceInstallFlow();
   };
 
   return (
@@ -134,10 +127,8 @@ export function SetupSmarthub() {
         />
       </Stack>
       <SetupSmarthubDialog
-        status={dialogStatus}
         open={showDialog}
         onClose={() => setShowDialog(false)}
-        onContinue={handleContinueFromDialog}
         errorInfo={installError}
       />
       <ButtonRow>
