@@ -5,9 +5,11 @@ import SupportRounded from "@mui/icons-material/SupportRounded";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import { useConnectionValidationStore } from "@store/connectionValidationStore";
 import { useOctantStore } from "@store/octantStore";
 import classNames from "classnames";
 import { useLocation } from "wouter";
+import { useShallow } from "zustand/shallow";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";
 import "./PageNav.css";
@@ -35,20 +37,25 @@ const navButtons = [
 ];
 
 function getSystemHealthNavStatus({
+  connectionStatus,
   hubInstalled,
-  validation,
-}: Pick<
-  ReturnType<typeof useOctantStore.getState>,
-  "hubInstalled" | "validation"
->) {
+  loading,
+}: {
+  connectionStatus: ReturnType<
+    typeof useConnectionValidationStore.getState
+  >["connectionStatus"];
+  hubInstalled?: boolean;
+  loading: boolean;
+}) {
+  if (loading) return "loading";
   if (hubInstalled === false) return "error";
 
-  if (validation) {
+  if (connectionStatus) {
     const connectionIsHealthy =
-      validation.clientsConnected &&
-      validation.receivingData &&
-      validation.sendingData &&
-      validation.dataIntegrity;
+      connectionStatus.clientsConnected &&
+      connectionStatus.receivingData &&
+      connectionStatus.sendingData &&
+      connectionStatus.dataIntegrity;
 
     if (!connectionIsHealthy) return "error";
     if (hubInstalled === true) return "healthy";
@@ -59,7 +66,18 @@ function getSystemHealthNavStatus({
 
 export function PageNav() {
   const [location, setLocation] = useLocation();
-  const systemHealthStatus = useOctantStore(getSystemHealthNavStatus);
+  const hubInstalled = useOctantStore((state) => state.hubInstalled);
+  const { connectionStatus, loading } = useConnectionValidationStore(
+    useShallow(({ connectionStatus, status }) => ({
+      connectionStatus,
+      loading: status === "loading",
+    })),
+  );
+  const systemHealthNavStatus = getSystemHealthNavStatus({
+    connectionStatus,
+    hubInstalled,
+    loading,
+  });
 
   return (
     <Stack className="mdai-page-nav-container" gap={2}>
@@ -84,15 +102,17 @@ export function PageNav() {
           startIcon={<Icon />}
         >
           {label}
-          {href === ROUTES.SYSTEMHEALTH && systemHealthStatus && (
+          {href === ROUTES.SYSTEMHEALTH && systemHealthNavStatus && (
             <Box
               component="span"
               className={classNames(
                 "mdai-page-nav-status-dot",
-                systemHealthStatus,
+                systemHealthNavStatus,
               )}
               aria-label={
-                systemHealthStatus === "healthy"
+                systemHealthNavStatus === "loading"
+                  ? "System health validating"
+                  : systemHealthNavStatus === "healthy"
                   ? "System health operational"
                   : "System health error"
               }

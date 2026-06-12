@@ -102,11 +102,11 @@ export const mockTransport = createRouterTransport(({ service }) => {
     },
     getConnectionValidatorRunIds: (...args) => {
       console.log("ConnectionService.getConnectionValidatorRunIds", args);
-      return { validatorRunIds: ["mock-run-id-1"] };
+      return { validatorRunIds: ["2026-06-11_22-16-12.646967"] };
     },
     createConnectionValidatorRun: (...args) => {
       console.log("ConnectionService.createConnectionValidatorRun", args);
-      return { validatorRunId: "mock-run-id-1" };
+      return { validatorRunId: "2026-06-11_22-16-12.646967" };
     },
     deleteConnectionValidator: (...args) => {
       console.log("ConnectionService.deleteConnectionValidator", args);
