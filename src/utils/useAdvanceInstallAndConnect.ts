@@ -13,7 +13,7 @@ export function useAdvanceInstallAndConnect() {
   );
 
   const advanceInstallAndConnectFlow = useCallback(() => {
-    if (currentStepNumber > lastCompletedStep) {
+    if (currentStepNumber > lastCompletedStep || !lastCompletedStep) {
       setFormField("lastCompletedStep", currentStepNumber);
     }
     navigate(`${ROUTES.INSTALL}/${currentStepNumber + 1}`);

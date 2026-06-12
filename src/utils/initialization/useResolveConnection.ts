@@ -6,8 +6,8 @@ import { connectionServiceClient } from "../../services/connection";
 
 type ResolveStatus = "pending" | "resolved";
 
-const NO_CONNECTIONS_ERROR =
-  '[internal] failed to get connections: failed to get configmap mdai-octant-connections: configmaps "mdai-octant-connections" not found';
+const NO_CONNECTIONS_ERROR_PART =
+  "[internal] failed to get connections: failed to get configmap";
 
 export function useResolveConnection() {
   const { setState } = useOctantStore(
@@ -39,9 +39,9 @@ export function useResolveConnection() {
           }
         }
       } catch (e) {
-        console.error("Error resolving connection: ", e);
         if (e instanceof ConnectError) {
-          if (e.message !== NO_CONNECTIONS_ERROR) {
+          if (!e.message.includes(NO_CONNECTIONS_ERROR_PART)) {
+            console.error("Error resolving connection: ", e);
             throw e;
           }
         }
@@ -50,10 +50,8 @@ export function useResolveConnection() {
       }
     }
 
-    if (status === "pending") {
-      void resolve();
-    }
-  }, [status, setState]);
+    void resolve();
+  }, [setState]);
 
   return status === "pending";
 }

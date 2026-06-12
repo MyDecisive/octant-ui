@@ -6,7 +6,7 @@ import {
 import { useClarityStore } from "@store/clarityStore";
 import type { UIConnectionScope } from "@types";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { timeframeServiceClient } from "../../services/timeframe";
 
@@ -16,21 +16,19 @@ export function useInitClarity({
   connectionScope?: UIConnectionScope;
 }) {
   const [loading, setLoading] = useState(false);
-  const [hasRan, setHasRan] = useState(false);
+  const hasRan = useRef(false);
 
   const { setState } = useClarityStore(
-    useShallow(({ setState }) => ({
-      setState,
-    })),
+    useShallow(({ setState }) => ({ setState })),
   );
 
   useEffect(() => {
-    let ignore = false;
+    if (!connectionScope || hasRan.current) return;
+    hasRan.current = true;
 
     async function fetchPickerOptions() {
       setLoading(true);
       try {
-        // TODO: Are these flags for log/trace indicative of selected data type?
         const { statuses, trace, log } =
           await timeframeServiceClient.timeframeStatus(
             connectionScope as Pick<
@@ -38,8 +36,6 @@ export function useInitClarity({
               "connectionName" | "namespace"
             >,
           );
-
-        if (ignore) return;
 
         if (statuses.length) {
           const options = timeframeToPickerOptions(statuses);
@@ -60,26 +56,15 @@ export function useInitClarity({
         setState("logData", log);
         setState("traceData", trace);
       } catch {
-        if (!ignore) {
-          setState("logData", false);
-          setState("traceData", false);
-        }
+        setState("logData", false);
+        setState("traceData", false);
       } finally {
-        if (!ignore) {
-          setLoading(false);
-          setHasRan(true);
-        }
+        setLoading(false);
       }
     }
 
-    if (connectionScope && !hasRan) {
-      void fetchPickerOptions();
-    }
-
-    return () => {
-      ignore = true;
-    };
-  }, [connectionScope, hasRan, setState]);
+    void fetchPickerOptions();
+  }, [connectionScope, setState]);
 
   return loading;
 }

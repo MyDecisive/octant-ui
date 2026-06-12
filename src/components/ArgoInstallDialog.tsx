@@ -28,7 +28,7 @@ export function ArgoInstallDialog() {
     ![ROUTES.SPLASH, ROUTES.INSTALL, `${ROUTES.INSTALL}/1`].includes(location);
 
   const handleClose = () => {
-    if (lastCompletedStep === -1) {
+    if (lastCompletedStep === -1 || !lastCompletedStep) {
       setFormField("lastCompletedStep", 1);
     }
     setFormField("argoAgreement", true);

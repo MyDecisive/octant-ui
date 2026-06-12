@@ -15,12 +15,14 @@ export function NextSteps() {
   const [, navigate] = useLocation();
   const { connectionName, mdaiVersion, namespace, telemetryTypes } =
     useInstallAndConnectStore(
-      useShallow(({ connectionName, mdaiVersion, namespace, telemetryTypes }) => ({
-        connectionName,
-        mdaiVersion,
-        namespace,
-        telemetryTypes,
-      })),
+      useShallow(
+        ({ connectionName, mdaiVersion, namespace, telemetryTypes }) => ({
+          connectionName,
+          mdaiVersion,
+          namespace,
+          telemetryTypes,
+        }),
+      ),
     );
   const { loading, fetchAndDownload } = useFetchManifestsAndDownload({
     connectionName,
@@ -70,7 +72,6 @@ export function NextSteps() {
           </Button>
         }
       />
-      {/* TODO: delete this last card when Settings page is ready */}
       <SimpleCard
         title={copy.tile3.title}
         description={copy.tile3.description}
