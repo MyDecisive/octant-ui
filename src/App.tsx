@@ -28,25 +28,27 @@ function App() {
     <>
       <Switch>
         <Route path={FLOW_ROUTES}>
-          <InstallAndConnectProvider>
-            <FlowLayout>
-              <Route path={ROUTES.SPLASH} component={Splash} />
-              <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
-              {INSTALL_AND_CONNECT.map(({ Component, path }, index) => {
-                return (
-                  <Route
-                    key={`flow-step-${index.toLocaleString()}`}
-                    path={path}
-                    component={Component}
-                  />
-                );
-              })}
-              <Route path={ROUTES.INSTALL}>
-                <Redirect to="/install/1" />
-              </Route>
-            </FlowLayout>
-          </InstallAndConnectProvider>
-          <Redirect to={"/error"} />
+          <Switch>
+            <InstallAndConnectProvider>
+              <FlowLayout>
+                <Route path={ROUTES.SPLASH} component={Splash} />
+                <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
+                {INSTALL_AND_CONNECT.map(({ Component, path }, index) => {
+                  return (
+                    <Route
+                      key={`flow-step-${index.toLocaleString()}`}
+                      path={path}
+                      component={Component}
+                    />
+                  );
+                })}
+                <Route path={ROUTES.INSTALL}>
+                  <Redirect to="/install/1" />
+                </Route>
+              </FlowLayout>
+            </InstallAndConnectProvider>
+            <Redirect to={ROUTES.ERROR} />
+          </Switch>
         </Route>
         <Route path={PAGE_ROUTES}>
           <Switch>
@@ -58,12 +60,13 @@ function App() {
             <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
             <Route path={ROUTES.SETTINGS} component={Settings} />
             {/* <Route path={ROUTES.SUPPORT} component={SmarthubPage} /> */}
+            <Redirect to={ROUTES.ERROR} />
           </Switch>
-          <Redirect to={"/error"} />
         </Route>
-        <Route>
+        <Route path={ROUTES.ERROR}>
           <FullscreenLoader is404 />
         </Route>
+        <Redirect to={ROUTES.ERROR} />
       </Switch>
       <SettingsUpdateToasts />
     </>
