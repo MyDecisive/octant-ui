@@ -1,4 +1,6 @@
 import type { InputProps } from "@components/formInputs/Input";
+import type { ErrorModalContent } from "@types";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../../constants/error";
 
 type SmartHubConfig = {
   header: string;
@@ -12,17 +14,53 @@ type SmartHubConfig = {
   genericFormErrorTxt: string;
   loadingTxt: string;
   infoTxt: string;
-  errModal: {
-    header: string;
-    body: string;
-    cta: string;
-  };
-  warnModal: {
-    header: string;
-    body: string;
-    ctaClose: string;
-    ctaContinue: string;
-  };
+  installErrorModal: ErrorModalContent;
+  installStatusErrorModal: ErrorModalContent;
+  installStatusTimeoutModal: ErrorModalContent;
+};
+
+const installStatusErrorModal: ErrorModalContent = {
+  // IC3-10
+  header: "Install Failed",
+  // IC3-11
+  body: "Something went wrong during installation. You can try installing again, check our <troubleshooting guide> for help, or report a bug if the issue persists.",
+  // IC3-12
+  actions: [
+    {
+      text: "Report a bug",
+      act: [ERROR_MODAL_ACT.REPORT_BUG],
+    },
+    {
+      text: "Retry install",
+      act: [ERROR_MODAL_ACT.CLOSE],
+    },
+  ],
+  severity: ERROR_SEVERITY.ERROR,
+};
+
+const installStatusTimeoutModal: ErrorModalContent = {
+  severity: ERROR_SEVERITY.WARN,
+  header: "Install still in progress",
+  body: "We're sorry. Our system isn't quite ready to complete your installation yet. Please try again in a few moments.",
+  actions: [
+    {
+      text: "Got it",
+      act: [ERROR_MODAL_ACT.CLOSE],
+    },
+  ],
+};
+
+const installErrorModal: ErrorModalContent = {
+  header: installStatusErrorModal.header,
+  body: installStatusErrorModal.body,
+  severity: installStatusErrorModal.severity,
+  actions: [
+    {
+      text: "Retry install",
+      act: [ERROR_MODAL_ACT.CLOSE],
+    },
+  ],
+  showNetworkError: true,
 };
 
 export const SmarthubCopy = {
@@ -50,24 +88,9 @@ export const SmarthubCopy = {
   // IC3-13
   loadingTxt: "Syncing resources via ArgoCD",
   infoTxt: "This usually takes 2-10 minutes",
-  errModal: {
-    // IC3-10
-    header: "Deployment Failed",
-    // IC3-11
-    body: "An unexpected error occurred while deploying to your cluster. Please review your cluster logs or consult our troubleshooting guide for assistance.",
-    // IC3-12
-    cta: "Retry Deployment",
-  },
-  warnModal: {
-    // IC3-??
-    header: "Still waiting",
-    // IC3-??
-    body: "We're still not sure whether or not things are running correctly. What would you like to do?",
-    // IC3-??
-    ctaContinue: "It's ok, let's keep going",
-    // IC3-??
-    ctaClose: "Keep waiting",
-  },
+  installStatusErrorModal,
+  installStatusTimeoutModal,
+  installErrorModal,
   // IC3-??
   genericFormErrorTxt: "Something went wrong.",
 } satisfies SmartHubConfig;

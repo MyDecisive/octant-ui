@@ -6,60 +6,76 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import type { ReactNode } from "react";
-import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
+import type {
+  ErrorModalActs,
+  ErrorModalContent,
+  ErrorModalCTA,
+  ErrorModalSeverity,
+} from "@types";
+import { useMemo, type ReactNode } from "react";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/error";
 import "./SetupSmarthubDialog.css";
+
+export interface DialogErrorInfo extends Omit<
+  ErrorModalContent,
+  "showNetworkError"
+> {
+  networkErrorInfo?: string;
+}
 
 interface SetupSmarthubDialogProps {
   open: boolean;
   onClose: () => void;
-  onContinue?: () => void;
-  errorInfo?: ReactNode;
-  status: "error" | "warn";
+  errorInfo: DialogErrorInfo | null;
 }
 
-const contentByStatus = {
-  error: {
-    title: {
-      icon: <ErrorOutlineRoundedIcon color="error" />,
-      text: copy.errModal.header,
-    },
-    content: copy.errModal.body,
-    createActions: (onClose: () => void) => (
-      <>
-        <Button onClick={onClose} variant="text">
-          {copy.errModal.cta}
-        </Button>
-      </>
-    ),
-  },
-  warn: {
-    title: {
-      icon: <WarningAmberIcon color="warning" />,
-      text: copy.warnModal.header,
-    },
-    content: copy.warnModal.body,
-    createActions: (onClose: () => void, onContinue?: () => void) => (
-      <>
-        <Button onClick={onContinue} variant="text">
-          {copy.warnModal.ctaContinue}
-        </Button>
-        <Button onClick={onClose} variant="contained">
-          {copy.warnModal.ctaClose}
-        </Button>
-      </>
-    ),
-  },
+type ActMap = Record<ErrorModalActs, () => void>;
+
+function createActions(actMap: ActMap, actions: ErrorModalCTA[]) {
+  return actions.map((action) => (
+    <Button
+      key={action.text}
+      onClick={() => {
+        action.act.forEach((act) => actMap[act]());
+      }}
+    >
+      {action.text}
+    </Button>
+  ));
+}
+
+const iconBySeverity: Record<ErrorModalSeverity, ReactNode> = {
+  [ERROR_SEVERITY.ERROR]: <ErrorOutlineRoundedIcon color="error" />,
+  [ERROR_SEVERITY.WARN]: <WarningAmberIcon color="warning" />,
 };
 
 export function SetupSmarthubDialog({
   open,
   onClose,
-  status,
-  onContinue,
   errorInfo,
 }: SetupSmarthubDialogProps) {
-  const { title, content, createActions } = contentByStatus[status];
+  const {
+    header,
+    severity = ERROR_SEVERITY.ERROR,
+    body,
+    actions = [],
+    networkErrorInfo,
+  } = errorInfo ?? {};
+
+  const icon = iconBySeverity[severity];
+
+  // TODO: refine this such that it provides button/link props
+  const actMap: ActMap = useMemo(() => {
+    return {
+      [ERROR_MODAL_ACT.CLOSE]: onClose,
+      [ERROR_MODAL_ACT.VISIT_DOCS]: () => {
+        window.location.assign("https://docs.mydecisive.ai/");
+      },
+      [ERROR_MODAL_ACT.REPORT_BUG]: () => {
+        window.alert("We need a URL for this");
+      },
+    };
+  }, [onClose]);
 
   return (
     <Dialog
@@ -69,18 +85,20 @@ export function SetupSmarthubDialog({
       aria-describedby="error-dialog-description"
     >
       <DialogTitle id="error-dialog-title">
-        {title.icon}
-        {title.text}
+        {icon}
+        {header}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="error-dialog-description">
-          {content}
-          {errorInfo && (
-            <pre className="error-dialog-error-info-content">{errorInfo}</pre>
+        <DialogContentText component="div" id="error-dialog-description">
+          {body}
+          {networkErrorInfo && (
+            <pre className="error-dialog-error-info-content">
+              {networkErrorInfo}
+            </pre>
           )}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>{createActions(onClose, onContinue)}</DialogActions>
+      <DialogActions>{createActions(actMap, actions)}</DialogActions>
     </Dialog>
   );
 }
