@@ -42,3 +42,10 @@ svg.octobuddy-loader-icon {
   width: 34px;
   animation: logo-spin 3s ease-in-out infinite;
 }
+
+svg.octobuddy-loader-icon.is404 {
+  animation: none;
+  width: 120px;
+  height: auto;
+  margin-bottom: calc(var(--mdai-spacing-unit) * 2);
+}

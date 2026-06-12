@@ -10,10 +10,28 @@ import { INSTALL_AND_CONNECT, ROUTES } from "../../constants/routing";
 import { argoCdServiceClient } from "../../services/argoCd";
 import { dDogServiceClient } from "../../services/ddog";
 
+function probablyFinishedInstallAndConnect(
+  state: Partial<InstallAndConnectFormFields>,
+): boolean {
+  return !!(
+    state.connectionName &&
+    state.namespace &&
+    state.telemetryTypes?.length &&
+    state.url &&
+    state.argoUrl
+  );
+}
+
 export function deriveRedirectRoute(
   currentPath: string,
   storeState: Partial<InstallAndConnectFormFields>,
 ): string | null {
+  if (
+    currentPath === ROUTES.SPLASH &&
+    probablyFinishedInstallAndConnect(storeState)
+  ) {
+    return ROUTES.CLARITY;
+  }
   const currentPageConfig = INSTALL_AND_CONNECT.find(
     (pageConfig) => pageConfig.path === currentPath,
   );
@@ -30,24 +48,32 @@ export function deriveRedirectRoute(
 export function useDetectProgress() {
   const [currentPath, navigate] = useLocation();
 
-  const { connectionName, namespace, telemetryTypes, url, lastCompletedStep } =
-    useInstallAndConnectStore(
-      useShallow(
-        ({
-          connectionName,
-          namespace,
-          telemetryTypes,
-          lastCompletedStep,
-          url,
-        }) => ({
-          connectionName,
-          namespace,
-          lastCompletedStep,
-          telemetryTypes,
-          url,
-        }),
-      ),
-    );
+  const {
+    connectionName,
+    namespace,
+    telemetryTypes,
+    url,
+    argoUrl,
+    lastCompletedStep,
+  } = useInstallAndConnectStore(
+    useShallow(
+      ({
+        connectionName,
+        namespace,
+        telemetryTypes,
+        lastCompletedStep,
+        url,
+        argoUrl,
+      }) => ({
+        connectionName,
+        namespace,
+        lastCompletedStep,
+        telemetryTypes,
+        url,
+        argoUrl,
+      }),
+    ),
+  );
 
   const setInstallAndConnectField = useInstallAndConnectStore(
     (state) => state.setFormField,
@@ -119,6 +145,7 @@ export function useDetectProgress() {
     namespace,
     telemetryTypes,
     url,
+    argoUrl,
   });
 
   if (redirectRoute) {

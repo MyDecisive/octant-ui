@@ -15,9 +15,10 @@ export const ROUTES = {
   SYSTEMHEALTH: "/system-health",
   SETTINGS: "/settings",
   SUPPORT: "/support",
+  ERROR: "/error",
 };
 
-export const FLOW_ROUTES = new RegExp(/^\/(?:install(?:\/\d+)?)?$/);
+export const FLOW_ROUTES = new RegExp(/^\/(?:install(?:\/[1-7])?)?$/);
 
 export const PAGE_ROUTES = new RegExp(
   /^\/(clarity|system-health|settings|support)$/,
