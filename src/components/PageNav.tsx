@@ -1,7 +1,6 @@
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MonitorHeartRounded from "@mui/icons-material/MonitorHeartRounded";
 import SettingsRounded from "@mui/icons-material/SettingsRounded";
-import SupportRounded from "@mui/icons-material/SupportRounded";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -27,11 +26,11 @@ const navButtons = [
     href: ROUTES.SETTINGS,
     Icon: SettingsRounded,
   },
-  {
-    label: "Support",
-    href: ROUTES.SUPPORT,
-    Icon: SupportRounded,
-  },
+  // {
+  //   label: "Support",
+  //   href: ROUTES.SUPPORT,
+  //   Icon: SupportRounded,
+  // },
 ];
 
 function getSystemHealthNavStatus({
