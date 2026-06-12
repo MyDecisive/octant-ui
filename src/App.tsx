@@ -46,6 +46,7 @@ function App() {
               </Route>
             </FlowLayout>
           </InstallAndConnectProvider>
+          <Redirect to={"/error"} />
         </Route>
         <Route path={PAGE_ROUTES}>
           <Switch>
@@ -58,6 +59,7 @@ function App() {
             <Route path={ROUTES.SETTINGS} component={Settings} />
             {/* <Route path={ROUTES.SUPPORT} component={SmarthubPage} /> */}
           </Switch>
+          <Redirect to={"/error"} />
         </Route>
         <Route>
           <FullscreenLoader is404 />
