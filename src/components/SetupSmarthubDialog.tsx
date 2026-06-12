@@ -89,7 +89,7 @@ export function SetupSmarthubDialog({
         {header}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="error-dialog-description">
+        <DialogContentText component="div" id="error-dialog-description">
           {body}
           {networkErrorInfo && (
             <pre className="error-dialog-error-info-content">
