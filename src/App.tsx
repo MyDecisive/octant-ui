@@ -59,6 +59,9 @@ function App() {
             {/* <Route path={ROUTES.SUPPORT} component={SmarthubPage} /> */}
           </Switch>
         </Route>
+        <Route>
+          <FullscreenLoader is404 />
+        </Route>
       </Switch>
       <SettingsUpdateToasts />
     </>
