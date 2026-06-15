@@ -5,6 +5,7 @@ import {
 } from "@store/settingsStore";
 import type { ComponentProps } from "react";
 import { useShallow } from "zustand/shallow";
+import { ASYNC_STATUS } from "../../constants/status";
 
 type SnackbarProps = Omit<ComponentProps<typeof Snackbar>, "onClose">;
 
@@ -14,7 +15,7 @@ function determineSnackbarProps(
   loadingDismissed: boolean,
 ): SnackbarProps | null {
   switch (status) {
-    case "loading":
+    case ASYNC_STATUS.LOADING:
       return {
         open: !loadingDismissed,
         severity: "neutral",
@@ -22,20 +23,20 @@ function determineSnackbarProps(
         description:
           "This may take a few moments. Feel free to monitor connection status in System health.",
       };
-    case "success":
+    case ASYNC_STATUS.SUCCESS:
       return {
         open: true,
         severity: "neutral",
         message: "New settings applied",
       };
-    case "error":
+    case ASYNC_STATUS.ERROR:
       return {
         open: true,
         severity: "error",
         title: "Settings update failed",
         description: error,
       };
-    case "idle":
+    case ASYNC_STATUS.IDLE:
       return null;
   }
 }

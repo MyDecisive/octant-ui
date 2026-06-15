@@ -1,8 +1,8 @@
 import {
   DEFAULT_CONNECTION_VALIDATION_WAIT_MS,
   type ConnectionValidationScope,
+  selectConnectionValidationView,
   useConnectionValidationStore,
-  validatorRunIdToTimestamp,
 } from "@store/connectionValidationStore";
 import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
@@ -13,11 +13,9 @@ interface UseConnectionValidationOptions {
   waitForNewRunMs?: number;
 }
 
-export { validatorRunIdToTimestamp };
-
 export function useConnectionValidation({
   scope,
-  autoStart = true,
+  autoStart = false,
   waitForNewRunMs = DEFAULT_CONNECTION_VALIDATION_WAIT_MS,
 }: UseConnectionValidationOptions) {
   const connectionName = scope?.connectionName;
@@ -27,30 +25,10 @@ export function useConnectionValidation({
 
   const {
     connectionStatus,
-    error,
     loadLatestOrCreate,
-    loading,
     revalidate: runRevalidation,
-    validatorRun,
-  } = useConnectionValidationStore(
-    useShallow(
-      ({
-        connectionStatus,
-        error,
-        loadLatestOrCreate,
-        revalidate,
-        status,
-        validatorRun,
-      }) => ({
-        connectionStatus,
-        error,
-        loadLatestOrCreate,
-        loading: status === "loading",
-        revalidate,
-        validatorRun,
-      }),
-    ),
-  );
+    ...validationView
+  } = useConnectionValidationStore(useShallow(selectConnectionValidationView));
 
   async function revalidate() {
     if (!currentScope) return null;
@@ -77,11 +55,7 @@ export function useConnectionValidation({
 
   return {
     connectionStatus,
-    error,
-    loading,
+    ...validationView,
     revalidate,
-    validatorRunId: validatorRun?.runId,
-    timestamp:
-      validatorRun ? validatorRunIdToTimestamp(validatorRun.runId) : undefined,
   };
 }

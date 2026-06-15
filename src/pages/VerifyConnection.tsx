@@ -21,6 +21,7 @@ export function VerifyConnection() {
 
   const { connectionStatus, error, loading, revalidate } =
     useConnectionValidation({
+      autoStart: true,
       scope: { connectionName, namespace },
     });
 

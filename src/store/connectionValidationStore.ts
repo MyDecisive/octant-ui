@@ -3,7 +3,10 @@ import type {
   ConnectionScope,
   GetConnectionStatusResponse,
 } from "@mydecisiveai/octant-client";
+import type { AsyncStatus } from "@types";
+import { createInFlightRequestCache } from "@utils/createInFlightRequestCache";
 import { create } from "zustand";
+import { ASYNC_STATUS } from "../constants/status";
 import {
   connectionServiceClient,
   createOrGetValidatorRunId,
@@ -11,12 +14,6 @@ import {
   getLatestValidatorRunId,
   validatorRunIdToDate,
 } from "../services/connection";
-
-export type ConnectionValidationStatus =
-  | "idle"
-  | "loading"
-  | "success"
-  | "error";
 
 export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = 90_000;
 
@@ -34,8 +31,10 @@ interface ValidateConnectionParams {
   waitForNewRunMs?: number;
 }
 
+type ValidationOperation = "loadLatestOrCreate" | "revalidate";
+
 interface ConnectionValidationState {
-  status: ConnectionValidationStatus;
+  status: AsyncStatus;
   error?: string;
   connectionStatus: GetConnectionStatusResponse | null;
   validatorRun: ValidatorRun | null;
@@ -47,8 +46,8 @@ interface ConnectionValidationState {
   ) => Promise<GetConnectionStatusResponse | null>;
 }
 
-let inFlightValidation: Promise<GetConnectionStatusResponse | null> | null =
-  null;
+const validations =
+  createInFlightRequestCache<GetConnectionStatusResponse | null>();
 
 function getErrorMessage(error: unknown) {
   if (error instanceof Error || error instanceof ConnectError) {
@@ -76,23 +75,28 @@ async function getConnectionStatusForRun(
   });
 }
 
-export const useConnectionValidationStore =
-  create<ConnectionValidationState>()((set) => {
+function getValidationRequestKey(
+  operation: ValidationOperation,
+  scope: ConnectionValidationScope,
+) {
+  return [operation, scope.connectionName ?? "", scope.namespace ?? ""].join(
+    ":",
+  );
+}
+
+export const useConnectionValidationStore = create<ConnectionValidationState>()(
+  (set) => {
     async function runValidation(
+      operation: ValidationOperation,
       params: ValidateConnectionParams,
       getRunId: () => Promise<{ runId: string; isNewRun: boolean }>,
     ) {
-      const {
-        scope,
-        waitForNewRunMs = DEFAULT_CONNECTION_VALIDATION_WAIT_MS,
-      } = params;
+      const { scope, waitForNewRunMs = DEFAULT_CONNECTION_VALIDATION_WAIT_MS } =
+        params;
+      const requestKey = getValidationRequestKey(operation, scope);
 
-      if (inFlightValidation) {
-        return inFlightValidation;
-      }
-
-      const validation = (async () => {
-        set({ status: "loading", error: undefined });
+      return validations.run(requestKey, async () => {
+        set({ status: ASYNC_STATUS.LOADING, error: undefined });
 
         try {
           const { runId, isNewRun } = await getRunId();
@@ -108,7 +112,7 @@ export const useConnectionValidationStore =
           );
 
           set({
-            status: "success",
+            status: ASYNC_STATUS.SUCCESS,
             error: undefined,
             connectionStatus: nextConnectionStatus,
             validatorRun: { ...scope, runId },
@@ -117,25 +121,20 @@ export const useConnectionValidationStore =
         } catch (error) {
           console.error(error instanceof Error ? error.message : error);
           set({
-            status: "error",
+            status: ASYNC_STATUS.ERROR,
             error: getErrorMessage(error),
           });
           return null;
-        } finally {
-          inFlightValidation = null;
         }
-      })();
-
-      inFlightValidation = validation;
-      return validation;
+      });
     }
 
     return {
-      status: "idle",
+      status: ASYNC_STATUS.IDLE,
       connectionStatus: null,
       validatorRun: null,
       loadLatestOrCreate: (params) =>
-        runValidation(params, async () => {
+        runValidation("loadLatestOrCreate", params, async () => {
           const latestRunId = await getLatestValidatorRunId(params.scope);
           if (latestRunId) return { runId: latestRunId, isNewRun: false };
 
@@ -145,9 +144,31 @@ export const useConnectionValidationStore =
           };
         }),
       revalidate: (params) =>
-        runValidation(params, async () => ({
+        runValidation("revalidate", params, async () => ({
           runId: await createValidatorRunId(params.scope),
           isNewRun: true,
         })),
     };
-  });
+  },
+);
+
+export function selectConnectionValidationView({
+  connectionStatus,
+  error,
+  loadLatestOrCreate,
+  revalidate,
+  status,
+  validatorRun,
+}: ConnectionValidationState) {
+  return {
+    connectionStatus,
+    error,
+    loadLatestOrCreate,
+    loading: status === ASYNC_STATUS.LOADING,
+    revalidate,
+    validatorRunId: validatorRun?.runId,
+    timestamp: validatorRun
+      ? validatorRunIdToTimestamp(validatorRun.runId)
+      : undefined,
+  };
+}

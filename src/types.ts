@@ -6,6 +6,7 @@ import {
 } from "@mydecisiveai/octant-client";
 import type { JSX } from "react";
 import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "./constants/error";
+import { ASYNC_STATUS } from "./constants/status";
 
 export type DeployMethod = "argocd-sideload" | "argocd-manifests";
 
@@ -47,6 +48,7 @@ export interface DataFidelityResponse {
 }
 
 export type StatusRowState = "loading" | boolean | null;
+export type AsyncStatus = (typeof ASYNC_STATUS)[keyof typeof ASYNC_STATUS];
 
 export interface FidelityState {
   receivingData: StatusRowState;

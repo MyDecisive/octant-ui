@@ -1,13 +1,21 @@
 import type { HealthWidgetProps } from "@components/HealthWidget/HealthWidget";
+import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
 import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
+import { formatLastRun } from "@utils/formatTimestamp";
 import { useConnectionValidation } from "@utils/useConnectionValidation";
 import { useShallow } from "zustand/shallow";
+import { ASYNC_STATUS } from "../../constants/status";
 import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
 
 function smarthubStatusToHealthWidgetProps(
   installed: boolean | null,
+  loading: boolean,
 ): Omit<HealthWidgetProps, "title"> {
+  if (loading) {
+    return { status: "loading" };
+  }
+
   if (installed === true) {
     return { status: "operational" };
   }
@@ -32,33 +40,38 @@ function smarthubStatusToHealthWidgetProps(
   return {};
 }
 
-function formatLastRun(timestamp?: string) {
-  if (!timestamp) return undefined;
-
-  return `Last run ${new Intl.DateTimeFormat(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(timestamp))}`;
-}
-
 export function useManageSystemHealth() {
-  const { connectionName, hubInstalled, namespace } = useOctantStore(
-    useShallow(({ hubInstalled, connection }) => ({
-      hubInstalled,
+  const { connectionName, namespace } = useOctantStore(
+    useShallow(({ connection }) => ({
       connectionName: connection?.scope?.connectionName,
       namespace: connection?.scope?.namespace,
+    })),
+  );
+  const { hubInstalled, hubLoading, verifyInstall } = useHubInstallStore(
+    useShallow(({ installed, status, verifyInstall }) => ({
+      hubInstalled: installed,
+      hubLoading: status === ASYNC_STATUS.LOADING,
+      verifyInstall,
     })),
   );
 
   const {
     connectionStatus,
-    error,
     loading,
-    revalidate,
+    revalidate: revalidateConnection,
     timestamp,
   } = useConnectionValidation({
     scope: { connectionName, namespace },
   });
+
+  async function revalidate() {
+    if (!connectionName) {
+      await revalidateConnection();
+      return;
+    }
+
+    await Promise.all([verifyInstall(connectionName), revalidateConnection()]);
+  }
 
   const displayTimestamp = formatLastRun(timestamp);
 
@@ -76,14 +89,14 @@ export function useManageSystemHealth() {
     title: "Smarthub Infrastructure",
     timestamp: displayTimestamp,
     simple: true,
-    ...smarthubStatusToHealthWidgetProps(hubInstalled ?? null),
+    ...smarthubStatusToHealthWidgetProps(hubInstalled ?? null, hubLoading),
   };
 
   return {
     healthWidgetProps,
     revalidate,
     showRevalidateButton:
-      !loading && (healthWidgetProps.status === "error" || !!error),
+      !loading && !hubLoading && !!connectionName && !!namespace,
     smarthubWidgetProps,
   };
 }

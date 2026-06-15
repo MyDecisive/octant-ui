@@ -5,12 +5,13 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useConnectionValidationStore } from "@store/connectionValidationStore";
-import { useOctantStore } from "@store/octantStore";
+import { useHubInstallStore } from "@store/hubInstallStore";
 import classNames from "classnames";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";
+import { ASYNC_STATUS } from "../constants/status";
 import "./PageNav.css";
 const navButtons = [
   {
@@ -65,11 +66,11 @@ function getSystemHealthNavStatus({
 
 export function PageNav() {
   const [location, setLocation] = useLocation();
-  const hubInstalled = useOctantStore((state) => state.hubInstalled);
+  const hubInstalled = useHubInstallStore((state) => state.installed);
   const { connectionStatus, loading } = useConnectionValidationStore(
     useShallow(({ connectionStatus, status }) => ({
       connectionStatus,
-      loading: status === "loading",
+      loading: status === ASYNC_STATUS.LOADING,
     })),
   );
   const systemHealthNavStatus = getSystemHealthNavStatus({

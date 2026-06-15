@@ -3,7 +3,6 @@ import { create } from "zustand";
 
 interface OctantState {
   connection?: Partial<UIConnectionData>;
-  hubInstalled?: boolean;
 }
 interface Actions {
   setState: (
