@@ -43,3 +43,33 @@ npm run lint
 - Keep PRs focused — one logical change per PR makes review easier.
 - Respond to review feedback promptly; mark resolved threads once addressed.
 - Squash or clean up fixup commits before merge if requested.
+
+### Repository organization
+
+```bash
+src
+├── assets                # media resources used in the application
+├── components            # opinionated/wrapped versions of MUI components OR components extracting a common pattern as well as their associated style files, if any. components should be use-agnostic.
+│   ├── formInputs        # opinionated form input components and their associated style files, if any
+│   ├── layout            # components that extract common layout patterns for simpler use elsewhere
+│   ├── Component.tsx     # Example component filename
+│   ├── Component.css     # Example component style filename
+│   ├── Component         # if a component requires more than the above two files, put it in its own directory with the same name e.g. src/components/Table
+├── constants             # files named for a general domain (e.g. routing) with exports in SCREAMING_SNAKE_CASE with values to direct or indicate behavior, but not to be user-facing
+├── contexts              # contexts, typically for a store dependent on OctantStore information, and their providers
+├── copy                  # user facing strings. organization should follow the `pages` pattern
+├── fieldValidation       # utility functions for validating form fields
+├── pages                 # page components that represent one route in the application
+│   ├── Page.tsx          # Example page filename
+│   ├── Page.css          # Example page style filename
+│   ├── Page              # if a page requires more than the above two files, put it in its own directory with the same name e.g. src/pages/Clarity
+├── services              # utilities for connecting with the Octant API services
+│   └── mockData          # utilities for mocking Octant API services
+├── store                 # zustand store declarations
+├── stories               # storybook stories for components in this repository
+├── styles                # root css file, custom MUI theme broken up by top level theme key
+│   └── components        # theme overrides per component
+├── types                 # typescript types per domain
+├── utils                 # collection of reused helper functions. Each file exports one helper function
+└── initialization        # hooks that execute logic related to when a portion of the application first mounts. typically aligned with store and/or contexts
+```
