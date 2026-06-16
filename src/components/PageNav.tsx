@@ -11,7 +11,6 @@ import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";
-import { ASYNC_STATUS } from "../constants/status";
 import "./PageNav.css";
 const navButtons = [
   {
@@ -39,15 +38,12 @@ const navButtons = [
 function getSystemHealthNavStatus({
   connectionStatus,
   hubInstalled,
-  loading,
 }: {
   connectionStatus: ReturnType<
     typeof useConnectionValidationStore.getState
   >["connectionStatus"];
   hubInstalled?: boolean;
-  loading: boolean;
 }) {
-  if (loading) return "loading";
   if (hubInstalled === false) return "error";
 
   if (connectionStatus) {
@@ -58,7 +54,7 @@ function getSystemHealthNavStatus({
       connectionStatus.dataIntegrity;
 
     if (!connectionIsHealthy) return "error";
-    if (hubInstalled === true) return "healthy";
+    return "healthy";
   }
 
   return null;
@@ -67,16 +63,14 @@ function getSystemHealthNavStatus({
 export function PageNav() {
   const [location, setLocation] = useLocation();
   const hubInstalled = useHubInstallStore((state) => state.installed);
-  const { connectionStatus, loading } = useConnectionValidationStore(
-    useShallow(({ connectionStatus, status }) => ({
+  const { connectionStatus } = useConnectionValidationStore(
+    useShallow(({ connectionStatus }) => ({
       connectionStatus,
-      loading: status === ASYNC_STATUS.LOADING,
     })),
   );
   const systemHealthNavStatus = getSystemHealthNavStatus({
     connectionStatus,
     hubInstalled,
-    loading,
   });
 
   return (
@@ -110,9 +104,7 @@ export function PageNav() {
                 systemHealthNavStatus,
               )}
               aria-label={
-                systemHealthNavStatus === "loading"
-                  ? "System health validating"
-                  : systemHealthNavStatus === "healthy"
+                systemHealthNavStatus === "healthy"
                   ? "System health operational"
                   : "System health error"
               }
