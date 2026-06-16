@@ -202,8 +202,12 @@ export function useManageClarityData(
     summaryData: overallToSummaryRows(overallData),
     logData,
     spanData,
-    hasLogData: canRequestLogData && (overallData?.log?.sent ?? 0) > 0,
-    hasTraceData: canRequestTraceData && (overallData?.trace?.sent ?? 0) > 0,
+    hasLogData:
+      canRequestLogData &&
+      ((overallData?.log?.sent ?? 0) > 0 || logData.length > 0),
+    hasTraceData:
+      canRequestTraceData &&
+      ((overallData?.trace?.sent ?? 0) > 0 || spanData.length > 0),
     refreshData: fetchOverallData,
   };
 }
