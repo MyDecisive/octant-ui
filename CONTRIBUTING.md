@@ -34,7 +34,7 @@ npm run lint
 
 - Scope styles to their component to avoid unintended side effects. Component style files should be named to match the component they apply to. See existing css files for examples.
 - Prefer CSS custom properties (variables) for colors, spacing, and typography to maintain consistency.
-- Avoid inline styles except for values that are truly dynamic.
+- Avoid inline styles
 - Class names should be descriptive and follow a consistent convention.
 
 ## Pull Request Guidelines
@@ -74,6 +74,7 @@ src
 └── hooks               # custom hooks that are used in multiple places. custom hooks that are used by one consumer should be colocated in that consumer's directory.
 ```
 
-For components or pages, colocate shared code in the same directory as the components or functions sharing the code. However, if the shared code is needed elsewhere in the application, elevate it to an appropriate location in the repository.
+For components or pages, colocate shared code in the same directory as the components or functions sharing the code. However, if the shared code is needed elsewhere in the application, elevate it to an appropriate location in the repository. If two components in the same folder using a common function, just keep that function in that folder. But if/when it needs to be used elsewhere, pull it out into utils.
+Or if it's a type or constant, move to the appropriate place.
 
 Unit tests should be located in a directory under a \_\_tests\_\_ folder, e.g. services/mockData/\_\_tests\_\_.
