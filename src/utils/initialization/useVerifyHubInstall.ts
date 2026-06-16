@@ -1,18 +1,14 @@
 import { useOctantStore } from "@store/octantStore";
+import { useHubInstallStore } from "@store/hubInstallStore";
 import { useEffect, useRef, useState } from "react";
-import { useShallow } from "zustand/shallow";
-import { waitForInstallStatus } from "../../services/install";
 
 type VerifyStatus = "pending" | "complete";
 
 export function useVerifyHubInstall(upstreamResolving: boolean) {
-  const { connectionName, setState } = useOctantStore(
-    useShallow(({ connection, setState }) => ({
-      connectionName: connection?.scope?.connectionName,
-
-      setState,
-    })),
+  const connectionName = useOctantStore(
+    (state) => state.connection?.scope?.connectionName,
   );
+  const verifyHubInstall = useHubInstallStore((state) => state.verifyInstall);
 
   const [status, setStatus] = useState<VerifyStatus>("pending");
   const hasRan = useRef(false);
@@ -23,19 +19,18 @@ export function useVerifyHubInstall(upstreamResolving: boolean) {
     }
     hasRan.current = true;
 
-    async function verifyInstall() {
+    async function runVerification() {
       if (!connectionName) {
         setStatus("complete");
         return;
       }
 
-      const installResult = await waitForInstallStatus(connectionName);
-      setState("hubInstalled", installResult.status === "installed");
+      await verifyHubInstall(connectionName);
       setStatus("complete");
     }
 
-    void verifyInstall();
-  }, [connectionName, setState, upstreamResolving]);
+    void runVerification();
+  }, [connectionName, upstreamResolving, verifyHubInstall]);
 
   return status === "pending";
 }

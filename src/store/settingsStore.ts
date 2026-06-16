@@ -1,10 +1,12 @@
+import type { AsyncStatus } from "@types";
 import { create } from "zustand";
+import { ASYNC_STATUS } from "../constants/status";
 import {
   updateCollectorSettings,
   type UpdateCollectorSettingsParams,
 } from "../services/settings";
 
-export type SettingsStatus = "idle" | "loading" | "success" | "error";
+export type SettingsStatus = AsyncStatus;
 
 interface SettingsState {
   status: SettingsStatus;
@@ -21,28 +23,36 @@ interface SettingsActions {
 type SettingsStore = SettingsState & SettingsActions;
 
 export const useSettingsStore = create<SettingsStore>()((set) => ({
-  status: "idle",
+  status: ASYNC_STATUS.IDLE,
   loadingDismissed: false,
   updateSettings: async (payload) => {
-    set({ status: "loading", error: undefined, loadingDismissed: false });
+    set({
+      status: ASYNC_STATUS.LOADING,
+      error: undefined,
+      loadingDismissed: false,
+    });
 
     try {
       const updated = await updateCollectorSettings(payload);
 
       if (!updated) {
         set({
-          status: "error",
+          status: ASYNC_STATUS.ERROR,
           error: "Octant timed out while updating collector settings.",
           loadingDismissed: false,
         });
         return false;
       }
 
-      set({ status: "success", error: undefined, loadingDismissed: false });
+      set({
+        status: ASYNC_STATUS.SUCCESS,
+        error: undefined,
+        loadingDismissed: false,
+      });
       return true;
     } catch (e) {
       set({
-        status: "error",
+        status: ASYNC_STATUS.ERROR,
         error:
           e instanceof Error
             ? e.message
@@ -53,11 +63,15 @@ export const useSettingsStore = create<SettingsStore>()((set) => ({
     }
   },
   showError: (error) =>
-    set({ status: "error", error, loadingDismissed: false }),
+    set({ status: ASYNC_STATUS.ERROR, error, loadingDismissed: false }),
   dismiss: () =>
     set((state) =>
-      state.status === "loading"
+      state.status === ASYNC_STATUS.LOADING
         ? { loadingDismissed: true }
-        : { status: "idle", error: undefined, loadingDismissed: false },
+        : {
+            status: ASYNC_STATUS.IDLE,
+            error: undefined,
+            loadingDismissed: false,
+          },
     ),
 }));

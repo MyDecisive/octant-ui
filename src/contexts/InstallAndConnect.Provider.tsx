@@ -2,6 +2,7 @@ import {
   createInstallAndConnectStore,
   type InstallAndConnectFormFields,
 } from "@store/installAndConnectStore";
+import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
 import { fromMLTTypes } from "@utils/fromMltTypes";
 import { type PropsWithChildren, useState } from "react";
@@ -14,17 +15,16 @@ export function InstallAndConnectProvider({
 }: PropsWithChildren<Partial<InstallAndConnectFormFields>>) {
   const {
     connectionName,
-    hubInstalled,
     namespace,
     telemetryTypes = [],
   } = useOctantStore(
-    useShallow(({ connection, hubInstalled }) => ({
+    useShallow(({ connection }) => ({
       connectionName: connection?.scope?.connectionName,
       namespace: connection?.scope?.namespace,
       telemetryTypes: connection?.telemetryTypes,
-      hubInstalled,
     })),
   );
+  const hubInstalled = useHubInstallStore((state) => state.installed);
   const [store] = useState(() =>
     createInstallAndConnectStore({
       ...props,

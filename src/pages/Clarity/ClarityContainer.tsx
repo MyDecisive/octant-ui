@@ -1,18 +1,14 @@
 import { FullscreenLoader } from "@components/FullscreenLoader";
 import { PageContainer } from "@components/layout/PageContainer";
+import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
 import { useInitClarity } from "@utils/initialization/useInitClarity";
 import { useLocation } from "wouter";
-import { useShallow } from "zustand/shallow";
 import { ROUTES } from "../../constants/routing";
 
 export function ClarityContainer({ children }: { children: React.ReactNode }) {
-  const { connectionScope, hubInstalled } = useOctantStore(
-    useShallow(({ connection, hubInstalled }) => ({
-      connectionScope: connection?.scope,
-      hubInstalled,
-    })),
-  );
+  const connectionScope = useOctantStore((state) => state.connection?.scope);
+  const hubInstalled = useHubInstallStore((state) => state.installed);
   const initializing = useInitClarity({ connectionScope });
   const [, navigate] = useLocation();
 

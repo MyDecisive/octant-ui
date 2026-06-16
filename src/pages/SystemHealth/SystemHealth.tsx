@@ -24,18 +24,18 @@ export function SystemHealthPage() {
               containerClassName="system-health-widget"
               {...healthWidgetProps}
             />
-            <ButtonRow>
-              {showRevalidateButton && (
-                <Button variant="contained" onClick={() => void revalidate()}>
-                  Revalidate
-                </Button>
-              )}
-            </ButtonRow>
           </Stack>
           <HealthWidget
             containerClassName="system-health-widget"
             {...smarthubWidgetProps}
           />
+          <ButtonRow>
+            {showRevalidateButton && (
+              <Button variant="contained" onClick={() => void revalidate()}>
+                Revalidate
+              </Button>
+            )}
+          </ButtonRow>
         </Stack>
       </Box>
     </PageContainer>
