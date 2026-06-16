@@ -74,7 +74,7 @@ export function useManageSystemHealth() {
     await Promise.all([verifyInstall(connectionName), revalidateConnection()]);
   }, [connectionName, revalidateConnection, verifyInstall]);
 
-  const displayTimestamp = formatLastRun(timestamp);
+  const displayTimestamp = useMemo(() => formatLastRun(timestamp), [timestamp]);
 
   const healthWidgetProps = useMemo(
     () => ({
