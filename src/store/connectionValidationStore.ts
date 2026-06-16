@@ -15,7 +15,7 @@ import {
   validatorRunIdToDate,
 } from "../services/connection";
 
-export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = 90_000;
+export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = 65_000;
 
 export type ConnectionValidationScope = Pick<
   ConnectionScope,

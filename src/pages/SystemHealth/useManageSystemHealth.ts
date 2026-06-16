@@ -4,6 +4,7 @@ import { useOctantStore } from "@store/octantStore";
 import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
 import { formatLastRun } from "@utils/formatTimestamp";
 import { useConnectionValidation } from "@utils/useConnectionValidation";
+import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { ASYNC_STATUS } from "../../constants/status";
 import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
@@ -64,39 +65,56 @@ export function useManageSystemHealth() {
     scope: { connectionName, namespace },
   });
 
-  async function revalidate() {
+  const revalidate = useCallback(async () => {
     if (!connectionName) {
       await revalidateConnection();
       return;
     }
 
     await Promise.all([verifyInstall(connectionName), revalidateConnection()]);
-  }
+  }, [connectionName, revalidateConnection, verifyInstall]);
 
   const displayTimestamp = formatLastRun(timestamp);
 
-  const healthWidgetProps = {
-    title: copy.connection,
-    timestamp: displayTimestamp,
-    ...connectionStatusToHealthWidgetProps({
-      loading,
-      connectionStatus,
-      preferLoading: true,
+  const healthWidgetProps = useMemo(
+    () => ({
+      title: copy.connection,
+      timestamp: displayTimestamp,
+      ...connectionStatusToHealthWidgetProps({
+        loading,
+        connectionStatus,
+        preferLoading: true,
+      }),
     }),
-  };
+    [displayTimestamp, connectionStatus, loading],
+  );
 
-  const smarthubWidgetProps = {
-    title: "Smarthub Infrastructure",
-    timestamp: displayTimestamp,
-    simple: true,
-    ...smarthubStatusToHealthWidgetProps(hubInstalled ?? null, hubLoading),
-  };
+  const smarthubWidgetProps = useMemo(
+    () => ({
+      title: "Smarthub Infrastructure",
+      timestamp: displayTimestamp,
+      simple: true,
+      ...smarthubStatusToHealthWidgetProps(hubInstalled ?? null, hubLoading),
+    }),
+    [displayTimestamp, hubInstalled, hubLoading],
+  );
 
-  return {
-    healthWidgetProps,
-    revalidate,
-    showRevalidateButton:
-      !loading && !hubLoading && !!connectionName && !!namespace,
-    smarthubWidgetProps,
-  };
+  return useMemo(
+    () => ({
+      healthWidgetProps,
+      revalidate,
+      showRevalidateButton:
+        !loading && !hubLoading && !!connectionName && !!namespace,
+      smarthubWidgetProps,
+    }),
+    [
+      healthWidgetProps,
+      loading,
+      hubLoading,
+      connectionName,
+      namespace,
+      revalidate,
+      smarthubWidgetProps,
+    ],
+  );
 }
