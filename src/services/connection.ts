@@ -3,13 +3,11 @@ import {
   type ConnectionScope,
   ConnectionService,
 } from "@mydecisiveai/octant-client";
-import {
-  MOCK_CONNECTION_VALIDATION_WAIT_MS,
-  mockTransport,
-} from "./mockData/connection.mock";
+import { mockTransport } from "./mockData/connection.mock";
 import { transport } from "./transport";
 
 const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = 65_000;
+const MOCK_CONNECTION_VALIDATION_WAIT_MS = 10_000;
 
 export const connectionServiceClient = createClient(
   ConnectionService,
