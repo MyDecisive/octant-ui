@@ -10,7 +10,9 @@ import { FilterTypes } from "@types";
 import { fromMLTTypes } from "@utils/fromMltTypes";
 import { timeframeLabels } from "@utils/timeframeToPickerOptions";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
+import { ROUTES } from "../../constants/routing";
 import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 import "./Clarity.css";
 import { ClarityTabs } from "./ClarityTabs";
@@ -21,6 +23,7 @@ import { useManageTimeframes } from "./useManageTimeframes";
 
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [, navigate] = useLocation();
   const { logFilter, traceFilter } = useManageFilters();
   const connectionTelemetryTypes = useOctantStore(
     useShallow(({ connection }) => connection?.telemetryTypes ?? []),
@@ -103,9 +106,7 @@ export function ClarityPage() {
                 title={cc.logFilter.emptyState.title}
                 description={cc.logFilter.emptyState.subtitle}
                 actionLabel={cc.logFilter.emptyState.cta}
-                onAction={() => {
-                  console.log("turn on logs");
-                }}
+                onAction={() => navigate(ROUTES.SETTINGS)}
               />
             ) : (
               <FilterCard
@@ -127,9 +128,7 @@ export function ClarityPage() {
                 title={cc.traceFilter.emptyState.title}
                 description={cc.traceFilter.emptyState.subtitle}
                 actionLabel={cc.traceFilter.emptyState.cta}
-                onAction={() => {
-                  console.log("turn on traces");
-                }}
+                onAction={() => navigate(ROUTES.SETTINGS)}
               />
             ) : (
               <FilterCard
