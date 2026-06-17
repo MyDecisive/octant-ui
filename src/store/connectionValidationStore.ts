@@ -12,10 +12,11 @@ import {
   createOrGetValidatorRunId,
   createValidatorRunId,
   getLatestValidatorRunId,
+  connectionValidationWaitMs,
   validatorRunIdToDate,
 } from "../services/connection";
 
-export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = 65_000;
+export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = connectionValidationWaitMs;
 
 export type ConnectionValidationScope = Pick<
   ConnectionScope,

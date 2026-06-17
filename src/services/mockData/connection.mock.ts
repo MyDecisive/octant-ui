@@ -10,6 +10,8 @@ import {
 
 type MockConnectionData = MessageInitShape<typeof ConnectionDataSchema>;
 
+export const MOCK_CONNECTION_VALIDATION_WAIT_MS = 10_000;
+
 const connections = new Map<string, MockConnectionData>([
   [
     "datadog-prod",
