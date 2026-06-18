@@ -49,6 +49,26 @@ const SPAN_NAMES_FOR_MOCK = [
   "/apiv1/customer/support",
 ];
 
+const MOCK_LOG_COSTS = [
+  11.13, 8.79, 7.24, 6.32, 5.48, 4.52, 3.74, 3.12, 2.35, 1.63,
+];
+const MOCK_TRACE_COSTS = [
+  9.21, 7.14, 5.88, 5.21, 4.37, 3.96, 3.12, 2.55, 1.74, 1.06,
+];
+const MOCK_RATE = 0.45;
+const MOCK_LOG_SAMPLE_RATE = 25;
+const MOCK_TRACE_SAMPLE_RATE = 10;
+const MOCK_LOG_COST_TOTAL = sumCosts(MOCK_LOG_COSTS);
+const MOCK_TRACE_COST_TOTAL = sumCosts(MOCK_TRACE_COSTS);
+
+function roundToTwo(value: number) {
+  return Math.round(value * 100) / 100;
+}
+
+function sumCosts(costs: number[]) {
+  return roundToTwo(costs.reduce((sum, cost) => sum + cost, 0));
+}
+
 function shouldShowEmpty24HourMockData(timeframe: Timeframe) {
   return (
     getStringEnv(import.meta.env.VITE_BUDGET_MOCK_EMPTY_24HR) === "true" &&
@@ -70,9 +90,9 @@ function createMockOverallMetric(
     received: 120.5,
     sent: 98.3,
     filtered: 22.2,
-    costRate: 0.45,
-    pct: 62.5,
-    cost: 44.24,
+    costRate: MOCK_RATE,
+    pct: 44.88,
+    cost: MOCK_LOG_COST_TOTAL,
     ...overrides,
   } as Overall_Metric;
 }
@@ -87,35 +107,55 @@ function createEmptyMockOverallMetric(): Overall_Metric {
   });
 }
 
-function createMockLogs(count = 50): Log[] {
+function scaleRowCost(cost: number, multiplier: number) {
+  return roundToTwo(cost * multiplier);
+}
+
+function costToSent(cost: number) {
+  return roundToTwo(cost / MOCK_RATE);
+}
+
+function sentToReceived(sent: number, sampleRate: number) {
+  return roundToTwo(sent / (sampleRate / 100));
+}
+
+function costToPct(cost: number, total: number) {
+  return roundToTwo((cost / total) * 100);
+}
+
+function createMockLogs(multiplier: number): Log[] {
   const pickRandomishServiceName = makePickRandomishString(
     SERVICE_NAMES_FOR_MOCK,
   );
-  return Array.from(
-    { length: count },
-    (_, i) =>
-      ({
-        name: pickRandomishServiceName(i),
-        sent: parseFloat((Math.random() * 100).toFixed(2)),
-        pct: parseFloat((Math.random() * 20).toFixed(2)),
-        cost: parseFloat((Math.random() * 50).toFixed(2)),
-      }) as Log,
-  );
+  const totalCost = scaleRowCost(MOCK_LOG_COST_TOTAL, multiplier);
+
+  return MOCK_LOG_COSTS.map((cost, index) => {
+    const scaledCost = scaleRowCost(cost, multiplier);
+
+    return {
+      name: pickRandomishServiceName(index),
+      sent: costToSent(scaledCost),
+      pct: costToPct(scaledCost, totalCost),
+      cost: scaledCost,
+    } as Log;
+  });
 }
 
-function createMockSpans(count = 50): Span[] {
+function createMockSpans(multiplier: number): Span[] {
   const pickRandomishRootSpan = makePickRandomishString(SPAN_NAMES_FOR_MOCK);
-  return Array.from(
-    { length: count },
-    (_, i) =>
-      ({
-        name: pickRandomishRootSpan(i),
-        breadth: parseFloat((Math.random() * 10).toFixed(2)),
-        depth: parseFloat((Math.random() * 8).toFixed(2)),
-        invocations: parseFloat((Math.random() * 1000).toFixed(2)),
-        cost: parseFloat((Math.random() * 50).toFixed(2)),
-      }) as Span,
-  );
+
+  return MOCK_TRACE_COSTS.map((cost, index) => {
+    const scaledCost = scaleRowCost(cost, multiplier);
+    const invocations = costToSent(scaledCost);
+
+    return {
+      name: pickRandomishRootSpan(index),
+      breadth: roundToTwo(1.6 + (index % 5) * 0.74),
+      depth: roundToTwo(2.1 + (index % 4) * 0.58),
+      invocations,
+      cost: scaledCost,
+    } as Span;
+  });
 }
 
 export const mockTransport = createRouterTransport(({ service }) => {
@@ -124,28 +164,37 @@ export const mockTransport = createRouterTransport(({ service }) => {
       console.log("BudgetService.overall", request);
       const multiplier = request.timeframe === Timeframe.TIMEFRAME_MTD ? 30 : 1;
       const isEmpty = shouldShowEmpty24HourMockData(request.timeframe);
-      const logCost = isEmpty ? 0 : 44.24 * multiplier;
-      const traceCost = isEmpty ? 0 : 54.32 * multiplier;
+      const logCost = isEmpty
+        ? 0
+        : scaleRowCost(MOCK_LOG_COST_TOTAL, multiplier);
+      const traceCost = isEmpty
+        ? 0
+        : scaleRowCost(MOCK_TRACE_COST_TOTAL, multiplier);
+      const totalCost = roundToTwo(logCost + traceCost);
+      const logSent = costToSent(logCost);
+      const traceSent = costToSent(traceCost);
+      const logReceived = sentToReceived(logSent, MOCK_LOG_SAMPLE_RATE);
+      const traceReceived = sentToReceived(traceSent, MOCK_TRACE_SAMPLE_RATE);
 
       return {
         data: {
-          cost: logCost + traceCost,
+          cost: totalCost,
           log: isEmpty
             ? createEmptyMockOverallMetric()
             : createMockOverallMetric({
-                received: 120.5 * multiplier,
-                sent: 98.3 * multiplier,
-                filtered: 22.2 * multiplier,
-                pct: 62.5,
+                received: logReceived,
+                sent: logSent,
+                filtered: roundToTwo(logReceived - logSent),
+                pct: costToPct(logCost, totalCost),
                 cost: logCost,
               }),
           trace: isEmpty
             ? createEmptyMockOverallMetric()
             : createMockOverallMetric({
-                received: 120.5 * multiplier,
-                sent: 98.3 * multiplier,
-                filtered: 22.2 * multiplier,
-                pct: 37.5,
+                received: traceReceived,
+                sent: traceSent,
+                filtered: roundToTwo(traceReceived - traceSent),
+                pct: costToPct(traceCost, totalCost),
                 cost: traceCost,
               }),
         },
@@ -162,7 +211,9 @@ export const mockTransport = createRouterTransport(({ service }) => {
       }
 
       return {
-        data: createMockLogs(10),
+        data: createMockLogs(
+          request.timeframe === Timeframe.TIMEFRAME_MTD ? 30 : 1,
+        ),
         nextPageToken: "",
       };
     },
@@ -177,7 +228,9 @@ export const mockTransport = createRouterTransport(({ service }) => {
       }
 
       return {
-        data: createMockSpans(10),
+        data: createMockSpans(
+          request.timeframe === Timeframe.TIMEFRAME_MTD ? 30 : 1,
+        ),
         nextPageToken: "",
       };
     },
