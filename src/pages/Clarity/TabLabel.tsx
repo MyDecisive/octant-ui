@@ -1,3 +1,4 @@
+import { HoverPopover } from "@components/Tabs/HoverPopover";
 import WarningAmberRounded from "@mui/icons-material/WarningAmberRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
@@ -31,7 +32,7 @@ export function TabLabel({
   resultCount,
   showResultCounts = false,
 }: TabLabelProps) {
-  return (
+  const labelMarkup = (
     <Stack component="span" direction="row" alignItems="center" gap={1}>
       {loading && <CircularProgress color="inherit" size={16} />}
       {missingData && <WarningAmberRounded fontSize="small" />}
@@ -39,5 +40,13 @@ export function TabLabel({
         {formatLabel({ label, resultCount, showResultCounts })}
       </Typography>
     </Stack>
+  );
+
+  if (!loading) {
+    return labelMarkup;
+  }
+
+  return (
+    <HoverPopover message={"Data is still loading"}>{labelMarkup}</HoverPopover>
   );
 }
