@@ -1,4 +1,4 @@
-import { HoverPopover } from "@components/Tabs/HoverPopover";
+import { RichTooltip } from "@components/RichTooltip";
 import WarningAmberRounded from "@mui/icons-material/WarningAmberRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
@@ -47,6 +47,8 @@ export function TabLabel({
   }
 
   return (
-    <HoverPopover message={"Data is still loading"}>{labelMarkup}</HoverPopover>
+    <RichTooltip description={"Data is still loading"}>
+      {labelMarkup}
+    </RichTooltip>
   );
 }
