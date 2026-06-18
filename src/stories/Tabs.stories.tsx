@@ -7,10 +7,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-interface TabsStoryArgs extends ComponentProps<typeof Tabs> {
-  missingData: boolean;
-  resultCount: number;
-}
+type TabsStoryArgs = ComponentProps<typeof Tabs>;
 
 const tabs: {
   label: string;
@@ -52,32 +49,11 @@ const meta: Meta<TabsStoryArgs> = {
       },
     },
   },
-  argTypes: {
-    loading: {
-      control: "boolean",
-    },
-    showLoadingPopover: {
-      control: "boolean",
-    },
-    missingData: {
-      control: "boolean",
-    },
-    resultCount: {
-      control: {
-        type: "number",
-        min: 0,
-        step: 1,
-      },
-    },
-  },
+  argTypes: {},
   args: {
     activeValue: "logs",
     items: [],
     onChange: () => undefined,
-    loading: false,
-    missingData: false,
-    showLoadingPopover: false,
-    resultCount: 0,
   },
 };
 
@@ -85,13 +61,11 @@ export default meta;
 
 type Story = StoryObj<TabsStoryArgs>;
 
-function RenderTabs(args: TabsStoryArgs) {
+function RenderTabs() {
   const [activeValue, setActiveValue] = useState(tabs[0].value);
   const items: TabItem[] = tabs.map(({ label, value, filler }) => ({
     label,
     value,
-    missingData: args.missingData,
-    resultCount: args.resultCount,
     children: (
       <Card sx={{ minWidth: 275, p: 5 }}>
         <CardContent>
@@ -103,46 +77,11 @@ function RenderTabs(args: TabsStoryArgs) {
 
   return (
     <Stack width={774} spacing={2}>
-      <Tabs
-        activeValue={activeValue}
-        items={items}
-        loading={args.loading}
-        onChange={setActiveValue}
-        showLoadingPopover={args.showLoadingPopover}
-        showResultCounts={args.resultCount > 0}
-      />
+      <Tabs activeValue={activeValue} items={items} onChange={setActiveValue} />
     </Stack>
   );
 }
 
 export const Default: Story = {
-  render: RenderTabs,
-};
-
-export const Loading: Story = {
-  args: {
-    loading: true,
-    showLoadingPopover: true,
-    resultCount: 0,
-  },
-  render: RenderTabs,
-};
-
-export const ResultCount: Story = {
-  args: {
-    loading: false,
-    showLoadingPopover: false,
-    resultCount: 17,
-  },
-  render: RenderTabs,
-};
-
-export const MissingData: Story = {
-  args: {
-    loading: false,
-    missingData: true,
-    showLoadingPopover: false,
-    resultCount: 0,
-  },
   render: RenderTabs,
 };
