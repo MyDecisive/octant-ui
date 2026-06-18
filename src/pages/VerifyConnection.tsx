@@ -28,6 +28,7 @@ export function VerifyConnection() {
   const healthWidgetProps = connectionStatusToHealthWidgetProps({
     loading,
     connectionStatus,
+    preferLoading: true,
   });
 
   return (
