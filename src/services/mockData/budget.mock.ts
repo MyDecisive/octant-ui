@@ -58,8 +58,8 @@ const MOCK_TRACE_COSTS = [
 const MOCK_RATE = 0.45;
 const MOCK_LOG_SAMPLE_RATE = 25;
 const MOCK_TRACE_SAMPLE_RATE = 10;
-const MOCK_LOG_COST = sumCosts(MOCK_LOG_COSTS);
-const MOCK_TRACE_COST = sumCosts(MOCK_TRACE_COSTS);
+const MOCK_LOG_COST_TOTAL = sumCosts(MOCK_LOG_COSTS);
+const MOCK_TRACE_COST_TOTAL = sumCosts(MOCK_TRACE_COSTS);
 
 function roundToTwo(value: number) {
   return Math.round(value * 100) / 100;
