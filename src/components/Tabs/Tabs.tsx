@@ -1,9 +1,9 @@
+import { RichTooltip } from "@components/RichTooltip";
 import { SearchField, type SearchFieldProps } from "@components/SearchField";
 import Stack from "@mui/material/Stack";
 import MuiTab from "@mui/material/Tab";
 import MuiTabs from "@mui/material/Tabs";
 import type { ReactNode } from "react";
-import { HoverPopover } from "./HoverPopover";
 import { TabLabel } from "./TabLabel";
 import { TabPanel } from "./TabPanel";
 
@@ -52,9 +52,9 @@ export function Tabs({
     }
 
     return (
-      <HoverPopover message={loadingMessage ?? "Data is still loading"}>
-        {tabLabel}
-      </HoverPopover>
+      <RichTooltip description={loadingMessage ?? "Data is still loading"}>
+        <span>{tabLabel}</span>
+      </RichTooltip>
     );
   }
 
