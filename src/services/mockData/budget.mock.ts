@@ -92,7 +92,7 @@ function createMockOverallMetric(
     filtered: 22.2,
     costRate: MOCK_RATE,
     pct: 44.88,
-    cost: MOCK_LOG_COST,
+    cost: MOCK_LOG_COST_TOTAL,
     ...overrides,
   } as Overall_Metric;
 }
@@ -127,7 +127,7 @@ function createMockLogs(multiplier: number): Log[] {
   const pickRandomishServiceName = makePickRandomishString(
     SERVICE_NAMES_FOR_MOCK,
   );
-  const totalCost = scaleRowCost(MOCK_LOG_COST, multiplier);
+  const totalCost = scaleRowCost(MOCK_LOG_COST_TOTAL, multiplier);
 
   return MOCK_LOG_COSTS.map((cost, index) => {
     const scaledCost = scaleRowCost(cost, multiplier);
@@ -164,10 +164,12 @@ export const mockTransport = createRouterTransport(({ service }) => {
       console.log("BudgetService.overall", request);
       const multiplier = request.timeframe === Timeframe.TIMEFRAME_MTD ? 30 : 1;
       const isEmpty = shouldShowEmpty24HourMockData(request.timeframe);
-      const logCost = isEmpty ? 0 : scaleRowCost(MOCK_LOG_COST, multiplier);
+      const logCost = isEmpty
+        ? 0
+        : scaleRowCost(MOCK_LOG_COST_TOTAL, multiplier);
       const traceCost = isEmpty
         ? 0
-        : scaleRowCost(MOCK_TRACE_COST, multiplier);
+        : scaleRowCost(MOCK_TRACE_COST_TOTAL, multiplier);
       const totalCost = roundToTwo(logCost + traceCost);
       const logSent = costToSent(logCost);
       const traceSent = costToSent(traceCost);
