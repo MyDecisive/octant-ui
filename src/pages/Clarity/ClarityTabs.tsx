@@ -5,6 +5,7 @@ import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { ClarityTabTable } from "./ClarityTabTables";
 import type { LogData, SpanData } from "./constants";
+import { TabLabel } from "./TabLabel";
 
 interface ClarityTabsProps {
   data: Overall | null;
@@ -52,21 +53,24 @@ export function ClarityTabs({
   return (
     <Tabs
       activeValue={activeTab}
-      loading={tableDataLoading}
       onChange={setActiveTab}
       search={{
         options: searchOptions,
         value: searchQuery,
         onChange: setSearchQuery,
       }}
-      showLoadingPopover
-      showResultCounts={showResultCounts}
       items={[
         {
           value: FilterTypes.LOG,
-          label: "Logs",
-          missingData: !loading && (!logDataTypeConfigured || !hasLogData),
-          resultCount: logData.length,
+          label: (
+            <TabLabel
+              label="Logs"
+              loading={loading}
+              missingData={!loading && (!logDataTypeConfigured || !hasLogData)}
+              resultCount={logData.length}
+              showResultCounts={showResultCounts}
+            />
+          ),
           children: (
             <ClarityTabTable
               dataType={FilterTypes.LOG}
@@ -84,9 +88,17 @@ export function ClarityTabs({
         },
         {
           value: FilterTypes.TRACE,
-          label: "Traces",
-          missingData: !loading && (!traceDataTypeConfigured || !hasTraceData),
-          resultCount: spanData.length,
+          label: (
+            <TabLabel
+              label={"Traces"}
+              loading={loading}
+              missingData={
+                !loading && (!traceDataTypeConfigured || !hasTraceData)
+              }
+              resultCount={spanData.length}
+              showResultCounts={showResultCounts}
+            />
+          ),
           children: (
             <ClarityTabTable
               dataType={FilterTypes.TRACE}
