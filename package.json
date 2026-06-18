@@ -18,7 +18,10 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build",
     "predeploy:storybook": "npm run build-storybook",
-    "deploy:storybook": "gh-pages -d storybook-static --dest storybook"
+    "deploy:storybook": "gh-pages -d storybook-static --dest storybook",
+    "e2e:smoke": "playwright test",
+    "e2e:dashboard": "playwright test e2e/2-dashboard.spec.ts",
+    "e2e:load": "playwright test e2e/4-load.spec.ts"
   },
   "dependencies": {
     "@connectrpc/connect": "^2.1.1",
@@ -40,6 +43,7 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^5.1.2",
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.59.1",
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-onboarding": "^10.3.5",
