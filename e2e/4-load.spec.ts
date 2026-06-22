@@ -16,6 +16,28 @@ test.describe("clarity under load", () => {
     return match ? Number(match[1]) : 0;
   }
 
+  // Auto warm-up. The data-dependent assertions need accumulated throughput; for
+  // the first few minutes after the load stand starts, volume is too small —
+  // log GB rounds to 0.00 and small costs make the per-row pct/cost rounding
+  // diverge. Poll the log card's Ingested (the slowest signal to register) until
+  // it is non-zero, capped at 3 min, so an already-warm cluster proceeds at once.
+  test.beforeAll(async ({ browser }) => {
+    if (process.env.OCTANT_DEMO_LOAD !== "1") return;
+    const page = await browser.newPage();
+    try {
+      await page.goto("/clarity");
+      const logCard = page.locator(".filter-card-container", { hasText: "Log filters" });
+      await expect
+        .poll(() => metric(logCard, "Ingested"), {
+          timeout: 3 * 60_000,
+          intervals: [5_000],
+        })
+        .toBeGreaterThan(0);
+    } finally {
+      await page.close();
+    }
+  });
+
   test("log filter metrics populate from collector throughput", async ({ page }) => {
     await page.goto("/clarity");
     await expect(page).toHaveURL(/\/clarity$/);
@@ -117,28 +139,30 @@ test.describe("clarity under load", () => {
       '.mdai-table:not(.summary-table) [role="row"] [role="gridcell"][data-colindex="0"]',
     );
 
-    // Derive the query from live data: take the longest alphanumeric token of
-    // the first row's service.
-    const firstService = (await serviceCells.first().innerText()).trim();
-    const query =
-      firstService
-        .split(/[^a-zA-Z0-9]+/)
-        .filter(Boolean)
-        .sort((a, b) => b.length - a.length)[0] ?? firstService;
+    // Query the full service name of the first row (the most discriminating
+    // choice from live data).
+    const initial = await serviceCells.allInnerTexts();
+    const query = initial[0].trim();
     expect(query.length).toBeGreaterThan(0);
+    const q = query.toLowerCase();
+
+    // The query must discriminate: some visible row must not match it, or a
+    // "filter" that drops nothing would still satisfy the checks below.
+    expect(initial.some((name) => !name.toLowerCase().includes(q))).toBe(true);
+    const beforeCount = initial.length;
 
     await page.getByRole("combobox", { name: "Search for service" }).fill(query);
 
-    // The filtered table keeps at least the source row, and every remaining
-    // row's service contains the query (case-insensitive). Polling waits out
-    // the search debounce.
+    // The table actually shrinks and every remaining row contains the query
+    // (case-insensitive). Polling waits out the search debounce.
     await expect
       .poll(
         async () => {
           const names = await serviceCells.allInnerTexts();
           return (
             names.length > 0 &&
-            names.every((n) => n.toLowerCase().includes(query.toLowerCase()))
+            names.length < beforeCount &&
+            names.every((name) => name.toLowerCase().includes(q))
           );
         },
         { timeout: 15_000 },

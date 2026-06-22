@@ -36,6 +36,28 @@ function secretResourceVersion(): string {
     "-n", env.namespace, "-o", "jsonpath={.metadata.resourceVersion}"]);
 }
 
+// The stored api-key, base64-encoded exactly as the Secret holds it. Compared
+// against the base64 of the submitted key, so the raw value is never decoded.
+function readApiKeyBase64(): string {
+  return kubectl(["get", "secret", `${env.connectionName}-integration-secret`,
+    "-n", env.namespace, "-o", "jsonpath={.data.api-key}"]);
+}
+
+// The connection's stored telemetry types (connections ConfigMap, octant ns) —
+// the source of truth a Settings telemetry-type change updates. Used instead of
+// collector presence because the connection app syncs with prune off, so a
+// removed collector lingers. Returns [] on any transient read error so callers
+// can poll.
+function readConnectionTelemetryTypes(): string[] {
+  try {
+    const json = kubectl(["get", "configmap", "mdai-octant-connections", "-n", "octant",
+      "-o", `jsonpath={.data.${env.connectionName}}`]);
+    return (JSON.parse(json) as { telemetryTypes?: string[] }).telemetryTypes ?? [];
+  } catch {
+    return [];
+  }
+}
+
 // After a mutation settles, the connection's ArgoCD app must converge to
 // Healthy (not Degraded) — a degraded app means the change broke the collectors
 // even if the UI looked fine.
@@ -54,6 +76,29 @@ async function waitForArgoIdle(): Promise<void> {
     .poll(() => kubectl(["get", "application", "-n", "argocd", env.connectionName,
       "-o", "jsonpath={.status.operationState.phase}"]), { timeout: 120_000 })
     .not.toBe("Running");
+}
+
+// Restore both telemetry types via the Settings flow. Idempotent: a no-op when
+// the connection already carries logs+traces (e.g. a change that never applied).
+// Used in a finally so a failed telemetry-type test cannot leave it logs-only.
+async function restoreBothTelemetryTypes(page: Page): Promise<void> {
+  if (readConnectionTelemetryTypes().sort().join(",") === "logs,traces") return;
+  await page.goto("/settings");
+  await expect(page.getByRole("checkbox", { name: "Logs" })).toBeChecked({ timeout: 30_000 });
+  await page.getByRole("checkbox", { name: "Traces" }).check();
+  const update = page.getByRole("button", { name: "Update settings" });
+  await expect(update).toBeEnabled();
+  await waitForArgoIdle();
+  await update.click();
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "I've updated my Datadog agent" })
+    .click();
+  await expect(page.getByText("New settings applied")).toBeVisible({ timeout: 90_000 });
+  await expect
+    .poll(() => readConnectionTelemetryTypes().sort(), { timeout: 60_000 })
+    .toEqual(["logs", "traces"]);
+  await expectConnectionAppHealthy();
 }
 
 // These tests run against an existing octant connection (created by the wizard
@@ -367,10 +412,12 @@ test.describe.serial("octant post-install dashboard", () => {
       await expect
         .poll(() => readCollectorVariables().LOGS_RATIO_NUMBER, { timeout: 60_000 })
         .toBe(target);
+      // Each bound (including 0%) must keep the connection's argo app Healthy —
+      // asserted per-iteration, not once after the last value. A sampling-rate
+      // change is ConfigMap-driven via envFrom, so it does not roll the collector
+      // deployment (unlike a keep-errors toggle); there is no generation bump.
+      await expectConnectionAppHealthy();
     }
-
-    // A 0% sampling rate must not degrade the collector's argo app.
-    await expectConnectionAppHealthy();
   });
 
   test("clarity: switch tabs and use search", async () => {
@@ -464,14 +511,49 @@ test.describe.serial("octant post-install dashboard", () => {
 
     await expect(page.getByText("New settings applied")).toBeVisible({ timeout: 90_000 });
 
-    // cluster: the secret was rewritten but the destination URL is unchanged, so
-    // only the key changed — verified without reading the key value.
+    // cluster: the secret was rewritten, now holds exactly the submitted key, and
+    // the destination URL is unchanged — so only the key changed. A rewrite that
+    // dropped or ignored the key fails the key check (the resourceVersion bump
+    // alone would not). The key is compared base64-encoded, never decoded.
     await expect.poll(() => secretResourceVersion(), { timeout: 30_000 }).not.toBe(rvBefore);
+    expect(readApiKeyBase64()).toBe(Buffer.from(newKey).toString("base64"));
     expect(readSiteUrl()).toBe(urlBefore);
     await expectConnectionAppHealthy();
 
     // the key re-masks after a successful update.
     await expect(apiKeyField).toHaveValue(/^\*+$/, { timeout: 30_000 });
+  });
+
+  test("settings telemetry-type change opens the agent dialog and updates the connection", async () => {
+    try {
+      // Remove Traces (logs-only): the type change opens the agent-update dialog,
+      // and the connection's stored telemetry types drop traces.
+      await page.goto("/settings");
+      const traces = page.getByRole("checkbox", { name: "Traces" });
+      await expect(traces).toBeChecked({ timeout: 30_000 });
+
+      await traces.uncheck();
+      const update = page.getByRole("button", { name: "Update settings" });
+      await expect(update).toBeEnabled();
+      await waitForArgoIdle();
+      await update.click();
+
+      // The agent-update dialog opens because the telemetry types changed.
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible();
+      await expect(dialog.getByText("Update your Datadog agent", { exact: true })).toBeVisible();
+      await dialog.getByRole("button", { name: "I've updated my Datadog agent" }).click();
+
+      await expect(page.getByText("New settings applied")).toBeVisible({ timeout: 90_000 });
+      await expect
+        .poll(() => readConnectionTelemetryTypes().sort(), { timeout: 60_000 })
+        .toEqual(["logs"]);
+      await expectConnectionAppHealthy();
+    } finally {
+      // Always restore logs+traces, even if an assertion above failed, so a
+      // logs-only connection cannot break later tests or reruns.
+      await restoreBothTelemetryTypes(page);
+    }
   });
 
   test("settings download manifests triggers a download", async () => {

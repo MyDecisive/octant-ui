@@ -20,6 +20,9 @@
     "predeploy:storybook": "npm run build-storybook",
     "deploy:storybook": "gh-pages -d storybook-static --dest storybook",
     "e2e:smoke": "playwright test",
+    "e2e:findings": "playwright test e2e/0-findings.spec.ts",
+    "e2e:guards": "playwright test e2e/1-wizard-guards.spec.ts",
+    "e2e:wizard": "playwright test e2e/1-wizard.spec.ts",
     "e2e:dashboard": "playwright test e2e/2-dashboard.spec.ts",
     "e2e:load": "playwright test e2e/4-load.spec.ts"
   },

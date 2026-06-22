@@ -146,7 +146,6 @@ test.describe.serial("octant install-and-connect smoke", () => {
   // length client-side or surfaces the backend error. Runs before the valid
   // deploy below and leaves the form on step 4 for it.
   test("step 4: invalid Datadog API key fails silently", async () => {
-    test.fail();
     await expect(
       page.getByRole("heading", { name: "Configure Telemetry Routing" }),
     ).toBeVisible();
@@ -154,15 +153,30 @@ test.describe.serial("octant install-and-connect smoke", () => {
     await page.getByRole("checkbox", { name: "Traces" }).check();
     await page.getByPlaceholder("Destination URL").fill(env.datadogUrl);
     await page.getByPlaceholder("Datadog API key").fill("too-short-key");
-    await page.getByRole("button", { name: "Deploy Collector", exact: true }).click();
 
-    // Deploy does not proceed (correct), but no error feedback appears. Match the
-    // backend's "must be 32 characters" wording, not the always-present "Datadog
-    // API key" field label.
+    // Confirm the backend actually rejected the short key (invalid_argument), so
+    // the expected-failure below is about the swallowed error, not a skipped RPC.
+    const savePromise = page.waitForResponse(
+      (res) => res.url().includes("DatadogService/SaveDatadogIntegration"),
+      { timeout: 30_000 },
+    );
+    await page.getByRole("button", { name: "Deploy Collector", exact: true }).click();
+    const saveResponse = await savePromise;
+    expect(saveResponse.status()).toBe(400); // ConnectRPC maps invalid_argument -> 400
+    expect(await saveResponse.text()).toContain("invalid_argument");
+
+    // The known bug: that rejection surfaces no UI feedback. Detect whether the
+    // "must be 32 characters" message appears (that wording, not the ever-present
+    // "Datadog API key" label) and mark expected-failure only when it is genuinely
+    // absent — so a selector/navigation regression fails loudly, not masked.
     await expect(page).toHaveURL(/\/install\/4$/);
-    await expect(page.getByText(/32 characters/i)).toBeVisible({
-      timeout: 5_000,
-    });
+    const errorShown = await page
+      .getByText(/32 characters/i)
+      .waitFor({ state: "visible", timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false);
+    test.fail(!errorShown, "DeployCollector swallows the invalid-key error (no inline error/alert/toast)");
+    expect(errorShown, "the invalid-key error should be surfaced").toBe(true);
   });
 
   test("step 4: deploy collector with dummy Datadog creds", async () => {

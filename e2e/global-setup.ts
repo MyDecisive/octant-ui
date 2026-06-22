@@ -1,5 +1,5 @@
 import { execFileSync, spawn } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
@@ -53,6 +53,28 @@ async function waitForOctantDeployment(timeoutMs: number): Promise<void> {
   );
 }
 
+// curl exits 0 once the TLS handshake to the ArgoCD port-forward succeeds (even
+// a 403/404), and non-zero while the forward is still coming up.
+function argoReachable(): boolean {
+  try {
+    execFileSync("curl", ["-sk", "-o", "/dev/null", "https://localhost:8443/"], {
+      encoding: "utf8",
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function waitArgoReachable(timeoutMs: number): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    if (argoReachable()) return;
+    await sleep(300);
+  }
+  throw new Error("timed out waiting for the ArgoCD port-forward on localhost:8443");
+}
+
 export default async function globalSetup(): Promise<void> {
   // Refuse to run unless the target kubectl context exists; all kubectl calls
   // below pin --context so they cannot touch the wrong cluster.
@@ -88,35 +110,44 @@ export default async function globalSetup(): Promise<void> {
     { stdio: "ignore", detached: true },
   );
   argoPf.unref();
-  await sleep(2_000);
 
   // 2b. Exchange admin credentials for a session JWT (self-signed cert -> -k).
-  const sessionJson = execFileSync(
-    "curl",
-    [
-      "-sk", "https://localhost:8443/api/v1/session",
-      "-H", "Content-Type: application/json",
-      "-d", JSON.stringify({ username: "admin", password }),
-    ],
-    { encoding: "utf8" },
-  );
-  const token = (JSON.parse(sessionJson) as { token?: string }).token;
-  if (argoPf.pid) {
-    try {
-      process.kill(-argoPf.pid);
-    } catch {
-      /* group already gone */
+  // try/finally so a curl/parse failure still tears the port-forward down.
+  let token: string | undefined;
+  try {
+    await waitArgoReachable(30_000);
+    const sessionJson = execFileSync(
+      "curl",
+      [
+        "-sk", "https://localhost:8443/api/v1/session",
+        "-H", "Content-Type: application/json",
+        "-d", JSON.stringify({ username: "admin", password }),
+      ],
+      { encoding: "utf8" },
+    );
+    token = (JSON.parse(sessionJson) as { token?: string }).token;
+  } finally {
+    if (argoPf.pid) {
+      try {
+        process.kill(-argoPf.pid);
+      } catch {
+        /* group already gone */
+      }
     }
   }
   if (!token) {
-    throw new Error(`no token in ArgoCD session response: ${sessionJson}`);
+    throw new Error("no token in ArgoCD session response");
   }
 
   // 3. Write creds. The ArgoCD address must be cluster-internal because the
   //    octant backend (not the browser) dials it; octant runs in Dev so its
-  //    apiclient skips TLS verification of the self-signed cert.
+  //    apiclient skips TLS verification of the self-signed cert. The file holds
+  //    an admin JWT, so drop any prior (possibly world-readable) copy and write
+  //    0600; global-teardown deletes it.
+  const setupPath = path.join(tmpDir, "setup.json");
+  rmSync(setupPath, { force: true });
   writeFileSync(
-    path.join(tmpDir, "setup.json"),
+    setupPath,
     JSON.stringify(
       {
         argoUrl: "argo-cd-argocd-server.argocd.svc.cluster.local:443",
@@ -126,5 +157,6 @@ export default async function globalSetup(): Promise<void> {
       null,
       2,
     ),
+    { mode: 0o600 },
   );
 }
