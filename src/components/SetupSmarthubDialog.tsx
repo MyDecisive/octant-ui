@@ -1,11 +1,7 @@
+import { Dialog } from "@components/Dialog";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import type {
   ErrorModalActs,
   ErrorModalContent,
@@ -83,22 +79,16 @@ export function SetupSmarthubDialog({
       onClose={onClose}
       aria-labelledby="error-dialog-title"
       aria-describedby="error-dialog-description"
+      icon={icon}
+      title={header}
+      description={body}
+      actions={createActions(actMap, actions)}
     >
-      <DialogTitle id="error-dialog-title">
-        {icon}
-        {header}
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText component="div" id="error-dialog-description">
-          {body}
-          {networkErrorInfo && (
-            <pre className="error-dialog-error-info-content">
-              {networkErrorInfo}
-            </pre>
-          )}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>{createActions(actMap, actions)}</DialogActions>
+      {networkErrorInfo && (
+        <pre className="error-dialog-error-info-content">
+          {networkErrorInfo}
+        </pre>
+      )}
     </Dialog>
   );
 }
