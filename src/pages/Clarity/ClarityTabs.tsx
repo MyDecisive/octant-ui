@@ -1,10 +1,12 @@
 import { Tabs } from "@components/Tabs/Tabs";
+import WarningAmberRounded from "@mui/icons-material/WarningAmberRounded";
 import type { Overall } from "@mydecisiveai/octant-client";
 import { FilterTypes } from "@types";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { ClarityTabTable } from "./ClarityTabTables";
 import type { LogData, SpanData } from "./constants";
+import { formatTabLabel } from "./formatTabLabel";
 
 interface ClarityTabsProps {
   data: Overall | null;
@@ -52,21 +54,27 @@ export function ClarityTabs({
   return (
     <Tabs
       activeValue={activeTab}
-      loading={tableDataLoading}
       onChange={setActiveTab}
       search={{
         options: searchOptions,
         value: searchQuery,
         onChange: setSearchQuery,
       }}
-      showLoadingPopover
-      showResultCounts={showResultCounts}
       items={[
         {
           value: FilterTypes.LOG,
-          label: "Logs",
-          missingData: !loading && (!logDataTypeConfigured || !hasLogData),
-          resultCount: logData.length,
+          label: {
+            text: formatTabLabel(
+              "Logs",
+              showResultCounts ? logData.length : undefined,
+            ),
+            loading: tableDataLoading,
+            tooltip: tableDataLoading ? "Data is still loading" : undefined,
+            startIcon:
+              !loading && (!logDataTypeConfigured || !hasLogData) ? (
+                <WarningAmberRounded fontSize="small" />
+              ) : undefined,
+          },
           children: (
             <ClarityTabTable
               dataType={FilterTypes.LOG}
@@ -84,9 +92,18 @@ export function ClarityTabs({
         },
         {
           value: FilterTypes.TRACE,
-          label: "Traces",
-          missingData: !loading && (!traceDataTypeConfigured || !hasTraceData),
-          resultCount: spanData.length,
+          label: {
+            text: formatTabLabel(
+              "Traces",
+              showResultCounts ? spanData.length : undefined,
+            ),
+            loading: tableDataLoading,
+            tooltip: tableDataLoading ? "Data is still loading" : undefined,
+            startIcon:
+              !loading && (!traceDataTypeConfigured || !hasTraceData) ? (
+                <WarningAmberRounded fontSize="small" />
+              ) : undefined,
+          },
           children: (
             <ClarityTabTable
               dataType={FilterTypes.TRACE}

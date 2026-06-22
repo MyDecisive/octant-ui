@@ -1,43 +1,44 @@
-import WarningAmberRounded from "@mui/icons-material/WarningAmberRounded";
+import { RichTooltip, type RichTooltipProps } from "@components/RichTooltip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import "./TabLabel.css";
+import type { ReactNode } from "react";
 
-interface TabLabelProps {
-  label: string;
+export interface TabLabelProps {
+  text: string;
+  tooltip?: string | RichTooltipProps;
   loading?: boolean;
-  missingData?: boolean;
-  resultCount?: number;
-  showResultCounts?: boolean;
-}
-
-function formatLabel({
-  label,
-  resultCount,
-  showResultCounts = false,
-}: Pick<TabLabelProps, "label" | "resultCount" | "showResultCounts">) {
-  if (showResultCounts && resultCount !== undefined) {
-    return `${label} (${resultCount.toString()})`;
-  }
-
-  return label;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
 }
 
 export function TabLabel({
-  label,
+  text,
   loading = false,
-  missingData = false,
-  resultCount,
-  showResultCounts = false,
+  startIcon,
+  endIcon,
+  tooltip,
 }: TabLabelProps) {
-  return (
+  const markup = (
     <Stack component="span" direction="row" alignItems="center" gap={1}>
-      {loading && <CircularProgress color="inherit" size={16} />}
-      {missingData && <WarningAmberRounded fontSize="small" />}
-      <Typography className="tab-label-text" component="span">
-        {formatLabel({ label, resultCount, showResultCounts })}
+      {loading ? <CircularProgress color="inherit" size={16} /> : startIcon}
+      {/* {missingData && <WarningAmberRounded fontSize="small" />} */}
+      <Typography color="inherit" component="span">
+        {text}
       </Typography>
+      {endIcon}
     </Stack>
   );
+
+  if (tooltip) {
+    return (
+      <RichTooltip
+        {...(typeof tooltip === "string" ? { description: tooltip } : tooltip)}
+      >
+        <span>{markup}</span>
+      </RichTooltip>
+    );
+  }
+
+  return markup;
 }

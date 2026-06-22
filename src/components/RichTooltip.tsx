@@ -7,7 +7,7 @@ import { mergeSlotPropsClassNames } from "@utils/mergeSlotPropsClassNames";
 import classNames from "classnames";
 import type { ReactNode } from "react";
 
-interface RichTooltipProps extends Omit<MuiTooltipProps, "title"> {
+export interface RichTooltipProps extends Omit<MuiTooltipProps, "title"> {
   title?: string;
   description?: string;
   actions?: ReactNode;

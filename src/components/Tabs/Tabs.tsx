@@ -1,17 +1,14 @@
-import { RichTooltip } from "@components/RichTooltip";
 import { SearchField, type SearchFieldProps } from "@components/SearchField";
 import Stack from "@mui/material/Stack";
 import MuiTab from "@mui/material/Tab";
 import MuiTabs from "@mui/material/Tabs";
 import type { ReactNode } from "react";
-import { TabLabel } from "./TabLabel";
+import { TabLabel, type TabLabelProps } from "./TabLabel";
 import { TabPanel } from "./TabPanel";
 
 export interface TabItem {
   value: string;
-  label: string;
-  missingData?: boolean;
-  resultCount?: number;
+  label: string | TabLabelProps;
   children: ReactNode;
 }
 
@@ -19,45 +16,10 @@ interface TabsProps {
   activeValue: string;
   items: TabItem[];
   onChange: (value: string) => void;
-  loading?: boolean;
-  loadingMessage?: string;
   search?: SearchFieldProps;
-  showLoadingPopover?: boolean;
-  showResultCounts?: boolean;
 }
 
-export function Tabs({
-  activeValue,
-  items,
-  loading = false,
-  loadingMessage,
-  onChange,
-  search,
-  showLoadingPopover = false,
-  showResultCounts = false,
-}: TabsProps) {
-  function renderTabLabel(item: TabItem) {
-    const tabLabel = (
-      <TabLabel
-        label={item.label}
-        loading={loading}
-        missingData={item.missingData}
-        resultCount={item.resultCount}
-        showResultCounts={showResultCounts}
-      />
-    );
-
-    if (!loading || !showLoadingPopover) {
-      return tabLabel;
-    }
-
-    return (
-      <RichTooltip description={loadingMessage ?? "Data is still loading"}>
-        <span>{tabLabel}</span>
-      </RichTooltip>
-    );
-  }
-
+export function Tabs({ activeValue, items, onChange, search }: TabsProps) {
   return (
     <>
       <Stack direction={"row"} justifyContent={"space-between"}>
@@ -72,7 +34,13 @@ export function Tabs({
               key={item.value}
               id={`simple-tab-${item.value}`}
               aria-controls={`simple-tabpanel-${item.value}`}
-              label={renderTabLabel(item)}
+              label={
+                typeof item.label === "string" ? (
+                  item.label
+                ) : (
+                  <TabLabel {...item.label} />
+                )
+              }
               value={item.value}
             />
           ))}
