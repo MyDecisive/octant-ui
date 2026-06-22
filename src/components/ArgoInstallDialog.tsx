@@ -1,13 +1,5 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Dialog } from "@components/Dialog";
+import { Button, Stack, Typography } from "@mui/material";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
 import { ROUTES } from "../constants/routing";
@@ -35,17 +27,17 @@ export function ArgoInstallDialog() {
   };
 
   return (
-    <Dialog open={showDialog} onClose={handleClose}>
-      <DialogTitle>{copy.header}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{copy.subheader}</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Stack direction={"column"}>
+    <Dialog
+      open={showDialog}
+      onClose={handleClose}
+      title={copy.header}
+      description={copy.subheader}
+      actions={
+        <Stack direction={"column"} alignItems={"flex-end"}>
           <Typography>{copy.continueNotice}</Typography>
           <Button onClick={handleClose}>{copy.ctaAlt}</Button>
         </Stack>
-      </DialogActions>
-    </Dialog>
+      }
+    />
   );
 }
