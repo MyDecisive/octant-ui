@@ -1,10 +1,11 @@
-import type { UIFilter } from "@types";
+import type { FilterTypes, UIFilter } from "@types";
 
 export interface FiltersSlice {
-  logFilter?: UIFilter;
-  traceFilter?: UIFilter;
+  filters: Partial<Record<FilterTypes, UIFilter>>;
 }
 
 export function createDefaultFiltersSlice(): FiltersSlice {
-  return {};
+  return {
+    filters: {},
+  };
 }

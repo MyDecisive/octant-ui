@@ -1,5 +1,6 @@
 import type { Log, Overall, Span } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarity/store";
+import { FilterTypes } from "@types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { budgetServiceClient } from "../../services/budget";
@@ -62,14 +63,27 @@ export function useManageClarityData(searchQuery = "") {
   const { namespace, connectionName } = connectionScope || {};
 
   const timeRange = useClarityStore((state) => state.selectedTimeframe);
-  const hasLogTimeframeData = useClarityStore((state) => state.hasLogData);
-  const hasTraceTimeframeData = useClarityStore((state) => state.hasTraceData);
+  const hasLogTimeframeData = useClarityStore(
+    (state) => state.hasData[FilterTypes.LOG],
+  );
+  const hasTraceTimeframeData = useClarityStore(
+    (state) => state.hasData[FilterTypes.TRACE],
+  );
 
   const canRequestLogData = useClarityStore(
-    useShallow((state) => !!(state.logsConfigured && state.hasLogData)),
+    useShallow(
+      (state) =>
+        !!(state.configured[FilterTypes.LOG] && state.hasData[FilterTypes.LOG]),
+    ),
   );
   const canRequestTraceData = useClarityStore(
-    useShallow((state) => !!(state.tracesConfigured && state.hasTraceData)),
+    useShallow(
+      (state) =>
+        !!(
+          state.configured[FilterTypes.TRACE] &&
+          state.hasData[FilterTypes.TRACE]
+        ),
+    ),
   );
 
   const [overallData, setOverallData] = useState<Overall | null>(null);

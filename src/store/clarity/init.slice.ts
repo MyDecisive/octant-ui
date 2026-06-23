@@ -1,9 +1,8 @@
 import { MLTType } from "@mydecisiveai/octant-client";
-import type { UIConnectionScope } from "@types";
+import { FilterTypes, type UIConnectionScope } from "@types";
 export interface InitSlice {
   connectionScope?: UIConnectionScope;
-  logsConfigured: boolean;
-  tracesConfigured: boolean;
+  configured: Partial<Record<FilterTypes, boolean>>;
 }
 
 export interface ClarityStoreInitProps {
@@ -16,11 +15,17 @@ export function createDefaultInitSlice(
 ): InitSlice {
   return {
     connectionScope: initProps?.connectionScope,
-    logsConfigured: (initProps?.configuredTelemetryTypes ?? []).includes(
-      MLTType.MLT_TYPE_LOG,
-    ),
-    tracesConfigured: (initProps?.configuredTelemetryTypes ?? []).includes(
-      MLTType.MLT_TYPE_TRACE,
+    configured: (initProps?.configuredTelemetryTypes ?? []).reduce(
+      (accum, current) => {
+        if (current === MLTType.MLT_TYPE_LOG) {
+          accum[FilterTypes.LOG] = true;
+        }
+        if (current === MLTType.MLT_TYPE_TRACE) {
+          accum[FilterTypes.TRACE] = true;
+        }
+        return accum;
+      },
+      {} as Partial<Record<FilterTypes, boolean>>,
     ),
   };
 }

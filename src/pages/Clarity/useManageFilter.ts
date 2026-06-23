@@ -2,7 +2,7 @@ import {
   UpdateFilterResponse_Status,
   type GetFilterResponse,
 } from "@mydecisiveai/octant-client";
-import { useClarityStore } from "@store/clarity/store";
+import { useClarityStore, type ClarityState } from "@store/clarity/store";
 import { FilterTypes, type UIFilter } from "@types";
 import { toFilterType } from "@utils/toFilterTypes";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -20,49 +20,44 @@ function normalizeFilterResult(
   };
 }
 
+function makeFilterDataByTypeSelector(filterType: FilterTypes) {
+  return (state: ClarityState) => ({
+    filter: state.filters[filterType],
+    configured: state.configured[filterType],
+    hasData: state.hasData[filterType],
+  });
+}
+
 export function useManageFilter(filterType: FilterTypes) {
-  const {
-    connectionScope,
-    logsConfigured,
-    tracesConfigured,
-    setState,
-    logFilter,
-    traceFilter,
-  } = useClarityStore(
-    useShallow(
-      ({
-        connectionScope,
-        logsConfigured,
-        tracesConfigured,
-        setState,
-        logFilter,
-        traceFilter,
-      }) => ({
-        connectionScope,
-        setState,
-        logFilter,
-        traceFilter,
-        logsConfigured,
-        tracesConfigured,
-      }),
-    ),
+  const { connectionScope, update } = useClarityStore(
+    useShallow(({ connectionScope, update }) => ({
+      connectionScope,
+      update,
+    })),
   );
 
-  const filterStateKey = useMemo(
-    () => (filterType === FilterTypes.LOG ? "logFilter" : "traceFilter"),
-    [filterType],
-  );
+  const filterDataByTypeSelector = useMemo(() => {
+    return makeFilterDataByTypeSelector(filterType);
+  }, [filterType]);
 
-  const configured = useMemo(() => {
-    return filterType === FilterTypes.LOG ? logsConfigured : tracesConfigured;
-  }, [filterType, logsConfigured, tracesConfigured]);
-
-  const filter = useMemo(
-    () => (filterType === FilterTypes.LOG ? logFilter : traceFilter),
-    [filterType, logFilter, traceFilter],
+  const { filter, configured } = useClarityStore(
+    useShallow(filterDataByTypeSelector),
   );
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  const handleUpsertFilter = useCallback(
+    (filter: UIFilter) => {
+      update((prev) => ({
+        ...prev,
+        filters: {
+          ...prev.filters,
+          [filterType]: filter,
+        },
+      }));
+    },
+    [update, filterType],
+  );
 
   const connectionName = connectionScope?.connectionName;
   const namespace = connectionScope?.namespace;
@@ -84,9 +79,9 @@ export function useManageFilter(filterType: FilterTypes) {
           filterType,
           filterResponse,
         );
-        setState(filterStateKey, normalizedResult);
+        handleUpsertFilter(normalizedResult);
       } catch {
-        setState(filterStateKey, {
+        handleUpsertFilter({
           type: filterType,
           pctSampled: 0,
           includeErr: false,
@@ -97,7 +92,7 @@ export function useManageFilter(filterType: FilterTypes) {
     }
 
     void fetchFilters();
-  }, [connectionName, namespace, setState, filterStateKey, filterType]);
+  }, [connectionName, namespace, handleUpsertFilter, filterType]);
 
   const handleApplyFilter = useCallback(
     async (pctSampled: number, includeErr: boolean) => {
@@ -114,7 +109,7 @@ export function useManageFilter(filterType: FilterTypes) {
         })) {
           const status = res.status;
           if (status === UpdateFilterResponse_Status.COMPLETED) {
-            setState(filterStateKey, {
+            handleUpsertFilter({
               type: filterType,
               pctSampled,
               includeErr,
@@ -126,7 +121,7 @@ export function useManageFilter(filterType: FilterTypes) {
         setLoading(false);
       }
     },
-    [connectionScope, filterType, filterStateKey, setState],
+    [connectionScope, filterType, handleUpsertFilter],
   );
 
   return {

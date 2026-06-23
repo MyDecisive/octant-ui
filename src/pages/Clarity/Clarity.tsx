@@ -20,14 +20,12 @@ export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const { logsConfigured, tracesConfigured, logFilter, traceFilter } =
     useClarityStore(
-      useShallow(
-        ({ logsConfigured, tracesConfigured, logFilter, traceFilter }) => ({
-          logFilter,
-          traceFilter,
-          logsConfigured,
-          tracesConfigured,
-        }),
-      ),
+      useShallow(({ filters, configured }) => ({
+        logFilter: filters.logs,
+        traceFilter: filters.traces,
+        logsConfigured: !!configured.logs,
+        tracesConfigured: !!configured.traces,
+      })),
     );
   const { setSelectedTimeframe, selectedTimeframe, timeframeOptions } =
     useManageTimeframes();
@@ -61,40 +59,38 @@ export function ClarityPage() {
       }
     >
       <Box className="main-content-container">
-        <>
-          <Stack gap={3} className="left-column">
-            <Table<SummaryData>
-              label={cc.overall.title}
-              columns={summaryColumns}
-              rows={summaryData}
-              showToolbar
-              timeRangeLabel={timeRangeLabel}
-              toolbarTooltip={cc.overall.tooltip}
-              total={data?.cost ? data.cost.toLocaleString() : "-"}
-              summaryTable
-            />
-            <ClarityTabs
-              data={data}
-              hasLogData={hasLogData}
-              hasTraceData={hasTraceData}
-              logPercentSampled={logFilter?.pctSampled}
-              logDataTypeConfigured={logsConfigured}
-              tracePercentSampled={traceFilter?.pctSampled}
-              traceDataTypeConfigured={tracesConfigured}
-              logData={logData}
-              loading={loading}
-              onRefreshData={refreshData}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              spanData={spanData}
-              tableDataLoading={tableDataLoading}
-            />
-          </Stack>
-          <Stack className="right-column" gap={1}>
-            <LogsFilterControl {...data?.log} />
-            <TracesFilterControl {...data?.trace} />
-          </Stack>
-        </>
+        <Stack gap={3} className="left-column">
+          <Table<SummaryData>
+            label={cc.overall.title}
+            columns={summaryColumns}
+            rows={summaryData}
+            showToolbar
+            timeRangeLabel={timeRangeLabel}
+            toolbarTooltip={cc.overall.tooltip}
+            total={data?.cost ? data.cost.toLocaleString() : "-"}
+            summaryTable
+          />
+          <ClarityTabs
+            data={data}
+            hasLogData={hasLogData}
+            hasTraceData={hasTraceData}
+            logPercentSampled={logFilter?.pctSampled}
+            logDataTypeConfigured={logsConfigured}
+            tracePercentSampled={traceFilter?.pctSampled}
+            traceDataTypeConfigured={tracesConfigured}
+            logData={logData}
+            loading={loading}
+            onRefreshData={refreshData}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            spanData={spanData}
+            tableDataLoading={tableDataLoading}
+          />
+        </Stack>
+        <Stack className="right-column" gap={1}>
+          <LogsFilterControl {...data?.log} />
+          <TracesFilterControl {...data?.trace} />
+        </Stack>
       </Box>
     </PageContainer>
   );

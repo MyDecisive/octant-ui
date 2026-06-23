@@ -13,11 +13,13 @@ import {
 } from "./timeframe.slice";
 
 interface ClarityData extends InitSlice, TimeframeSlice, FiltersSlice {}
-
-interface ClarityState extends ClarityData {
+export interface ClarityState extends ClarityData {
   setState: (
     key: keyof ClarityData,
     value: ClarityData[keyof ClarityData],
+  ) => void;
+  update: (
+    updater: Partial<ClarityData> | ((prev: ClarityData) => ClarityData),
   ) => void;
 }
 
@@ -29,6 +31,13 @@ export const createClarityStore = (initProps?: ClarityStoreInitProps) => {
     ...createDefaultTimeframeSlice(),
     ...createDefaultFiltersSlice(),
     setState: (key, value) => set((state) => ({ ...state, [key]: value })),
+    update: (
+      updater: Partial<ClarityData> | ((prev: ClarityData) => ClarityData),
+    ) =>
+      set((state) => ({
+        ...state,
+        ...(typeof updater === "function" ? updater(state) : updater),
+      })),
   }));
 };
 
