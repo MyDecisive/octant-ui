@@ -5,12 +5,12 @@ import Typography from "@mui/material/Typography";
 import { useState, type ChangeEventHandler } from "react";
 
 import { Accordion } from "@components/Accordion";
+import { SliderControl } from "@components/formInputs/SliderControl";
 import { Switch } from "@mui/material";
-import { SliderControl } from "../formInputs/SliderControl";
+import { ClarityCopy } from "../../../copy/clarity/Clarity.copy";
 import "./FilterCard.css";
 import { FilterCardTitle } from "./FilterCardTitle";
 import { MetricRow } from "./MetricRow";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 
 interface FilterCardProps {
   title: string;
@@ -75,9 +75,21 @@ export function FilterCard({
       content={
         <Stack gap={2}>
           <Stack gap={1}>
-            <MetricRow label={ClarityCopy.filterCard.rows.ingested} value={received} unit={unit} />
-            <MetricRow label={ClarityCopy.filterCard.rows.routed} value={sent} unit={unit} />
-            <MetricRow label={ClarityCopy.filterCard.rows.dropped} value={filtered} unit={unit} />
+            <MetricRow
+              label={ClarityCopy.filterCard.rows.ingested}
+              value={received}
+              unit={unit}
+            />
+            <MetricRow
+              label={ClarityCopy.filterCard.rows.routed}
+              value={sent}
+              unit={unit}
+            />
+            <MetricRow
+              label={ClarityCopy.filterCard.rows.dropped}
+              value={filtered}
+              unit={unit}
+            />
           </Stack>
           <Divider />
           <SliderControl
@@ -93,7 +105,9 @@ export function FilterCard({
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography variant="chipLabel">{ClarityCopy.filterCard.toggle}</Typography>
+            <Typography variant="chipLabel">
+              {ClarityCopy.filterCard.toggle}
+            </Typography>
             <Switch checked={persist} onChange={handlePersistChange} />
           </Stack>
           <Divider />

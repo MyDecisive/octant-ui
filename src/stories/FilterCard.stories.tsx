@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { FilterCard } from "../components/FilterCard/FilterCard";
-import { FilterEmptyStateCard } from "../components/FilterCard/FilterEmptyStateCard";
+import { FilterCard } from "../pages/Clarity/FilterCard/FilterCard";
+import { FilterEmptyStateCard } from "../pages/Clarity/FilterCard/FilterEmptyStateCard";
 
 const meta = {
   title: "Components/FilterCard",

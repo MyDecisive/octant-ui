@@ -1,5 +1,3 @@
-import { FilterCard } from "@components/FilterCard/FilterCard";
-import { FilterEmptyStateCard } from "@components/FilterCard/FilterEmptyStateCard";
 import { Select } from "@components/formInputs/Select";
 import { PageContainer } from "@components/layout/PageContainer";
 import { Table } from "@components/Table/Table";
@@ -17,6 +15,8 @@ import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 import "./Clarity.css";
 import { ClarityTabs } from "./ClarityTabs";
 import { summaryColumns, type SummaryData } from "./constants";
+import { FilterCard } from "./FilterCard/FilterCard";
+import { FilterEmptyStateCard } from "./FilterCard/FilterEmptyStateCard";
 import { useManageClarityData } from "./useManageClarityData";
 import { useManageFilters } from "./useManageFilters";
 import { useManageTimeframes } from "./useManageTimeframes";
