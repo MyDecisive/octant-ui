@@ -2,7 +2,7 @@ import { CardHeader } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import "./FilterEmptyStateCard.css";
+import "./RatioFilterControlEmptyState.css";
 
 export interface FilterEmptyStateCardProps {
   title: string;
@@ -11,15 +11,15 @@ export interface FilterEmptyStateCardProps {
   onAction?: () => void;
 }
 
-export function FilterEmptyStateCard({
+export function RatioFilterControlEmptyState({
   title,
   description,
   actionLabel,
   onAction,
 }: FilterEmptyStateCardProps) {
   return (
-    <Card className="filter-card-empty-state-container">
-      <CardContent className="filter-card-empty-state-content">
+    <Card className="ratio-filter-control-empty-state-container">
+      <CardContent className="ratio-filter-control-empty-state-content">
         <CardHeader
           title={title}
           subheader={description}

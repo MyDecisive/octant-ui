@@ -1,4 +1,4 @@
-.filter-card-empty-state-container.MuiCard-root {
+.ratio-filter-control-empty-state-container.MuiCard-root {
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 4px;
   background-color: #ffffff;
@@ -6,7 +6,7 @@
   min-height: 252px;
 }
 
-.filter-card-empty-state-content.MuiCardContent-root {
+.ratio-filter-control-empty-state-content.MuiCardContent-root {
   min-height: 252px;
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@
   padding: calc(var(--mdai-spacing-unit) * 2);
 }
 
-.filter-card-empty-state-content.MuiCardContent-root
+.ratio-filter-control-empty-state-content.MuiCardContent-root
   > .MuiButton-root:last-child {
   align-self: center;
   margin-top: auto;

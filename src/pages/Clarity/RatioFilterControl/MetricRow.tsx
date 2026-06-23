@@ -13,17 +13,20 @@ export function MetricRow({
 }) {
   return (
     <Stack
-      className="filter-card-metric-row"
+      className="ratio-filter-control-metric-row"
       direction={"row"}
       justifyContent={"flex-end"}
       alignItems={"flex-end"}
     >
-      <Typography variant="chipLabel" className="filter-card-metric-row-label">
+      <Typography
+        variant="chipLabel"
+        className="ratio-filter-control-metric-row-label"
+      >
         {label}
       </Typography>
       <Typography variant="body1">{formatNumber(value)}</Typography>
       <Typography
-        className="filter-card-metric-row-unit"
+        className="ratio-filter-control-metric-row-unit"
         color="secondary"
         variant="chipLabel"
       >

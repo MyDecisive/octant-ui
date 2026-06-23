@@ -8,7 +8,7 @@ const chipProps: Partial<ChipProps> = {
   clickable: false,
 };
 
-export function FilterCardTitle({
+export function RationFilterControlTitle({
   title,
   includeErr,
   pctSampled,

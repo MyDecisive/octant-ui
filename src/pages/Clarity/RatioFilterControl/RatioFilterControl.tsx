@@ -8,11 +8,11 @@ import { Accordion } from "@components/Accordion";
 import { SliderControl } from "@components/formInputs/SliderControl";
 import { Switch } from "@mui/material";
 import { ClarityCopy } from "../../../copy/clarity/Clarity.copy";
-import "./FilterCard.css";
-import { FilterCardTitle } from "./FilterCardTitle";
 import { MetricRow } from "./MetricRow";
+import "./RatioFilterControl.css";
+import { RationFilterControlTitle } from "./RatioFilterControlTitle";
 
-interface FilterCardProps {
+interface RatioFilterControlProps {
   title: string;
   defaultExpanded?: boolean;
   received?: number;
@@ -25,7 +25,7 @@ interface FilterCardProps {
   onApplyFilter: (pctSampled: number, includeErr: boolean) => Promise<void>;
 }
 
-export function FilterCard({
+export function RatioFilterControl({
   title,
   defaultExpanded,
   received,
@@ -36,7 +36,7 @@ export function FilterCard({
   includeErr,
   unit,
   onApplyFilter,
-}: FilterCardProps) {
+}: RatioFilterControlProps) {
   const appliedSampleRate = pctSampled ?? 0;
   const appliedPersist = includeErr ?? false;
   const [sampleRate, setSampleRate] = useState(appliedSampleRate);
@@ -63,10 +63,10 @@ export function FilterCard({
   };
   return (
     <Accordion
-      className="filter-card-container"
+      className="ratio-filter-control-container"
       defaultExpanded={defaultExpanded}
       title={
-        <FilterCardTitle
+        <RationFilterControlTitle
           title={title}
           pctSampled={pctSampled}
           includeErr={includeErr}
