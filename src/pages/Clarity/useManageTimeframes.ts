@@ -1,4 +1,4 @@
-import { useClarityStore } from "@store/clarityStore";
+import { useClarityStore } from "@store/clarity/store";
 import { useCallback } from "react";
 import { useShallow } from "zustand/shallow";
 

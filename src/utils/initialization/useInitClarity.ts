@@ -3,7 +3,7 @@ import {
   TimeframeStatusResponse_Code,
   type TimeframeStatusRequest,
 } from "@mydecisiveai/octant-client";
-import { useClarityStore } from "@store/clarityStore";
+import { useClarityStore } from "@store/clarity/store";
 import type { UIConnectionScope } from "@types";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useRef, useState } from "react";
@@ -53,11 +53,11 @@ export function useInitClarity({
           }
           setState("timeframeOptions", options);
         }
-        setState("logData", log);
-        setState("traceData", trace);
+        setState("hasLogData", log);
+        setState("hasTraceData", trace);
       } catch {
-        setState("logData", false);
-        setState("traceData", false);
+        setState("hasLogData", false);
+        setState("hasTraceData", false);
       } finally {
         setLoading(false);
       }
