@@ -1,5 +1,5 @@
 import type { Log, Overall, Span } from "@mydecisiveai/octant-client";
-import { useClarityStore } from "@store/clarityStore";
+import { useClarityStore } from "@store/clarity/store";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { budgetServiceClient } from "../../services/budget";
@@ -52,11 +52,7 @@ function spanToRow(
   };
 }
 
-export function useManageClarityData(
-  searchQuery = "",
-  logDataTypeConfigured: boolean,
-  traceDataTypeConfigured: boolean,
-) {
+export function useManageClarityData(searchQuery = "") {
   const { connectionScope } = useClarityStore(
     useShallow(({ connectionScope }) => ({
       connectionScope,
@@ -66,17 +62,21 @@ export function useManageClarityData(
   const { namespace, connectionName } = connectionScope || {};
 
   const timeRange = useClarityStore((state) => state.selectedTimeframe);
-  const hasLogTimeframeData = useClarityStore((state) => state.logData);
-  const hasTraceTimeframeData = useClarityStore((state) => state.traceData);
+  const hasLogTimeframeData = useClarityStore((state) => state.hasLogData);
+  const hasTraceTimeframeData = useClarityStore((state) => state.hasTraceData);
+
+  const canRequestLogData = useClarityStore(
+    useShallow((state) => !!(state.logsConfigured && state.hasLogData)),
+  );
+  const canRequestTraceData = useClarityStore(
+    useShallow((state) => !!(state.tracesConfigured && state.hasTraceData)),
+  );
 
   const [overallData, setOverallData] = useState<Overall | null>(null);
   const [logData, setLogData] = useState<LogData[]>([]);
   const [spanData, setSpanData] = useState<SpanData[]>([]);
   const [overallLoading, setOverallLoading] = useState(false);
   const [tableDataLoading, setTableDataLoading] = useState(false);
-  const canRequestLogData = logDataTypeConfigured && !!hasLogTimeframeData;
-  const canRequestTraceData =
-    traceDataTypeConfigured && !!hasTraceTimeframeData;
 
   const abortRef = useRef<AbortController | null>(null);
 

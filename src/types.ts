@@ -97,7 +97,7 @@ export type FieldErrorsMap = Record<
   InputValidationErrors | null
 >;
 
-export interface Filter extends Pick<
+export interface UIFilter extends Pick<
   ClientFilter,
   "includeErr" | "pctSampled"
 > {

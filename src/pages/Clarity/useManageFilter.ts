@@ -21,19 +21,41 @@ function normalizeFilterResult(
 }
 
 export function useManageFilter(filterType: FilterTypes) {
-  const { connectionScope, setState, logFilter, traceFilter } = useClarityStore(
-    useShallow(({ connectionScope, setState, logFilter, traceFilter }) => ({
-      connectionScope,
-      setState,
-      logFilter,
-      traceFilter,
-    })),
+  const {
+    connectionScope,
+    logsConfigured,
+    tracesConfigured,
+    setState,
+    logFilter,
+    traceFilter,
+  } = useClarityStore(
+    useShallow(
+      ({
+        connectionScope,
+        logsConfigured,
+        tracesConfigured,
+        setState,
+        logFilter,
+        traceFilter,
+      }) => ({
+        connectionScope,
+        setState,
+        logFilter,
+        traceFilter,
+        logsConfigured,
+        tracesConfigured,
+      }),
+    ),
   );
 
   const filterStateKey = useMemo(
     () => (filterType === FilterTypes.LOG ? "logFilter" : "traceFilter"),
     [filterType],
   );
+
+  const configured = useMemo(() => {
+    return filterType === FilterTypes.LOG ? logsConfigured : tracesConfigured;
+  }, [filterType, logsConfigured, tracesConfigured]);
 
   const filter = useMemo(
     () => (filterType === FilterTypes.LOG ? logFilter : traceFilter),
@@ -78,13 +100,13 @@ export function useManageFilter(filterType: FilterTypes) {
   }, [connectionName, namespace, setState, filterStateKey, filterType]);
 
   const handleApplyFilter = useCallback(
-    async (type: FilterTypes, pctSampled: number, includeErr: boolean) => {
+    async (pctSampled: number, includeErr: boolean) => {
       setLoading(true);
 
       try {
         for await (const res of filterServiceClient.updateFilter({
           data: {
-            type: toFilterType(type),
+            type: toFilterType(filterType),
             pctSampled,
             includeErr,
           },
@@ -93,7 +115,7 @@ export function useManageFilter(filterType: FilterTypes) {
           const status = res.status;
           if (status === UpdateFilterResponse_Status.COMPLETED) {
             setState(filterStateKey, {
-              type,
+              type: filterType,
               pctSampled,
               includeErr,
             });
@@ -104,10 +126,11 @@ export function useManageFilter(filterType: FilterTypes) {
         setLoading(false);
       }
     },
-    [connectionScope, filterStateKey, setState],
+    [connectionScope, filterType, filterStateKey, setState],
   );
 
   return {
+    configured,
     filter,
     loading,
     handleApplyFilter,

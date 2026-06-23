@@ -12,7 +12,7 @@ import { MetricRow } from "./MetricRow";
 import "./RatioFilterControl.css";
 import { RationFilterControlTitle } from "./RatioFilterControlTitle";
 
-interface RatioFilterControlProps {
+export interface RatioFilterControlProps {
   title: string;
   defaultExpanded?: boolean;
   received?: number;
