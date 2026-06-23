@@ -2,70 +2,46 @@ import {
   UpdateFilterResponse_Status,
   type GetFilterResponse,
 } from "@mydecisiveai/octant-client";
-import { useClarityStore } from "@store/clarityStore";
-import { FilterTypes, type Filter } from "@types";
+import { useClarityStore } from "@store/clarity/store";
+import { FilterTypes, type UIFilter } from "@types";
 import { toFilterType } from "@utils/toFilterTypes";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { filterServiceClient } from "../../services/filter";
 
-const bothFilterTypes: FilterTypes[] = [FilterTypes.LOG, FilterTypes.TRACE];
-
-interface ManagedFilter extends Partial<Filter> {
-  configured: boolean;
-}
-
-const defaultFilters: Record<FilterTypes, ManagedFilter> = {
-  [FilterTypes.LOG]: {
-    type: FilterTypes.LOG,
-    configured: false,
-  },
-  [FilterTypes.TRACE]: {
-    type: FilterTypes.TRACE,
-    configured: false,
-  },
-};
-
-function normalizeFilterResponse(
-  expectedType: FilterTypes,
-  response: GetFilterResponse,
-): ManagedFilter {
-  if (!response.data) {
-    return defaultFilters[expectedType];
-  }
-
+function normalizeFilterResult(
+  type: FilterTypes,
+  result: GetFilterResponse,
+): UIFilter {
   return {
-    type: expectedType,
-    configured: true,
-    pctSampled: response.data?.pctSampled ?? 0,
-    includeErr: response.data?.includeErr ?? false,
+    type,
+    pctSampled: result?.data?.pctSampled ?? 0,
+    includeErr: result?.data?.includeErr ?? false,
   };
 }
 
-function normalizeFilterResult(
-  expectedType: FilterTypes,
-  result: PromiseSettledResult<GetFilterResponse>,
-): ManagedFilter {
-  if (result.status === "rejected") {
-    return defaultFilters[expectedType];
-  }
-
-  return normalizeFilterResponse(expectedType, result.value);
-}
-
-export function useManageFilters() {
-  const { connectionScope } = useClarityStore(
-    useShallow(({ connectionScope }) => ({
+export function useManageFilter(filterType: FilterTypes) {
+  const { connectionScope, setState, logFilter, traceFilter } = useClarityStore(
+    useShallow(({ connectionScope, setState, logFilter, traceFilter }) => ({
       connectionScope,
+      setState,
+      logFilter,
+      traceFilter,
     })),
   );
-  const [filters, setFilters] = useState<Record<
-    FilterTypes,
-    ManagedFilter
-  > | null>(null);
-  const [filtersLoading, setFiltersLoading] = useState<Set<FilterTypes>>(
-    new Set(),
+
+  const filterStateKey = useMemo(
+    () => (filterType === FilterTypes.LOG ? "logFilter" : "traceFilter"),
+    [filterType],
   );
+
+  const filter = useMemo(
+    () => (filterType === FilterTypes.LOG ? logFilter : traceFilter),
+    [filterType, logFilter, traceFilter],
+  );
+
+  const [loading, setLoading] = useState<boolean>(false);
+
   const connectionName = connectionScope?.connectionName;
   const namespace = connectionScope?.namespace;
 
@@ -73,96 +49,67 @@ export function useManageFilters() {
     if (!connectionName) return;
 
     async function fetchFilters() {
-      setFiltersLoading(new Set<FilterTypes>(bothFilterTypes));
+      setLoading(true);
 
-      const [logFilterResponse, traceFilterResponse] = await Promise.allSettled(
-        bothFilterTypes.map((type) =>
-          filterServiceClient.getFilter({
-            connectionName,
-            namespace,
-            type: toFilterType(type),
-          }),
-        ),
-      );
+      try {
+        const filterResponse = await filterServiceClient.getFilter({
+          connectionName,
+          namespace,
+          type: toFilterType(filterType),
+        });
 
-      setFilters({
-        [FilterTypes.LOG]: normalizeFilterResult(
-          FilterTypes.LOG,
-          logFilterResponse,
-        ),
-        [FilterTypes.TRACE]: normalizeFilterResult(
-          FilterTypes.TRACE,
-          traceFilterResponse,
-        ),
-      });
-      setFiltersLoading(new Set());
+        const normalizedResult = normalizeFilterResult(
+          filterType,
+          filterResponse,
+        );
+        setState(filterStateKey, normalizedResult);
+      } catch {
+        setState(filterStateKey, {
+          type: filterType,
+          pctSampled: 0,
+          includeErr: false,
+        });
+      } finally {
+        setLoading(false);
+      }
     }
 
     void fetchFilters();
-  }, [connectionName, namespace]);
+  }, [connectionName, namespace, setState, filterStateKey, filterType]);
 
-  const handleApplyFilter = async (
-    type: FilterTypes,
-    pctSampled: number,
-    includeErr: boolean,
-  ) => {
-    setFiltersLoading((state) => new Set(state).add(type));
+  const handleApplyFilter = useCallback(
+    async (type: FilterTypes, pctSampled: number, includeErr: boolean) => {
+      setLoading(true);
 
-    try {
-      for await (const res of filterServiceClient.updateFilter({
-        data: {
-          type: toFilterType(type),
-          pctSampled,
-          includeErr,
-        },
-        ...connectionScope,
-      })) {
-        const status = res.status;
-        if (status === UpdateFilterResponse_Status.COMPLETED) {
-          setFilters((state) => ({
-            [FilterTypes.LOG]: state?.[FilterTypes.LOG] ?? {
-              type: FilterTypes.LOG,
-              configured: false,
-              pctSampled: 0,
-              includeErr: false,
-            },
-            [FilterTypes.TRACE]: state?.[FilterTypes.TRACE] ?? {
-              type: FilterTypes.TRACE,
-              configured: false,
-              pctSampled: 0,
-              includeErr: false,
-            },
-            [type]: {
+      try {
+        for await (const res of filterServiceClient.updateFilter({
+          data: {
+            type: toFilterType(type),
+            pctSampled,
+            includeErr,
+          },
+          ...connectionScope,
+        })) {
+          const status = res.status;
+          if (status === UpdateFilterResponse_Status.COMPLETED) {
+            setState(filterStateKey, {
               type,
-              configured: true,
               pctSampled,
               includeErr,
-            },
-          }));
-          break;
+            });
+            break;
+          }
         }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setFiltersLoading((state) => {
-        const newState = new Set(state);
-        newState.delete(type);
-        return newState;
-      });
-    }
-  };
+    },
+    [connectionScope, filterStateKey, setState],
+  );
 
   return {
-    logFilter: {
-      ...filters?.[FilterTypes.LOG],
-      loading: filtersLoading.has(FilterTypes.LOG),
-      updateLogsFilter: (pctSampled: number, includeErr: boolean) =>
-        handleApplyFilter(FilterTypes.LOG, pctSampled, includeErr),
-    },
-    traceFilter: {
-      ...filters?.[FilterTypes.TRACE],
-      loading: filtersLoading.has(FilterTypes.TRACE),
-      updateTracesFilter: (pctSampled: number, includeErr: boolean) =>
-        handleApplyFilter(FilterTypes.TRACE, pctSampled, includeErr),
-    },
+    filter,
+    loading,
+    handleApplyFilter,
   };
 }
