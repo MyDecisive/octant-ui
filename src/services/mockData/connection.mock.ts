@@ -78,7 +78,8 @@ export const mockTransport = createRouterTransport(({ service }) => {
   service(ConnectionService, {
     getConnections: (...args) => {
       console.log("ConnectionService.getConnections", args);
-      return { connectionNames: Array.from(connections.keys()) };
+      return { connectionNames: [] };
+      // return { connectionNames: Array.from(connections.keys()) };
     },
     getConnection: (request) => {
       console.log("ConnectionService.getConnection", request);
