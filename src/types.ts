@@ -2,6 +2,8 @@ import {
   type Filter as ClientFilter,
   type ConnectionData,
   type Deployment,
+  type Overall,
+  type Overall_Metric,
   type TelemetryDestination,
 } from "@mydecisiveai/octant-client";
 import type { JSX } from "react";
@@ -120,6 +122,11 @@ export interface UIConnectionData extends Pick<
   scope?: UIConnectionScope;
   deployment: UIDeployment;
   destinations: UIDestination[];
+}
+
+export interface UIOverall extends Pick<Overall, "cost"> {
+  [FilterTypes.LOG]?: Overall_Metric;
+  [FilterTypes.TRACE]?: Overall_Metric;
 }
 
 // error modal types

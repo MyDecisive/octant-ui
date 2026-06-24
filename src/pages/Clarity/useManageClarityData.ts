@@ -54,15 +54,16 @@ function spanToRow(
 }
 
 export function useManageClarityData(searchQuery = "") {
-  const { connectionScope } = useClarityStore(
-    useShallow(({ connectionScope }) => ({
+  const { connectionScope, setState, selectedTimeframe } = useClarityStore(
+    useShallow(({ connectionScope, setState, selectedTimeframe }) => ({
       connectionScope,
+      setState,
+      selectedTimeframe,
     })),
   );
 
   const { namespace, connectionName } = connectionScope || {};
 
-  const timeRange = useClarityStore((state) => state.selectedTimeframe);
   const hasLogTimeframeData = useClarityStore(
     (state) => state.hasData[FilterTypes.LOG],
   );
@@ -101,6 +102,7 @@ export function useManageClarityData(searchQuery = "") {
 
     if (!namespace) {
       setOverallData(null);
+      setState("overall", null);
       setLogData([]);
       setSpanData([]);
       return;
@@ -108,6 +110,7 @@ export function useManageClarityData(searchQuery = "") {
 
     setOverallLoading(true);
     setOverallData(null);
+    setState("overall", null);
     setLogData([]);
     setSpanData([]);
 
@@ -115,26 +118,32 @@ export function useManageClarityData(searchQuery = "") {
       const overallResponse = await budgetServiceClient.overall(
         {
           namespace,
-          timeframe: timeRange,
+          timeframe: selectedTimeframe,
         },
         {
           signal: controller.signal,
         },
       );
 
-      if (!controller.signal.aborted) {
-        setOverallData(overallResponse.data ?? null);
+      if (!controller.signal.aborted && overallResponse.data) {
+        setOverallData(overallResponse.data);
+        setState("overall", {
+          ...overallResponse.data,
+          [FilterTypes.LOG]: overallResponse.data?.log,
+          [FilterTypes.TRACE]: overallResponse.data?.trace,
+        });
       }
     } catch {
       if (!controller.signal.aborted) {
         setOverallData(null);
+        setState("overall", null);
       }
     } finally {
       if (!controller.signal.aborted) {
         setOverallLoading(false);
       }
     }
-  }, [namespace, timeRange]);
+  }, [namespace, selectedTimeframe, setState]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -159,7 +168,7 @@ export function useManageClarityData(searchQuery = "") {
       const request = {
         connectionName,
         namespace,
-        timeframe: timeRange,
+        timeframe: selectedTimeframe,
         size: tablePageSize,
         pageToken: "",
         search: searchQuery.trim(),
@@ -201,7 +210,7 @@ export function useManageClarityData(searchQuery = "") {
     namespace,
     overallData,
     searchQuery,
-    timeRange,
+    selectedTimeframe,
     hasTraceTimeframeData,
     hasLogTimeframeData,
     canRequestLogData,
