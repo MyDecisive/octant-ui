@@ -1,0 +1,29 @@
+import{j as r,r as v}from"./iframe-B8WsEGHq.js";import{S as y}from"./SearchField-Bw0F6tGM.js";import{R as C}from"./RichTooltip-CGAi_WG3.js";import{S as c}from"./Stack-DjRt2RXZ.js";import{C as x}from"./CircularProgress-DGPOJjrh.js";import{T as f}from"./Typography-BZhPPhck.js";import{T as j,a as R}from"./Tabs-B6F_ZX9r.js";import{C as q}from"./Card-DqXOohIp.js";import{C as S}from"./CardContent-D7kPBzTw.js";import{W as w}from"./WarningAmberRounded-CtIL2_Bo.js";import"./preload-helper-CZWHLvzI.js";import"./Autocomplete-jEjMm1BV.js";import"./TextField-Lu4Gza8g.js";import"./useSlot-U6_aPKPU.js";import"./mergeSlotProps-CAETWj2Y.js";import"./useFormControl-DU5kopq1.js";import"./ownerDocument-DW-IO8s5.js";import"./useSlotProps-BQNBN2GS.js";import"./Paper-BfH9b8vB.js";import"./Grow-Cfc93Vzc.js";import"./utils-BzYjJIVb.js";import"./index-BIapRzG0.js";import"./index-bF7fSFuN.js";import"./Popper-Djh0oyLU.js";import"./useControlled-CO8Qmhc-.js";import"./createSvgIcon-D6VDE93t.js";import"./Close-Tf9DWZwr.js";import"./Chip-DNLVBqnj.js";import"./index-D6GmIEuN.js";import"./Tooltip-CHS2PaHM.js";function b({text:a,loading:t=!1,startIcon:n,endIcon:s,tooltip:e}){const o=r.jsxs(c,{component:"span",direction:"row",alignItems:"center",gap:1,children:[t?r.jsx(x,{color:"inherit",size:16}):n,r.jsx(f,{color:"inherit",component:"span",children:a}),s]});return e?r.jsx(C,{...typeof e=="string"?{description:e}:e,children:r.jsx("span",{children:o})}):o}b.__docgenInfo={description:"",methods:[],displayName:"TabLabel",props:{text:{required:!0,tsType:{name:"string"},description:""},tooltip:{required:!1,tsType:{name:"union",raw:"string | RichTooltipProps",elements:[{name:"string"},{name:"RichTooltipProps"}]},description:""},loading:{required:!1,tsType:{name:"boolean"},description:"",defaultValue:{value:"false",computed:!1}},startIcon:{required:!1,tsType:{name:"ReactNode"},description:""},endIcon:{required:!1,tsType:{name:"ReactNode"},description:""}}};function h(a){const{children:t,value:n,activeValue:s,panelGap:e=2,...o}=a;return r.jsx("div",{role:"tabpanel",id:`simple-tabpanel-${n}`,"aria-labelledby":`simple-tab-${n}`,className:`octant-tab-panel${s===n?" visible":""}`,...o,children:s===n&&r.jsx(c,{gap:e,children:t})})}h.__docgenInfo={description:"",methods:[],displayName:"TabPanel",props:{children:{required:!1,tsType:{name:"ReactNode"},description:""},panelGap:{required:!1,tsType:{name:"number"},description:""},value:{required:!0,tsType:{name:"string"},description:""},activeValue:{required:!0,tsType:{name:"string"},description:""}}};function m({activeValue:a,items:t,onChange:n,search:s}){return r.jsxs(r.Fragment,{children:[r.jsxs(c,{direction:"row",justifyContent:"space-between",children:[r.jsx(j,{value:a,onChange:(e,o)=>{n(o)},children:t.map(e=>r.jsx(R,{id:`simple-tab-${e.value}`,"aria-controls":`simple-tabpanel-${e.value}`,label:typeof e.label=="string"?e.label:r.jsx(b,{...e.label}),value:e.value},e.value))}),s&&r.jsx(y,{...s})]}),t.map(e=>r.jsx(h,{value:e.value,activeValue:a,children:e.children},e.value))]})}m.__docgenInfo={description:"",methods:[],displayName:"Tabs",props:{activeValue:{required:!0,tsType:{name:"string"},description:""},items:{required:!0,tsType:{name:"Array",elements:[{name:"TabItem"}],raw:"TabItem[]"},description:""},onChange:{required:!0,tsType:{name:"signature",type:"function",raw:"(value: string) => void",signature:{arguments:[{type:{name:"string"},name:"value"}],return:{name:"void"}}},description:""},search:{required:!1,tsType:{name:"SearchFieldProps"},description:""}}};function D(a,t){return t!==void 0?`${a} (${t.toString()})`:a}const g=[{label:"Logs",value:"logs",filler:"Log tab content"},{label:"Traces",value:"traces",filler:"Trace tab content"}],se={title:"Layout/Tabs",component:m,parameters:{layout:"centered",controls:{include:["loading","showLoadingPopover","missingData","resultCount"]},docs:{source:{code:`<Tabs
+  activeValue={activeValue}
+  items={items}
+  loading={loading}
+  onChange={setActiveValue}
+  showLoadingPopover={showLoadingPopover}
+  showResultCounts={resultCount > 0}
+/>`,type:"code"}}},argTypes:{loading:{control:"boolean"},missingData:{control:"boolean"},resultCount:{control:{type:"number",min:0,step:1}}},args:{activeValue:"logs",items:[],onChange:()=>{},loading:!1,missingData:!1,resultCount:0}};function u(a){const[t,n]=v.useState(g[0].value),s=g.map(({label:e,value:o,filler:T})=>({label:{text:a.resultCount!=null?D(e,a.resultCount):e,loading:a.loading,tooltip:a.loading?"Data is still loading":void 0,startIcon:a.missingData?r.jsx(w,{fontSize:"small"}):void 0},value:o,resultCount:a.resultCount,children:r.jsx(q,{sx:{minWidth:275,p:5},children:r.jsx(S,{children:r.jsx(f,{variant:"body2",children:T})})})}));return r.jsx(c,{width:774,spacing:2,children:r.jsx(m,{activeValue:t,items:s,onChange:n})})}const i={render:u},l={args:{loading:!0,resultCount:0},render:u},d={args:{loading:!1,resultCount:17},render:u},p={args:{loading:!1,missingData:!0,resultCount:0},render:u};i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  render: RenderTabs
+}`,...i.parameters?.docs?.source}}};l.parameters={...l.parameters,docs:{...l.parameters?.docs,source:{originalSource:`{
+  args: {
+    loading: true,
+    resultCount: 0
+  },
+  render: RenderTabs
+}`,...l.parameters?.docs?.source}}};d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`{
+  args: {
+    loading: false,
+    resultCount: 17
+  },
+  render: RenderTabs
+}`,...d.parameters?.docs?.source}}};p.parameters={...p.parameters,docs:{...p.parameters?.docs,source:{originalSource:`{
+  args: {
+    loading: false,
+    missingData: true,
+    resultCount: 0
+  },
+  render: RenderTabs
+}`,...p.parameters?.docs?.source}}};const oe=["Default","Loading","ResultCount","MissingData"];export{i as Default,l as Loading,p as MissingData,d as ResultCount,oe as __namedExportsOrder,se as default};

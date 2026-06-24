@@ -1,0 +1,11 @@
+import{j as o}from"./iframe-B8WsEGHq.js";import{C as m,F as e}from"./routing-BwEPs6n6.js";import{F as i}from"./FlowLayout-D3HDH0pu.js";import"./preload-helper-CZWHLvzI.js";import"./Box-CbO0Nqhl.js";import"./Typography-BZhPPhck.js";import"./Stack-DjRt2RXZ.js";import"./index-DI4pvUGu.js";import"./Alert-DpEbhGFo.js";import"./useSlot-U6_aPKPU.js";import"./mergeSlotProps-CAETWj2Y.js";import"./createSvgIcon-D6VDE93t.js";import"./Close-Tf9DWZwr.js";import"./CircularProgress-DGPOJjrh.js";import"./Paper-BfH9b8vB.js";import"./Button-CO9sK1fg.js";import"./Cancel-CmtRCNND.js";import"./MenuItem-DVmN25Oo.js";import"./SwitchBase-DB9gsZ7O.js";import"./useFormControl-DU5kopq1.js";import"./useControlled-CO8Qmhc-.js";import"./TextField-Lu4Gza8g.js";import"./ownerDocument-DW-IO8s5.js";import"./useSlotProps-BQNBN2GS.js";import"./Grow-Cfc93Vzc.js";import"./utils-BzYjJIVb.js";import"./index-BIapRzG0.js";import"./index-bF7fSFuN.js";import"./Popper-Djh0oyLU.js";import"./Divider-DSOkfWGd.js";import"./Tooltip-CHS2PaHM.js";import"./Accordion-ixPjHsbE.js";import"./index-D6GmIEuN.js";import"./Chip-DNLVBqnj.js";import"./Card-DqXOohIp.js";import"./CardContent-D7kPBzTw.js";import"./CardHeader-2wH9UmRh.js";import"./CardActions-JBHCnL4c.js";import"./HealthWidget-C7UwckAq.js";import"./ArgoInstallDialog-jlQ15Nti.js";import"./FullscreenLoader-Uz02u9jf.js";import"./logo-Cs6w02g1.js";const V={title:"Display/CodeSnippet",component:m,decorators:[p=>o.jsx(i,{children:o.jsx(e,{children:o.jsx("div",{style:{backgroundColor:"#F3F3F6",borderRadius:"4px"},children:o.jsx(p,{})})})})],parameters:{layout:"centered"},args:{code:`kubectl apply -f collector.yaml
+kubectl rollout restart deployment/datadog-agent -n mdai`}},t={args:{copyButton:!1,maxHeight:"500px"}},r={args:{copyButton:!1}};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  args: {
+    copyButton: false,
+    maxHeight: "500px"
+  }
+}`,...t.parameters?.docs?.source}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {
+    copyButton: false
+  }
+}`,...r.parameters?.docs?.source}}};const X=["Default","WithoutCopyButton"];export{t as Default,r as WithoutCopyButton,X as __namedExportsOrder,V as default};
