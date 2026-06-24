@@ -19,7 +19,13 @@ function getCopyByType(type: FilterTypes) {
   };
 }
 
-export function SimpleFilterControl({ type }: { type: FilterTypes }) {
+export function SimpleFilterControl({
+  type,
+  defaultExpanded,
+}: {
+  defaultExpanded?: boolean;
+  type: FilterTypes;
+}) {
   const { controlData, loading, handleApplyFilter, configured } =
     useManageFilter(type);
 
@@ -38,6 +44,7 @@ export function SimpleFilterControl({ type }: { type: FilterTypes }) {
   return (
     <RatioFilterControl
       loading={loading}
+      defaultExpanded={defaultExpanded}
       {...controlData}
       unit={unit}
       onApplyFilter={handleApplyFilter}

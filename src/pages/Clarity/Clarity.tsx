@@ -88,8 +88,14 @@ export function ClarityPage() {
           />
         </Stack>
         <Stack className="right-column" gap={1}>
-          <SimpleFilterControl type={FilterTypes.LOG} />
-          <SimpleFilterControl type={FilterTypes.TRACE} />
+          <SimpleFilterControl
+            defaultExpanded={logsConfigured}
+            type={FilterTypes.LOG}
+          />
+          <SimpleFilterControl
+            defaultExpanded={!logsConfigured && tracesConfigured}
+            type={FilterTypes.TRACE}
+          />
         </Stack>
       </Box>
     </PageContainer>
