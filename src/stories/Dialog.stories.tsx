@@ -1,11 +1,18 @@
+import { ArgoInstallDialog } from "@components/ArgoInstallDialog";
 import { CodeSnippet } from "@components/CodeSnippet";
+import { Dialog } from "@components/Dialog";
+import { SetupSmarthubDialog } from "@components/SetupSmarthubDialog";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { createInstallAndConnectStore } from "@store/installAndConnectStore";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Dialog } from "../components/Dialog";
+import { Router } from "wouter";
+import { memoryLocation } from "wouter/memory-location";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/error";
+import { InstallAndConnectContext } from "../contexts/InstallAndConnect";
 
 const code = `datadog:
   # Enable this only if applications send traces to the agent over TCP:8126
@@ -91,4 +98,74 @@ export const Error: Story = {
       </>
     ),
   },
+};
+
+export const ArgoInstall: Story = {
+  render: () => {
+    const store = createInstallAndConnectStore({
+      argoAgreement: false,
+      lastCompletedStep: 1,
+    });
+    const { hook } = memoryLocation({ path: "/some-other-route" });
+    return (
+      <InstallAndConnectContext value={store}>
+        <Router hook={hook}>
+          <ArgoInstallDialog />
+        </Router>
+      </InstallAndConnectContext>
+    );
+  },
+};
+
+export const SetupSmarthubError: Story = {
+  render: () => (
+    <SetupSmarthubDialog
+      open={true}
+      onClose={() => null}
+      errorInfo={{
+        header: "Smarthub setup failed",
+        severity: ERROR_SEVERITY.ERROR,
+        body: "An error occurred while setting up the smarthub.",
+        actions: [
+          { text: "Close", act: [ERROR_MODAL_ACT.CLOSE] },
+          { text: "Report bug", act: [ERROR_MODAL_ACT.REPORT_BUG] },
+        ],
+      }}
+    />
+  ),
+};
+
+export const SetupSmarthubWarning: Story = {
+  render: () => (
+    <SetupSmarthubDialog
+      open={true}
+      onClose={() => null}
+      errorInfo={{
+        header: "Smarthub setup warning",
+        severity: ERROR_SEVERITY.WARN,
+        body: "Some issues were detected during setup.",
+        actions: [
+          { text: "Visit docs", act: [ERROR_MODAL_ACT.VISIT_DOCS] },
+          { text: "Close", act: [ERROR_MODAL_ACT.CLOSE] },
+        ],
+      }}
+    />
+  ),
+};
+
+export const SetupSmarthubNetworkError: Story = {
+  render: () => (
+    <SetupSmarthubDialog
+      open={true}
+      onClose={() => null}
+      errorInfo={{
+        header: "Network error",
+        severity: ERROR_SEVERITY.ERROR,
+        body: "Could not reach the smarthub.",
+        networkErrorInfo:
+          "Error 503: Service Unavailable\nHost: smarthub.local",
+        actions: [{ text: "Close", act: [ERROR_MODAL_ACT.CLOSE] }],
+      }}
+    />
+  ),
 };

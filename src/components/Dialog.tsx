@@ -49,7 +49,7 @@ export function Dialog({
       }}
     >
       <DialogTitle>
-        <Stack direction="row" alignItems="flex-start" gap={1}>
+        <Stack direction="row" alignItems="center" gap={1}>
           {icon}
           <Typography variant="body2" data-bold="true" component="span">
             {title}
@@ -68,9 +68,7 @@ export function Dialog({
       </DialogTitle>
       {(description || children) && (
         <DialogContent className="mdai-dialog-content">
-          {description && (
-            <DialogContentText>{description}</DialogContentText>
-          )}
+          {description && <DialogContentText>{description}</DialogContentText>}
           {children}
         </DialogContent>
       )}
