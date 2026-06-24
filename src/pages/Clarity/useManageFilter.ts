@@ -21,11 +21,19 @@ function normalizeFilterResult(
 }
 
 function makeFilterDataByTypeSelector(filterType: FilterTypes) {
-  return (state: ClarityState) => ({
-    filter: state.filters[filterType],
-    configured: state.configured[filterType],
-    hasData: state.hasData[filterType],
-  });
+  return (state: ClarityState) => {
+    const overallByType = (state.overall ?? {})[filterType];
+    return {
+      configured: state.configured[filterType],
+      hasData: state.hasData[filterType],
+      ...state.filters[filterType],
+      ...(overallByType && {
+        received: overallByType.received,
+        sent: overallByType.sent,
+        filtered: overallByType.filtered,
+      }),
+    };
+  };
 }
 
 export function useManageFilter(filterType: FilterTypes) {
@@ -40,7 +48,7 @@ export function useManageFilter(filterType: FilterTypes) {
     return makeFilterDataByTypeSelector(filterType);
   }, [filterType]);
 
-  const { filter, configured } = useClarityStore(
+  const { configured, ...controlData } = useClarityStore(
     useShallow(filterDataByTypeSelector),
   );
 
@@ -126,7 +134,7 @@ export function useManageFilter(filterType: FilterTypes) {
 
   return {
     configured,
-    filter,
+    controlData,
     loading,
     handleApplyFilter,
   };

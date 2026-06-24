@@ -1,23 +1,29 @@
 import { FilterTypes } from "@types";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
-import {
-  RatioFilterControl,
-  type RatioFilterControlProps,
-} from "./RatioFilterControl/RatioFilterControl";
+import { RatioFilterControl } from "./RatioFilterControl/RatioFilterControl";
 import { RatioFilterControlEmptyState } from "./RatioFilterControl/RatioFilterControlEmptyState";
 import { useManageFilter } from "./useManageFilter";
 
-const { title, emptyState } = ClarityCopy.logFilter;
+// TODO: Units constant
+function getCopyByType(type: FilterTypes) {
+  if (type === FilterTypes.LOG) {
+    return {
+      unit: "GB",
+      ...ClarityCopy.logFilter,
+    };
+  }
 
-export type DataTypeFilterControlProps = Pick<
-  RatioFilterControlProps,
-  "received" | "sent" | "filtered" | "defaultExpanded"
->;
+  return {
+    unit: "MM Spans",
+    ...ClarityCopy.traceFilter,
+  };
+}
 
-export function LogsFilterControl(props: DataTypeFilterControlProps) {
-  const { filter, loading, handleApplyFilter, configured } = useManageFilter(
-    FilterTypes.LOG,
-  );
+export function SimpleFilterControl({ type }: { type: FilterTypes }) {
+  const { controlData, loading, handleApplyFilter, configured } =
+    useManageFilter(type);
+
+  const { title, emptyState, unit } = getCopyByType(type);
 
   if (!configured) {
     return (
@@ -32,9 +38,8 @@ export function LogsFilterControl(props: DataTypeFilterControlProps) {
   return (
     <RatioFilterControl
       loading={loading}
-      {...filter}
-      {...props}
-      unit="GB"
+      {...controlData}
+      unit={unit}
       onApplyFilter={handleApplyFilter}
       title={title}
     />

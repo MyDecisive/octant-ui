@@ -4,6 +4,7 @@ import { Table } from "@components/Table/Table";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { useClarityStore } from "@store/clarity/store";
+import { FilterTypes } from "@types";
 import { timeframeLabels } from "@utils/timeframeToPickerOptions";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
@@ -11,8 +12,7 @@ import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 import "./Clarity.css";
 import { ClarityTabs } from "./ClarityTabs";
 import { summaryColumns, type SummaryData } from "./constants";
-import { LogsFilterControl } from "./LogsFilterControl";
-import { TracesFilterControl } from "./TracesFilterControl";
+import { SimpleFilterControl } from "./SimpleFilterControl";
 import { useManageClarityData } from "./useManageClarityData";
 import { useManageTimeframes } from "./useManageTimeframes";
 
@@ -88,8 +88,8 @@ export function ClarityPage() {
           />
         </Stack>
         <Stack className="right-column" gap={1}>
-          <LogsFilterControl {...data?.log} />
-          <TracesFilterControl {...data?.trace} />
+          <SimpleFilterControl type={FilterTypes.LOG} />
+          <SimpleFilterControl type={FilterTypes.TRACE} />
         </Stack>
       </Box>
     </PageContainer>
