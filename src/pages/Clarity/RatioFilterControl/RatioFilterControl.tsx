@@ -10,7 +10,7 @@ import { Switch } from "@mui/material";
 import { ClarityCopy } from "../../../copy/clarity/Clarity.copy";
 import { MetricRow } from "./MetricRow";
 import "./RatioFilterControl.css";
-import { RationFilterControlTitle } from "./RatioFilterControlTitle";
+import { RatioFilterControlTitle } from "./RatioFilterControlTitle";
 
 export interface RatioFilterControlProps {
   title: string;
@@ -66,7 +66,7 @@ export function RatioFilterControl({
       className="ratio-filter-control-container"
       defaultExpanded={defaultExpanded}
       title={
-        <RationFilterControlTitle
+        <RatioFilterControlTitle
           title={title}
           pctSampled={pctSampled}
           includeErr={includeErr}

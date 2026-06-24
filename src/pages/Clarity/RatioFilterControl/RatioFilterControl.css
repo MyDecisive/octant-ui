@@ -12,27 +12,3 @@
   line-height: 20px;
   margin-left: calc(var(--mdai-spacing-unit) / 2);
 }
-
-/** empty state styles */
-.ratio-filter-control-empty-state-container.MuiCard-root {
-  border: 1px solid rgba(0, 0, 0, 0.23);
-  border-radius: 4px;
-  background-color: #ffffff;
-  box-shadow: none;
-  min-height: 252px;
-}
-
-.ratio-filter-control-empty-state-content.MuiCardContent-root {
-  min-height: 252px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: calc(var(--mdai-spacing-unit) * 2);
-  padding: calc(var(--mdai-spacing-unit) * 2);
-}
-
-.ratio-filter-control-empty-state-content.MuiCardContent-root
-  > .MuiButton-root:last-child {
-  align-self: center;
-  margin-top: auto;
-}
