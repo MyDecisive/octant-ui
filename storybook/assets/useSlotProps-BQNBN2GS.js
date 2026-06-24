@@ -1,1 +1,0 @@
-import{r as f,m as i,u as m,b as S}from"./mergeSlotProps-CAETWj2Y.js";function d(o){const{elementType:s,externalSlotProps:t,ownerState:e,skipResolvingSlotProps:n=!1,...p}=o,r=n?{}:f(t,e),{props:l,internalRef:a}=i({...p,externalSlotProps:r}),P=m(a,r?.ref,o.additionalProps?.ref);return S(s,{...l,ref:P},e)}export{d as u};
