@@ -1,4 +1,5 @@
 import { Tabs, type TabItem } from "@components/Tabs/Tabs";
+import { WarningAmberRounded } from "@mui/icons-material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Stack from "@mui/material/Stack";
@@ -6,10 +7,12 @@ import Typography from "@mui/material/Typography";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ComponentProps } from "react";
 import { useState } from "react";
+import { formatTabLabel } from "../pages/Clarity/formatTabLabel";
 
 interface TabsStoryArgs extends ComponentProps<typeof Tabs> {
   missingData: boolean;
   resultCount: number;
+  loading?: boolean;
 }
 
 const tabs: {
@@ -56,9 +59,6 @@ const meta: Meta<TabsStoryArgs> = {
     loading: {
       control: "boolean",
     },
-    showLoadingPopover: {
-      control: "boolean",
-    },
     missingData: {
       control: "boolean",
     },
@@ -76,7 +76,6 @@ const meta: Meta<TabsStoryArgs> = {
     onChange: () => undefined,
     loading: false,
     missingData: false,
-    showLoadingPopover: false,
     resultCount: 0,
   },
 };
@@ -88,9 +87,18 @@ type Story = StoryObj<TabsStoryArgs>;
 function RenderTabs(args: TabsStoryArgs) {
   const [activeValue, setActiveValue] = useState(tabs[0].value);
   const items: TabItem[] = tabs.map(({ label, value, filler }) => ({
-    label,
+    label: {
+      text:
+        args.resultCount != undefined
+          ? formatTabLabel(label, args.resultCount)
+          : label,
+      loading: args.loading,
+      tooltip: args.loading ? "Data is still loading" : undefined,
+      startIcon: args.missingData ? (
+        <WarningAmberRounded fontSize="small" />
+      ) : undefined,
+    },
     value,
-    missingData: args.missingData,
     resultCount: args.resultCount,
     children: (
       <Card sx={{ minWidth: 275, p: 5 }}>
@@ -103,14 +111,7 @@ function RenderTabs(args: TabsStoryArgs) {
 
   return (
     <Stack width={774} spacing={2}>
-      <Tabs
-        activeValue={activeValue}
-        items={items}
-        loading={args.loading}
-        onChange={setActiveValue}
-        showLoadingPopover={args.showLoadingPopover}
-        showResultCounts={args.resultCount > 0}
-      />
+      <Tabs activeValue={activeValue} items={items} onChange={setActiveValue} />
     </Stack>
   );
 }
@@ -122,7 +123,6 @@ export const Default: Story = {
 export const Loading: Story = {
   args: {
     loading: true,
-    showLoadingPopover: true,
     resultCount: 0,
   },
   render: RenderTabs,
@@ -131,7 +131,6 @@ export const Loading: Story = {
 export const ResultCount: Story = {
   args: {
     loading: false,
-    showLoadingPopover: false,
     resultCount: 17,
   },
   render: RenderTabs,
@@ -141,7 +140,6 @@ export const MissingData: Story = {
   args: {
     loading: false,
     missingData: true,
-    showLoadingPopover: false,
     resultCount: 0,
   },
   render: RenderTabs,
