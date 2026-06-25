@@ -1,10 +1,8 @@
+import type { UIConnectionScope } from "@app-types/contracts";
 import type { AsyncStatus } from "@app-types/enums";
 import { ConnectError } from "@connectrpc/connect";
 import { ASYNC_STATUS } from "@constants/enums";
-import type {
-  ConnectionScope,
-  GetConnectionStatusResponse,
-} from "@mydecisiveai/octant-client";
+import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
 import { createInFlightRequestCache } from "@utils/createInFlightRequestCache";
 import { create } from "zustand";
 import {
@@ -16,19 +14,15 @@ import {
   validatorRunIdToDate,
 } from "../services/connection";
 
+// TODO: Move to constants
 export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = connectionValidationWaitMs;
 
-export type ConnectionValidationScope = Pick<
-  ConnectionScope,
-  "connectionName" | "namespace"
->;
-
-interface ValidatorRun extends ConnectionValidationScope {
+interface ValidatorRun extends UIConnectionScope {
   runId: string;
 }
 
 interface ValidateConnectionParams {
-  scope: ConnectionValidationScope;
+  scope: UIConnectionScope;
   waitForNewRunMs?: number;
 }
 
@@ -67,7 +61,7 @@ export function validatorRunIdToTimestamp(validatorRunId: string) {
 }
 
 async function getConnectionStatusForRun(
-  scope: ConnectionValidationScope,
+  scope: UIConnectionScope,
   runId: string,
 ) {
   return connectionServiceClient.getConnectionStatus({
@@ -78,7 +72,7 @@ async function getConnectionStatusForRun(
 
 function getValidationRequestKey(
   operation: ValidationOperation,
-  scope: ConnectionValidationScope,
+  scope: UIConnectionScope,
 ) {
   return [operation, scope.connectionName ?? "", scope.namespace ?? ""].join(
     ":",

@@ -1,6 +1,6 @@
+import type { UIConnectionScope } from "@app-types/contracts";
 import {
   DEFAULT_CONNECTION_VALIDATION_WAIT_MS,
-  type ConnectionValidationScope,
   selectConnectionValidationView,
   useConnectionValidationStore,
 } from "@store/connectionValidationStore";
@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 
 interface UseConnectionValidationOptions {
-  scope?: Partial<ConnectionValidationScope>;
+  scope?: Partial<UIConnectionScope>;
   autoStart?: boolean;
   waitForNewRunMs?: number;
 }

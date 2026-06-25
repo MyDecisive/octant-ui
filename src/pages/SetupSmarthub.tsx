@@ -14,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import { InstallStatus } from "@mydecisiveai/octant-client";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
-import { useOctantStore } from "@store/octantStore";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState } from "react";
 import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/enums";
@@ -36,9 +35,6 @@ export function SetupSmarthub() {
   const mdaiVersion = useInstallAndConnectStore((state) => state.mdaiVersion);
   const setFormField = useInstallAndConnectStore((state) => state.setFormField);
   const setHubInstalled = useHubInstallStore((state) => state.setInstalled);
-  const setOctantConnectionScope = useOctantStore(
-    (state) => state.setInConnectionScope,
-  );
 
   const [namespace, setNamespace] = useState<string>("mdai");
 
@@ -74,7 +70,6 @@ export function SetupSmarthub() {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
             setHubInstalled(true);
-            setOctantConnectionScope("namespace", namespace);
             setFormField("namespace", namespace);
             return true;
           case InstallStatus.TIMEOUT:

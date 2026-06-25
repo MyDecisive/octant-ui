@@ -15,8 +15,8 @@ export interface UIFilter extends Pick<Filter, "includeErr" | "pctSampled"> {
 
 // UI versions of client types
 export interface UIConnectionScope {
-  connectionName?: string;
-  namespace?: string;
+  connectionName: string;
+  namespace: string;
 }
 
 type UIDeployment = Pick<Deployment, "type" | "integrationName">;
@@ -26,7 +26,7 @@ export interface UIConnectionData extends Pick<
   ConnectionData,
   "telemetryTypes"
 > {
-  scope?: UIConnectionScope;
+  scope: UIConnectionScope;
   deployment: UIDeployment;
   destinations: UIDestination[];
 }

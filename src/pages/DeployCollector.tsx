@@ -54,8 +54,8 @@ export function DeployCollector() {
 
       const connection: UIConnectionData = {
         scope: {
-          connectionName,
-          namespace,
+          connectionName: connectionName!,
+          namespace: namespace!,
         },
         telemetryTypes: toMLTTypes(telemetryTypes),
         deployment: {

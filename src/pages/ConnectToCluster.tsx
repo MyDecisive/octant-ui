@@ -5,7 +5,6 @@ import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
-import { useOctantStore } from "@store/octantStore";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
@@ -42,9 +41,6 @@ export function ConnectToCluster() {
 
   const setPartialState = useInstallAndConnectStore(
     useShallow((state) => state.setPartialState),
-  );
-  const setOctantConnectionScope = useOctantStore(
-    (state) => state.setInConnectionScope,
   );
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -93,7 +89,6 @@ export function ConnectToCluster() {
         name: connectionName,
       });
       setPartialState({ accountToken, argoUrl, connectionName });
-      setOctantConnectionScope("connectionName", connectionName);
       return true;
     } catch {
       setConnectionError(copy.formError.genericError);
