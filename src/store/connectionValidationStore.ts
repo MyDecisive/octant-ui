@@ -56,10 +56,6 @@ function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function validatorRunIdToTimestamp(validatorRunId: string) {
-  return validatorRunIdToDate(validatorRunId)?.toISOString();
-}
-
 async function getConnectionStatusForRun(
   scope: UIConnectionScope,
   runId: string,
@@ -163,7 +159,7 @@ export function selectConnectionValidationView({
     revalidate,
     validatorRunId: validatorRun?.runId,
     timestamp: validatorRun
-      ? validatorRunIdToTimestamp(validatorRun.runId)
+      ? validatorRunIdToDate(validatorRun?.runId)?.toISOString()
       : undefined,
   };
 }

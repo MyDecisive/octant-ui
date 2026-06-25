@@ -1,5 +1,5 @@
 export type InputValidationErrors = string[] | string | undefined;
-export type FieldValidator<T = string> = (value?: T) => string | undefined;
+type FieldValidator<T = string> = (value?: T) => string | undefined;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FormFields = Record<string, FieldValidator<any>[]>;
