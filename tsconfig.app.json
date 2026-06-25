@@ -3,10 +3,12 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@app-types/*": ["./src/types/*"],
+      "@copy/*": ["./src/copy/*"],
+      "@fieldValidation/*": ["./src/fieldValidation/*"],
+      "@services/*": ["./src/services/*"],
       "@store/*": ["./src/store/*"],
-      "@services/*": ["./src/services/*"]
+      "@app-types/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"]
     },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
