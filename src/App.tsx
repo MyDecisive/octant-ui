@@ -59,7 +59,6 @@ function App() {
             </Route>
             <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
             <Route path={ROUTES.SETTINGS} component={Settings} />
-            {/* <Route path={ROUTES.SUPPORT} component={SmarthubPage} /> */}
             <Redirect to={ROUTES.ERROR} />
           </Switch>
         </Route>
