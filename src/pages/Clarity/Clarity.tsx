@@ -1,3 +1,4 @@
+import type { SummaryData } from "@app-types/components";
 import { Select } from "@components/formInputs/Select";
 import { PageContainer } from "@components/layout/PageContainer";
 import { Table } from "@components/Table/Table";
@@ -51,7 +52,9 @@ export function ClarityPage() {
       headerActions={
         <Select
           selected={pickerFriendlySelectedTimeframe}
-          onChange={(event) => setSelectedTimeframe(event.target.value)}
+          onChange={(event) =>
+            setSelectedTimeframe(event.target.value as string)
+          }
           options={timeframeOptions}
           className="clarity-timepicker"
           label={cc.timerange.label}
