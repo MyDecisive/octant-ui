@@ -2,14 +2,14 @@ import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { SimpleCard } from "@components/SimpleCard";
 import { ViewTitle } from "@components/ViewTitle";
+import { ROUTES } from "@constants/routing";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
-import { ROUTES } from "../../constants/routing";
-import { NextStepsCopy as copy } from "../../copy/install/NextSteps.copy";
-import { useFetchManifestsAndDownload } from "../../utils/useFetchManifestsAndDownload";
+import { NextStepsCopy as copy } from "../copy/install/NextSteps.copy";
+import { useFetchManifestsAndDownload } from "../utils/useFetchManifestsAndDownload";
 
 export function NextSteps() {
   const [, navigate] = useLocation();

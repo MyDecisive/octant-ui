@@ -24,7 +24,7 @@ interface ManifestDownloadParams {
   mdaiVersion?: string;
 }
 
-// TODO: Handle error state
+// TODO: [UX] Handle error state
 export function useFetchManifestsAndDownload({
   connectionName,
   telemetryTypes,

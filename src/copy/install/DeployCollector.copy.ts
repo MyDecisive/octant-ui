@@ -94,7 +94,7 @@ export const DeployCollectorCopy = {
     timeText: "This usually takes 2-5 minutes depending on your cluster.",
   },
   configViewer: {
-    // TODO: Not incorporated yet, accordion component may need adjustment to inject copy based on state.
+    // TODO: [Copy] Not incorporated yet, accordion component may need adjustment to inject copy based on state.
     // IC4-23
     open: "View YAML Config",
     close: "Hide YAML Config",

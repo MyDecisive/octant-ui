@@ -1,2 +1,2 @@
-// TODO: Move to copy dir
+// TODO: [Copy] Move to copy dir
 export const SECRET_VALUE_MASK = "************************";

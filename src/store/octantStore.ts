@@ -13,7 +13,7 @@ interface Actions {
     key: keyof UIConnectionData,
     value: UIConnectionData[keyof UIConnectionData],
   ) => void;
-  // TODO: Removing `setInConnectionScope` satisfies types and UX flows, but reopens a bug that needs to be solved in that OctantStore does not get updated with connection information during the IxC flow.
+  // TODO: [Progress] Removing `setInConnectionScope` satisfies types and UX flows, but reopens a bug that needs to be solved in that OctantStore does not get updated with connection information during the IxC flow.
 }
 
 type OctantStore = OctantState & Actions;

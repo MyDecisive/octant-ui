@@ -58,6 +58,7 @@ export function SetupSmarthubDialog({
         window.location.assign("https://docs.mydecisive.ai/");
       },
       [ERROR_MODAL_ACT.REPORT_BUG]: () => {
+        // TODO: [Content]
         window.alert("We need a URL for this");
       },
     };

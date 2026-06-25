@@ -94,7 +94,7 @@ export function useDetectProgress() {
         return;
       }
 
-      // TODO: run connectionStatus to verify step 6?
+      // TODO: [Progress] run connectionStatus to verify step 6?
       const [argoCdIntegration, ddogIntegration] = await Promise.all([
         argoCdServiceClient
           .getArgoIntegrations({})
