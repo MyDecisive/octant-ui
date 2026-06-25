@@ -1,4 +1,4 @@
-import type { TelemetryTypes } from "@types";
+import type { TelemetryTypes } from "@app-types/enums";
 import { useContext } from "react";
 import { createStore, useStore } from "zustand";
 import { InstallAndConnectContext } from "../contexts/InstallAndConnect";

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import type { TelemetryTypes } from "@app-types/enums";
 import {
   DeploymentType,
   ManifestOutFormat,
 } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import type { TelemetryTypes } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { connectionServiceClient } from "../services/connection";
 

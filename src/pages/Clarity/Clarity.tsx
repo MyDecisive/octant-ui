@@ -1,10 +1,10 @@
 import { Select } from "@components/formInputs/Select";
 import { PageContainer } from "@components/layout/PageContainer";
 import { Table } from "@components/Table/Table";
+import { FILTER_TYPES } from "@constants/enums";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { useClarityStore } from "@store/clarity/store";
-import { FilterTypes } from "@types";
 import { timeframeLabels } from "@utils/timeframeToPickerOptions";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
@@ -90,11 +90,11 @@ export function ClarityPage() {
         <Stack className="right-column" gap={1}>
           <SimpleFilterControl
             defaultExpanded={logsConfigured}
-            type={FilterTypes.LOG}
+            type={FILTER_TYPES.LOG}
           />
           <SimpleFilterControl
             defaultExpanded={!logsConfigured && tracesConfigured}
-            type={FilterTypes.TRACE}
+            type={FILTER_TYPES.TRACE}
           />
         </Stack>
       </Box>

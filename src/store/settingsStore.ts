@@ -1,6 +1,6 @@
-import type { AsyncStatus } from "@types";
+import type { AsyncStatus } from "@app-types/enums";
+import { ASYNC_STATUS } from "@constants/enums";
 import { create } from "zustand";
-import { ASYNC_STATUS } from "../constants/status";
 import {
   updateCollectorSettings,
   type UpdateCollectorSettingsParams,

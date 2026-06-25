@@ -1,3 +1,4 @@
+import type { FormFields } from "@app-types/validation";
 import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
 import { ButtonRow } from "@components/layout/ButtonRow";
@@ -14,10 +15,9 @@ import { InstallStatus } from "@mydecisiveai/octant-client";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
-import type { FormFields } from "@types";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState } from "react";
-import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/error";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/enums";
 import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
 import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";

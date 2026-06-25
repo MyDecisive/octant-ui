@@ -1,3 +1,4 @@
+import type { FormFields } from "@app-types/validation";
 import { Alert } from "@components/Alert";
 import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
@@ -5,7 +6,6 @@ import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
-import type { FormFields } from "@types";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";

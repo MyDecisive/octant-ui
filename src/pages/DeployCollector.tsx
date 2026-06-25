@@ -1,9 +1,9 @@
+import type { UIConnectionData } from "@app-types/contracts";
 import { AsyncButton } from "@components/AsyncButton";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
-import type { UIConnectionData } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";

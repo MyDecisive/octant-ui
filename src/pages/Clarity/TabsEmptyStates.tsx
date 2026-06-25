@@ -1,7 +1,8 @@
+import type { UIFilterType } from "@app-types/enums";
 import { NoConnectionCard } from "@components/NoConnectionCard";
+import { FILTER_TYPES } from "@constants/enums";
 import LinkOffRoundedIcon from "@mui/icons-material/LinkOffRounded";
 import Button from "@mui/material/Button";
-import { FilterTypes } from "@types";
 import type { ComponentProps, ReactNode } from "react";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/routing";
@@ -10,7 +11,7 @@ import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 type EmptyStateCardProps = ComponentProps<typeof NoConnectionCard>;
 
 interface TabsEmptyStateProps {
-  dataType: FilterTypes;
+  dataType: UIFilterType;
   configured: boolean;
   hasData: boolean;
   onClearSearch: () => void;
@@ -167,11 +168,11 @@ export function TabsEmptyState({
 }: TabsEmptyStateProps) {
   const [, setLocation] = useLocation();
   const copy =
-    dataType === FilterTypes.LOG
+    dataType === FILTER_TYPES.LOG
       ? ClarityCopy.logsEmptyStates
       : ClarityCopy.traceEmptyStates;
   const setupCopy =
-    dataType === FilterTypes.LOG
+    dataType === FILTER_TYPES.LOG
       ? ClarityCopy.logFilter.emptyState
       : ClarityCopy.traceFilter.emptyState;
 

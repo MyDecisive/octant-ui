@@ -1,4 +1,4 @@
-import type { TelemetryTypes } from "@types";
+import type { TelemetryTypes } from "@app-types/enums";
 
 export function validateTelemetryTypesSelection(selected: TelemetryTypes[]) {
   if (

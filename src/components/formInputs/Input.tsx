@@ -1,6 +1,6 @@
+import type { InputValidationErrors } from "@app-types/validation";
 import { InputEndAdornment } from "@components/InputEndAdornment";
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
-import type { InputValidationErrors } from "@types";
 import { getErrorOrHelperText } from "@utils/getErrorOrHelperText";
 import {
   useState,
@@ -9,7 +9,10 @@ import {
 } from "react";
 import { hasValidationError } from "../../fieldValidation/hasValidationError";
 
-export interface InputProps extends Omit<TextFieldProps<"outlined">, "variant"> {
+export interface InputProps extends Omit<
+  TextFieldProps<"outlined">,
+  "variant"
+> {
   tooltip?: string;
   success?: boolean;
   validate?: (value?: string) => InputValidationErrors;

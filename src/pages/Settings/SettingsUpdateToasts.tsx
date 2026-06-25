@@ -1,11 +1,8 @@
 import { Snackbar } from "@components/Snackbar";
-import {
-  useSettingsStore,
-  type SettingsStatus,
-} from "@store/settingsStore";
+import { ASYNC_STATUS } from "@constants/enums";
+import { useSettingsStore, type SettingsStatus } from "@store/settingsStore";
 import type { ComponentProps } from "react";
 import { useShallow } from "zustand/shallow";
-import { ASYNC_STATUS } from "../../constants/status";
 
 type SnackbarProps = Omit<ComponentProps<typeof Snackbar>, "onClose">;
 
@@ -50,11 +47,7 @@ export function SettingsUpdateToasts() {
       status,
     })),
   );
-  const snackbarProps = determineSnackbarProps(
-    status,
-    error,
-    loadingDismissed,
-  );
+  const snackbarProps = determineSnackbarProps(status, error, loadingDismissed);
 
   if (!snackbarProps) return null;
 

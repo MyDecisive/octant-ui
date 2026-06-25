@@ -1,6 +1,6 @@
+import type { ErrorModalContent } from "@app-types/copy";
 import type { InputProps } from "@components/formInputs/Input";
-import type { ErrorModalContent } from "@types";
-import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../../constants/error";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../../constants/enums";
 
 type SmartHubConfig = {
   header: string;

@@ -1,3 +1,7 @@
+import { SECRET_VALUE_MASK } from "@constants/forms";
+import { INSTALL_AND_CONNECT, ROUTES } from "@constants/routing";
+import { argoCdServiceClient } from "@services/argoCd";
+import { dDogServiceClient } from "@services/ddog";
 import {
   useInstallAndConnectStore,
   type InstallAndConnectFormFields,
@@ -5,10 +9,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
-import { SECRET_VALUE_MASK } from "../../constants/forms";
-import { INSTALL_AND_CONNECT, ROUTES } from "../../constants/routing";
-import { argoCdServiceClient } from "../../services/argoCd";
-import { dDogServiceClient } from "../../services/ddog";
 
 function probablyFinishedInstallAndConnect(
   state: Partial<InstallAndConnectFormFields>,

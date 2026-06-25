@@ -1,4 +1,5 @@
 import type { HealthWidgetProps } from "@components/HealthWidget/HealthWidget";
+import { ASYNC_STATUS } from "@constants/enums";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
 import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
@@ -6,7 +7,6 @@ import { formatLastRun } from "@utils/formatTimestamp";
 import { useConnectionValidation } from "@utils/useConnectionValidation";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { ASYNC_STATUS } from "../../constants/status";
 import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
 
 function smarthubStatusToHealthWidgetProps(

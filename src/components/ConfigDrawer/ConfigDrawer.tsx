@@ -1,8 +1,8 @@
+import type { TelemetryTypes } from "@app-types/enums";
 import { Accordion } from "@components/Accordion";
 import { CopyButton } from "@components/CopyButton";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import type { TelemetryTypes } from "@types";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import {

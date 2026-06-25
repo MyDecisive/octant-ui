@@ -6,7 +6,7 @@ import { useManageFilter } from "./useManageFilter";
 
 // TODO: Units constant
 function getCopyByType(type: FilterTypes) {
-  if (type === FilterTypes.LOG) {
+  if (type === FILTER_TYPES.LOG) {
     return {
       unit: "GB",
       ...ClarityCopy.logFilter,

@@ -1,3 +1,4 @@
+import type { TelemetryTypes } from "@app-types/enums";
 import { AsyncButton } from "@components/AsyncButton";
 import { CodeSnippet } from "@components/CodeSnippet";
 import { Dialog } from "@components/Dialog";
@@ -11,7 +12,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useOctantStore } from "@store/octantStore";
 import { useSettingsStore } from "@store/settingsStore";
-import type { TelemetryTypes } from "@types";
 import { fromMLTTypes } from "@utils/fromMltTypes";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useEffect, useState } from "react";
@@ -56,15 +56,19 @@ export function Settings() {
   const [agentUpdateSnippets, setAgentUpdateSnippets] =
     useState<AgentUpdateSnippets | null>(null);
 
-  const { connectionName, connectionTelemetryTypes, namespace, setInConnection } =
-    useOctantStore(
-      useShallow(({ connection, setInConnection }) => ({
-        connectionName: connection?.scope?.connectionName,
-        connectionTelemetryTypes: connection?.telemetryTypes,
-        namespace: connection?.scope?.namespace,
-        setInConnection,
-      })),
-    );
+  const {
+    connectionName,
+    connectionTelemetryTypes,
+    namespace,
+    setInConnection,
+  } = useOctantStore(
+    useShallow(({ connection, setInConnection }) => ({
+      connectionName: connection?.scope?.connectionName,
+      connectionTelemetryTypes: connection?.telemetryTypes,
+      namespace: connection?.scope?.namespace,
+      setInConnection,
+    })),
+  );
   const { settingsStatus, showSettingsError, updateSettings } =
     useSettingsStore(
       useShallow(({ showError, status, updateSettings }) => ({

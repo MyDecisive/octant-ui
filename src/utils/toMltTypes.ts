@@ -1,5 +1,5 @@
+import type { TelemetryTypes } from "@app-types/enums";
 import { MLTType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import type { TelemetryTypes } from "@types";
 
 const telemetryToMLTType: Record<TelemetryTypes, MLTType> = {
   metrics: MLTType.MLT_TYPE_METRIC,

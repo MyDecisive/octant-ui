@@ -1,5 +1,5 @@
+import type { BaseRowDefinition } from "@app-types/components";
 import type { GridColDef } from "@mui/x-data-grid";
-import type { BaseRowDefinition } from "@types";
 import classNames from "classnames";
 import { baseColumn } from "./constants";
 

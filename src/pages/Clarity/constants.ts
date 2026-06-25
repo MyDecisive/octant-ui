@@ -1,7 +1,7 @@
+import type { BaseRowDefinition } from "@app-types/components";
 import { ProgressLineWithLabel } from "@components/ProgressLineWithLabel";
 import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import type { GridColDef } from "@mui/x-data-grid";
-import type { BaseRowDefinition } from "@types";
 import { formatNumber } from "@utils/formatNumber";
 import { createElement } from "react";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";

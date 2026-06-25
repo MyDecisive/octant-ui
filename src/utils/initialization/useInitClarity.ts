@@ -1,14 +1,15 @@
+import type { UIConnectionScope } from "@app-types/contracts";
 import {
   Timeframe,
   TimeframeStatusResponse_Code,
   type TimeframeStatusRequest,
 } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarity/store";
-import { FilterTypes, type UIConnectionScope } from "@types";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { timeframeServiceClient } from "../../services/timeframe";
+import { FILTER_TYPES } from "@constants/enums";
 
 export function useInitClarity({
   connectionScope,
@@ -54,13 +55,13 @@ export function useInitClarity({
           setState("timeframeOptions", options);
         }
         setState("hasData", {
-          [FilterTypes.LOG]: log,
-          [FilterTypes.TRACE]: trace,
+          [FILTER_TYPES.LOG]: log,
+          [FILTER_TYPES.TRACE]: trace,
         });
       } catch {
         setState("hasData", {
-          [FilterTypes.LOG]: false,
-          [FilterTypes.TRACE]: false,
+          [FILTER_TYPES.LOG]: false,
+          [FILTER_TYPES.TRACE]: false,
         });
       } finally {
         setLoading(false);

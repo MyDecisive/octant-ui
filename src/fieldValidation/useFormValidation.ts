@@ -3,7 +3,7 @@ import type {
   FieldValidationMap,
   FormFields,
   InputValidationErrors,
-} from "@types";
+} from "@app-types/validation";
 import { useMemo, useState } from "react";
 
 export function useFormValidation(fields: FormFields) {

@@ -1,6 +1,8 @@
+import type { BaseRowDefinition } from "@app-types/components";
+import type { UIFilterType } from "@app-types/enums";
 import { Table, type TableProps } from "@components/Table/Table";
+import { FILTER_TYPES } from "@constants/enums";
 import type { Overall } from "@mydecisiveai/octant-client";
-import { FilterTypes, type BaseRowDefinition } from "@types";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 import {
   logsColumns,
@@ -18,8 +20,8 @@ type ClarityTabTableConfig<TRow extends BaseRowDefinition> = Pick<
 };
 
 type ClarityRowsByType = {
-  [FilterTypes.LOG]: LogData;
-  [FilterTypes.TRACE]: SpanData;
+  [FILTER_TYPES.LOG]: LogData;
+  [FILTER_TYPES.TRACE]: SpanData;
 };
 
 interface BaseClarityTabTableProps {
@@ -35,22 +37,22 @@ interface BaseClarityTabTableProps {
 
 type ClarityTabTableProps = BaseClarityTabTableProps &
   {
-    [DataType in FilterTypes]: {
+    [DataType in UIFilterType]: {
       dataType: DataType;
       rows: TableProps<ClarityRowsByType[DataType]>["rows"];
     };
-  }[FilterTypes];
+  }[UIFilterType];
 
 interface ClarityTabTableContentProps<
   TRow extends BaseRowDefinition,
 > extends BaseClarityTabTableProps {
   config: ClarityTabTableConfig<TRow>;
   rows: TableProps<TRow>["rows"];
-  dataType: FilterTypes;
+  dataType: UIFilterType;
 }
 
 const tableConfigs = {
-  [FilterTypes.LOG]: {
+  [FILTER_TYPES.LOG]: {
     label: ClarityCopy.logsTable.title,
     toolbarTooltip: {
       ...ClarityCopy.logsTable.tooltip,
@@ -61,7 +63,7 @@ const tableConfigs = {
     getTotal: (data) =>
       data?.log?.cost ? data.log.cost.toLocaleString() : "-",
   },
-  [FilterTypes.TRACE]: {
+  [FILTER_TYPES.TRACE]: {
     label: ClarityCopy.traceTable.title,
     toolbarTooltip: {
       ...ClarityCopy.traceTable.tooltip,
@@ -73,7 +75,7 @@ const tableConfigs = {
       data?.trace?.cost ? data.trace.cost.toLocaleString() : "-",
   },
 } satisfies {
-  [K in FilterTypes]: ClarityTabTableConfig<ClarityRowsByType[K]>;
+  [K in UIFilterType]: ClarityTabTableConfig<ClarityRowsByType[K]>;
 };
 
 function ClarityTabTableContent<TRow extends BaseRowDefinition>({
@@ -118,11 +120,11 @@ function ClarityTabTableContent<TRow extends BaseRowDefinition>({
 }
 
 export function ClarityTabTable(props: ClarityTabTableProps) {
-  if (props.dataType === FilterTypes.LOG) {
+  if (props.dataType === FILTER_TYPES.LOG) {
     return (
       <ClarityTabTableContent
         {...props}
-        config={tableConfigs[FilterTypes.LOG]}
+        config={tableConfigs[FILTER_TYPES.LOG]}
       />
     );
   }
@@ -130,7 +132,7 @@ export function ClarityTabTable(props: ClarityTabTableProps) {
   return (
     <ClarityTabTableContent
       {...props}
-      config={tableConfigs[FilterTypes.TRACE]}
+      config={tableConfigs[FILTER_TYPES.TRACE]}
     />
   );
 }

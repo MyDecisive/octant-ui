@@ -1,4 +1,4 @@
-import type { UIConnectionData, UIConnectionScope } from "@types";
+import type { UIConnectionData, UIConnectionScope } from "@app-types/contracts";
 import { create } from "zustand";
 
 interface OctantState {

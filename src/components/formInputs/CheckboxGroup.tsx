@@ -1,10 +1,10 @@
+import type { InputValidationErrors } from "@app-types/validation";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
-import type { InputValidationErrors } from "@types";
 import { getErrorOrHelperText } from "@utils/getErrorOrHelperText";
 import { useState, type ChangeEvent, type FocusEventHandler } from "react";
 import { hasValidationError } from "../../fieldValidation/hasValidationError";

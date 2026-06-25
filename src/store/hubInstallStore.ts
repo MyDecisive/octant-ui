@@ -1,7 +1,7 @@
-import type { AsyncStatus } from "@types";
+import type { AsyncStatus } from "@app-types/enums";
+import { ASYNC_STATUS } from "@constants/enums";
 import { createInFlightRequestCache } from "@utils/createInFlightRequestCache";
 import { create } from "zustand";
-import { ASYNC_STATUS } from "../constants/status";
 import { waitForInstallStatus } from "../services/install";
 
 interface HubInstallState {
@@ -22,8 +22,7 @@ function getErrorMessage(error: unknown) {
 
 export const useHubInstallStore = create<HubInstallState>()((set) => ({
   status: ASYNC_STATUS.IDLE,
-  setInstalled: (installed) =>
-    set({ installed, status: ASYNC_STATUS.SUCCESS }),
+  setInstalled: (installed) => set({ installed, status: ASYNC_STATUS.SUCCESS }),
   verifyInstall: async (connectionName) => {
     return installVerifications.run(connectionName, async () => {
       set({ status: ASYNC_STATUS.LOADING, error: undefined });

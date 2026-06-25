@@ -1,6 +1,9 @@
+import type { TelemetryTypes } from "@app-types/enums";
 import { createClient, createRouterTransport } from "@connectrpc/connect";
-import { SettingService, UpdateResponse_Status } from "@mydecisiveai/octant-client";
-import type { TelemetryTypes } from "@types";
+import {
+  SettingService,
+  UpdateResponse_Status,
+} from "@mydecisiveai/octant-client";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { setMockConnectionTelemetryTypes } from "./mockData/connection.mock";
 import { transport } from "./transport";

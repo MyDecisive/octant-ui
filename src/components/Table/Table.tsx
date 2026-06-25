@@ -1,8 +1,8 @@
+import type { BaseRowDefinition } from "@app-types/components";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
-import type { BaseRowDefinition } from "@types";
 import classNames from "classnames";
 import type { ReactNode } from "react";
 import "./Table.css";

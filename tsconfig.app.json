@@ -2,9 +2,11 @@
   "compilerOptions": {
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@constants/*": ["./src/constants/*"],
       "@utils/*": ["./src/utils/*"],
-      "@types": ["./src/types.ts"],
-      "@store/*": ["./src/store/*"]
+      "@app-types/*": ["./src/types/*"],
+      "@store/*": ["./src/store/*"],
+      "@services/*": ["./src/services/*"]
     },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",

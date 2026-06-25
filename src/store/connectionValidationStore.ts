@@ -1,18 +1,18 @@
+import type { AsyncStatus } from "@app-types/enums";
 import { ConnectError } from "@connectrpc/connect";
+import { ASYNC_STATUS } from "@constants/enums";
 import type {
   ConnectionScope,
   GetConnectionStatusResponse,
 } from "@mydecisiveai/octant-client";
-import type { AsyncStatus } from "@types";
 import { createInFlightRequestCache } from "@utils/createInFlightRequestCache";
 import { create } from "zustand";
-import { ASYNC_STATUS } from "../constants/status";
 import {
   connectionServiceClient,
+  connectionValidationWaitMs,
   createOrGetValidatorRunId,
   createValidatorRunId,
   getLatestValidatorRunId,
-  connectionValidationWaitMs,
   validatorRunIdToDate,
 } from "../services/connection";
 
