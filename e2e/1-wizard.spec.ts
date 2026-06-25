@@ -18,10 +18,7 @@ async function expectConnectionAppHealthy(): Promise<void> {
     .toBe("Healthy");
 }
 
-// Wait for the connection's ArgoCD app to finish any in-flight sync. The verify
-// step deploys its validator via ArgoCD; if step 4's sync is still running it
-// collides ("another operation is already in progress") and the UI reuses a
-// stale validator run instead of validating the live load.
+// Wait for the connection's ArgoCD app to finish any in-flight sync.
 async function waitForArgoIdle(): Promise<void> {
   await expect
     .poll(
@@ -42,8 +39,7 @@ test.describe.serial("octant install-and-connect smoke", () => {
     // Reset to the fresh-user wizard state. Octant persists the saved connection
     // in this ConfigMap; while it exists the app boots to the dashboard and
     // skips the wizard. The installed hub and collector are left in place, so
-    // re-runs stay warm. The reset lives here (not in global-setup) so that
-    // running the dashboard spec on its own does not wipe the connection.
+    // re-runs stay warm.
     kubectl(["delete", "configmap", "-n", "octant", "mdai-octant-connections", "--ignore-not-found"]);
     page = await browser.newPage();
   });
@@ -131,7 +127,6 @@ test.describe.serial("octant install-and-connect smoke", () => {
     await page.getByRole("checkbox", { name: "Logs" }).check();
     await expect(deploy).toBeDisabled();
 
-    // A malformed destination URL surfaces a field error on blur.
     const url = page.getByPlaceholder("Destination URL");
     await url.fill("not a url");
     await url.blur();
@@ -243,14 +238,12 @@ test.describe.serial("octant install-and-connect smoke", () => {
     const next = page.getByRole("button", { name: "Next", exact: true });
     await expect(next).toBeEnabled({ timeout: 6 * 60 * 1000 });
 
-    // Outcome check. With load (a fresh validator run, after the step-5 argo-idle
-    // wait) verification reaches operational; without telemetry it fails.
-    if (process.env.OCTANT_DEMO_LOAD === "1") {
-      await expect(page.getByText(/operational/i)).toBeVisible({ timeout: 6 * 60 * 1000 });
-    } else {
-      await expect(page.getByText("Error", { exact: true })).toBeVisible();
-      await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
-    }
+    // Outcome check. No telemetry flows during the install, so verification
+    // reports the failure outcome. (The validator/operational path is exercised
+    // under load in 4-load; reaching operational is non-deterministic and not
+    // asserted here.)
+    await expect(page.getByText("Error", { exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
 
     await next.click();
     await expect(page).toHaveURL(/\/install\/7$/);
@@ -275,5 +268,12 @@ test.describe.serial("octant install-and-connect smoke", () => {
 
     await page.getByRole("button", { name: "Go to Clarity" }).click();
     await expect(page).toHaveURL(/\/clarity$/);
+
+    // A freshly-installed connection has no telemetry yet, so Clarity shows the
+    // configured-but-no-data empty state, whose action links to System Health.
+    const review = page.getByRole("button", { name: "Review in System Health" });
+    await expect(review).toBeVisible({ timeout: 60_000 });
+    await review.click();
+    await expect(page).toHaveURL(/\/system-health$/);
   });
 });

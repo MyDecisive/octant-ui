@@ -1,0 +1,37 @@
+# DataDog fakeintake: a fake Datadog backend that captures what the collector
+# exports. Applied with `-n <namespace>` by the egress spec; the sampling
+# collectors are patched to send their datadog exporter traffic here.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fakeintake
+  labels:
+    app: fakeintake
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fakeintake
+  template:
+    metadata:
+      labels:
+        app: fakeintake
+    spec:
+      containers:
+        - name: fakeintake
+          image: docker.io/datadog/fakeintake:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fakeintake
+  labels:
+    app: fakeintake
+spec:
+  selector:
+    app: fakeintake
+  ports:
+    - port: 80
+      targetPort: 80

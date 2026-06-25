@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 #
 # Full local e2e: recreate the cluster from octant-argo-example, then run the
-# wizard + dashboard suite against it. With OCTANT_DEMO_LOAD=1 it also generates
-# load and runs the data-dependent assertions.
+# wizard + dashboard suite against it. With OCTANT_E2E_LOAD=1 it also runs the
+# data-dependent assertions, generating load in-process by replaying captured
+# telemetry fixtures (no demo stand, no Datadog key).
 #
 # Requires: just, kind, helm, kubectl, and Node >= 18.19 on PATH.
 # The octant-argo-example checkout defaults to a sibling of the mdai repo;
@@ -24,23 +25,19 @@ if ! node -e 'const [a,b]=process.versions.node.split(".").map(Number); process.
 fi
 
 # Capture the load request before clearing it for the smoke run below.
-run_load="${OCTANT_DEMO_LOAD:-}"
+run_load="${OCTANT_E2E_LOAD:-}"
 
 echo "==> Recreating the cluster: just cleanup && just octant-bootstrap ($argo_dir)"
 (cd "$argo_dir" && just cleanup && just octant-bootstrap)
 
-# Smoke runs without load: step 6 verifies the no-telemetry outcome and the
-# data-dependent specs skip. Load runs afterwards, once the connection exists.
 echo "==> Running the smoke suite (global-setup waits for octant to be Available)"
-(cd "$ui_dir" && OCTANT_DEMO_LOAD= npm run e2e:smoke)
+(cd "$ui_dir" && OCTANT_E2E_LOAD= npm run e2e:smoke)
 
 if [[ "$run_load" == "1" ]]; then
-  echo "==> Generating load and running the data-dependent assertions"
-  (cd "$ui_dir" && e2e/load.sh up)
-  load_status=0
-  (cd "$ui_dir" && OCTANT_DEMO_LOAD=1 npm run e2e:load) || load_status=$?
-  (cd "$ui_dir" && e2e/load.sh down) # always tear the stand back down
-  [[ $load_status -eq 0 ]] || exit "$load_status"
+  # Load runs after the smoke, once the connection (and its collectors) exist.
+  # e2e:load replays captured telemetry in-process — no demo stand to bring up.
+  echo "==> Running the data-dependent assertions (replayed load)"
+  (cd "$ui_dir" && npm run e2e:load)
 fi
 
 echo "==> Done."

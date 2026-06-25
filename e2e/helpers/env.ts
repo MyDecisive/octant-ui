@@ -14,6 +14,6 @@ export const env = {
   // Override to run against a differently-named connection (e.g. test-dd-vv-1).
   connectionName: process.env.OCTANT_E2E_CONNECTION ?? "octant-e2e-smoke",
   namespace: process.env.OCTANT_E2E_NAMESPACE ?? "mdai",
-  datadogUrl: "https://app.datadoghq.com",
+  datadogUrl: "datadoghq.com",
   datadogApiKey: "0123456789abcdef0123456789abcdef",
 };

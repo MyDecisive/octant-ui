@@ -1,0 +1,42 @@
+# In-cluster fixture replay. A single pod posts the captured demo scenarios
+# (mounted from the octant-e2e-replay ConfigMap, created by helpers/replay.ts)
+# to the hub ingress via service DNS — no port-forward, so the load never
+# tunnels through the kube-apiserver proxy. Paced to RATE_BYTES_PER_SEC.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: octant-e2e-replay
+  labels:
+    app: octant-e2e-replay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: octant-e2e-replay
+  template:
+    metadata:
+      labels:
+        app: octant-e2e-replay
+    spec:
+      containers:
+        - name: poster
+          image: node:22-alpine
+          command: ["node", "/app/poster.mjs"]
+          env:
+            - name: FORWARDER_URL
+              value: "http://mdai-envoy:8126"
+            - name: RATE_BYTES_PER_SEC
+              value: "1500000"
+          volumeMounts:
+            - name: replay
+              mountPath: /app
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              memory: "256Mi"
+      volumes:
+        - name: replay
+          configMap:
+            name: octant-e2e-replay
