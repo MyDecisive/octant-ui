@@ -1,6 +1,6 @@
-import { FilterTypes, type UIOverall } from "@types";
-import type { LogData, SpanData } from "../../pages/Clarity/constants";
-import type { FILTER_TYPES } from "@constants/enums";
+import type { LogData, SpanData } from "@app-types/components";
+import type { UIOverall } from "@app-types/contracts";
+import { FILTER_TYPES } from "@constants/enums";
 
 export interface BudgetSlice {
   overall?: UIOverall | null;

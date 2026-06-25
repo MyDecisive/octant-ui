@@ -1,5 +1,5 @@
 import type { TelemetryTypes, UIFilterType } from "@app-types/enums";
-import type { FILTER_TYPES } from "@constants/enums";
+import { FILTER_TYPES } from "@constants/enums";
 import {
   type ConnectionData,
   type Deployment,
