@@ -1,4 +1,5 @@
-import type { ErrorModalContent, ErrorModalCTA } from "@app-types/copy";
+import type { DialogErrorInfo } from "@app-types/components";
+import type { ErrorModalCTA } from "@app-types/copy";
 import type { ErrorModalActs, ErrorModalSeverity } from "@app-types/enums";
 import { Dialog } from "@components/Dialog";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
@@ -7,13 +8,6 @@ import Button from "@mui/material/Button";
 import { useMemo, type ReactNode } from "react";
 import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/enums";
 import "./SetupSmarthubDialog.css";
-
-export interface DialogErrorInfo extends Omit<
-  ErrorModalContent,
-  "showNetworkError"
-> {
-  networkErrorInfo?: string;
-}
 
 interface SetupSmarthubDialogProps {
   open: boolean;

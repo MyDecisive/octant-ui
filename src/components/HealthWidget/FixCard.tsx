@@ -1,22 +1,12 @@
+import type { FixCardProps } from "@app-types/components";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
-import type { ReactNode } from "react";
 
-export interface FixInfo {
-  label?: string;
-  description?: ReactNode;
-  actions?: {
-    onClick?: () => void;
-    text: string;
-    href?: string;
-  }[];
-}
-
-export function FixCard({ label, description, actions }: FixInfo) {
+export function FixCard({ label, description, actions }: FixCardProps) {
   return (
     <Card className="health-widget-fix-card">
       <CardHeader

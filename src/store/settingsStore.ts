@@ -1,15 +1,11 @@
+import type { UpdateCollectorSettingsParams } from "@app-types/contracts";
 import type { AsyncStatus } from "@app-types/enums";
 import { ASYNC_STATUS } from "@constants/enums";
 import { create } from "zustand";
-import {
-  updateCollectorSettings,
-  type UpdateCollectorSettingsParams,
-} from "../services/settings";
-
-export type SettingsStatus = AsyncStatus;
+import { updateCollectorSettings } from "../services/settings";
 
 interface SettingsState {
-  status: SettingsStatus;
+  status: AsyncStatus;
   error?: string;
   loadingDismissed: boolean;
 }

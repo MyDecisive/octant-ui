@@ -1,4 +1,5 @@
-export function formatTimestamp(timestamp?: string) {
+// TODO: Move to copy dir. String creators?
+function formatTimestamp(timestamp?: string) {
   if (!timestamp) return undefined;
 
   return new Intl.DateTimeFormat(undefined, {

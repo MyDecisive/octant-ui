@@ -1,3 +1,4 @@
+import type { LogData, SpanData } from "@app-types/components";
 import { Tabs } from "@components/Tabs/Tabs";
 import { FILTER_TYPES } from "@constants/enums";
 import WarningAmberRounded from "@mui/icons-material/WarningAmberRounded";
@@ -5,7 +6,6 @@ import type { Overall } from "@mydecisiveai/octant-client";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { ClarityTabTable } from "./ClarityTabTables";
-import type { LogData, SpanData } from "./constants";
 import { formatTabLabel } from "./formatTabLabel";
 
 interface ClarityTabsProps {

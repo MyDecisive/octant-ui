@@ -1,10 +1,10 @@
+import type { LogData, SpanData, SummaryData } from "@app-types/components";
 import type { Log, Overall, Span } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarity/store";
 import { FilterTypes } from "@types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { budgetServiceClient } from "../../services/budget";
-import type { LogData, SpanData, SummaryData } from "./constants";
 
 const tablePageSize = 100;
 

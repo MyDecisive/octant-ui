@@ -1,45 +1,12 @@
-import type { TelemetryTypes } from "@app-types/enums";
-import { createClient, createRouterTransport } from "@connectrpc/connect";
+import type { UpdateCollectorSettingsParams } from "@app-types/contracts";
+import { createClient } from "@connectrpc/connect";
 import {
   SettingService,
   UpdateResponse_Status,
 } from "@mydecisiveai/octant-client";
 import { toMLTTypes } from "@utils/toMltTypes";
-import { setMockConnectionTelemetryTypes } from "./mockData/connection.mock";
+import { mockTransport } from "./mockData/settings.mock";
 import { transport } from "./transport";
-
-export interface UpdateCollectorSettingsParams {
-  connectionName: string;
-  namespace: string;
-  telemetryTypes: TelemetryTypes[];
-  datadogUrl: string;
-  datadogApiKey: string;
-}
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-const mockTransport = createRouterTransport(({ service }) => {
-  service(SettingService, {
-    update: async function* (request) {
-      console.log("SettingService.update", request);
-      await delay(800);
-      yield { status: UpdateResponse_Status.UPDATED };
-      await delay(800);
-      yield { status: UpdateResponse_Status.DEPLOY };
-      await delay(800);
-      if (request.scope?.connectionName) {
-        setMockConnectionTelemetryTypes({
-          connectionName: request.scope.connectionName,
-          namespace: request.scope.namespace,
-          telemetryTypes: request.telemetryTypes,
-        });
-      }
-      yield { status: UpdateResponse_Status.COMPLETED };
-    },
-  });
-});
 
 export const settingServiceClient = createClient(
   SettingService,

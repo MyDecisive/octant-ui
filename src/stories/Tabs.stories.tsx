@@ -1,4 +1,5 @@
-import { Tabs, type TabItem } from "@components/Tabs/Tabs";
+import type { TabItem } from "@app-types/components";
+import { Tabs } from "@components/Tabs/Tabs";
 import { WarningAmberRounded } from "@mui/icons-material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";

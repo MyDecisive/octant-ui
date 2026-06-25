@@ -22,7 +22,7 @@ function probablyFinishedInstallAndConnect(
   );
 }
 
-export function deriveRedirectRoute(
+function deriveRedirectRoute(
   currentPath: string,
   storeState: Partial<InstallAndConnectFormFields>,
 ): string | null {

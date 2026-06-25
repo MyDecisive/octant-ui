@@ -1,4 +1,4 @@
-import type { SelectOption } from "@components/formInputs/Select";
+import type { SelectOption } from "@app-types/components";
 import {
   Timeframe,
   TimeframeStatusResponse_Code,

@@ -1,21 +1,12 @@
+import type { HealthWidgetProps } from "@app-types/components";
 import { Accordion } from "@components/Accordion";
 import Divider from "@mui/material/Divider";
 import classNames from "classnames";
 import { Fragment } from "react";
-import { FixCard, type FixInfo } from "./FixCard";
-import { HealthFacetRow, type HealthFacet } from "./HealthFacetRow";
+import { FixCard } from "./FixCard";
+import { HealthFacetRow } from "./HealthFacetRow";
 import "./HealthWidget.css";
 import { HealthWidgetTitle } from "./HealthWidgetTitle";
-
-export interface HealthWidgetProps {
-  title: string;
-  timestamp?: string;
-  status?: "error" | "operational" | "loading";
-  fix?: FixInfo;
-  facets?: HealthFacet[];
-  simple?: boolean;
-  containerClassName?: string;
-}
 
 export function HealthWidget({
   title,

@@ -1,4 +1,4 @@
-import type { BaseRowDefinition } from "@app-types/components";
+import type { LogData, SpanData, SummaryData } from "@app-types/components";
 import { ProgressLineWithLabel } from "@components/ProgressLineWithLabel";
 import { createColumnDefinitionsForDataTable } from "@components/Table/createColumnDefinitionsForDataTable";
 import type { GridColDef } from "@mui/x-data-grid";
@@ -40,21 +40,6 @@ export const traceColumns = createColumnDefinitionsForDataTable<SpanData>([
   },
 ]);
 
-export interface SpanData extends BaseRowDefinition {
-  span: string;
-  breadth: number;
-  invocations: number;
-  depth: number;
-  cost: number;
-}
-
-export interface LogData extends BaseRowDefinition {
-  name: string;
-  sent: number;
-  percent: number;
-  cost: number;
-}
-
 export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
   {
     headerName: ClarityCopy.logsTable.columns.service,
@@ -84,14 +69,6 @@ export const logsColumns = createColumnDefinitionsForDataTable<LogData>([
     headerAlign: "right",
   },
 ]);
-
-export interface SummaryData extends BaseRowDefinition {
-  type: "logs" | "traces";
-  cost: number | undefined;
-  sent: number | undefined;
-  rate: number | undefined;
-  pct: number | undefined;
-}
 
 function summaryValueFormatter(
   value: number | undefined,

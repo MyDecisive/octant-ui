@@ -1,20 +1,9 @@
+import type { RichTooltipProps } from "@app-types/components";
 import Stack from "@mui/material/Stack";
-import MuiTooltip, {
-  type TooltipProps as MuiTooltipProps,
-} from "@mui/material/Tooltip";
+import MuiTooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { mergeSlotPropsClassNames } from "@utils/mergeSlotPropsClassNames";
 import classNames from "classnames";
-import type { ReactNode } from "react";
-
-export interface RichTooltipProps extends Omit<MuiTooltipProps, "title"> {
-  title?: string;
-  description?: string;
-  actions?: ReactNode;
-  titleClassName?: string;
-  descriptionClassName?: string;
-  actionRowClassName?: string;
-}
 
 const baseSlotProps: NonNullable<RichTooltipProps["slotProps"]> = {
   tooltip: {

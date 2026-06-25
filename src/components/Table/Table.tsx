@@ -1,44 +1,11 @@
-import type { BaseRowDefinition } from "@app-types/components";
+import type { BaseRowDefinition, TableProps } from "@app-types/components";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
 import classNames from "classnames";
-import type { ReactNode } from "react";
 import "./Table.css";
 import { TableFooter } from "./TableFooter";
-import { TableToolbar, type TableToolbarTooltip } from "./TableToolbar";
-
-declare module "@mui/x-data-grid" {
-  interface ToolbarPropsOverrides {
-    label: string;
-    summaryTable?: boolean;
-    tooltip?: TableToolbarTooltip;
-    total: string;
-    timeRangeLabel?: string;
-  }
-  interface FooterPropsOverrides {
-    total?: string;
-    label: string;
-    hideFooterPagination?: boolean;
-  }
-}
-
-export interface TableProps<T extends BaseRowDefinition> extends Omit<
-  DataGridProps,
-  "rows" | "columns" | "label"
-> {
-  rows: T[];
-  columns: GridColDef<T>[];
-  label?: string;
-  header?: ReactNode;
-  footerLabel?: string;
-  footerClassName?: string;
-  timeRangeLabel?: string;
-  toolbarTooltip?: TableToolbarTooltip;
-  total?: string;
-  summaryTable?: boolean;
-}
+import { TableToolbar } from "./TableToolbar";
 
 const paginationProps: Pick<
   DataGridProps,

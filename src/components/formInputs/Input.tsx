@@ -1,25 +1,14 @@
+import type { InputProps } from "@app-types/components";
 import type { InputValidationErrors } from "@app-types/validation";
 import { InputEndAdornment } from "@components/InputEndAdornment";
-import TextField, { type TextFieldProps } from "@mui/material/TextField";
+import { hasValidationError } from "@fieldValidation/hasValidationError";
+import TextField from "@mui/material/TextField";
 import { getErrorOrHelperText } from "@utils/getErrorOrHelperText";
 import {
   useState,
   type ChangeEventHandler,
   type FocusEventHandler,
 } from "react";
-import { hasValidationError } from "../../fieldValidation/hasValidationError";
-
-export interface InputProps extends Omit<
-  TextFieldProps<"outlined">,
-  "variant"
-> {
-  tooltip?: string;
-  success?: boolean;
-  validate?: (value?: string) => InputValidationErrors;
-  onValidation?: (error: InputValidationErrors) => void;
-  value?: string;
-  helperText?: string;
-}
 
 export function Input({
   label,

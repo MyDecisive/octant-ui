@@ -1,4 +1,4 @@
-import type { InputProps } from "@components/formInputs/Input";
+import type { InputProps } from "@app-types/components";
 
 type DeployCollectorConfig = {
   header: string;
@@ -33,7 +33,7 @@ type DeployCollectorConfig = {
     open: string;
     close: string;
   };
-}
+};
 
 export const DeployCollectorCopy = {
   // IC4-01
@@ -59,7 +59,7 @@ export const DeployCollectorCopy = {
     datatypes: {
       // IC4-06
       label: "Which telemetry types do you want to manage?",
-    }
+    },
   },
   destinationSection: {
     // IC4-10

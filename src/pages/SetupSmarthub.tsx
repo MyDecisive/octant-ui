@@ -1,12 +1,10 @@
+import type { DialogErrorInfo } from "@app-types/components";
 import type { FormFields } from "@app-types/validation";
 import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
-import {
-  SetupSmarthubDialog,
-  type DialogErrorInfo,
-} from "@components/SetupSmarthubDialog";
+import { SetupSmarthubDialog } from "@components/SetupSmarthubDialog";
 import { ViewTitle } from "@components/ViewTitle";
 import { ConnectError } from "@connectrpc/connect";
 import Stack from "@mui/material/Stack";

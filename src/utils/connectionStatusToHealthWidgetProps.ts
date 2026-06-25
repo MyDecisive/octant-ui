@@ -1,4 +1,4 @@
-import type { HealthWidgetProps } from "@components/HealthWidget/HealthWidget";
+import type { HealthWidgetProps } from "@app-types/components";
 
 interface ConnectionHealthStatus {
   clientsConnected: boolean;

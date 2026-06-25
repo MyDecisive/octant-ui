@@ -1,15 +1,15 @@
-import type { BaseRowDefinition } from "@app-types/components";
+import type {
+  BaseRowDefinition,
+  LogData,
+  SpanData,
+  TableProps,
+} from "@app-types/components";
 import type { UIFilterType } from "@app-types/enums";
-import { Table, type TableProps } from "@components/Table/Table";
+import { Table } from "@components/Table/Table";
 import { FILTER_TYPES } from "@constants/enums";
 import type { Overall } from "@mydecisiveai/octant-client";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
-import {
-  logsColumns,
-  traceColumns,
-  type LogData,
-  type SpanData,
-} from "./constants";
+import { logsColumns, traceColumns } from "./constants";
 import { TabsEmptyState } from "./TabsEmptyStates";
 
 type ClarityTabTableConfig<TRow extends BaseRowDefinition> = Pick<

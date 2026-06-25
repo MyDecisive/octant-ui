@@ -1,4 +1,4 @@
-import type { UIFilterType } from "@app-types/enums";
+import type { TelemetryTypes, UIFilterType } from "@app-types/enums";
 import type { FILTER_TYPES } from "@constants/enums";
 import {
   type ConnectionData,
@@ -34,4 +34,11 @@ export interface UIConnectionData extends Pick<
 export interface UIOverall extends Pick<Overall, "cost"> {
   [FILTER_TYPES.LOG]?: Overall_Metric;
   [FILTER_TYPES.TRACE]?: Overall_Metric;
+}
+export interface UpdateCollectorSettingsParams {
+  connectionName: string;
+  namespace: string;
+  telemetryTypes: TelemetryTypes[];
+  datadogUrl: string;
+  datadogApiKey: string;
 }

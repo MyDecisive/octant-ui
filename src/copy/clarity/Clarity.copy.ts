@@ -1,4 +1,4 @@
-import type { InputProps } from "@components/formInputs/Input";
+import type { InputProps } from "@app-types/components";
 
 type CopyState = {
   header?: string;
@@ -327,11 +327,13 @@ export const ClarityCopy = {
     }),
     zeroSampling: {
       title: "Data Unavailable",
-      description: "Looks like you’re not capturing any new data. Increase the sampling of log volume to continue receiving data.",
+      description:
+        "Looks like you’re not capturing any new data. Increase the sampling of log volume to continue receiving data.",
     },
     filteringIssue: {
       title: "Data Unavailable",
-      description: "We couldn’t load your log data. Let’s check to see if you have log filtering turned on before we look into other potential issues.",
+      description:
+        "We couldn’t load your log data. Let’s check to see if you have log filtering turned on before we look into other potential issues.",
       actionLabel: "Review in System Health",
     },
   },
@@ -343,11 +345,13 @@ export const ClarityCopy = {
     }),
     zeroSampling: {
       title: "Data Unavailable",
-      description: "Looks like you’re not capturing any new data. Increase the sampling of trace volume to continue receiving data.",
+      description:
+        "Looks like you’re not capturing any new data. Increase the sampling of trace volume to continue receiving data.",
     },
     filteringIssue: {
       title: "Data Unavailable",
-      description: "We couldn’t load your trace data. Let’s check to see if you have trace filtering turned on before we look into other potential issues.",
+      description:
+        "We couldn’t load your trace data. Let’s check to see if you have trace filtering turned on before we look into other potential issues.",
       actionLabel: "Review in System Health",
     },
   },

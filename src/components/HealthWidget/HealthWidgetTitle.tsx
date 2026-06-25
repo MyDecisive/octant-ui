@@ -1,7 +1,7 @@
+import type { HealthWidgetProps } from "@app-types/components";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { HeaderStatusChip } from "./HeaderStatusChip";
-import type { HealthWidgetProps } from "./HealthWidget";
 
 export function HealthWidgetTitle({
   title,

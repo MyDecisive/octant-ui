@@ -11,10 +11,11 @@ import { useShallow } from "zustand/shallow";
 import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
 import "./Clarity.css";
 import { ClarityTabs } from "./ClarityTabs";
-import { summaryColumns, type SummaryData } from "./constants";
+import { summaryColumns } from "./constants";
 import { SimpleFilterControl } from "./SimpleFilterControl";
 import { useManageClarityData } from "./useManageClarityData";
 import { useManageTimeframes } from "./useManageTimeframes";
+import type { SummaryData } from "@app-types/components";
 
 export function ClarityPage() {
   const [searchQuery, setSearchQuery] = useState("");

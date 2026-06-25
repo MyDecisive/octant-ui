@@ -1,5 +1,7 @@
 import { Dialog } from "@components/Dialog";
-import { Button, Stack, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
 import { ROUTES } from "../constants/routing";

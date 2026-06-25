@@ -1,16 +1,15 @@
+import type { HealthFacetRowProps } from "@app-types/components";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { FixCard, type FixInfo } from "./FixCard";
+import { FixCard } from "./FixCard";
 import { HealthFacetRowStatusIcon } from "./HealthFacetRowStatusIcon";
 
-export interface HealthFacet {
-  label: string;
-  health?: boolean;
-  loading?: boolean;
-  fix?: FixInfo;
-}
-
-export function HealthFacetRow({ label, health, fix, loading }: HealthFacet) {
+export function HealthFacetRow({
+  label,
+  health,
+  fix,
+  loading,
+}: HealthFacetRowProps) {
   return (
     <Stack className="health-facet-row-container" gap={1.25}>
       <Stack

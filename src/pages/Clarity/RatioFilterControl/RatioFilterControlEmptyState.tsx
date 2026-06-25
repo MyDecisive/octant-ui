@@ -6,7 +6,7 @@ import { useLocation } from "wouter";
 import { ROUTES } from "../../../constants/routing";
 import "./RatioFilterControlEmptyState.css";
 
-export interface FilterEmptyStateCardProps {
+interface FilterEmptyStateCardProps {
   title: string;
   description: string;
   actionLabel: string;

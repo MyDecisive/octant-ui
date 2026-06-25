@@ -1,13 +1,14 @@
+import type { AsyncStatus } from "@app-types/enums";
 import { Snackbar } from "@components/Snackbar";
 import { ASYNC_STATUS } from "@constants/enums";
-import { useSettingsStore, type SettingsStatus } from "@store/settingsStore";
+import { useSettingsStore } from "@store/settingsStore";
 import type { ComponentProps } from "react";
 import { useShallow } from "zustand/shallow";
 
 type SnackbarProps = Omit<ComponentProps<typeof Snackbar>, "onClose">;
 
 function determineSnackbarProps(
-  status: SettingsStatus,
+  status: AsyncStatus,
   error: string | undefined,
   loadingDismissed: boolean,
 ): SnackbarProps | null {

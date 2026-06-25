@@ -1,4 +1,4 @@
-import type { HealthWidgetProps } from "@components/HealthWidget/HealthWidget";
+import type { HealthWidgetProps } from "@app-types/components";
 import { ASYNC_STATUS } from "@constants/enums";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
