@@ -1,10 +1,10 @@
-import type { LogData, SpanData, SummaryData } from "@app-types/components";
 import type { Log, Overall, Span } from "@mydecisiveai/octant-client";
 import { useClarityStore } from "@store/clarity/store";
-import { FilterTypes } from "@types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { budgetServiceClient } from "../../services/budget";
+import type { LogData, SpanData, SummaryData } from "@app-types/components";
+import { FILTER_TYPES } from "@constants/enums";
 
 const tablePageSize = 100;
 
@@ -65,24 +65,26 @@ export function useManageClarityData(searchQuery = "") {
   const { namespace, connectionName } = connectionScope || {};
 
   const hasLogTimeframeData = useClarityStore(
-    (state) => state.hasData[FilterTypes.LOG],
+    (state) => state.hasData[FILTER_TYPES.LOG],
   );
   const hasTraceTimeframeData = useClarityStore(
-    (state) => state.hasData[FilterTypes.TRACE],
+    (state) => state.hasData[FILTER_TYPES.TRACE],
   );
 
   const canRequestLogData = useClarityStore(
     useShallow(
       (state) =>
-        !!(state.configured[FilterTypes.LOG] && state.hasData[FilterTypes.LOG]),
+        !!(
+          state.configured[FILTER_TYPES.LOG] && state.hasData[FILTER_TYPES.LOG]
+        ),
     ),
   );
   const canRequestTraceData = useClarityStore(
     useShallow(
       (state) =>
         !!(
-          state.configured[FilterTypes.TRACE] &&
-          state.hasData[FilterTypes.TRACE]
+          state.configured[FILTER_TYPES.TRACE] &&
+          state.hasData[FILTER_TYPES.TRACE]
         ),
     ),
   );
@@ -129,8 +131,8 @@ export function useManageClarityData(searchQuery = "") {
         setOverallData(overallResponse.data);
         setState("overall", {
           ...overallResponse.data,
-          [FilterTypes.LOG]: overallResponse.data?.log,
-          [FilterTypes.TRACE]: overallResponse.data?.trace,
+          [FILTER_TYPES.LOG]: overallResponse.data?.log,
+          [FILTER_TYPES.TRACE]: overallResponse.data?.trace,
         });
       }
     } catch {
