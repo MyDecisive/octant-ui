@@ -1,5 +1,5 @@
-import { SECRET_VALUE_MASK } from "@constants/forms";
 import { INSTALL_AND_CONNECT, ROUTES } from "@constants/routing";
+import { SECRET_VALUE_MASK } from "@copy/global";
 import { argoCdServiceClient } from "@services/argoCd";
 import { dDogServiceClient } from "@services/ddog";
 import {

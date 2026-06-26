@@ -6,19 +6,10 @@ import {
 import { mockTransport } from "./mockData/connection.mock";
 import { transport } from "./transport";
 
-const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = 65_000;
-const MOCK_CONNECTION_VALIDATION_WAIT_MS = 10_000;
-
 export const connectionServiceClient = createClient(
   ConnectionService,
   import.meta.env.VITE_USE_MOCKS === "true" ? mockTransport : transport,
 );
-
-// TODO: Move to constants
-export const connectionValidationWaitMs =
-  import.meta.env.VITE_USE_MOCKS === "true"
-    ? MOCK_CONNECTION_VALIDATION_WAIT_MS
-    : DEFAULT_CONNECTION_VALIDATION_WAIT_MS;
 
 const IN_PROGRESS_ERROR = "another operation is already in progress";
 // TODO: move to utils

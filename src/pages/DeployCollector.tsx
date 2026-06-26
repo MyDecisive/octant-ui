@@ -11,7 +11,7 @@ import { DeployCollectorForm } from "../components/DeployCollectorForm";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
 import { connectionServiceClient } from "../services/connection";
 import { dDogServiceClient } from "../services/ddog";
-import { getSubmittedCollectorValue } from "../utils/maskedDDValues";
+import { getSubmittedCollectorValue } from "../utils/maskedValues";
 
 export function DeployCollector() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();

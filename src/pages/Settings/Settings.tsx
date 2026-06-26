@@ -4,6 +4,7 @@ import { CodeSnippet } from "@components/CodeSnippet";
 import { Dialog } from "@components/Dialog";
 import { PageContainer } from "@components/layout/PageContainer";
 import { RichTooltip } from "@components/RichTooltip";
+import { SECRET_VALUE_MASK } from "@copy/global";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import FileDownloadRounded from "@mui/icons-material/FileDownloadRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
@@ -13,18 +14,14 @@ import Typography from "@mui/material/Typography";
 import { useOctantStore } from "@store/octantStore";
 import { useSettingsStore } from "@store/settingsStore";
 import { fromMLTTypes } from "@utils/fromMltTypes";
+import { getSubmittedCollectorValue, isMaskedValue } from "@utils/maskedValues";
 import { toMLTTypes } from "@utils/toMltTypes";
+import { useFetchManifestsAndDownload } from "@utils/useFetchManifestsAndDownload";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../../components/DeployCollectorForm";
-import { SECRET_VALUE_MASK } from "../../constants/forms";
 import { SettingsCopy as copy } from "../../copy/settings/Settings.copy";
 import { dDogServiceClient } from "../../services/ddog";
-import {
-  getSubmittedCollectorValue,
-  isMaskedCollectorValue,
-} from "../../utils/maskedDDValues";
-import { useFetchManifestsAndDownload } from "../../utils/useFetchManifestsAndDownload";
 import { createForwardDataSnippets } from "../UpdateAgent/createForwardDataSnippets";
 import "./Settings.css";
 
@@ -92,7 +89,7 @@ export function Settings() {
   const hasSettingsChanges =
     !telemetryTypesMatch(telemetryTypes, savedTelemetryTypes) ||
     url.trim() !== savedUrl.trim() ||
-    (!!apiKey.trim() && !isMaskedCollectorValue(apiKey));
+    (!!apiKey.trim() && !isMaskedValue(apiKey));
   const loading = settingsStatus === "loading";
 
   useEffect(() => {

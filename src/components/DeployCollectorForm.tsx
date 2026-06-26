@@ -13,10 +13,10 @@ import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";
 import { validateTelemetryTypesSelection } from "../fieldValidation/validateTelemetryTypesSelection";
 import { validateUrlInput } from "../fieldValidation/validateUrlInput";
-import { isMaskedCollectorValue } from "../utils/maskedDDValues";
+import { isMaskedValue } from "../utils/maskedValues";
 
 function validateOptionalUrlInput(value?: string) {
-  if (!value || isMaskedCollectorValue(value)) {
+  if (!value || isMaskedValue(value)) {
     return undefined;
   }
 
@@ -24,7 +24,7 @@ function validateOptionalUrlInput(value?: string) {
 }
 
 function validateOptionalDatadogApiKey(value?: string) {
-  if (!value || isMaskedCollectorValue(value)) {
+  if (!value || isMaskedValue(value)) {
     return undefined;
   }
 

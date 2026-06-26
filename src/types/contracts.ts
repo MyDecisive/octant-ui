@@ -9,11 +9,11 @@ import {
   type TelemetryDestination,
 } from "@mydecisiveai/octant-client";
 
+// UI versions of client types
 export interface UIFilter extends Pick<Filter, "includeErr" | "pctSampled"> {
   type: UIFilterType;
 }
 
-// UI versions of client types
 export interface UIConnectionScope {
   connectionName: string;
   namespace: string;

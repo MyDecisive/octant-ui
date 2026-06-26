@@ -1,6 +1,6 @@
 import type { UIConnectionScope } from "@app-types/contracts";
+import { CONNECTION_VALIDATION_WAIT_MS } from "@constants/time";
 import {
-  DEFAULT_CONNECTION_VALIDATION_WAIT_MS,
   selectConnectionValidationView,
   useConnectionValidationStore,
 } from "@store/connectionValidationStore";
@@ -16,7 +16,7 @@ interface UseConnectionValidationOptions {
 export function useConnectionValidation({
   scope,
   autoStart = false,
-  waitForNewRunMs = DEFAULT_CONNECTION_VALIDATION_WAIT_MS,
+  waitForNewRunMs = CONNECTION_VALIDATION_WAIT_MS,
 }: UseConnectionValidationOptions) {
   const connectionName = scope?.connectionName;
   const namespace = scope?.namespace;

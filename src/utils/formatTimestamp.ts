@@ -1,4 +1,4 @@
-// TODO: Move to copy dir. String creators?
+// TODO: Move to copy dir. String creators? Dynamic strings?
 function formatTimestamp(timestamp?: string) {
   if (!timestamp) return undefined;
 

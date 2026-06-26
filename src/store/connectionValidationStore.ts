@@ -2,20 +2,17 @@ import type { UIConnectionScope } from "@app-types/contracts";
 import type { AsyncStatus } from "@app-types/enums";
 import { ConnectError } from "@connectrpc/connect";
 import { ASYNC_STATUS } from "@constants/enums";
+import { CONNECTION_VALIDATION_WAIT_MS } from "@constants/time";
 import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
 import { createInFlightRequestCache } from "@utils/createInFlightRequestCache";
 import { create } from "zustand";
 import {
   connectionServiceClient,
-  connectionValidationWaitMs,
   createOrGetValidatorRunId,
   createValidatorRunId,
   getLatestValidatorRunId,
   validatorRunIdToDate,
 } from "../services/connection";
-
-// TODO: Move to constants
-export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = connectionValidationWaitMs;
 
 interface ValidatorRun extends UIConnectionScope {
   runId: string;
@@ -82,8 +79,7 @@ export const useConnectionValidationStore = create<ConnectionValidationState>()(
       params: ValidateConnectionParams,
       getRunId: () => Promise<{ runId: string; isNewRun: boolean }>,
     ) {
-      const { scope, waitForNewRunMs = DEFAULT_CONNECTION_VALIDATION_WAIT_MS } =
-        params;
+      const { scope, waitForNewRunMs = CONNECTION_VALIDATION_WAIT_MS } = params;
       const requestKey = getValidationRequestKey(operation, scope);
 
       return validations.run(requestKey, async () => {

@@ -1,21 +1,21 @@
 import type { UIFilterType } from "@app-types/enums";
 import { FILTER_TYPES } from "@constants/enums";
+import { UNITS_BY_DATA_TYPE } from "@copy/global";
 import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
 import { RatioFilterControl } from "./RatioFilterControl/RatioFilterControl";
 import { RatioFilterControlEmptyState } from "./RatioFilterControl/RatioFilterControlEmptyState";
 import { useManageFilter } from "./useManageFilter";
 
-// TODO: Units constant
 function getCopyByType(type: UIFilterType) {
   if (type === FILTER_TYPES.LOG) {
     return {
-      unit: "GB",
+      unit: UNITS_BY_DATA_TYPE[type],
       ...ClarityCopy.logFilter,
     };
   }
 
   return {
-    unit: "MM Spans",
+    unit: UNITS_BY_DATA_TYPE[type],
     ...ClarityCopy.traceFilter,
   };
 }

@@ -71,7 +71,7 @@ export interface TableProps<T extends BaseRowDefinition> extends Omit<
   summaryTable?: boolean;
 }
 
-// TODO: Can this be combined with RichTooltipProps somehow?
+// TODO: Once copy types, content, etc. is revised, this can be revised to leverage RichTooltipProps interface
 export interface TableToolbarTooltip {
   targetIcon?: ReactElement;
   header?: string;
@@ -97,7 +97,7 @@ export interface RichTooltipProps extends Omit<TooltipProps, "title"> {
 /**
  * SetupSmarthubDialog
  */
-// TODO: Can this type, or its use, be simplified somehow?
+// TODO: [copy] Can this type, or its use, be simplified somehow?
 export interface DialogErrorInfo extends Omit<
   ErrorModalContent,
   "showNetworkError"
