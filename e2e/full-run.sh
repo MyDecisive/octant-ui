@@ -6,13 +6,13 @@
 # telemetry fixtures (no demo stand, no Datadog key).
 #
 # Requires: just, kind, helm, kubectl, and Node >= 18.19 on PATH.
-# The octant-argo-example checkout defaults to a sibling of the mdai repo;
-# override with OCTANT_ARGO_DIR.
+# The octant-argo-example checkout defaults to octant-ui's sibling; override with
+# OCTANT_ARGO_DIR for other layouts.
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ui_dir="$(dirname "$script_dir")" # .../octant-ui
-argo_dir="${OCTANT_ARGO_DIR:-$(dirname "$(dirname "$ui_dir")")/octant-argo-example}"
+argo_dir="${OCTANT_ARGO_DIR:-$(dirname "$ui_dir")/octant-argo-example}"
 
 if [[ ! -f "$argo_dir/Justfile" ]]; then
   echo "octant-argo-example not found at '$argo_dir'. Set OCTANT_ARGO_DIR to its checkout path." >&2

@@ -18,8 +18,8 @@ ESM config needs it). Then:
   ```bash
   npx playwright install chromium
   ```
-- The **`octant-argo-example`** checkout, which bootstraps the cluster — expected
-  as a sibling of the `mdai` repo (override with `OCTANT_ARGO_DIR`).
+- The **`octant-argo-example`** checkout, which bootstraps the cluster — found next
+  to `octant-ui` (override with `OCTANT_ARGO_DIR`).
 
 The cluster itself is **not** a prerequisite: `full-run.sh` creates it from
 scratch (step 2). No Datadog account or demo stand is required — the
@@ -128,7 +128,7 @@ connection.
 | `OCTANT_E2E_NAMESPACE` | `mdai` | Namespace the connection's collectors and secrets live in. |
 | `OCTANT_E2E_LOAD` | _(unset)_ | `1` enables the `4-load` assertions. |
 | `OCTANT_E2E_EGRESS` | _(unset)_ | `1` enables the `5-egress` assertions. |
-| `OCTANT_ARGO_DIR` | sibling `octant-argo-example` | Cluster-bootstrap repo (`full-run.sh` only). |
+| `OCTANT_ARGO_DIR` | next to `octant-ui` | Cluster-bootstrap repo (`full-run.sh` only); set it if `octant-argo-example` is elsewhere. |
 
 Point the dashboard at an existing connection without recreating it:
 
