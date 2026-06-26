@@ -242,7 +242,8 @@ test.describe.serial("octant install-and-connect smoke", () => {
     // reports the failure outcome. (The validator/operational path is exercised
     // under load in 4-load; reaching operational is non-deterministic and not
     // asserted here.)
-    await expect(page.getByText("Error", { exact: true })).toBeVisible();
+    const connection = page.locator(".health-widget-container", { hasText: "Datadog connection" });
+    await expect(connection.getByText("Error", { exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
 
     await next.click();

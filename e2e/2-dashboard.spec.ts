@@ -498,9 +498,10 @@ test.describe.serial("octant post-install dashboard", () => {
     await page.goto("/system-health");
     // The connection widget is a collapsible accordion; expand it to reveal the
     // facet rows (their health is data-dependent; the labels are not).
+    const connection = page.locator(".system-health-widget", { hasText: "Datadog connection" });
     await page.getByRole("button", { name: /Datadog connection/ }).click();
     for (const facet of ["Clients connected", "Receiving data", "Sending data", "Data integrity"]) {
-      await expect(page.getByText(facet, { exact: true })).toBeVisible({ timeout: 30_000 });
+      await expect(connection.getByText(facet, { exact: true })).toBeVisible({ timeout: 30_000 });
     }
   });
 

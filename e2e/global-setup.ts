@@ -1,5 +1,6 @@
 import { execFileSync, spawn } from "node:child_process";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { createServer } from "node:net";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
@@ -7,7 +8,8 @@ import { CONTEXT, assertKubectlContext, kubectl, kubectlArgs } from "./helpers/k
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const tmpDir = path.join(dir, ".tmp");
-const OCTANT_URL = "http://localhost:5678";
+const PORT = Number(process.env.OCTANT_E2E_PORT ?? 5678);
+const OCTANT_URL = `http://localhost:${PORT}`;
 
 async function reachable(url: string): Promise<boolean> {
   try {
@@ -25,6 +27,16 @@ async function waitReachable(url: string, timeoutMs: number): Promise<void> {
     await sleep(500);
   }
   throw new Error(`timed out waiting for ${url}`);
+}
+
+// Whether the local port is bindable — i.e. nothing already serves on it.
+function portFree(port: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    const probe = createServer();
+    probe.once("error", () => resolve(false));
+    probe.once("listening", () => probe.close(() => resolve(true)));
+    probe.listen(port, "127.0.0.1");
+  });
 }
 
 // False (not thrown) when the deployment does not exist yet — e.g. right after
@@ -81,20 +93,27 @@ export default async function globalSetup(): Promise<void> {
   assertKubectlContext();
   mkdirSync(tmpDir, { recursive: true });
 
-  // 1. Ensure the octant port-forward is up; record the pid for teardown.
-  if (!(await reachable(OCTANT_URL))) {
-    // After a fresh `just octant-bootstrap`, ArgoCD is still syncing octant;
-    // wait for the deployment to be Available before port-forwarding to it.
-    await waitForOctantDeployment(5 * 60_000);
-    const pf = spawn(
-      "kubectl",
-      kubectlArgs(["port-forward", "-n", "octant", "svc/octant", "5678:5678"]),
-      { stdio: "ignore", detached: true },
+  // 1. Own the octant port-forward so the UI and the context-pinned assertions hit
+  //    the same cluster; refuse to adopt one we didn't start (it could forward a
+  //    different cluster's octant), so fail if the port is already taken.
+  if (!(await portFree(PORT))) {
+    throw new Error(
+      `localhost:${PORT} is already in use; the e2e suite must own the port-forward to ` +
+        `context "${CONTEXT}". Stop whatever holds the port (e.g. a stale ` +
+        `"kubectl port-forward") or set OCTANT_E2E_PORT to a free port, then re-run.`,
     );
-    pf.unref();
-    writeFileSync(path.join(tmpDir, "octant-pf.pid"), String(pf.pid));
-    await waitReachable(OCTANT_URL, 30_000);
   }
+  // After a fresh `just octant-bootstrap`, ArgoCD is still syncing octant; wait for
+  // the deployment to be Available before port-forwarding to it.
+  await waitForOctantDeployment(5 * 60_000);
+  const pf = spawn(
+    "kubectl",
+    kubectlArgs(["port-forward", "-n", "octant", "svc/octant", `${PORT}:5678`]),
+    { stdio: "ignore", detached: true },
+  );
+  pf.unref();
+  writeFileSync(path.join(tmpDir, "octant-pf.pid"), String(pf.pid));
+  await waitReachable(OCTANT_URL, 30_000);
 
   // 2. Derive an ArgoCD admin token from the in-cluster admin secret.
   const passwordB64 = kubectl([
