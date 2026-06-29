@@ -21,9 +21,9 @@ const meta = {
     layout: "padded",
   },
   args: {
-    title: "Set up and install your Smarthub",
+    title: "Set up and install your SmartHub",
     description:
-      "Tell us where you'd like the Smarthub to live and how you want to preserve important data.",
+      "Tell us where you'd like the SmartHub to live and how you want to preserve important data.",
   },
 } satisfies Meta<typeof ViewTitle>;
 

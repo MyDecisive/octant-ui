@@ -123,9 +123,9 @@ export const SetupSmarthubError: Story = {
       open={true}
       onClose={() => null}
       errorInfo={{
-        header: "Smarthub setup failed",
+        header: "SmartHub setup failed",
         severity: ERROR_SEVERITY.ERROR,
-        body: "An error occurred while setting up the smarthub.",
+        body: "An error occurred while setting up the SmartHub.",
         actions: [
           { text: "Close", act: [ERROR_MODAL_ACT.CLOSE] },
           { text: "Report bug", act: [ERROR_MODAL_ACT.REPORT_BUG] },
@@ -141,7 +141,7 @@ export const SetupSmarthubWarning: Story = {
       open={true}
       onClose={() => null}
       errorInfo={{
-        header: "Smarthub setup warning",
+        header: "SmartHub setup warning",
         severity: ERROR_SEVERITY.WARN,
         body: "Some issues were detected during setup.",
         actions: [
@@ -161,9 +161,9 @@ export const SetupSmarthubNetworkError: Story = {
       errorInfo={{
         header: "Network error",
         severity: ERROR_SEVERITY.ERROR,
-        body: "Could not reach the smarthub.",
+        body: "Could not reach the SmartHub.",
         networkErrorInfo:
-          "Error 503: Service Unavailable\nHost: smarthub.local",
+          "Error 503: Service Unavailable\nHost: SmartHub.local",
         actions: [{ text: "Close", act: [ERROR_MODAL_ACT.CLOSE] }],
       }}
     />

@@ -148,9 +148,9 @@ const meta = {
   },
   args: {
     variant: "docs-link",
-    title: "Migrate Smarthub into production",
+    title: "Migrate SmartHub into production",
     description:
-      "Ready to go live? Follow our step-by-step guide to safely migrate Smarthub from your current environment into production.",
+      "Ready to go live? Follow our step-by-step guide to safely migrate SmartHub from your current environment into production.",
     headerActionText: "See our docs",
     badgeText: "Recommended",
     primaryActionText: "Download .zip first",

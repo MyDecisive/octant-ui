@@ -17,13 +17,12 @@ const installVerifications = createInFlightRequestCache<boolean>();
 function getErrorMessage(error: unknown) {
   return error instanceof Error
     ? error.message
-    : "Something went wrong while verifying Smarthub installation.";
+    : "Something went wrong while verifying SmartHub installation.";
 }
 
 export const useHubInstallStore = create<HubInstallState>()((set) => ({
   status: ASYNC_STATUS.IDLE,
-  setInstalled: (installed) =>
-    set({ installed, status: ASYNC_STATUS.SUCCESS }),
+  setInstalled: (installed) => set({ installed, status: ASYNC_STATUS.SUCCESS }),
   verifyInstall: async (connectionName) => {
     return installVerifications.run(connectionName, async () => {
       set({ status: ASYNC_STATUS.LOADING, error: undefined });

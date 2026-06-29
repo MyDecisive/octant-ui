@@ -18,21 +18,21 @@ export const SimpleGreen: Story = {
   args: {
     simple: true,
     status: "operational",
-    title: "Smarthub Infrastructure",
+    title: "SmartHub Infrastructure",
   },
 };
 export const SimpleLoading: Story = {
   args: {
     simple: true,
     status: "loading",
-    title: "Smarthub Infrastructure",
+    title: "SmartHub Infrastructure",
   },
 };
 export const SimpleRed: Story = {
   args: {
     simple: true,
     status: "error",
-    title: "Smarthub Infrastructure",
+    title: "SmartHub Infrastructure",
     fix: {
       label: "How to fix",
       description: "{Generic description}",

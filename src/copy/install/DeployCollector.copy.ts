@@ -33,14 +33,14 @@ type DeployCollectorConfig = {
     open: string;
     close: string;
   };
-}
+};
 
 export const DeployCollectorCopy = {
   // IC4-01
   header: "Configure Telemetry Routing",
   // IC4-02
   subheader:
-    "Define how the Smarthub collector will intercept and route your data. You can update these pipeline rules later in your dashboard.",
+    "Define how the SmartHub collector will intercept and route your data. You can update these pipeline rules later in your dashboard.",
   sourceSection: {
     // IC4-03
     title: "Data Source",
@@ -59,7 +59,7 @@ export const DeployCollectorCopy = {
     datatypes: {
       // IC4-06
       label: "Which telemetry types do you want to manage?",
-    }
+    },
   },
   destinationSection: {
     // IC4-10

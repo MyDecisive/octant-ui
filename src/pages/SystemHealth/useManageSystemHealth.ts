@@ -27,7 +27,7 @@ function smarthubStatusToHealthWidgetProps(
       fix: {
         label: "How to fix",
         description:
-          "Smarthub could not be detected in the configured cluster. Review the installation steps and cluster configuration.",
+          "SmartHub could not be detected in the configured cluster. Review the installation steps and cluster configuration.",
         actions: [
           {
             text: "See Docs",
@@ -91,7 +91,7 @@ export function useManageSystemHealth() {
 
   const smarthubWidgetProps = useMemo(
     () => ({
-      title: "Smarthub Infrastructure",
+      title: "SmartHub Infrastructure",
       timestamp: displayTimestamp,
       simple: true,
       ...smarthubStatusToHealthWidgetProps(hubInstalled ?? null, hubLoading),

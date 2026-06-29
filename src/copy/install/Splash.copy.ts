@@ -5,7 +5,7 @@ type SplashConfig = {
   gear: string;
   wire: string;
   cta: string;
-}
+};
 
 export const SplashCopy = {
   // SS-01
@@ -15,9 +15,9 @@ export const SplashCopy = {
   // SS-03
   rocket: "Connect your cluster.",
   // SS-04
-  gear: "Deploy Smarthub.",
+  gear: "Deploy SmartHub.",
   // SS-05
   wire: "Route your data.",
   // SS-06
-  cta: "Let's Build"
+  cta: "Let's Build",
 } satisfies SplashConfig;
