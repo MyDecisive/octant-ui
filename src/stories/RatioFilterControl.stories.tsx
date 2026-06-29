@@ -1,12 +1,12 @@
 import Box from "@mui/material/Box";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { FilterCard } from "../components/FilterCard/FilterCard";
-import { FilterEmptyStateCard } from "../components/FilterCard/FilterEmptyStateCard";
+import { RatioFilterControl } from "../pages/Clarity/RatioFilterControl/RatioFilterControl";
+import { RatioFilterControlEmptyState } from "../pages/Clarity/RatioFilterControl/RatioFilterControlEmptyState";
 
 const meta = {
-  title: "Components/FilterCard",
-  component: FilterCard,
+  title: "Components/RatioFilterControl",
+  component: RatioFilterControl,
   decorators: [
     (Story) => {
       return (
@@ -20,7 +20,7 @@ const meta = {
     layout: "centered",
   },
   args: {},
-} satisfies Meta<typeof FilterCard>;
+} satisfies Meta<typeof RatioFilterControl>;
 
 export default meta;
 
@@ -48,7 +48,7 @@ export const Default: Story = {
     });
 
     return (
-      <FilterCard
+      <RatioFilterControl
         {...args}
         pctSampled={filters.pctSampled}
         includeErr={filters.includeErr}
@@ -79,13 +79,10 @@ export const EmptyState: Story = {
   },
   render: function Render() {
     return (
-      <FilterEmptyStateCard
+      <RatioFilterControlEmptyState
         title="Here is why you need traces"
         description="Enable traces to see what's actually happening."
         actionLabel="Turn on traces"
-        onAction={() => {
-          console.log("turn on traces");
-        }}
       />
     );
   },

@@ -5,14 +5,14 @@ import Typography from "@mui/material/Typography";
 import { useState, type ChangeEventHandler } from "react";
 
 import { Accordion } from "@components/Accordion";
+import { SliderControl } from "@components/formInputs/SliderControl";
 import { Switch } from "@mui/material";
-import { SliderControl } from "../formInputs/SliderControl";
-import "./FilterCard.css";
-import { FilterCardTitle } from "./FilterCardTitle";
+import { ClarityCopy } from "../../../copy/clarity/Clarity.copy";
 import { MetricRow } from "./MetricRow";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
+import "./RatioFilterControl.css";
+import { RatioFilterControlTitle } from "./RatioFilterControlTitle";
 
-interface FilterCardProps {
+export interface RatioFilterControlProps {
   title: string;
   defaultExpanded?: boolean;
   received?: number;
@@ -25,7 +25,7 @@ interface FilterCardProps {
   onApplyFilter: (pctSampled: number, includeErr: boolean) => Promise<void>;
 }
 
-export function FilterCard({
+export function RatioFilterControl({
   title,
   defaultExpanded,
   received,
@@ -36,7 +36,7 @@ export function FilterCard({
   includeErr,
   unit,
   onApplyFilter,
-}: FilterCardProps) {
+}: RatioFilterControlProps) {
   const appliedSampleRate = pctSampled ?? 0;
   const appliedPersist = includeErr ?? false;
   const [sampleRate, setSampleRate] = useState(appliedSampleRate);
@@ -63,10 +63,10 @@ export function FilterCard({
   };
   return (
     <Accordion
-      className="filter-card-container"
+      className="ratio-filter-control-container"
       defaultExpanded={defaultExpanded}
       title={
-        <FilterCardTitle
+        <RatioFilterControlTitle
           title={title}
           pctSampled={pctSampled}
           includeErr={includeErr}
@@ -75,9 +75,21 @@ export function FilterCard({
       content={
         <Stack gap={2}>
           <Stack gap={1}>
-            <MetricRow label={ClarityCopy.filterCard.rows.ingested} value={received} unit={unit} />
-            <MetricRow label={ClarityCopy.filterCard.rows.routed} value={sent} unit={unit} />
-            <MetricRow label={ClarityCopy.filterCard.rows.dropped} value={filtered} unit={unit} />
+            <MetricRow
+              label={ClarityCopy.filterCard.rows.ingested}
+              value={received}
+              unit={unit}
+            />
+            <MetricRow
+              label={ClarityCopy.filterCard.rows.routed}
+              value={sent}
+              unit={unit}
+            />
+            <MetricRow
+              label={ClarityCopy.filterCard.rows.dropped}
+              value={filtered}
+              unit={unit}
+            />
           </Stack>
           <Divider />
           <SliderControl
@@ -93,7 +105,9 @@ export function FilterCard({
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography variant="chipLabel">{ClarityCopy.filterCard.toggle}</Typography>
+            <Typography variant="chipLabel">
+              {ClarityCopy.filterCard.toggle}
+            </Typography>
             <Switch checked={persist} onChange={handlePersistChange} />
           </Stack>
           <Divider />
