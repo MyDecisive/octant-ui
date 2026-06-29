@@ -1,4 +1,3 @@
-import type { SummaryData } from "@app-types/components";
 import { Select } from "@components/formInputs/Select";
 import { PageContainer } from "@components/layout/PageContainer";
 import { Table } from "@components/Table/Table";
