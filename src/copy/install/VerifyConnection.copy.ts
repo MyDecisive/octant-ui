@@ -6,11 +6,11 @@ type VerifyConnectionConfig = {
     inProgress: string;
     success: string;
   };
-}
+};
 
 export const VerifyConnection = {
   // IC6-01
-  header: "Testing data flow in our Smarthub",
+  header: "Testing data flow in our SmartHub",
   // IC6-02
   connection: "Datadog connection",
   status: {

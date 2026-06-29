@@ -65,17 +65,17 @@ const installErrorModal: ErrorModalContent = {
 
 export const SmarthubCopy = {
   // IC3-01
-  header: "Deploy Smarthub",
+  header: "Deploy SmartHub",
   // IC3-02
   subheader:
-    "Specify the Kubernetes namespace where Octant will deploy the Smarthub engine and its associated resources. If the namespace does not exist, ArgoCD will create it.",
+    "Specify the Kubernetes namespace where Octant will deploy the SmartHub engine and its associated resources. If the namespace does not exist, ArgoCD will create it.",
   // IC3-03
   nsHeader: "Kubernetes Namespace",
   k8sNsInput: {
     // IC3-03
     label: "Kubernetes Namespace",
     // IC3-04
-    helperText: "The dedicated namespace for all Smarthub components.",
+    helperText: "The dedicated namespace for all SmartHub components.",
     // IC3-05
     placeholder: "mdai",
   },

@@ -48,7 +48,7 @@ export const INSTALL_AND_CONNECT = [
   },
   {
     Component: SetupSmarthub,
-    label: "Set up and install your Smarthub",
+    label: "Set up and install your SmartHub",
     isAvailable: ({ connectionName }: Partial<InstallAndConnectFormFields>) => {
       return !!connectionName;
     },

@@ -12,7 +12,8 @@ export const UpdateAgentCopy = {
   // IC5-01
   header: "Configure the Datadog Agent",
   // IC5-02
-  subheader: "Route your existing Datadog agent's traffic to the Smarthub collector. Apply the environment variables provided on the right to your Datadog agent's values.yaml (or equivalent Kubernetes manifest), then restart the agent pods.",
+  subheader:
+    "Route your existing Datadog agent's traffic to the SmartHub collector. Apply the environment variables provided on the right to your Datadog agent's values.yaml (or equivalent Kubernetes manifest), then restart the agent pods.",
   // IC5-05
   ack: "I have applied these changes and restarted the Datadog agent",
   // IC5-06
