@@ -1,3 +1,5 @@
+import { FONT_WEIGHTS } from "../constants";
+import { palette } from "../palette";
 import type { ComponentOverride } from "../types";
 
 declare module "@mui/material/Alert" {
@@ -13,7 +15,7 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
   },
   styleOverrides: {
     root: {
-      fontWeight: 400,
+      fontWeight: FONT_WEIGHTS.DEFAULT,
       [`& > .MuiAlert-action > .MuiButtonBase-root`]: {
         padding: "4px 5px",
         color: "inherit",
@@ -27,7 +29,7 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
         backgroundColor: "#FDEDED",
         color: "#5F2120",
         [`& > .MuiAlert-icon`]: {
-          color: "#D32F2F",
+          color: palette.error.main,
         },
       },
     },
@@ -37,7 +39,7 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
         backgroundColor: "#FFF4E5",
         color: "#663C00",
         [`& > .MuiAlert-icon`]: {
-          color: "#EF6C00",
+          color: palette.warning.main,
         },
       },
     },
@@ -73,13 +75,13 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
       props: { variant: "snackbarError" },
       style: {
         alignItems: "center",
-        backgroundColor: "#d32f2f",
+        backgroundColor: palette.error.main,
         borderRadius: 4,
         boxShadow: "0 8px 24px rgba(0, 0, 0, 0.24)",
-        color: "#ffffff",
+        color: palette.error.contrastText,
         padding: "16px 12px 16px 16px",
         "& .MuiAlert-icon": {
-          color: "#ffffff",
+          color: palette.error.contrastText,
           padding: 0,
         },
         "& .MuiAlert-message": {
@@ -92,12 +94,12 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
         },
         "& .MuiAlert-action": {
           alignItems: "center",
-          color: "#ffffff",
+          color: palette.error.contrastText,
           marginLeft: "24px",
           padding: 0,
         },
         "& .MuiButtonBase-root, & .MuiSvgIcon-root": {
-          color: "#ffffff",
+          color: palette.error.contrastText,
         },
       },
     },

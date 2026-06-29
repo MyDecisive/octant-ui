@@ -1,3 +1,4 @@
+import { palette } from "../palette";
 import type { ComponentOverride } from "../types";
 
 export const MuiOutlinedInput: ComponentOverride<"MuiOutlinedInput"> = {
@@ -12,7 +13,7 @@ export const MuiOutlinedInput: ComponentOverride<"MuiOutlinedInput"> = {
         borderColor: "#AEAEB5",
       },
       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#9C27B0",
+        borderColor: palette.primary.main,
       },
     },
   },

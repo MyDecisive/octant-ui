@@ -1,3 +1,4 @@
+import { FONT_WEIGHTS } from "../constants";
 import type { ComponentOverride } from "../types";
 
 declare module "@mui/material/Button" {
@@ -29,7 +30,7 @@ export const MuiButton: ComponentOverride<"MuiButton"> = {
         color: "#000",
         padding: "8px 10px",
         fontSize: "14px",
-        fontWeight: 400,
+        fontWeight: FONT_WEIGHTS.DEFAULT,
         lineHeight: "20px",
         textAlign: "left",
         minWidth: 0,

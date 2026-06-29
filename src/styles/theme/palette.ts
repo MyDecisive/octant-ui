@@ -1,37 +1,47 @@
-import type { ThemeOptions } from "@mui/material/styles";
+import type {
+  PaletteOptions,
+  SimplePaletteColorOptions,
+} from "@mui/material/styles";
 import type {} from "@mui/x-data-grid/themeAugmentation";
 
-export const palette: ThemeOptions["palette"] = {
+const primary: SimplePaletteColorOptions = {
+  main: "#9C27B0",
+  dark: "#7B1FA2",
+  light: "#F3E5F5",
+  contrastText: "#FFFFFF",
+};
+const secondary: SimplePaletteColorOptions = {
+  main: "#6D6D75",
+  dark: "#51515A",
+  light: "#E6E6EB",
+  contrastText: "#FFFFFF",
+};
+const error: SimplePaletteColorOptions = {
+  main: "#D32F2F",
+  contrastText: "#FFFFFF",
+};
+const warning: SimplePaletteColorOptions = {
+  main: "#EF6C00",
+  dark: "#F57C00",
+  contrastText: "rgba(0, 0, 0, 0.87)",
+};
+const info: SimplePaletteColorOptions = {
+  main: "#E5F6FD",
+  contrastText: "#014361",
+};
+const success: SimplePaletteColorOptions = {
+  main: "#2E7D32",
+  contrastText: "#FFFFFF",
+};
+
+export const palette = {
   mode: "light",
-  primary: {
-    main: "#9C27B0",
-    dark: "#7B1FA2",
-    light: "#F3E5F5",
-    contrastText: "#FFFFFF",
-  },
-  secondary: {
-    main: "#6D6D75",
-    dark: "#51515A",
-    light: "#E6E6EB",
-    contrastText: "#FFFFFF",
-  },
-  error: {
-    main: "#D32F2F",
-    contrastText: "#FFFFFF",
-  },
-  warning: {
-    main: "#EF6C00",
-    dark: "#F57C00",
-    contrastText: "rgba(0, 0, 0, 0.87)",
-  },
-  info: {
-    main: "#E5F6FD",
-    contrastText: "#014361",
-  },
-  success: {
-    main: "#2E7D32",
-    contrastText: "#FFFFFF",
-  },
+  primary,
+  secondary,
+  error,
+  warning,
+  info,
+  success,
   text: {
     primary: "#000000de",
     secondary: "#00000099",
@@ -46,4 +56,4 @@ export const palette: ThemeOptions["palette"] = {
     pinnedBg: "#F3F3F6",
     headerBg: "#F3F3F6",
   },
-};
+} satisfies PaletteOptions;
