@@ -6,16 +6,16 @@ export function useInitConnectionValidation(upstreamResolving: boolean) {
   const loadLatestOrCreate = useConnectionValidationStore(
     (state) => state.loadLatestOrCreate,
   );
-  const connectionScope = useOctantStore(
-    (state) => state.connection?.scope,
-  );
+  const connectionScope = useOctantStore((state) => state.connection?.scope);
 
   const initializedScopeKeyRef = useRef<string | null>(null);
+  const hasRan = useRef(false);
 
   useEffect(() => {
-    if (upstreamResolving) {
+    if (upstreamResolving || hasRan.current) {
       return;
     }
+    hasRan.current = true;
 
     const connectionName = connectionScope?.connectionName;
     const namespace = connectionScope?.namespace;
