@@ -1,0 +1,5 @@
+export const FONT_WEIGHTS = {
+  DEFAULT: 400,
+  SLIGHTLY_BOLD: 500,
+  BOLD: 700,
+};
