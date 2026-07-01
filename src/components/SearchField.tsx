@@ -1,13 +1,8 @@
+import type { SearchFieldProps } from "@app-types/components";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import "./SearchField.css";
-
-export interface SearchFieldProps {
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
-}
 
 const limitedFilterOptions = createFilterOptions<string>({
   limit: 7,

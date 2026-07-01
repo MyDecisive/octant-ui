@@ -1,4 +1,4 @@
-import type { SelectOption } from "@components/formInputs/Select";
+import type { SelectOption } from "@app-types/components";
 import {
   Timeframe,
   TimeframeStatusResponse_Code,
@@ -30,7 +30,7 @@ const codeToChip: Record<
     size: "small",
   },
 };
-// TODO: selected item annotations per designs
+// TODO: selected item annotations per designs (e.g. 10 mins ago, March, etc.)
 export function timeframeToPickerOptions(
   statuses: TimeframeStatusResponse_Status[],
 ): SelectOption[] {

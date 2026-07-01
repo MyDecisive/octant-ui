@@ -1,4 +1,4 @@
-import type { UIConnectionData, UIConnectionScope } from "@types";
+import type { UIConnectionData } from "@app-types/contracts";
 import { create } from "zustand";
 
 interface OctantState {
@@ -13,10 +13,7 @@ interface Actions {
     key: keyof UIConnectionData,
     value: UIConnectionData[keyof UIConnectionData],
   ) => void;
-  setInConnectionScope: (
-    key: keyof UIConnectionScope,
-    value: UIConnectionScope[keyof UIConnectionScope],
-  ) => void;
+  // TODO: [Progress] Removing `setInConnectionScope` satisfies types and UX flows, but reopens a bug that needs to be solved in that OctantStore does not get updated with connection information during the IxC flow.
 }
 
 type OctantStore = OctantState & Actions;
@@ -29,17 +26,6 @@ export const useOctantStore = create<OctantStore>()((set) => ({
       connection: {
         ...state.connection,
         [key]: value,
-      },
-    })),
-  setInConnectionScope: (key, value) =>
-    set((state) => ({
-      ...state,
-      connection: {
-        ...state.connection,
-        scope: {
-          ...(state.connection?.scope || {}),
-          [key]: value,
-        },
       },
     })),
 }));

@@ -1,12 +1,10 @@
+import type { LogData, SpanData, SummaryData } from "@app-types/components";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Table } from "../components/Table/Table";
 import {
   logsColumns,
   summaryColumns,
   traceColumns,
-  type LogData,
-  type SpanData,
-  type SummaryData,
 } from "../pages/Clarity/constants";
 import { formatNumber } from "../utils/formatNumber";
 

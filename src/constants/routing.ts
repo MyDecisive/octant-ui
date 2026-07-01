@@ -2,7 +2,7 @@ import type { InstallAndConnectFormFields } from "@store/installAndConnectStore"
 import { ArgoInstall } from "../pages/ArgoInstall";
 import { ConnectToCluster } from "../pages/ConnectToCluster";
 import { DeployCollector } from "../pages/DeployCollector";
-import { NextSteps } from "../pages/NextSteps/NextSteps";
+import { NextSteps } from "../pages/NextSteps";
 import { SetupSmarthub } from "../pages/SetupSmarthub";
 import { UpdateAgent } from "../pages/UpdateAgent/UpdateAgent";
 import { VerifyConnection } from "../pages/VerifyConnection";

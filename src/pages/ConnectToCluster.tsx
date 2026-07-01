@@ -1,15 +1,14 @@
+import type { FormFields } from "@app-types/validation";
 import { Alert } from "@components/Alert";
 import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
-import { useOctantStore } from "@store/octantStore";
-import type { FormFields } from "@types";
+import { isMaskedValue } from "@utils/maskedValues";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
-import { SECRET_VALUE_MASK } from "../constants/forms";
 import { ConnectToClusterCopy as copy } from "../copy/install/ConnectToCluster.copy";
 import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateMinLength } from "../fieldValidation/validateMinLength";
@@ -43,9 +42,6 @@ export function ConnectToCluster() {
   const setPartialState = useInstallAndConnectStore(
     useShallow((state) => state.setPartialState),
   );
-  const setOctantConnectionScope = useOctantStore(
-    (state) => state.setInConnectionScope,
-  );
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setArgoUrl(e.target.value);
@@ -61,7 +57,7 @@ export function ConnectToCluster() {
     setConnectionName(encodeURI(e.target.value));
   };
 
-  const tokenIsMasked = token === SECRET_VALUE_MASK;
+  const tokenIsMasked = isMaskedValue(token);
 
   const testArgoConnection = async () => {
     if (
@@ -73,7 +69,7 @@ export function ConnectToCluster() {
     ) {
       return false;
     }
-    if (accountToken === SECRET_VALUE_MASK || !accountToken) {
+    if (isMaskedValue(accountToken) || !accountToken) {
       return true;
     }
     try {
@@ -93,7 +89,6 @@ export function ConnectToCluster() {
         name: connectionName,
       });
       setPartialState({ accountToken, argoUrl, connectionName });
-      setOctantConnectionScope("connectionName", connectionName);
       return true;
     } catch {
       setConnectionError(copy.formError.genericError);

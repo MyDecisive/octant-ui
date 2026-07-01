@@ -2,7 +2,7 @@ import Stack from "@mui/material/Stack";
 import type { ReactNode } from "react";
 import "./TabPanel.css";
 
-export interface TabPanelProps {
+interface TabPanelProps {
   children?: ReactNode;
   panelGap?: number;
   value: string;

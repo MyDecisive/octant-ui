@@ -1,9 +1,9 @@
+import type { UIConnectionData } from "@app-types/contracts";
 import { AsyncButton } from "@components/AsyncButton";
 import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
-import type { UIConnectionData } from "@types";
 import { toMLTTypes } from "@utils/toMltTypes";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";
@@ -11,7 +11,7 @@ import { DeployCollectorForm } from "../components/DeployCollectorForm";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
 import { connectionServiceClient } from "../services/connection";
 import { dDogServiceClient } from "../services/ddog";
-import { getSubmittedCollectorValue } from "../utils/maskedDDValues";
+import { getSubmittedCollectorValue } from "../utils/maskedValues";
 
 export function DeployCollector() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();
@@ -54,8 +54,8 @@ export function DeployCollector() {
 
       const connection: UIConnectionData = {
         scope: {
-          connectionName,
-          namespace,
+          connectionName: connectionName!,
+          namespace: namespace!,
         },
         telemetryTypes: toMLTTypes(telemetryTypes),
         deployment: {
@@ -78,9 +78,8 @@ export function DeployCollector() {
       setPartialState({ telemetryTypes, url, apiKey });
 
       return true;
-      // eslint-disable-next-line
-    } catch (_) {
-      // TODO: We need error feedback in this component
+    } catch {
+      // TODO: [UX] We need error feedback in this component
       return false;
     }
   };

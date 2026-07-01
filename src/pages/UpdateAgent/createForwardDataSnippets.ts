@@ -1,5 +1,4 @@
-import type { TelemetryTypes } from "@types";
-
+import type { TelemetryTypes } from "@app-types/enums";
 interface ForwardDataSnippetOptions {
   connectionName: string;
   url: string;

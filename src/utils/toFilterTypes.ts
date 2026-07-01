@@ -1,11 +1,12 @@
+import type { UIFilterType } from "@app-types/enums";
+import { FILTER_TYPES } from "@constants/enums";
 import { FilterType } from "@mydecisiveai/octant-client";
-import type { FilterTypes } from "@types";
 
-const filtersToFilterTypes: Record<FilterTypes, FilterType> = {
-  logs: FilterType.LOG,
-  traces: FilterType.TRACE,
+const filtersToFilterTypes: Partial<Record<UIFilterType, FilterType>> = {
+  [FILTER_TYPES.LOG]: FilterType.LOG,
+  [FILTER_TYPES.TRACE]: FilterType.TRACE,
 };
 
-export function toFilterType(type: FilterTypes) {
+export function toFilterType(type: UIFilterType) {
   return filtersToFilterTypes[type];
 }

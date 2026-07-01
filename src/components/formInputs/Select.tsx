@@ -1,25 +1,16 @@
+import type { SelectOption } from "@app-types/components";
 import { RichMenuItem } from "@components/RichMenuItem";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import { type ChipProps } from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import MuiSelect, {
   type SelectProps as MuiSelectProps,
-  type SelectChangeEvent,
 } from "@mui/material/Select";
 import classNames from "classnames";
 import "./Select.css";
 
-export interface SelectOption {
-  label?: string;
-  helperText?: string;
-  chip?: ChipProps;
-  disabled?: boolean;
-  value: string;
-}
-
-export interface SelectProps {
+interface SelectProps extends Pick<MuiSelectProps, "onChange" | "size"> {
   label?: string;
   options: SelectOption[];
   disabled?: boolean;
@@ -27,8 +18,6 @@ export interface SelectProps {
   helperText?: string;
   errorText?: string;
   selected: string;
-  onChange: (event: SelectChangeEvent) => void;
-  size?: MuiSelectProps["size"];
 }
 
 export function Select({

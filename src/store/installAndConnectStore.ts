@@ -1,8 +1,9 @@
-import type { TelemetryTypes } from "@types";
+import type { TelemetryTypes } from "@app-types/enums";
 import { useContext } from "react";
 import { createStore, useStore } from "zustand";
 import { InstallAndConnectContext } from "../contexts/InstallAndConnect";
 
+// TODO: Should this move?
 export interface InstallAndConnectFormFields {
   argoAgreement: boolean;
   namespace?: string;
@@ -16,7 +17,7 @@ export interface InstallAndConnectFormFields {
   lastCompletedStep: number;
 }
 
-export interface InstallAndConnectFormState extends InstallAndConnectFormFields {
+interface InstallAndConnectFormState extends InstallAndConnectFormFields {
   setFormField: (
     key: keyof InstallAndConnectFormFields,
     value: InstallAndConnectFormFields[keyof InstallAndConnectFormFields],

@@ -1,23 +1,13 @@
+import type { DialogErrorInfo } from "@app-types/components";
+import type { ErrorModalCTA } from "@app-types/copy";
+import type { ErrorModalActs, ErrorModalSeverity } from "@app-types/enums";
 import { Dialog } from "@components/Dialog";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import Button from "@mui/material/Button";
-import type {
-  ErrorModalActs,
-  ErrorModalContent,
-  ErrorModalCTA,
-  ErrorModalSeverity,
-} from "@types";
 import { useMemo, type ReactNode } from "react";
-import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/error";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/enums";
 import "./SetupSmarthubDialog.css";
-
-export interface DialogErrorInfo extends Omit<
-  ErrorModalContent,
-  "showNetworkError"
-> {
-  networkErrorInfo?: string;
-}
 
 interface SetupSmarthubDialogProps {
   open: boolean;
@@ -68,6 +58,7 @@ export function SetupSmarthubDialog({
         window.location.assign("https://docs.mydecisive.ai/");
       },
       [ERROR_MODAL_ACT.REPORT_BUG]: () => {
+        // TODO: [Content]
         window.alert("We need a URL for this");
       },
     };

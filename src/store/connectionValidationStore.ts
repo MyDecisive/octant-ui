@@ -1,34 +1,25 @@
+import type { UIConnectionScope } from "@app-types/contracts";
+import type { AsyncStatus } from "@app-types/enums";
 import { ConnectError } from "@connectrpc/connect";
-import type {
-  ConnectionScope,
-  GetConnectionStatusResponse,
-} from "@mydecisiveai/octant-client";
-import type { AsyncStatus } from "@types";
+import { ASYNC_STATUS } from "@constants/enums";
+import { CONNECTION_VALIDATION_WAIT_MS } from "@constants/time";
+import type { GetConnectionStatusResponse } from "@mydecisiveai/octant-client";
 import { createInFlightRequestCache } from "@utils/createInFlightRequestCache";
 import { create } from "zustand";
-import { ASYNC_STATUS } from "../constants/status";
 import {
   connectionServiceClient,
   createOrGetValidatorRunId,
   createValidatorRunId,
   getLatestValidatorRunId,
-  connectionValidationWaitMs,
   validatorRunIdToDate,
 } from "../services/connection";
 
-export const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = connectionValidationWaitMs;
-
-export type ConnectionValidationScope = Pick<
-  ConnectionScope,
-  "connectionName" | "namespace"
->;
-
-interface ValidatorRun extends ConnectionValidationScope {
+interface ValidatorRun extends UIConnectionScope {
   runId: string;
 }
 
 interface ValidateConnectionParams {
-  scope: ConnectionValidationScope;
+  scope: UIConnectionScope;
   waitForNewRunMs?: number;
 }
 
@@ -62,12 +53,8 @@ function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function validatorRunIdToTimestamp(validatorRunId: string) {
-  return validatorRunIdToDate(validatorRunId)?.toISOString();
-}
-
 async function getConnectionStatusForRun(
-  scope: ConnectionValidationScope,
+  scope: UIConnectionScope,
   runId: string,
 ) {
   return connectionServiceClient.getConnectionStatus({
@@ -78,7 +65,7 @@ async function getConnectionStatusForRun(
 
 function getValidationRequestKey(
   operation: ValidationOperation,
-  scope: ConnectionValidationScope,
+  scope: UIConnectionScope,
 ) {
   return [operation, scope.connectionName ?? "", scope.namespace ?? ""].join(
     ":",
@@ -92,8 +79,7 @@ export const useConnectionValidationStore = create<ConnectionValidationState>()(
       params: ValidateConnectionParams,
       getRunId: () => Promise<{ runId: string; isNewRun: boolean }>,
     ) {
-      const { scope, waitForNewRunMs = DEFAULT_CONNECTION_VALIDATION_WAIT_MS } =
-        params;
+      const { scope, waitForNewRunMs = CONNECTION_VALIDATION_WAIT_MS } = params;
       const requestKey = getValidationRequestKey(operation, scope);
 
       return validations.run(requestKey, async () => {
@@ -169,7 +155,7 @@ export function selectConnectionValidationView({
     revalidate,
     validatorRunId: validatorRun?.runId,
     timestamp: validatorRun
-      ? validatorRunIdToTimestamp(validatorRun.runId)
+      ? validatorRunIdToDate(validatorRun?.runId)?.toISOString()
       : undefined,
   };
 }

@@ -1,4 +1,4 @@
-import type { TelemetryTypes } from "@types";
+import type { TelemetryTypes } from "@app-types/enums";
 import { stringify } from "yaml";
 import type { OpenTelemetryCollector, Pipeline } from "./types";
 

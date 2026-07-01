@@ -9,7 +9,7 @@ type MockArgoCdIntegration = MessageInitShape<
   typeof GetArgoIntegrationByNameResponseSchema
 >;
 
-export const integrations = new Map<string, MockArgoCdIntegration>([
+const integrations = new Map<string, MockArgoCdIntegration>([
   [
     "datadog-prod",
     {

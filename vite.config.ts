@@ -27,9 +27,13 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@components": path.resolve(__dirname, "./src/components"),
-        "@utils": path.resolve(__dirname, "./src/utils"),
-        "@types": path.resolve(__dirname, "./src/types.ts"),
+        "@constants": path.resolve(__dirname, "./src/constants"),
+        "@copy": path.resolve(__dirname, "./src/copy"),
+        "@fieldValidation": path.resolve(__dirname, "./src/fieldValidation"),
+        "@services": path.resolve(__dirname, "./src/services"),
         "@store": path.resolve(__dirname, "./src/store"),
+        "@app-types": path.resolve(__dirname, "./src/types"),
+        "@utils": path.resolve(__dirname, "./src/utils"),
       },
     },
   };

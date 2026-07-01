@@ -6,20 +6,14 @@ import {
 import { mockTransport } from "./mockData/connection.mock";
 import { transport } from "./transport";
 
-const DEFAULT_CONNECTION_VALIDATION_WAIT_MS = 65_000;
-const MOCK_CONNECTION_VALIDATION_WAIT_MS = 10_000;
-
 export const connectionServiceClient = createClient(
   ConnectionService,
   import.meta.env.VITE_USE_MOCKS === "true" ? mockTransport : transport,
 );
 
-export const connectionValidationWaitMs =
-  import.meta.env.VITE_USE_MOCKS === "true"
-    ? MOCK_CONNECTION_VALIDATION_WAIT_MS
-    : DEFAULT_CONNECTION_VALIDATION_WAIT_MS;
-
 const IN_PROGRESS_ERROR = "another operation is already in progress";
+// TODO: move to utils
+// TODO: Is this really the best/most robust way to convert a validatorRunId to a date?
 const VALIDATOR_RUN_ID_PATTERN =
   /^(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})(?:\.(\d+))?$/;
 

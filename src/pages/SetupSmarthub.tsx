@@ -1,11 +1,10 @@
+import type { DialogErrorInfo } from "@app-types/components";
+import type { FormFields } from "@app-types/validation";
 import { AsyncButton } from "@components/AsyncButton";
 import { Input } from "@components/formInputs/Input";
 import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
-import {
-  SetupSmarthubDialog,
-  type DialogErrorInfo,
-} from "@components/SetupSmarthubDialog";
+import { SetupSmarthubDialog } from "@components/SetupSmarthubDialog";
 import { ViewTitle } from "@components/ViewTitle";
 import { ConnectError } from "@connectrpc/connect";
 import Stack from "@mui/material/Stack";
@@ -13,11 +12,9 @@ import Typography from "@mui/material/Typography";
 import { InstallStatus } from "@mydecisiveai/octant-client";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
-import { useOctantStore } from "@store/octantStore";
-import type { FormFields } from "@types";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useState } from "react";
-import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/error";
+import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/enums";
 import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
 import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";
@@ -36,9 +33,6 @@ export function SetupSmarthub() {
   const mdaiVersion = useInstallAndConnectStore((state) => state.mdaiVersion);
   const setFormField = useInstallAndConnectStore((state) => state.setFormField);
   const setHubInstalled = useHubInstallStore((state) => state.setInstalled);
-  const setOctantConnectionScope = useOctantStore(
-    (state) => state.setInConnectionScope,
-  );
 
   const [namespace, setNamespace] = useState<string>("mdai");
 
@@ -74,7 +68,6 @@ export function SetupSmarthub() {
         switch (res.installStatus) {
           case InstallStatus.INSTALLED:
             setHubInstalled(true);
-            setOctantConnectionScope("namespace", namespace);
             setFormField("namespace", namespace);
             return true;
           case InstallStatus.TIMEOUT:

@@ -1,16 +1,17 @@
+import type { UIFilter } from "@app-types/contracts";
+import type { UIFilterType } from "@app-types/enums";
 import {
   UpdateFilterResponse_Status,
   type GetFilterResponse,
 } from "@mydecisiveai/octant-client";
 import { useClarityStore, type ClarityState } from "@store/clarity/store";
-import { FilterTypes, type UIFilter } from "@types";
 import { toFilterType } from "@utils/toFilterTypes";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { filterServiceClient } from "../../services/filter";
 
 function normalizeFilterResult(
-  type: FilterTypes,
+  type: UIFilterType,
   result: GetFilterResponse,
 ): UIFilter {
   return {
@@ -20,7 +21,7 @@ function normalizeFilterResult(
   };
 }
 
-function makeFilterDataByTypeSelector(filterType: FilterTypes) {
+function makeFilterDataByTypeSelector(filterType: UIFilterType) {
   return (state: ClarityState) => {
     const overallByType = (state.overall ?? {})[filterType];
     return {
@@ -36,7 +37,7 @@ function makeFilterDataByTypeSelector(filterType: FilterTypes) {
   };
 }
 
-export function useManageFilter(filterType: FilterTypes) {
+export function useManageFilter(filterType: UIFilterType) {
   const { connectionScope, update } = useClarityStore(
     useShallow(({ connectionScope, update }) => ({
       connectionScope,

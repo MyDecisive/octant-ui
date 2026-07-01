@@ -1,3 +1,7 @@
+import { INSTALL_AND_CONNECT, ROUTES } from "@constants/routing";
+import { SECRET_VALUE_MASK } from "@copy/global";
+import { argoCdServiceClient } from "@services/argoCd";
+import { dDogServiceClient } from "@services/ddog";
 import {
   useInstallAndConnectStore,
   type InstallAndConnectFormFields,
@@ -5,10 +9,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
-import { SECRET_VALUE_MASK } from "../../constants/forms";
-import { INSTALL_AND_CONNECT, ROUTES } from "../../constants/routing";
-import { argoCdServiceClient } from "../../services/argoCd";
-import { dDogServiceClient } from "../../services/ddog";
 
 function probablyFinishedInstallAndConnect(
   state: Partial<InstallAndConnectFormFields>,
@@ -22,7 +22,7 @@ function probablyFinishedInstallAndConnect(
   );
 }
 
-export function deriveRedirectRoute(
+function deriveRedirectRoute(
   currentPath: string,
   storeState: Partial<InstallAndConnectFormFields>,
 ): string | null {
@@ -94,7 +94,7 @@ export function useDetectProgress() {
         return;
       }
 
-      // TODO: run connectionStatus to verify step 6?
+      // TODO: [Progress] run connectionStatus to verify step 6?
       const [argoCdIntegration, ddogIntegration] = await Promise.all([
         argoCdServiceClient
           .getArgoIntegrations({})

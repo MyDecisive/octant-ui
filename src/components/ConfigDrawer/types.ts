@@ -60,7 +60,7 @@ type Config = {
   service: {
     telemetry: Record<string, unknown>;
     extensions: string[];
-    pipelines: Record<string, Pipeline>;
+    pipelines: Partial<Record<string, Pipeline>>;
   };
 };
 

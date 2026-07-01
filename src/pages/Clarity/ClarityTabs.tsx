@@ -1,11 +1,11 @@
+import type { LogData, SpanData } from "@app-types/components";
 import { Tabs } from "@components/Tabs/Tabs";
+import { FILTER_TYPES } from "@constants/enums";
 import WarningAmberRounded from "@mui/icons-material/WarningAmberRounded";
 import type { Overall } from "@mydecisiveai/octant-client";
-import { FilterTypes } from "@types";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { ClarityTabTable } from "./ClarityTabTables";
-import type { LogData, SpanData } from "./constants";
 import { formatTabLabel } from "./formatTabLabel";
 
 interface ClarityTabsProps {
@@ -41,7 +41,7 @@ export function ClarityTabs({
   spanData,
   tableDataLoading,
 }: ClarityTabsProps) {
-  const [activeTab, setActiveTab] = useState<string>(FilterTypes.LOG);
+  const [activeTab, setActiveTab] = useState<string>(FILTER_TYPES.LOG);
   const showResultCounts = searchQuery.trim().length > 0;
 
   const searchOptions = [
@@ -62,7 +62,7 @@ export function ClarityTabs({
       }}
       items={[
         {
-          value: FilterTypes.LOG,
+          value: FILTER_TYPES.LOG,
           label: {
             text: formatTabLabel(
               "Logs",
@@ -77,7 +77,7 @@ export function ClarityTabs({
           },
           children: (
             <ClarityTabTable
-              dataType={FilterTypes.LOG}
+              dataType={FILTER_TYPES.LOG}
               configured={logDataTypeConfigured}
               data={data}
               hasData={hasLogData}
@@ -91,7 +91,7 @@ export function ClarityTabs({
           ),
         },
         {
-          value: FilterTypes.TRACE,
+          value: FILTER_TYPES.TRACE,
           label: {
             text: formatTabLabel(
               "Traces",
@@ -106,7 +106,7 @@ export function ClarityTabs({
           },
           children: (
             <ClarityTabTable
-              dataType={FilterTypes.TRACE}
+              dataType={FILTER_TYPES.TRACE}
               configured={traceDataTypeConfigured}
               data={data}
               hasData={hasTraceData}

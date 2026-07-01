@@ -1,4 +1,4 @@
-import type { InputValidationErrors } from "@types";
+import type { InputValidationErrors } from "@app-types/validation";
 
 export function getErrorOrHelperText(
   validationErrors: InputValidationErrors | null,

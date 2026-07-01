@@ -1,23 +1,12 @@
+import type { TableToolbarTooltip } from "@app-types/components";
 import { RichTooltip } from "@components/RichTooltip";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import type { TooltipProps } from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { Toolbar } from "@mui/x-data-grid";
 import classNames from "classnames";
-import type { ReactElement } from "react";
-
-export interface TableToolbarTooltip {
-  targetIcon?: ReactElement;
-  header?: string;
-  body?: string;
-  cta?: string;
-  ctaHref?: string;
-  ctaExternal?: boolean;
-  placement?: TooltipProps["placement"];
-}
 
 interface TableToolbarProps {
   label?: string;

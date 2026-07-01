@@ -1,7 +1,7 @@
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { FlowLayout } from "@components/layout/FlowLayout";
+import { ViewTitle } from "@components/ViewTitle";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ViewTitle } from "../components/ViewTitle";
 
 const meta = {
   title: "Layout/ViewTitle",

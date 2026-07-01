@@ -1,16 +1,10 @@
-import { SearchField, type SearchFieldProps } from "@components/SearchField";
+import type { SearchFieldProps, TabItem } from "@app-types/components";
+import { SearchField } from "@components/SearchField";
 import Stack from "@mui/material/Stack";
 import MuiTab from "@mui/material/Tab";
 import MuiTabs from "@mui/material/Tabs";
-import type { ReactNode } from "react";
-import { TabLabel, type TabLabelProps } from "./TabLabel";
+import { TabLabel } from "./TabLabel";
 import { TabPanel } from "./TabPanel";
-
-export interface TabItem {
-  value: string;
-  label: string | TabLabelProps;
-  children: ReactNode;
-}
 
 interface TabsProps {
   activeValue: string;

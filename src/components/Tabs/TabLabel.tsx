@@ -1,16 +1,8 @@
-import { RichTooltip, type RichTooltipProps } from "@components/RichTooltip";
+import type { TabLabelProps } from "@app-types/components";
+import { RichTooltip } from "@components/RichTooltip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import type { ReactNode } from "react";
-
-export interface TabLabelProps {
-  text: string;
-  tooltip?: string | RichTooltipProps;
-  loading?: boolean;
-  startIcon?: ReactNode;
-  endIcon?: ReactNode;
-}
 
 export function TabLabel({
   text,

@@ -1,3 +1,5 @@
+import type { TelemetryTypes } from "@app-types/enums";
+import type { FormFields } from "@app-types/validation";
 import { ConfigDrawer } from "@components/ConfigDrawer/ConfigDrawer";
 import { CheckboxGroup } from "@components/formInputs/CheckboxGroup";
 import { Input } from "@components/formInputs/Input";
@@ -5,17 +7,16 @@ import { Select } from "@components/formInputs/Select";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
 import Typography from "@mui/material/Typography";
-import type { FormFields, TelemetryTypes } from "@types";
 import { useState, type ReactNode } from "react";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
 import { useFormValidation } from "../fieldValidation/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";
 import { validateTelemetryTypesSelection } from "../fieldValidation/validateTelemetryTypesSelection";
 import { validateUrlInput } from "../fieldValidation/validateUrlInput";
-import { isMaskedCollectorValue } from "../utils/maskedDDValues";
+import { isMaskedValue } from "../utils/maskedValues";
 
 function validateOptionalUrlInput(value?: string) {
-  if (!value || isMaskedCollectorValue(value)) {
+  if (!value || isMaskedValue(value)) {
     return undefined;
   }
 
@@ -23,7 +24,7 @@ function validateOptionalUrlInput(value?: string) {
 }
 
 function validateOptionalDatadogApiKey(value?: string) {
-  if (!value || isMaskedCollectorValue(value)) {
+  if (!value || isMaskedValue(value)) {
     return undefined;
   }
 

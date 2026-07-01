@@ -6,7 +6,7 @@ import { useLocation } from "wouter";
 import { ROUTES } from "../../../constants/routing";
 import "./RatioFilterControlEmptyState.css";
 
-export interface FilterEmptyStateCardProps {
+interface RatioFilterControlEmptyStateProps {
   title: string;
   description: string;
   actionLabel: string;
@@ -16,7 +16,7 @@ export function RatioFilterControlEmptyState({
   title,
   description,
   actionLabel,
-}: FilterEmptyStateCardProps) {
+}: RatioFilterControlEmptyStateProps) {
   const [, navigate] = useLocation();
 
   return (
