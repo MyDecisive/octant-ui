@@ -1,3 +1,5 @@
+import { isDemo } from "@constants/env";
+import { IxCDemoPrefillCopy } from "@copy/install/IxCDemoPrefill";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import {
   createInstallAndConnectStore,
@@ -5,10 +7,6 @@ import {
 } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
 import { fromMLTTypes } from "@utils/fromMltTypes";
-import {
-  createIxCDemoValues,
-  isDemo,
-} from "@utils/initialization/useDemoValues";
 import { type PropsWithChildren, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { InstallAndConnectContext } from "./InstallAndConnect";
@@ -33,7 +31,7 @@ export function InstallAndConnectProvider({
     if (isDemo) {
       return createInstallAndConnectStore({
         ...props,
-        ...createIxCDemoValues(),
+        ...IxCDemoPrefillCopy,
         lastCompletedStep: -1,
       });
     }

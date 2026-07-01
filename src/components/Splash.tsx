@@ -1,5 +1,6 @@
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { ViewTitle } from "@components/ViewTitle";
+import { isDemo } from "@constants/env";
 import CableRoundedIcon from "@mui/icons-material/CableRounded";
 import MiscellaneousServicesRoundedIcon from "@mui/icons-material/MiscellaneousServicesRounded";
 import RocketLaunchRoundedIcon from "@mui/icons-material/RocketLaunchRounded";
@@ -8,7 +9,6 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
-import { isDemo } from "@utils/initialization/useDemoValues";
 import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";

@@ -9,7 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
-import { isDemo } from "./useDemoValues";
+import { isDemo } from "../../constants/env";
 
 function probablyFinishedInstallAndConnect(
   state: Partial<InstallAndConnectFormFields>,
@@ -23,17 +23,14 @@ function probablyFinishedInstallAndConnect(
   );
 }
 
-function demoRestartDemoFlow(currentPath: string, lastCompletedStep: number) {
-  return (
-    isDemo &&
-    lastCompletedStep === -1 &&
-    (currentPath === ROUTES.INSTALL ||
-      currentPath.startsWith(`${ROUTES.INSTALL}/`))
-  );
-}
-
-function showDemoSplash(currentPath: string) {
-  return isDemo && currentPath === ROUTES.SPLASH;
+function deriveDemoRedirectRoute(
+  currentPath: string,
+  lastCompletedStep: number,
+) {
+  if (lastCompletedStep === -1 && currentPath.startsWith(ROUTES.INSTALL)) {
+    return ROUTES.SPLASH;
+  }
+  return null;
 }
 
 function deriveRedirectRoute(
@@ -103,11 +100,6 @@ export function useDetectProgress() {
     hasRan.current = true;
 
     async function runChecks() {
-      if (isDemo) {
-        setLoading(false);
-        return;
-      }
-
       let connName = connectionName;
       let addConnectionNameToState = false;
       if (!connName) {
@@ -161,19 +153,15 @@ export function useDetectProgress() {
     void runChecks();
   }, [connectionName, setInstallAndConnectField, lastCompletedStep]);
 
-  let redirectRoute: string | null = null;
-
-  if (demoRestartDemoFlow(currentPath, lastCompletedStep)) {
-    redirectRoute = ROUTES.SPLASH;
-  } else if (!showDemoSplash(currentPath)) {
-    redirectRoute = deriveRedirectRoute(currentPath, {
-      connectionName,
-      namespace,
-      telemetryTypes,
-      url,
-      argoUrl,
-    });
-  }
+  const redirectRoute = isDemo
+    ? deriveDemoRedirectRoute(currentPath, lastCompletedStep)
+    : deriveRedirectRoute(currentPath, {
+        connectionName,
+        namespace,
+        telemetryTypes,
+        url,
+        argoUrl,
+      });
 
   if (redirectRoute) {
     navigate(redirectRoute, { replace: true });
