@@ -89,51 +89,53 @@ export function useDetectProgress() {
     hasRan.current = true;
 
     async function runChecks() {
-      if (!connectionName) {
-        setLoading(false);
-        return;
-      }
-
-      // TODO: [Progress] run connectionStatus to verify step 6?
-      const [argoCdIntegration, ddogIntegration] = await Promise.all([
-        argoCdServiceClient
+      let connName = connectionName;
+      let addConnectionNameToState = false;
+      if (!connName) {
+        const argoIntegrations = await argoCdServiceClient
           .getArgoIntegrations({})
-          .then((res) => {
-            const fetchedConnectionName = connectionName ?? res.names[0];
-            if (!fetchedConnectionName) return null;
-
-            return argoCdServiceClient.getArgoIntegrationByName({
-              name: fetchedConnectionName,
-            });
-          })
-          .catch(() => null),
-        dDogServiceClient
-          .getDatadogIntegrations({})
-          .then((res) =>
-            res?.names?.includes(connectionName)
-              ? dDogServiceClient.getDatadogIntegrationByName({
-                  name: connectionName,
-                })
-              : null,
-          )
-          .catch(() => null),
-      ]);
-
-      if (argoCdIntegration) {
-        const { argoEndpoint } = argoCdIntegration;
-        setInstallAndConnectField("argoUrl", argoEndpoint);
-        setInstallAndConnectField("accountToken", SECRET_VALUE_MASK);
-        if (!lastCompletedStep) {
-          setInstallAndConnectField("lastCompletedStep", 2);
+          .catch(() => null);
+        const integrationName = argoIntegrations?.names?.[0];
+        if (integrationName) {
+          connName = integrationName;
+          addConnectionNameToState = true;
         }
       }
 
-      if (ddogIntegration) {
-        setInstallAndConnectField("url", ddogIntegration.url);
-        setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
-        setInstallAndConnectField("lastCompletedStep", 4);
-      }
+      if (connName) {
+        // TODO: [Progress] run connectionStatus to verify step 6?
+        const [argoCdIntegration, ddogIntegration] = await Promise.all([
+          argoCdServiceClient
+            .getArgoIntegrationByName({
+              name: connName,
+            })
+            .catch(() => null),
+          dDogServiceClient
+            .getDatadogIntegrationByName({
+              name: connName,
+            })
+            .catch(() => null),
+        ]);
 
+        if (addConnectionNameToState) {
+          setInstallAndConnectField("connectionName", connName);
+        }
+
+        if (argoCdIntegration) {
+          const { argoEndpoint } = argoCdIntegration;
+          setInstallAndConnectField("argoUrl", argoEndpoint);
+          setInstallAndConnectField("accountToken", SECRET_VALUE_MASK);
+          if (!lastCompletedStep) {
+            setInstallAndConnectField("lastCompletedStep", 2);
+          }
+        }
+
+        if (ddogIntegration) {
+          setInstallAndConnectField("url", ddogIntegration.url);
+          setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
+          setInstallAndConnectField("lastCompletedStep", 4);
+        }
+      }
       setLoading(false);
     }
 
