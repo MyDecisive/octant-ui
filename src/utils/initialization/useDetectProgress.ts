@@ -135,9 +135,8 @@ export function useDetectProgress() {
           setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
           setInstallAndConnectField("lastCompletedStep", 4);
         }
-
-        setLoading(false);
       }
+      setLoading(false);
     }
 
     void runChecks();
