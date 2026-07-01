@@ -102,40 +102,42 @@ export function useDetectProgress() {
         }
       }
 
-      // TODO: [Progress] run connectionStatus to verify step 6?
-      const [argoCdIntegration, ddogIntegration] = await Promise.all([
-        argoCdServiceClient
-          .getArgoIntegrationByName({
-            name: connName,
-          })
-          .catch(() => null),
-        dDogServiceClient
-          .getDatadogIntegrationByName({
-            name: connName,
-          })
-          .catch(() => null),
-      ]);
+      if (connName) {
+        // TODO: [Progress] run connectionStatus to verify step 6?
+        const [argoCdIntegration, ddogIntegration] = await Promise.all([
+          argoCdServiceClient
+            .getArgoIntegrationByName({
+              name: connName,
+            })
+            .catch(() => null),
+          dDogServiceClient
+            .getDatadogIntegrationByName({
+              name: connName,
+            })
+            .catch(() => null),
+        ]);
 
-      if (addConnectionNameToState) {
-        setInstallAndConnectField("connectionName", connName);
-      }
-
-      if (argoCdIntegration) {
-        const { argoEndpoint } = argoCdIntegration;
-        setInstallAndConnectField("argoUrl", argoEndpoint);
-        setInstallAndConnectField("accountToken", SECRET_VALUE_MASK);
-        if (!lastCompletedStep) {
-          setInstallAndConnectField("lastCompletedStep", 2);
+        if (addConnectionNameToState) {
+          setInstallAndConnectField("connectionName", connName);
         }
-      }
 
-      if (ddogIntegration) {
-        setInstallAndConnectField("url", ddogIntegration.url);
-        setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
-        setInstallAndConnectField("lastCompletedStep", 4);
-      }
+        if (argoCdIntegration) {
+          const { argoEndpoint } = argoCdIntegration;
+          setInstallAndConnectField("argoUrl", argoEndpoint);
+          setInstallAndConnectField("accountToken", SECRET_VALUE_MASK);
+          if (!lastCompletedStep) {
+            setInstallAndConnectField("lastCompletedStep", 2);
+          }
+        }
 
-      setLoading(false);
+        if (ddogIntegration) {
+          setInstallAndConnectField("url", ddogIntegration.url);
+          setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
+          setInstallAndConnectField("lastCompletedStep", 4);
+        }
+
+        setLoading(false);
+      }
     }
 
     void runChecks();
