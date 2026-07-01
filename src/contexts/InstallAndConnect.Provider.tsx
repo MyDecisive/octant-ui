@@ -36,12 +36,12 @@ export function InstallAndConnectProvider({
 
     return createInstallAndConnectStore({
       ...props,
-      ...(connectionName ? { connectionName } : {}),
-      ...(namespace ? { namespace } : {}),
-      ...(telemetryTypes?.length
-        ? { telemetryTypes: fromMLTTypes(telemetryTypes) }
-        : {}),
-      ...(hubInstalled ? { lastCompletedStep: 3 } : {}),
+      connectionName,
+      namespace,
+      telemetryTypes: telemetryTypes?.length
+        ? fromMLTTypes(telemetryTypes)
+        : undefined,
+      lastCompletedStep: hubInstalled ? 3 : undefined,
     });
   });
 
