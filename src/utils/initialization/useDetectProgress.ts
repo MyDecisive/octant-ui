@@ -89,35 +89,36 @@ export function useDetectProgress() {
     hasRan.current = true;
 
     async function runChecks() {
-      if (!connectionName) {
-        setLoading(false);
-        return;
+      let connName = connectionName;
+      let addConnectionNameToState = false;
+      if (!connName) {
+        const argoIntegrations = await argoCdServiceClient
+          .getArgoIntegrations({})
+          .catch(() => null);
+        const integrationName = argoIntegrations?.names?.[0];
+        if (integrationName) {
+          connName = integrationName;
+          addConnectionNameToState = true;
+        }
       }
 
       // TODO: [Progress] run connectionStatus to verify step 6?
       const [argoCdIntegration, ddogIntegration] = await Promise.all([
         argoCdServiceClient
-          .getArgoIntegrations({})
-          .then((res) => {
-            const fetchedConnectionName = connectionName ?? res.names[0];
-            if (!fetchedConnectionName) return null;
-
-            return argoCdServiceClient.getArgoIntegrationByName({
-              name: fetchedConnectionName,
-            });
+          .getArgoIntegrationByName({
+            name: connName,
           })
           .catch(() => null),
         dDogServiceClient
-          .getDatadogIntegrations({})
-          .then((res) =>
-            res?.names?.includes(connectionName)
-              ? dDogServiceClient.getDatadogIntegrationByName({
-                  name: connectionName,
-                })
-              : null,
-          )
+          .getDatadogIntegrationByName({
+            name: connName,
+          })
           .catch(() => null),
       ]);
+
+      if (addConnectionNameToState) {
+        setInstallAndConnectField("connectionName", connName);
+      }
 
       if (argoCdIntegration) {
         const { argoEndpoint } = argoCdIntegration;
