@@ -100,6 +100,10 @@ export function useDetectProgress() {
     hasRan.current = true;
 
     async function runChecks() {
+      if (isDemo) {
+        setLoading(false);
+        return;
+      }
       let connName = connectionName;
       let addConnectionNameToState = false;
       if (!connName) {
