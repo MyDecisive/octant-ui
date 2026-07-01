@@ -7,13 +7,14 @@ import { ViewTitle } from "@components/ViewTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
+import { isDemo } from "@utils/initialization/useDemoValues";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
 import { createForwardDataSnippets } from "./createForwardDataSnippets";
 
 export function UpdateAgent() {
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmed, setConfirmed] = useState(isDemo);
 
   const { telemetryTypes, connectionName, url, namespace } =
     useInstallAndConnectStore(
