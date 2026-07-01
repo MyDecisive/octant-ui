@@ -17,7 +17,11 @@ export function InstallAndConnectProvider({
   children,
   ...props
 }: PropsWithChildren<Partial<InstallAndConnectFormFields>>) {
-  const { connectionName, namespace, telemetryTypes } = useOctantStore(
+  const {
+    connectionName,
+    namespace,
+    telemetryTypes = [],
+  } = useOctantStore(
     useShallow(({ connection }) => ({
       connectionName: connection?.scope?.connectionName,
       namespace: connection?.scope?.namespace,
@@ -38,9 +42,7 @@ export function InstallAndConnectProvider({
       ...props,
       connectionName,
       namespace,
-      telemetryTypes: telemetryTypes?.length
-        ? fromMLTTypes(telemetryTypes)
-        : undefined,
+      telemetryTypes: fromMLTTypes(telemetryTypes),
       lastCompletedStep: hubInstalled ? 3 : undefined,
     });
   });

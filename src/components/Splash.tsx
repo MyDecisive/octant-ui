@@ -15,22 +15,23 @@ import { ROUTES } from "../constants/routing";
 import { DemoSplashCopy, SplashCopy } from "../copy/install/Splash.copy";
 import "./Splash.css";
 
+const copy = isDemo ? DemoSplashCopy : SplashCopy;
+const ROWS = [
+  {
+    Icon: RocketLaunchRoundedIcon,
+    text: copy.rocket,
+  },
+  {
+    Icon: MiscellaneousServicesRoundedIcon,
+    text: copy.gear,
+  },
+  {
+    Icon: CableRoundedIcon,
+    text: copy.wire,
+  },
+];
+
 export function Splash() {
-  const copy = isDemo ? DemoSplashCopy : SplashCopy;
-  const ROWS = [
-    {
-      Icon: RocketLaunchRoundedIcon,
-      text: copy.rocket,
-    },
-    {
-      Icon: MiscellaneousServicesRoundedIcon,
-      text: copy.gear,
-    },
-    {
-      Icon: CableRoundedIcon,
-      text: copy.wire,
-    },
-  ];
   const [, setLocation] = useLocation();
   const setInstallAndConnectField = useInstallAndConnectStore(
     (state) => state.setFormField,
