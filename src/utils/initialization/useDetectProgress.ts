@@ -9,6 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
+import { isDemo } from "./useDemoValues";
 
 function probablyFinishedInstallAndConnect(
   state: Partial<InstallAndConnectFormFields>,
@@ -20,6 +21,19 @@ function probablyFinishedInstallAndConnect(
     state.url &&
     state.argoUrl
   );
+}
+
+function demoRestartDemoFlow(currentPath: string, lastCompletedStep: number) {
+  return (
+    isDemo &&
+    lastCompletedStep === -1 &&
+    (currentPath === ROUTES.INSTALL ||
+      currentPath.startsWith(`${ROUTES.INSTALL}/`))
+  );
+}
+
+function showDemoSplash(currentPath: string) {
+  return isDemo && currentPath === ROUTES.SPLASH;
 }
 
 function deriveRedirectRoute(
@@ -89,6 +103,11 @@ export function useDetectProgress() {
     hasRan.current = true;
 
     async function runChecks() {
+      if (isDemo) {
+        setLoading(false);
+        return;
+      }
+
       let connName = connectionName;
       let addConnectionNameToState = false;
       if (!connName) {
@@ -142,13 +161,19 @@ export function useDetectProgress() {
     void runChecks();
   }, [connectionName, setInstallAndConnectField, lastCompletedStep]);
 
-  const redirectRoute = deriveRedirectRoute(currentPath, {
-    connectionName,
-    namespace,
-    telemetryTypes,
-    url,
-    argoUrl,
-  });
+  let redirectRoute: string | null = null;
+
+  if (demoRestartDemoFlow(currentPath, lastCompletedStep)) {
+    redirectRoute = ROUTES.SPLASH;
+  } else if (!showDemoSplash(currentPath)) {
+    redirectRoute = deriveRedirectRoute(currentPath, {
+      connectionName,
+      namespace,
+      telemetryTypes,
+      url,
+      argoUrl,
+    });
+  }
 
   if (redirectRoute) {
     navigate(redirectRoute, { replace: true });

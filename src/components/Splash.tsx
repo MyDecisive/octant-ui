@@ -7,30 +7,38 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useInstallAndConnectStore } from "@store/installAndConnectStore";
+import { isDemo } from "@utils/initialization/useDemoValues";
 import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";
-import { SplashCopy as copy } from "../copy/install/Splash.copy";
+import { DemoSplashCopy, SplashCopy } from "../copy/install/Splash.copy";
 import "./Splash.css";
 
-const ROWS = [
-  {
-    Icon: RocketLaunchRoundedIcon,
-    text: copy.rocket,
-  },
-  {
-    Icon: MiscellaneousServicesRoundedIcon,
-    text: copy.gear,
-  },
-  {
-    Icon: CableRoundedIcon,
-    text: copy.wire,
-  },
-];
-
 export function Splash() {
+  const copy = isDemo ? DemoSplashCopy : SplashCopy;
+  const ROWS = [
+    {
+      Icon: RocketLaunchRoundedIcon,
+      text: copy.rocket,
+    },
+    {
+      Icon: MiscellaneousServicesRoundedIcon,
+      text: copy.gear,
+    },
+    {
+      Icon: CableRoundedIcon,
+      text: copy.wire,
+    },
+  ];
   const [, setLocation] = useLocation();
+  const setInstallAndConnectField = useInstallAndConnectStore(
+    (state) => state.setFormField,
+  );
   const onClickProgress = () => {
+    if (isDemo) {
+      setInstallAndConnectField("lastCompletedStep", 0);
+    }
     setLocation(`${ROUTES.INSTALL}/1`);
   };
   return (

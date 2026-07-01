@@ -21,3 +21,19 @@ export const SplashCopy = {
   // SS-06
   cta: "Let's Build",
 } satisfies SplashConfig;
+
+export const DemoSplashCopy = {
+  // SS-01
+  header: "Welcome to Octant UI Demo",
+  // SS-02
+  subheader:
+    "This is a backless demo, it will walk you through the ux of octant.",
+  // SS-03
+  rocket: "See how you'd connect your cluster.",
+  // SS-04
+  gear: "See how you'd deploy SmartHub.",
+  // SS-05
+  wire: "Watch how you'd route your data.",
+  // SS-06
+  cta: "Try it now",
+} satisfies SplashConfig;
