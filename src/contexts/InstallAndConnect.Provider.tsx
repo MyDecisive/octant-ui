@@ -1,8 +1,10 @@
+import { isDemo } from "@constants/env";
+import { IxCDemoPrefillCopy } from "@copy/install/IxCDemoPrefill";
+import { useHubInstallStore } from "@store/hubInstallStore";
 import {
   createInstallAndConnectStore,
   type InstallAndConnectFormFields,
 } from "@store/installAndConnectStore";
-import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
 import { fromMLTTypes } from "@utils/fromMltTypes";
 import { type PropsWithChildren, useState } from "react";
@@ -25,15 +27,23 @@ export function InstallAndConnectProvider({
     })),
   );
   const hubInstalled = useHubInstallStore((state) => state.installed);
-  const [store] = useState(() =>
-    createInstallAndConnectStore({
+  const [store] = useState(() => {
+    if (isDemo) {
+      return createInstallAndConnectStore({
+        ...props,
+        ...IxCDemoPrefillCopy,
+        lastCompletedStep: -1,
+      });
+    }
+
+    return createInstallAndConnectStore({
       ...props,
       connectionName,
       namespace,
       telemetryTypes: fromMLTTypes(telemetryTypes),
       lastCompletedStep: hubInstalled ? 3 : undefined,
-    }),
-  );
+    });
+  });
 
   return (
     <InstallAndConnectContext value={store}>

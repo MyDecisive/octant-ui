@@ -4,6 +4,7 @@ import { ButtonRow } from "@components/layout/ButtonRow";
 import { FlowCenterColumn } from "@components/layout/FlowCenterColumn";
 import { NextButton } from "@components/NextButton";
 import { ViewTitle } from "@components/ViewTitle";
+import { isDemo } from "@constants/env";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
@@ -13,7 +14,7 @@ import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
 import { createForwardDataSnippets } from "./createForwardDataSnippets";
 
 export function UpdateAgent() {
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmed, setConfirmed] = useState(isDemo);
 
   const { telemetryTypes, connectionName, url, namespace } =
     useInstallAndConnectStore(

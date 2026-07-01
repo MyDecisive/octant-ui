@@ -9,6 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
+import { isDemo } from "../../constants/env";
 
 function probablyFinishedInstallAndConnect(
   state: Partial<InstallAndConnectFormFields>,
@@ -20,6 +21,16 @@ function probablyFinishedInstallAndConnect(
     state.url &&
     state.argoUrl
   );
+}
+
+function deriveDemoRedirectRoute(
+  currentPath: string,
+  lastCompletedStep: number,
+) {
+  if (lastCompletedStep === -1 && currentPath.startsWith(ROUTES.INSTALL)) {
+    return ROUTES.SPLASH;
+  }
+  return null;
 }
 
 function deriveRedirectRoute(
@@ -142,13 +153,15 @@ export function useDetectProgress() {
     void runChecks();
   }, [connectionName, setInstallAndConnectField, lastCompletedStep]);
 
-  const redirectRoute = deriveRedirectRoute(currentPath, {
-    connectionName,
-    namespace,
-    telemetryTypes,
-    url,
-    argoUrl,
-  });
+  const redirectRoute = isDemo
+    ? deriveDemoRedirectRoute(currentPath, lastCompletedStep)
+    : deriveRedirectRoute(currentPath, {
+        connectionName,
+        namespace,
+        telemetryTypes,
+        url,
+        argoUrl,
+      });
 
   if (redirectRoute) {
     navigate(redirectRoute, { replace: true });
