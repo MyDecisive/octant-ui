@@ -64,7 +64,7 @@ export function NextSteps() {
             variant="text"
             target="_blank"
             rel="noopener noreferrer"
-            href="https://docs.mydecisive.ai/"
+            href="https://github.com/MyDecisive/octant/blob/main/docs/how-to/production.md"
             size="small"
             disableRipple
           >
@@ -91,7 +91,7 @@ export function NextSteps() {
               color="secondary"
               target="_blank"
               rel="noopener noreferrer"
-              href="https://docs.mydecisive.ai/"
+              href="https://github.com/MyDecisive/octant/blob/main/docs/how-to/gitops.md"
               size="small"
               disableRipple
             >

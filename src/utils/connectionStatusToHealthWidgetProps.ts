@@ -39,7 +39,7 @@ const dataIntegrityFix = {
   actions: [
     {
       text: "See Docs",
-      href: "https://docs.mydecisive.ai/",
+      href: "https://github.com/MyDecisive/octant/blob/main/docs/how-to/connection-failures.md",
     },
   ],
 };
