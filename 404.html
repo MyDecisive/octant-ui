@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Redirecting...</title>
+    <script>
+      (function () {
+        var repoBase = "/octant-ui";
+        var locationPath = window.location.pathname;
+        var appPath = locationPath.startsWith(repoBase)
+          ? locationPath.slice(repoBase.length)
+          : locationPath;
+        var redirectPath =
+          appPath + window.location.search + window.location.hash;
+
+        window.location.replace(
+          window.location.origin +
+            repoBase +
+            "/?redirect=" +
+            encodeURIComponent(redirectPath),
+        );
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
