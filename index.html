@@ -8,17 +8,6 @@
       name="robots"
       content="noindex, nofollow, noarchive, nosnippet, noimageindex"
     />
-    <script>
-      (function () {
-        var params = new URLSearchParams(window.location.search);
-        var redirectPath = params.get("redirect");
-
-        if (!redirectPath) return;
-
-        var basePath = window.location.pathname.replace(/\/$/, "");
-        window.history.replaceState(null, "", basePath + redirectPath);
-      })();
-    </script>
     <title>MyDecisive Octant UI</title>
   </head>
   <body>
