@@ -57,6 +57,7 @@
     "gh-pages": "^6.3.0",
     "globals": "^16.5.0",
     "playwright": "^1.59.1",
+    "sass-embedded": "^1.100.0",
     "storybook": "^10.3.5",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.3",
