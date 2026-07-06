@@ -1,10 +1,14 @@
 import type { ChipProps } from "@mui/material/Chip";
 import type { TextFieldProps } from "@mui/material/TextField";
 import type { TooltipProps } from "@mui/material/Tooltip";
+import { type AlertProps as MuiAlertProps } from "@mui/material/Alert";
 import type { DataGridProps, GridColDef } from "@mui/x-data-grid";
 import type { ReactElement, ReactNode } from "react";
 import type { ErrorModalContent } from "./copy";
 import type { InputValidationErrors } from "./validation";
+import type { ValueOf } from "./utility";
+import { HEALTH_WIDGET_STATUS } from "@constants/enums";
+import type { UIFilterType } from "./enums";
 
 // ============================================================================
 // Display components
@@ -48,7 +52,7 @@ export interface LogData extends BaseRowDefinition {
 }
 
 export interface SummaryData extends BaseRowDefinition {
-  type: "logs" | "traces";
+  type: UIFilterType;
   cost: number | undefined;
   sent: number | undefined;
   rate: number | undefined;
@@ -125,10 +129,12 @@ export interface HealthFacetRowProps {
   fix?: FixCardProps;
 }
 
+export type HealthWidgetStatus = ValueOf<typeof HEALTH_WIDGET_STATUS>;
+
 export interface HealthWidgetProps {
   title: string;
   timestamp?: string;
-  status?: "error" | "operational" | "loading";
+  status?: HealthWidgetStatus;
   fix?: FixCardProps;
   facets?: HealthFacetRowProps[];
   simple?: boolean;
@@ -150,6 +156,14 @@ export interface TabItem {
   value: string;
   label: string | TabLabelProps;
   children: ReactNode;
+}
+
+/**
+ * Alert
+ */
+export interface AlertProps extends MuiAlertProps {
+  title?: string;
+  description?: string;
 }
 
 // ============================================================================

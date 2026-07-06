@@ -3,8 +3,8 @@ import { useOctantStore } from "@store/octantStore";
 import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { connectionServiceClient } from "../../services/connection";
-
-type ResolveStatus = "pending" | "resolved";
+import type { AsyncStatus } from "@app-types/enums";
+import { ASYNC_STATUS } from "@constants/enums";
 
 const NO_CONNECTIONS_ERROR_PART =
   "[internal] failed to get connections: failed to get configmap";
@@ -16,7 +16,7 @@ export function useResolveConnection() {
     })),
   );
 
-  const [status, setStatus] = useState<ResolveStatus>("pending");
+  const [status, setStatus] = useState<AsyncStatus>(ASYNC_STATUS.LOADING);
   const hasRan = useRef(false);
 
   useEffect(() => {
@@ -46,12 +46,12 @@ export function useResolveConnection() {
           }
         }
       } finally {
-        setStatus("resolved");
+        setStatus(ASYNC_STATUS.SUCCESS);
       }
     }
 
     void resolve();
   }, [setState]);
 
-  return status === "pending";
+  return status === ASYNC_STATUS.LOADING;
 }

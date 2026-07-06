@@ -1,8 +1,9 @@
+import type { HealthWidgetStatus } from "@app-types/components";
 import Chip, { type ChipProps } from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function chipPropsFromStatus(
-  status: "error" | "operational" | "loading",
+  status: HealthWidgetStatus,
 ): Pick<ChipProps, "color" | "label" | "icon"> {
   switch (status) {
     case "error":
@@ -24,11 +25,7 @@ function chipPropsFromStatus(
   }
 }
 
-export function HeaderStatusChip({
-  status,
-}: {
-  status: "error" | "operational" | "loading";
-}) {
+export function HeaderStatusChip({ status }: { status: HealthWidgetStatus }) {
   const chipProps = chipPropsFromStatus(status);
   return <Chip variant="filled" size="small" {...chipProps} />;
 }

@@ -3,25 +3,24 @@ import { Alert } from "@components/Alert";
 import IconButton from "@mui/material/IconButton";
 import MuiSnackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
+import type { AlertProps } from "@app-types/components";
 import type { ReactNode } from "react";
 import "./Snackbar.css";
 
 interface SnackbarProps {
   open: boolean;
-  message?: string;
   title?: string;
   description?: string;
-  severity?: "neutral" | "error";
+  severity?: AlertProps["severity"];
   action?: ReactNode;
   onClose?: () => void;
 }
 
 export function Snackbar({
   open,
-  message,
   title,
   description,
-  severity = "neutral",
+  severity,
   action,
   onClose,
 }: SnackbarProps) {
@@ -29,8 +28,6 @@ export function Snackbar({
     if (reason === "clickaway") return;
     onClose?.();
   };
-  const alertVariant =
-    severity === "error" ? "snackbarError" : "snackbarNeutral";
 
   return (
     <MuiSnackbar
@@ -41,11 +38,11 @@ export function Snackbar({
     >
       <Alert
         className="mdai-snackbar-alert"
-        variant={alertVariant}
-        severity={severity === "error" ? "error" : undefined}
+        variant={"snackbar"}
+        severity={severity}
         icon={severity === "neutral" ? false : undefined}
         title={title}
-        description={message ?? description}
+        description={description}
         action={
           (action || onClose) && (
             <Stack

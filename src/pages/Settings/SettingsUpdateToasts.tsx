@@ -25,7 +25,7 @@ function determineSnackbarProps(
       return {
         open: true,
         severity: "neutral",
-        message: "New settings applied",
+        description: "New settings applied",
       };
     case ASYNC_STATUS.ERROR:
       return {

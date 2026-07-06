@@ -27,7 +27,7 @@ export const Loading: Story = {
 export const Success: Story = {
   args: {
     severity: "neutral",
-    message: "New settings applied",
+    description: "New settings applied",
   },
 };
 

@@ -25,3 +25,9 @@ export const TELEMETRY_TYPES = {
   ...FILTER_TYPES,
   METRIC: "metrics",
 } as const;
+
+export const HEALTH_WIDGET_STATUS = {
+  ERROR: "error",
+  OPERATIONAL: "operational",
+  LOADING: "loading",
+} as const;
