@@ -25,6 +25,13 @@ export default defineConfig(({ mode }) => {
         // For example, you can add specific plugins or configure output formats.
       },
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          loadPaths: [path.resolve(__dirname, "src/styles")],
+        },
+      },
+    },
     resolve: {
       alias: {
         "@components": path.resolve(__dirname, "./src/components"),
