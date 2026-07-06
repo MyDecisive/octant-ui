@@ -1,20 +1,22 @@
+@use "tokens" as *;
+
 .code-snippet-container {
   position: relative;
-  color: #ffffff;
-  border-radius: 8px;
+  color: $text-primary;
+  border-radius: spacing();
   background: #454545;
   overflow: scroll;
   align-items: flex-start;
   max-height: 100vh;
   min-width: 0;
-  padding: var(--mdai-spacing-unit);
+  padding: spacing();
   font-size: 0.75rem;
 }
 
 .code-snippet-container .copy-button.MuiIconButton-root {
   position: absolute;
-  top: var(--mdai-spacing-unit);
-  right: var(--mdai-spacing-unit);
+  top: spacing();
+  right: spacing();
   z-index: 1;
 }
 
@@ -34,11 +36,11 @@
 }
 
 .code-snippet-content pre {
-  margin: calc(var(--mdai-spacing-unit) * 2);
+  margin: spacing(2);
 }
 
 .code-snippet-copy-button .MuiTypography-root {
-  color: var(--mdai-light-grey);
+  color: $light-grey;
   white-space: nowrap;
   line-height: 1;
 }
