@@ -1,6 +1,7 @@
 import type { ChipProps } from "@mui/material/Chip";
 import type { TextFieldProps } from "@mui/material/TextField";
 import type { TooltipProps } from "@mui/material/Tooltip";
+import { type AlertProps as MuiAlertProps } from "@mui/material/Alert";
 import type { DataGridProps, GridColDef } from "@mui/x-data-grid";
 import type { ReactElement, ReactNode } from "react";
 import type { ErrorModalContent } from "./copy";
@@ -155,6 +156,14 @@ export interface TabItem {
   value: string;
   label: string | TabLabelProps;
   children: ReactNode;
+}
+
+/**
+ * Alert
+ */
+export interface AlertProps extends MuiAlertProps {
+  title?: string;
+  description?: string;
 }
 
 // ============================================================================

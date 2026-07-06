@@ -4,8 +4,10 @@ import type { ComponentOverride } from "../types";
 
 declare module "@mui/material/Alert" {
   interface AlertPropsVariantOverrides {
-    snackbarNeutral: true;
-    snackbarError: true;
+    snackbar: true;
+  }
+  interface AlertPropsColorOverrides {
+    neutral: true;
   }
 }
 
@@ -44,13 +46,11 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
       },
     },
     {
-      props: { variant: "snackbarNeutral" },
+      props: { variant: "snackbar" },
       style: {
         alignItems: "center",
-        backgroundColor: "#2f2f2f",
         borderRadius: 4,
         boxShadow: "0 8px 24px rgba(0, 0, 0, 0.24)",
-        color: "#ffffff",
         padding: "16px 12px 16px 16px",
         "& .MuiAlert-message": {
           flex: 1,
@@ -62,9 +62,18 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
         },
         "& .MuiAlert-action": {
           alignItems: "center",
-          color: "#ffffff",
           marginLeft: "24px",
           padding: 0,
+        },
+      },
+    },
+    {
+      props: { variant: "snackbar", severity: "neutral" },
+      style: {
+        backgroundseverity: "#2f2f2f",
+        color: "#ffffff",
+        "& .MuiAlert-action": {
+          color: "#ffffff",
         },
         "& .MuiButtonBase-root, & .MuiSvgIcon-root": {
           color: "#ffffff",
@@ -72,31 +81,16 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
       },
     },
     {
-      props: { variant: "snackbarError" },
+      props: { variant: "snackbar", color: "error" },
       style: {
-        alignItems: "center",
         backgroundColor: palette.error.main,
-        borderRadius: 4,
-        boxShadow: "0 8px 24px rgba(0, 0, 0, 0.24)",
         color: palette.error.contrastText,
-        padding: "16px 12px 16px 16px",
         "& .MuiAlert-icon": {
           color: palette.error.contrastText,
           padding: 0,
         },
-        "& .MuiAlert-message": {
-          flex: 1,
-          minWidth: 0,
-          padding: 0,
-        },
-        "& .MuiAlertTitle-root": {
-          margin: 0,
-        },
         "& .MuiAlert-action": {
-          alignItems: "center",
           color: palette.error.contrastText,
-          marginLeft: "24px",
-          padding: 0,
         },
         "& .MuiButtonBase-root, & .MuiSvgIcon-root": {
           color: palette.error.contrastText,
