@@ -1,6 +1,6 @@
 import { CopyButton } from "@components/CopyButton";
 import Box from "@mui/material/Box";
-import "./CodeSnippet.css";
+import "./CodeSnippet.scss";
 
 interface CodeSnippetProps {
   code: string;

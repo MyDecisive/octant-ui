@@ -1,4 +1,4 @@
-import { FONT_WEIGHTS } from "../constants";
+import { COLORS, FONT_WEIGHTS } from "../constants";
 import { palette } from "../palette";
 import type { ComponentOverride } from "../types";
 
@@ -71,12 +71,12 @@ export const MuiAlert: ComponentOverride<"MuiAlert"> = {
       props: { variant: "snackbar", severity: "neutral" },
       style: {
         backgroundseverity: "#2f2f2f",
-        color: "#ffffff",
+        color: COLORS.WHITE,
         "& .MuiAlert-action": {
-          color: "#ffffff",
+          color: COLORS.WHITE,
         },
         "& .MuiButtonBase-root, & .MuiSvgIcon-root": {
-          color: "#ffffff",
+          color: COLORS.WHITE,
         },
       },
     },

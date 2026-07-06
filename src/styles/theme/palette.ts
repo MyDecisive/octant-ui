@@ -3,22 +3,23 @@ import type {
   SimplePaletteColorOptions,
 } from "@mui/material/styles";
 import type {} from "@mui/x-data-grid/themeAugmentation";
+import { COLORS } from "./constants";
 
 const primary: SimplePaletteColorOptions = {
   main: "#9C27B0",
   dark: "#7B1FA2",
   light: "#F3E5F5",
-  contrastText: "#FFFFFF",
+  contrastText: COLORS.WHITE,
 };
 const secondary: SimplePaletteColorOptions = {
   main: "#6D6D75",
   dark: "#51515A",
   light: "#E6E6EB",
-  contrastText: "#FFFFFF",
+  contrastText: COLORS.WHITE,
 };
 const error: SimplePaletteColorOptions = {
   main: "#D32F2F",
-  contrastText: "#FFFFFF",
+  contrastText: COLORS.WHITE,
 };
 const warning: SimplePaletteColorOptions = {
   main: "#EF6C00",
@@ -31,7 +32,7 @@ const info: SimplePaletteColorOptions = {
 };
 const success: SimplePaletteColorOptions = {
   main: "#2E7D32",
-  contrastText: "#FFFFFF",
+  contrastText: COLORS.WHITE,
 };
 
 export const palette = {
