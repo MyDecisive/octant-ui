@@ -1,8 +1,8 @@
 import { useOctantStore } from "@store/octantStore";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useEffect, useRef, useState } from "react";
-
-type VerifyStatus = "pending" | "complete";
+import type { AsyncStatus } from "@app-types/enums";
+import { ASYNC_STATUS } from "@constants/enums";
 
 export function useVerifyHubInstall(upstreamResolving: boolean) {
   const connectionName = useOctantStore(
@@ -10,7 +10,7 @@ export function useVerifyHubInstall(upstreamResolving: boolean) {
   );
   const verifyHubInstall = useHubInstallStore((state) => state.verifyInstall);
 
-  const [status, setStatus] = useState<VerifyStatus>("pending");
+  const [status, setStatus] = useState<AsyncStatus>(ASYNC_STATUS.LOADING);
   const hasRan = useRef(false);
 
   useEffect(() => {
@@ -21,16 +21,16 @@ export function useVerifyHubInstall(upstreamResolving: boolean) {
 
     async function runVerification() {
       if (!connectionName) {
-        setStatus("complete");
+        setStatus(ASYNC_STATUS.SUCCESS);
         return;
       }
 
       await verifyHubInstall(connectionName);
-      setStatus("complete");
+      setStatus(ASYNC_STATUS.SUCCESS);
     }
 
     void runVerification();
   }, [connectionName, upstreamResolving, verifyHubInstall]);
 
-  return status === "pending";
+  return status === ASYNC_STATUS.LOADING;
 }

@@ -13,6 +13,7 @@ import {
   getLatestValidatorRunId,
   validatorRunIdToDate,
 } from "../services/connection";
+import type { ValueOf } from "@app-types/utility";
 
 interface ValidatorRun extends UIConnectionScope {
   runId: string;
@@ -23,7 +24,12 @@ interface ValidateConnectionParams {
   waitForNewRunMs?: number;
 }
 
-type ValidationOperation = "loadLatestOrCreate" | "revalidate";
+const VALIDATION_OPERATION = {
+  LOAD_LATEST_OR_CREATE: "loadLatestOrCreate",
+  REVALIDATE: "revalidate",
+} as const;
+
+type ValidationOperation = ValueOf<typeof VALIDATION_OPERATION>;
 
 interface ConnectionValidationState {
   status: AsyncStatus;
@@ -121,17 +127,21 @@ export const useConnectionValidationStore = create<ConnectionValidationState>()(
       connectionStatus: null,
       validatorRun: null,
       loadLatestOrCreate: (params) =>
-        runValidation("loadLatestOrCreate", params, async () => {
-          const latestRunId = await getLatestValidatorRunId(params.scope);
-          if (latestRunId) return { runId: latestRunId, isNewRun: false };
+        runValidation(
+          VALIDATION_OPERATION.LOAD_LATEST_OR_CREATE,
+          params,
+          async () => {
+            const latestRunId = await getLatestValidatorRunId(params.scope);
+            if (latestRunId) return { runId: latestRunId, isNewRun: false };
 
-          return {
-            runId: await createOrGetValidatorRunId(params.scope),
-            isNewRun: true,
-          };
-        }),
+            return {
+              runId: await createOrGetValidatorRunId(params.scope),
+              isNewRun: true,
+            };
+          },
+        ),
       revalidate: (params) =>
-        runValidation("revalidate", params, async () => ({
+        runValidation(VALIDATION_OPERATION.REVALIDATE, params, async () => ({
           runId: await createValidatorRunId(params.scope),
           isNewRun: true,
         })),
