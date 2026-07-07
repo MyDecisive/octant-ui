@@ -9,7 +9,7 @@ import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
 import { NextStepsCopy as copy } from "../copy/install/NextSteps.copy";
-import { useFetchManifestsAndDownload } from "../utils/useFetchManifestsAndDownload";
+import { useFetchManifestsAndDownload } from "../hooks/useFetchManifestsAndDownload";
 
 export function NextSteps() {
   const [, navigate] = useLocation();

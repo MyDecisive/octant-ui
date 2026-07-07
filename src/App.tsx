@@ -1,19 +1,22 @@
-import { Redirect, Route, Switch } from 'wouter';
-
-import { FullscreenLoader } from '@components/FullscreenLoader';
-import { MobileWarn } from '@components/MobileWarn';
-import { StepperNav } from '@components/StepperNav';
-import { FlowLayout } from '@components/layout/FlowLayout';
-import { useInitOctant } from '@utils/initialization/useInitOctant';
-
-import { Splash } from './components/Splash';
-import { FLOW_ROUTES, INSTALL_AND_CONNECT, PAGE_ROUTES, ROUTES } from './constants/routing';
-import { ClarityProvider } from './contexts/Clarity.Provider';
-import { InstallAndConnectProvider } from './contexts/InstallAndConnect.Provider';
-import { ClarityPage } from './pages/Clarity/Clarity';
-import { Settings } from './pages/Settings/Settings';
-import { SettingsUpdateToasts } from './pages/Settings/SettingsUpdateToasts';
-import { SystemHealthPage } from './pages/SystemHealth/SystemHealth';
+import { FullscreenLoader } from "@components/FullscreenLoader";
+import { FlowLayout } from "@components/layout/FlowLayout";
+import { StepperNav } from "@components/StepperNav";
+import { useInitOctant } from "@hooks/useInitOctant";
+import { Redirect, Route, Switch } from "wouter";
+import { Splash } from "./components/Splash";
+import {
+  FLOW_ROUTES,
+  INSTALL_AND_CONNECT,
+  PAGE_ROUTES,
+  ROUTES,
+} from "./constants/routing";
+import { ClarityProvider } from "./contexts/Clarity.Provider";
+import { InstallAndConnectProvider } from "./contexts/InstallAndConnect.Provider";
+import { ClarityPage } from "./pages/Clarity/Clarity";
+import { Settings } from "./pages/Settings/Settings";
+import { SettingsUpdateToasts } from "./pages/Settings/SettingsUpdateToasts";
+import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
+import { MobileWarn } from "@components/MobileWarn";
 
 function App() {
   const initializing = useInitOctant();

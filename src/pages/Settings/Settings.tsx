@@ -16,7 +16,7 @@ import { useSettingsStore } from "@store/settingsStore";
 import { fromMLTTypes } from "@utils/fromMLTTypes";
 import { getSubmittedCollectorValue, isMaskedValue } from "@utils/maskedValues";
 import { toMLTTypes } from "@utils/toMLTTypes";
-import { useFetchManifestsAndDownload } from "@utils/useFetchManifestsAndDownload";
+import { useFetchManifestsAndDownload } from "../../hooks/useFetchManifestsAndDownload";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../../components/DeployCollectorForm";
@@ -28,8 +28,8 @@ import "./Settings.css";
 const DATADOG_SITE_PLACEHOLDER = "<datadog_site_url>";
 
 interface AgentUpdateSnippets {
-  locationUrl: string;
   code: string;
+  locationUrl: string;
 }
 
 function telemetryTypesMatch(
@@ -74,12 +74,12 @@ export function Settings() {
         updateSettings,
       })),
     );
-  const { loading: manifestsLoading, fetchAndDownload } =
+  const { fetchAndDownload, loading: manifestsLoading } =
     useFetchManifestsAndDownload({
       connectionName,
+      mdaiVersion: "0.10.0",
       namespace,
       telemetryTypes,
-      mdaiVersion: "0.10.0",
     });
 
   const handleDownloadManifestsClick = () => {
@@ -155,18 +155,18 @@ export function Settings() {
         createForwardDataSnippets({
           connectionName,
           namespace,
-          telemetryTypes,
           siteHost: submittedDatadogUrl || siteHost || DATADOG_SITE_PLACEHOLDER,
+          telemetryTypes,
         }),
       );
     }
 
     const updated = await updateSettings({
       connectionName,
+      datadogApiKey: submittedDatadogApiKey,
+      datadogUrl: submittedDatadogUrl,
       namespace,
       telemetryTypes,
-      datadogUrl: submittedDatadogUrl,
-      datadogApiKey: submittedDatadogApiKey,
     });
 
     if (!updated) {
@@ -184,52 +184,48 @@ export function Settings() {
   return (
     <PageContainer
       headerActions={
-        <Stack direction={"row"} alignItems={"center"} gap={2}>
+        <Stack alignItems={"center"} direction={"row"} gap={2}>
           <Button
-            variant="secondary"
-            size="small"
             disableRipple
-            onClick={handleDownloadManifestsClick}
             loading={manifestsLoading}
+            onClick={handleDownloadManifestsClick}
+            size="small"
             startIcon={<FileDownloadRounded />}
+            variant="secondary"
           >
             {copy.headerActions.downloadManifests}
           </Button>
           <RichTooltip
-            title={copy.headerActions.gitOpsTooltip.title}
-            description={copy.headerActions.gitOpsTooltip.description}
             actions={
               <Button
                 className="mdai-table-toolbar-tooltip-cta-button"
-                variant="text"
-                endIcon={<ArrowOutwardRoundedIcon />}
                 component="a"
+                endIcon={<ArrowOutwardRoundedIcon />}
                 href={copy.headerActions.gitOpsTooltip.href}
-                target="_blank"
                 rel="noreferrer"
+                target="_blank"
+                variant="text"
               >
                 {copy.headerActions.gitOpsTooltip.cta}
               </Button>
             }
+            description={copy.headerActions.gitOpsTooltip.description}
+            title={copy.headerActions.gitOpsTooltip.title}
           >
             <InfoOutlined color="secondary" />
           </RichTooltip>
         </Stack>
       }
     >
-      <Stack direction={"row"} spacing={3} className="settings-form-container">
+      <Stack className="settings-form-container" direction={"row"} spacing={3}>
         <DeployCollectorForm
-          telemetryTypes={telemetryTypes}
-          siteHost={siteHost}
           apiKey={apiKey}
-          connectionName={connectionName}
-          onTelemetryTypesChange={setTelemetryTypes}
-          onSiteHostChange={setSiteHost}
-          onApiKeyChange={setApiKey}
           apiKeyRequired={false}
-          siteHostRequired={false}
+          connectionName={connectionName}
           disabled={loading}
-          submitEnabled={hasSettingsChanges}
+          onApiKeyChange={setApiKey}
+          onSiteHostChange={setSiteHost}
+          onTelemetryTypesChange={setTelemetryTypes}
           renderSubmitAction={({ canSubmit, validate }) => (
             <AsyncButton
               asyncFunction={() => {
@@ -237,32 +233,36 @@ export function Settings() {
                 return handleUpdateSettings();
               }}
               canAsync={canSubmit}
-              text={copy.updateSettings.initial}
               loadingText={copy.updateSettings.activated}
+              text={copy.updateSettings.initial}
             />
           )}
+          siteHost={siteHost}
+          siteHostRequired={false}
+          submitEnabled={hasSettingsChanges}
+          telemetryTypes={telemetryTypes}
         />
       </Stack>
       <Dialog
-        open={!!agentUpdateSnippets}
-        onClose={() => setAgentUpdateSnippets(null)}
-        closeOnBackdropClick={false}
-        title={copy.updateAgentDialog.title}
         actions={
           <Button
-            variant="contained"
-            size="small"
             onClick={() => setAgentUpdateSnippets(null)}
+            size="small"
+            variant="contained"
           >
             {copy.updateAgentDialog.cta}
           </Button>
         }
+        closeOnBackdropClick={false}
+        onClose={() => setAgentUpdateSnippets(null)}
+        open={!!agentUpdateSnippets}
+        title={copy.updateAgentDialog.title}
       >
         <Stack className="settings-agent-update-dialog-content" gap={2}>
-          <Typography variant="body2" color="secondary">
+          <Typography color="secondary" variant="body2">
             {copy.updateAgentDialog.description}
           </Typography>
-          <Typography variant="body2" color="secondary">
+          <Typography color="secondary" variant="body2">
             {copy.updateAgentDialog.instructions}
           </Typography>
           {agentUpdateSnippets && (

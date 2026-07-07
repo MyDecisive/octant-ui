@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
+import { useAdvanceInstallAndConnect } from "../hooks/useAdvanceInstallAndConnect";
 
 export function NextButton({
   disabled,

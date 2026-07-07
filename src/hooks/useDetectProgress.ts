@@ -9,7 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
-import { isDemo } from "../../constants/env";
+import { isDemo } from "../constants/env";
 
 function probablyFinishedInstallAndConnect(
   state: Partial<InstallAndConnectFormFields>,

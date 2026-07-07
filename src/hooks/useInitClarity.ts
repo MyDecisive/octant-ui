@@ -8,7 +8,7 @@ import { useClarityStore } from "@store/clarity/store";
 import { timeframeToPickerOptions } from "@utils/timeframeToPickerOptions";
 import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { timeframeServiceClient } from "../../services/timeframe";
+import { timeframeServiceClient } from "@services/timeframe";
 import { FILTER_TYPES } from "@constants/enums";
 
 export function useInitClarity({

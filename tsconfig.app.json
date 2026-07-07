@@ -5,6 +5,7 @@
       "@constants/*": ["./src/constants/*"],
       "@copy/*": ["./src/copy/*"],
       "@fieldValidation/*": ["./src/fieldValidation/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@services/*": ["./src/services/*"],
       "@store/*": ["./src/store/*"],
       "@app-types/*": ["./src/types/*"],

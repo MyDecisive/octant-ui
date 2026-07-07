@@ -2,8 +2,8 @@ import { ArgoInstallDialog } from "@components/ArgoInstallDialog";
 import { FullscreenLoader } from "@components/FullscreenLoader";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import { useDetectProgress } from "@utils/initialization/useDetectProgress";
 import "./FlowLayout.css";
+import { useDetectProgress } from "@hooks/useDetectProgress";
 
 export function FlowLayout({ children }: { children: React.ReactNode }) {
   const { loading } = useDetectProgress();
