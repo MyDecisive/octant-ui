@@ -13,3 +13,5 @@ export function lastRun(timestamp?: string) {
 
   return formattedTimestamp ? `Last run ${formattedTimestamp}` : undefined;
 }
+export const URL_INPUT_VALIDATION_ERROR =
+  "Enter a valid URL. Expected format: http://www.abc.com or localhost:8080";
