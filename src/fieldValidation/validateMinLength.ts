@@ -1,9 +1,13 @@
+import { INPUT_VALIDATION_ERRORS } from "@copy/global";
+
 export function validateMinLength(minLength: number) {
   return (value?: string): string | undefined => {
-    if (typeof value !== "string" || value.trim().length >= minLength) {
+    const trimmedLength = (value ?? "").trim().length;
+
+    if (trimmedLength >= minLength) {
       return undefined;
     }
 
-    return `Must be at least ${minLength} characters`;
+    return INPUT_VALIDATION_ERRORS.MINIMUM_LENGTH(minLength);
   };
 }

@@ -18,4 +18,5 @@ export const INPUT_VALIDATION_ERRORS = {
   TELEMETRY_TYPES: 'At least one of "Logs" or "Traces" must be selected',
   REQUIRED: "This field is required",
   MINIMUM_SELECTION: "At least one item must be selected",
+  MINIMUM_LENGTH: (length: number) => `Must be at least ${length} characters`,
 };
