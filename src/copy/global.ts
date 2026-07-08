@@ -16,4 +16,6 @@ export function lastRun(timestamp?: string) {
 export const INPUT_VALIDATION_ERRORS = {
   URL: "Enter a valid URL. Expected format: http://www.abc.com or localhost:8080",
   TELEMETRY_TYPES: 'At least one of "Logs" or "Traces" must be selected',
+  REQUIRED: "This field is required",
+  MINIMUM_SELECTION: "At least one item must be selected",
 };
