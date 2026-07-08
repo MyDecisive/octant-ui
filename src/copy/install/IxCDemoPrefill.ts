@@ -6,7 +6,7 @@ export const IxCDemoPrefillCopy = {
   argoUrl: "https://argocd.demo.mydecisive.ai",
   accountToken: "argocd.demo-token",
   telemetryTypes: ["logs", "traces"],
-  url: "https://http-intake.logs.datadoghq.com",
+  siteHost: "https://http-intake.logs.datadoghq.com",
   apiKey: "demo-datadog-api-key",
   connectionName: "demo-connection",
 } satisfies Partial<InstallAndConnectFormFields>;

@@ -33,11 +33,11 @@ function validateOptionalDatadogApiKey(value?: string) {
 
 function createFormSpec(
   apiKeyRequired: boolean,
-  urlRequired: boolean,
+  siteHostRequired: boolean,
 ): FormFields {
   return {
     telemetryTypes: [validateTelemetryTypesSelection],
-    url: urlRequired
+    siteHost: siteHostRequired
       ? [validateRequired, validateOptionalUrlInput]
       : [validateOptionalUrlInput],
     apiKey: apiKeyRequired
@@ -48,52 +48,52 @@ function createFormSpec(
 
 interface DeployCollectorFormProps {
   telemetryTypes: TelemetryTypes[];
-  url: string;
+  siteHost: string;
   apiKey: string;
   connectionName?: string;
   onTelemetryTypesChange: (telemetryTypes: TelemetryTypes[]) => void;
-  onUrlChange: (url: string) => void;
+  onSiteHostChange: (siteHost: string) => void;
   onApiKeyChange: (apiKey: string) => void;
-  urlPlaceholder?: string;
+  siteHostPlaceholder?: string;
   apiKeyPlaceholder?: string;
   renderSubmitAction: (props: {
     canSubmit: boolean;
     validate: () => boolean;
   }) => ReactNode;
   apiKeyRequired?: boolean;
-  urlRequired?: boolean;
+  siteHostRequired?: boolean;
   disabled?: boolean;
   submitEnabled?: boolean;
 }
 
 export function DeployCollectorForm({
   telemetryTypes,
-  url,
+  siteHost,
   apiKey,
   connectionName,
   onTelemetryTypesChange,
-  onUrlChange,
+  onSiteHostChange,
   onApiKeyChange,
-  urlPlaceholder,
+  siteHostPlaceholder,
   apiKeyPlaceholder,
   renderSubmitAction,
   apiKeyRequired = true,
-  urlRequired = true,
+  siteHostRequired = true,
   disabled = false,
   submitEnabled = true,
 }: DeployCollectorFormProps) {
   const [focusedField, setFocusedField] = useState<string>();
   const { callbacks, validateAll } = useFormValidation(
-    createFormSpec(apiKeyRequired, urlRequired),
+    createFormSpec(apiKeyRequired, siteHostRequired),
   );
 
   const handleBlur = () => setFocusedField(undefined);
   const hasRequiredValues =
     telemetryTypes.length > 0 &&
-    (!urlRequired || !!url || !!urlPlaceholder) &&
+    (!siteHostRequired || !!siteHost || !!siteHostPlaceholder) &&
     (!apiKeyRequired || !!apiKey || !!apiKeyPlaceholder);
   const canSubmit = hasRequiredValues && submitEnabled && !disabled;
-  const validate = () => validateAll({ telemetryTypes, url, apiKey });
+  const validate = () => validateAll({ telemetryTypes, siteHost, apiKey });
 
   const fields = {
     source: {
@@ -127,7 +127,7 @@ export function DeployCollectorForm({
           },
         ],
       },
-      url: {
+      siteHost: {
         placeholder: copy.destinationSection.destinationUrl.placeholder,
         helperText: copy.destinationSection.destinationUrl.helperText,
       },
@@ -183,12 +183,14 @@ export function DeployCollectorForm({
         />
 
         <Input
-          value={url}
-          {...callbacks.url}
-          placeholder={urlPlaceholder ?? fields.destination.url.placeholder}
-          helperText={fields.destination.url.helperText}
-          onChange={(e) => onUrlChange(e.target.value)}
-          onFocus={() => setFocusedField("url")}
+          value={siteHost}
+          {...callbacks.siteHost}
+          placeholder={
+            siteHostPlaceholder ?? fields.destination.siteHost.placeholder
+          }
+          helperText={fields.destination.siteHost.helperText}
+          onChange={(e) => onSiteHostChange(e.target.value)}
+          onFocus={() => setFocusedField("siteHost")}
           onBlur={handleBlur}
           disabled={disabled}
         />
@@ -211,9 +213,9 @@ export function DeployCollectorForm({
       <ConfigDrawer
         focusedField={focusedField}
         telemetryTypes={telemetryTypes}
-        url={url}
+        siteHost={siteHost}
         apiKey={apiKey}
-        urlPlaceholder={urlPlaceholder}
+        siteHostPlaceholder={siteHostPlaceholder}
         apiKeyPlaceholder={apiKeyPlaceholder}
         connectionName={connectionName}
         className="right-column"

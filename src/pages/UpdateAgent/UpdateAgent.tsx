@@ -16,18 +16,18 @@ import { createForwardDataSnippets } from "./createForwardDataSnippets";
 export function UpdateAgent() {
   const [confirmed, setConfirmed] = useState(isDemo);
 
-  const { telemetryTypes, connectionName, url, namespace } =
+  const { telemetryTypes, connectionName, siteHost, namespace } =
     useInstallAndConnectStore(
-      useShallow(({ connectionName, url, namespace, telemetryTypes }) => ({
+      useShallow(({ connectionName, siteHost, namespace, telemetryTypes }) => ({
         connectionName,
-        url,
+        siteHost,
         namespace,
         telemetryTypes,
       })),
     );
   const { locationUrl, code } = createForwardDataSnippets({
     connectionName: connectionName!,
-    url: url!,
+    siteHost: siteHost!,
     namespace: namespace!,
     telemetryTypes,
   });

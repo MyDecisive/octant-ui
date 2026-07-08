@@ -18,7 +18,7 @@ function probablyFinishedInstallAndConnect(
     state.connectionName &&
     state.namespace &&
     state.telemetryTypes?.length &&
-    state.url &&
+    state.siteHost &&
     state.argoUrl
   );
 }
@@ -63,7 +63,7 @@ export function useDetectProgress() {
     connectionName,
     namespace,
     telemetryTypes,
-    url,
+    siteHost,
     argoUrl,
     lastCompletedStep,
   } = useInstallAndConnectStore(
@@ -73,14 +73,14 @@ export function useDetectProgress() {
         namespace,
         telemetryTypes,
         lastCompletedStep,
-        url,
+        siteHost,
         argoUrl,
       }) => ({
         connectionName,
         namespace,
         lastCompletedStep,
         telemetryTypes,
-        url,
+        siteHost,
         argoUrl,
       }),
     ),
@@ -146,7 +146,7 @@ export function useDetectProgress() {
         }
 
         if (ddogIntegration) {
-          setInstallAndConnectField("url", ddogIntegration.url);
+          setInstallAndConnectField("siteHost", ddogIntegration.url);
           setInstallAndConnectField("apiKey", SECRET_VALUE_MASK);
           setInstallAndConnectField("lastCompletedStep", 4);
         }
@@ -163,7 +163,7 @@ export function useDetectProgress() {
         connectionName,
         namespace,
         telemetryTypes,
-        url,
+        siteHost,
         argoUrl,
       });
 

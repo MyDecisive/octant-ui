@@ -47,8 +47,8 @@ export function Settings() {
   const [savedTelemetryTypes, setSavedTelemetryTypes] = useState<
     TelemetryTypes[]
   >([]);
-  const [url, setUrl] = useState("");
-  const [savedUrl, setSavedUrl] = useState("");
+  const [siteHost, setSiteHost] = useState("");
+  const [savedSiteHost, setSavedSiteHost] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [agentUpdateSnippets, setAgentUpdateSnippets] =
     useState<AgentUpdateSnippets | null>(null);
@@ -88,7 +88,7 @@ export function Settings() {
 
   const hasSettingsChanges =
     !telemetryTypesMatch(telemetryTypes, savedTelemetryTypes) ||
-    url.trim() !== savedUrl.trim() ||
+    siteHost.trim() !== savedSiteHost.trim() ||
     (!!apiKey.trim() && !isMaskedValue(apiKey));
   const loading = settingsStatus === "loading";
 
@@ -118,8 +118,8 @@ export function Settings() {
         !!datadogIntegrations?.names.includes(activeConnectionName);
 
       if (hasDatadogIntegration && datadogIntegration?.url) {
-        setUrl(datadogIntegration.url);
-        setSavedUrl(datadogIntegration.url);
+        setSiteHost(datadogIntegration.url);
+        setSavedSiteHost(datadogIntegration.url);
       }
 
       if (hasDatadogIntegration) {
@@ -145,7 +145,9 @@ export function Settings() {
       savedTelemetryTypes,
     );
     const submittedDatadogUrl =
-      url.trim() === savedUrl.trim() ? "" : getSubmittedCollectorValue(url);
+      siteHost.trim() === savedSiteHost.trim()
+        ? ""
+        : getSubmittedCollectorValue(siteHost);
     const submittedDatadogApiKey = getSubmittedCollectorValue(apiKey);
 
     if (telemetryTypesChanged) {
@@ -154,7 +156,7 @@ export function Settings() {
           connectionName,
           namespace,
           telemetryTypes,
-          url: submittedDatadogUrl || url || DATADOG_SITE_PLACEHOLDER,
+          siteHost: submittedDatadogUrl || siteHost || DATADOG_SITE_PLACEHOLDER,
         }),
       );
     }
@@ -173,7 +175,7 @@ export function Settings() {
 
     setSavedTelemetryTypes(telemetryTypes);
     setInConnection("telemetryTypes", toMLTTypes(telemetryTypes));
-    setSavedUrl(url);
+    setSavedSiteHost(siteHost);
     setApiKey(SECRET_VALUE_MASK);
 
     return true;
@@ -218,14 +220,14 @@ export function Settings() {
       <Stack direction={"row"} spacing={3} className="settings-form-container">
         <DeployCollectorForm
           telemetryTypes={telemetryTypes}
-          url={url}
+          siteHost={siteHost}
           apiKey={apiKey}
           connectionName={connectionName}
           onTelemetryTypesChange={setTelemetryTypes}
-          onUrlChange={setUrl}
+          onSiteHostChange={setSiteHost}
           onApiKeyChange={setApiKey}
           apiKeyRequired={false}
-          urlRequired={false}
+          siteHostRequired={false}
           disabled={loading}
           submitEnabled={hasSettingsChanges}
           renderSubmitAction={({ canSubmit, validate }) => (
