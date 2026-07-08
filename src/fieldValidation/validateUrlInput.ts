@@ -1,4 +1,4 @@
-import { URL_INPUT_VALIDATION_ERROR } from "@copy/global";
+import { INPUT_VALIDATION_ERRORS } from "@copy/global";
 
 const protocolRegex = /^[a-z][a-z\d+.-]*:\/\//i;
 const hostnameRegex =
@@ -30,5 +30,5 @@ export function validateUrlInput(value: string) {
     return undefined;
   }
 
-  return URL_INPUT_VALIDATION_ERROR;
+  return INPUT_VALIDATION_ERRORS.URL;
 }

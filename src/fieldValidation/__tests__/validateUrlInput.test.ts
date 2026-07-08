@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { validateUrlInput } from "../validateUrlInput";
-import { URL_INPUT_VALIDATION_ERROR } from "@copy/global";
+import { INPUT_VALIDATION_ERRORS } from "@copy/global";
 
 describe("validateUrlInput", () => {
   describe("valid URLs", () => {
@@ -59,61 +59,63 @@ describe("validateUrlInput", () => {
 
   describe("invalid URLs", () => {
     it("rejects an empty string", () => {
-      expect(validateUrlInput("")).toBe(URL_INPUT_VALIDATION_ERROR);
+      expect(validateUrlInput("")).toBe(INPUT_VALIDATION_ERRORS.URL);
     });
 
     it("rejects whitespace-only input", () => {
-      expect(validateUrlInput("   ")).toBe(URL_INPUT_VALIDATION_ERROR);
+      expect(validateUrlInput("   ")).toBe(INPUT_VALIDATION_ERRORS.URL);
     });
 
     it("rejects a non-http/https protocol", () => {
       expect(validateUrlInput("ftp://www.abc.com")).toBe(
-        URL_INPUT_VALIDATION_ERROR,
+        INPUT_VALIDATION_ERRORS.URL,
       );
     });
 
     it("rejects a mailto link", () => {
       expect(validateUrlInput("mailto:test@abc.com")).toBe(
-        URL_INPUT_VALIDATION_ERROR,
+        INPUT_VALIDATION_ERRORS.URL,
       );
     });
 
     it("rejects a single word without a TLD", () => {
-      expect(validateUrlInput("abc")).toBe(URL_INPUT_VALIDATION_ERROR);
+      expect(validateUrlInput("abc")).toBe(INPUT_VALIDATION_ERRORS.URL);
     });
 
     it("rejects a string with only spaces between words", () => {
-      expect(validateUrlInput("not a url")).toBe(URL_INPUT_VALIDATION_ERROR);
+      expect(validateUrlInput("not a url")).toBe(INPUT_VALIDATION_ERRORS.URL);
     });
 
     it("rejects an IP-less malformed hostname with invalid characters", () => {
       expect(validateUrlInput("http://abc_def.com")).toBe(
-        URL_INPUT_VALIDATION_ERROR,
+        INPUT_VALIDATION_ERRORS.URL,
       );
     });
 
     it("rejects a hostname with a leading hyphen in a label", () => {
       expect(validateUrlInput("http://-abc.com")).toBe(
-        URL_INPUT_VALIDATION_ERROR,
+        INPUT_VALIDATION_ERRORS.URL,
       );
     });
 
     it("rejects a hostname with a trailing hyphen in a label", () => {
       expect(validateUrlInput("http://abc-.com")).toBe(
-        URL_INPUT_VALIDATION_ERROR,
+        INPUT_VALIDATION_ERRORS.URL,
       );
     });
 
     it("rejects a TLD that is a single character", () => {
-      expect(validateUrlInput("http://abc.c")).toBe(URL_INPUT_VALIDATION_ERROR);
+      expect(validateUrlInput("http://abc.c")).toBe(
+        INPUT_VALIDATION_ERRORS.URL,
+      );
     });
 
     it("rejects malformed URLs that throw during construction", () => {
-      expect(validateUrlInput("http://")).toBe(URL_INPUT_VALIDATION_ERROR);
+      expect(validateUrlInput("http://")).toBe(INPUT_VALIDATION_ERRORS.URL);
     });
 
     it("rejects a value with only a protocol separator", () => {
-      expect(validateUrlInput("://")).toBe(URL_INPUT_VALIDATION_ERROR);
+      expect(validateUrlInput("://")).toBe(INPUT_VALIDATION_ERRORS.URL);
     });
   });
 });
