@@ -8,12 +8,12 @@ $text-primary: #ffffff;
 :root {
   --mdai-spacing-unit: 8px;
 
-  --mdai-purple: $purple;
-  --mdai-light-grey: $light-grey;
-  --mdai-grey-700: $grey-700;
-  --mdai-border: $border;
+  --mdai-purple: #{$purple};
+  --mdai-light-grey: #{$light-grey};
+  --mdai-grey-700: #{$grey-700};
+  --mdai-border: #{$border};
 
-  --mdai-text-primary: $text-primary;
+  --mdai-text-primary: #{$text-primary};
 }
 
 @function spacing($multiplier: 1) {
