@@ -23,6 +23,8 @@ export function validateUrlInput(value: string) {
   if (
     url &&
     (url.protocol === "http:" || url.protocol === "https:") &&
+    !url.username &&
+    !url.password &&
     hostnameRegex.test(url.hostname)
   ) {
     return undefined;
