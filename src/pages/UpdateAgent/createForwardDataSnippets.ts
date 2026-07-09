@@ -1,7 +1,7 @@
 import type { TelemetryTypes } from "@app-types/enums";
 interface ForwardDataSnippetOptions {
   connectionName: string;
-  url: string;
+  siteHost: string;
   namespace: string;
   telemetryTypes: TelemetryTypes[];
 }
@@ -127,14 +127,14 @@ const dataTypeToSnippetCreatorsMap = {
 };
 
 function createTheThingsSnippet(
-  url: string,
+  siteHost: string,
   mainSnippet: string,
   envSnippet: string,
 ) {
   return `datadog:
 apiKeyExistingSecret: datadog-secret
 clusterName: <cluster_name>
-site: ${url}
+site: ${siteHost}
 
 kubelet:
   # Useful in dev/test clusters with self-signed kubelet certs.
@@ -161,7 +161,7 @@ dogstatsd:
 }
 
 export function createForwardDataSnippets({
-  url,
+  siteHost,
   telemetryTypes,
 }: ForwardDataSnippetOptions) {
   const { mainSnippets, envSnippets } = telemetryTypes.reduce(
@@ -181,7 +181,7 @@ export function createForwardDataSnippets({
   return {
     locationUrl: `${collectorEndpoint}`,
     code: createTheThingsSnippet(
-      url,
+      siteHost,
       mainSnippets.join("\n\n"),
       envSnippets.join("\n\n"),
     ),

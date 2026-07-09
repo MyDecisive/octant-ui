@@ -14,9 +14,9 @@ import "./ConfigDrawer.css";
 interface ConfigDrawerProps {
   focusedField: string | undefined;
   telemetryTypes: TelemetryTypes[];
-  url?: string;
+  siteHost?: string;
   apiKey?: string;
-  urlPlaceholder?: string;
+  siteHostPlaceholder?: string;
   apiKeyPlaceholder?: string;
   connectionName?: string;
   className?: string;
@@ -25,9 +25,9 @@ interface ConfigDrawerProps {
 export function ConfigDrawer({
   focusedField,
   telemetryTypes,
-  url,
+  siteHost,
   apiKey,
-  urlPlaceholder,
+  siteHostPlaceholder,
   apiKeyPlaceholder,
   connectionName,
   className,
@@ -36,10 +36,10 @@ export function ConfigDrawer({
   const codeContainerRef = useRef<HTMLDivElement>(null);
   const linesForRender = createUpdatedConfigLines(
     telemetryTypes,
-    url,
+    siteHost,
     apiKey,
     connectionName,
-    urlPlaceholder,
+    siteHostPlaceholder,
     apiKeyPlaceholder,
   );
   const codeForCopy = linesForRender.map(([, content]) => content).join("\n");

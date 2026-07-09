@@ -10,7 +10,7 @@ export interface InstallAndConnectFormFields {
   argoUrl?: string;
   accountToken?: string;
   telemetryTypes: TelemetryTypes[];
-  url?: string;
+  siteHost?: string;
   apiKey?: string;
   connectionName?: string;
   mdaiVersion?: string;

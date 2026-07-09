@@ -15,18 +15,18 @@ import { getSubmittedCollectorValue } from "../utils/maskedValues";
 
 export function DeployCollector() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();
-  const { telemetryTypes, url, apiKey, connectionName, namespace } =
+  const { telemetryTypes, siteHost, apiKey, connectionName, namespace } =
     useInstallAndConnectStore(
       useShallow(
         ({
           telemetryTypes,
-          url = "",
+          siteHost = "",
           apiKey = "",
           connectionName,
           namespace,
         }) => ({
           telemetryTypes,
-          url,
+          siteHost,
           apiKey,
           connectionName,
           namespace,
@@ -41,12 +41,12 @@ export function DeployCollector() {
 
   const handleDeployButtonClick = async () => {
     try {
-      const submittedUrl = getSubmittedCollectorValue(url);
+      const submittedSiteHost = getSubmittedCollectorValue(siteHost);
       const submittedApiKey = getSubmittedCollectorValue(apiKey);
 
-      if (submittedUrl && submittedApiKey) {
+      if (submittedSiteHost && submittedApiKey) {
         await dDogServiceClient.saveDatadogIntegration({
-          url: submittedUrl,
+          siteHost: submittedSiteHost,
           apiKey: submittedApiKey,
           name: connectionName,
         });
@@ -75,7 +75,7 @@ export function DeployCollector() {
       });
 
       setOctantState("connection", connection);
-      setPartialState({ telemetryTypes, url, apiKey });
+      setPartialState({ telemetryTypes, siteHost, apiKey });
 
       return true;
     } catch {
@@ -87,13 +87,15 @@ export function DeployCollector() {
   return (
     <DeployCollectorForm
       telemetryTypes={telemetryTypes}
-      url={url}
+      siteHost={siteHost}
       apiKey={apiKey}
       connectionName={connectionName}
       onTelemetryTypesChange={(checked) =>
         setFormField("telemetryTypes", checked)
       }
-      onUrlChange={(nextUrl) => setFormField("url", nextUrl)}
+      onSiteHostChange={(nextSiteHost) =>
+        setFormField("siteHost", nextSiteHost)
+      }
       onApiKeyChange={(nextApiKey) => setFormField("apiKey", nextApiKey)}
       renderSubmitAction={({ canSubmit, validate }) => (
         <AsyncButton

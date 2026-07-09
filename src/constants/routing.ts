@@ -76,7 +76,7 @@ export const INSTALL_AND_CONNECT = [
      *      not present,  redirect to /install/2
      *    if !namespace, check installStatus if error/absent: redirect to /install/3
      */
-    // work: saveDatadogIntegration, createConnection; establish telemetryTypes = [], datadogURL
+    // work: saveDatadogIntegration, createConnection; establish telemetryTypes = [], siteHost
   },
   {
     Component: UpdateAgent,
@@ -85,20 +85,20 @@ export const INSTALL_AND_CONNECT = [
       connectionName,
       namespace,
       telemetryTypes = [],
-      url,
+      siteHost,
     }: Partial<InstallAndConnectFormFields>) =>
       !!connectionName &&
       !!namespace &&
       !!telemetryTypes.length &&
       (telemetryTypes.includes("logs") || telemetryTypes.includes("traces")) &&
-      !!url,
+      !!siteHost,
     /**
      * restrictions:
      *    if !argoAgreement in InstallAndConnectStore, show modal.
      *    if !connectionName in InstallAndConnectStore, check `useResolveConnectionName` if still
      *      not present,  redirect to /install/2
      *    if !namespace, check installStatus if error/absent: redirect to /install/3
-     *    if (!telemetryTypes.length || !datadogUrl) check `getDatadogIntegrations` &
+     *    if (!telemetryTypes.length || !siteHost) check `getDatadogIntegrations` &
      *      `getConnections` if error/absent: redirect to /install/4
      */
   },
@@ -109,20 +109,20 @@ export const INSTALL_AND_CONNECT = [
       connectionName,
       namespace,
       telemetryTypes = [],
-      url,
+      siteHost,
     }: Partial<InstallAndConnectFormFields>) =>
       !!connectionName &&
       !!namespace &&
       !!telemetryTypes.length &&
       (telemetryTypes.includes("logs") || telemetryTypes.includes("traces")) &&
-      !!url,
+      !!siteHost,
     /**
      * restrictions:
      *    if !argoAgreement in InstallAndConnectStore, show modal.
      *    if !connectionName in InstallAndConnectStore, check `useResolveConnectionName` if still
      *      not present,  redirect to /install/2
      *    if !namespace, check installStatus if error/absent: redirect to /install/3
-     *    if (!telemetryTypes.length || !datadogUrl) check `getDatadogIntegrations` &
+     *    if (!telemetryTypes.length || !siteHost) check `getDatadogIntegrations` &
      *      `getConnections` if error/absent: redirect to /install/4
      */
   },
@@ -133,20 +133,20 @@ export const INSTALL_AND_CONNECT = [
       connectionName,
       namespace,
       telemetryTypes = [],
-      url,
+      siteHost,
     }: Partial<InstallAndConnectFormFields>) =>
       !!connectionName &&
       !!namespace &&
       !!telemetryTypes.length &&
       (telemetryTypes.includes("logs") || telemetryTypes.includes("traces")) &&
-      !!url,
+      !!siteHost,
     /**
      * restrictions:
      *    if !argoAgreement in InstallAndConnectStore, show modal.
      *    if !connectionName in InstallAndConnectStore, check `useResolveConnectionName` if still
      *      not present,  redirect to /install/2
      *    if !namespace, check installStatus if error/absent: redirect to /install/3
-     *    if (!telemetryTypes.length || !datadogUrl) check `getDatadogIntegrations` &
+     *    if (!telemetryTypes.length || !siteHost) check `getDatadogIntegrations` &
      *      `getConnections` if error/absent: redirect to /install/4
      */
   },

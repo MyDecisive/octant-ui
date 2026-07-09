@@ -103,14 +103,14 @@ function createInitialCollectorConfig(): OpenTelemetryCollector {
 
 function createUpToDateConfigYaml(
   telemetryTypes: TelemetryTypes[],
-  url: string | undefined,
+  siteHost: string | undefined,
   apiKey: string | undefined,
   connectionName: string | undefined,
-  urlPlaceholder: string | undefined,
+  siteHostPlaceholder: string | undefined,
   apiKeyPlaceholder: string | undefined,
 ) {
   const configObject = createInitialCollectorConfig();
-  const urlForRender = url || urlPlaceholder;
+  const siteHostForRender = siteHost || siteHostPlaceholder;
   const apiKeyForRender = apiKey || apiKeyPlaceholder;
 
   const newPipelines = telemetryTypes.reduce<
@@ -126,8 +126,8 @@ function createUpToDateConfigYaml(
 
   configObject.spec.config.service.pipelines = newPipelines;
 
-  if (urlForRender) {
-    configObject.spec.config.exporters.datadog.api.site = urlForRender;
+  if (siteHostForRender) {
+    configObject.spec.config.exporters.datadog.api.site = siteHostForRender;
   }
 
   if (apiKeyForRender) {
@@ -171,18 +171,18 @@ function configObjectToLinesForRender(configObject: OpenTelemetryCollector) {
 
 export function createUpdatedConfigLines(
   telemetryTypes: TelemetryTypes[],
-  url: string | undefined,
+  siteHost: string | undefined,
   apiKey: string | undefined,
   connectionName: string | undefined,
-  urlPlaceholder?: string,
+  siteHostPlaceholder?: string,
   apiKeyPlaceholder?: string,
 ) {
   const configObject = createUpToDateConfigYaml(
     telemetryTypes,
-    url,
+    siteHost,
     apiKey,
     connectionName,
-    urlPlaceholder,
+    siteHostPlaceholder,
     apiKeyPlaceholder,
   );
   const updatedLinesForRender = configObjectToLinesForRender(configObject);
@@ -192,7 +192,7 @@ export function createUpdatedConfigLines(
 
 export const formKeyToConfigKeyMap = {
   telemetryTypes: "pipelines",
-  url: "site",
+  siteHost: "site",
   apiKey: "key",
   connectionName: "name",
 };

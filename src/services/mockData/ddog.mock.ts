@@ -42,7 +42,7 @@ export const mockTransport = createRouterTransport(({ service }) => {
     saveDatadogIntegration: (request) => {
       console.log("DatadogService.saveDatadogIntegration", request);
       if (request.name) {
-        integrations.set(request.name, { url: request.url });
+        integrations.set(request.name, { url: request.siteHost });
       }
       return {};
     },

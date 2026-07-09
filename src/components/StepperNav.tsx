@@ -19,13 +19,13 @@ export function StepperNav() {
         namespace,
         telemetryTypes,
         lastCompletedStep,
-        url,
+        siteHost,
       }) => ({
         connectionName,
         namespace,
         telemetryTypes,
         lastCompletedStep,
-        url,
+        siteHost,
       }),
     ),
   );
