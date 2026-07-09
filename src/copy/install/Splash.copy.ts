@@ -27,13 +27,13 @@ export const DemoSplashCopy = {
   header: "Welcome to Octant UI Demo",
   // SS-02
   subheader:
-    "This is a backless demo, it will walk you through the ux of octant.",
+    "This is a backless demo. It will walk you through the ux of Octant. In your environment, Octant would generate and manage the full lifecycle of the SmartHub platform for you.",
   // SS-03
   rocket: "See how you'd connect your cluster.",
   // SS-04
   gear: "See how you'd deploy SmartHub.",
   // SS-05
-  wire: "Watch how you'd route your data.",
+  wire: "Watch how you would take control over your data and spend.",
   // SS-06
   cta: "Try it now",
 } satisfies SplashConfig;
