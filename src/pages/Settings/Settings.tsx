@@ -15,7 +15,7 @@ import { useOctantStore } from "@store/octantStore";
 import { useSettingsStore } from "@store/settingsStore";
 import { fromMLTTypes } from "@utils/fromMltTypes";
 import { getSubmittedCollectorValue, isMaskedValue } from "@utils/maskedValues";
-import { toMLTTypes } from "@utils/toMltTypes";
+import { toMLTTypes } from "@utils/toMLTTypes";
 import { useFetchManifestsAndDownload } from "@utils/useFetchManifestsAndDownload";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";

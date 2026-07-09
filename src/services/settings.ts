@@ -4,7 +4,7 @@ import {
   SettingService,
   UpdateResponse_Status,
 } from "@mydecisiveai/octant-client";
-import { toMLTTypes } from "@utils/toMltTypes";
+import { toMLTTypes } from "@utils/toMLTTypes";
 import { mockTransport } from "./mockData/settings.mock";
 import { transport } from "./transport";
 
