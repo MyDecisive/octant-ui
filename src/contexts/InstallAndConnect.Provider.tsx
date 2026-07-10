@@ -6,7 +6,7 @@ import {
   type InstallAndConnectFormFields,
 } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
-import { fromMLTTypes } from "@utils/fromMltTypes";
+import { fromMLTTypes } from "@utils/fromMLTTypes";
 import { type PropsWithChildren, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { InstallAndConnectContext } from "./InstallAndConnect";

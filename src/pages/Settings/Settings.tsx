@@ -13,7 +13,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useOctantStore } from "@store/octantStore";
 import { useSettingsStore } from "@store/settingsStore";
-import { fromMLTTypes } from "@utils/fromMltTypes";
+import { fromMLTTypes } from "@utils/fromMLTTypes";
 import { getSubmittedCollectorValue, isMaskedValue } from "@utils/maskedValues";
 import { toMLTTypes } from "@utils/toMLTTypes";
 import { useFetchManifestsAndDownload } from "@utils/useFetchManifestsAndDownload";
