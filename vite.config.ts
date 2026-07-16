@@ -1,13 +1,28 @@
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import path from "path";
+import type { Plugin } from 'vite';
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
+
+function googleAnalytics(): Plugin {
+  return {
+    name: 'google-analytics',
+    transformIndexHtml() {
+      const id = process.env.VITE_GOOGLE_ANALYTICS_KEY
+      if (!id) return []
+      return [
+        { tag: 'script', attrs: { async: true, src: `https://www.googletagmanager.com/gtag/js?id=${id}` }, injectTo: 'head' },
+        { tag: 'script', children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${id}');`, injectTo: 'head' },
+      ]
+    },
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [react(), babel({ presets: [reactCompilerPreset()] }), svgr()],
+    plugins: [react(), babel({ presets: [reactCompilerPreset()] }), googleAnalytics(), svgr()],
     base: mode == "ghpages" ? "/octant-ui" : "/",
     publicDir: "public",
     build: {
