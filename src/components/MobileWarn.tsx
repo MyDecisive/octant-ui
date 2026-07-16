@@ -9,8 +9,7 @@ export function MobileWarn() {
   if (!matches || dismissed) { return <></> }
 
   return <Alert
-    title="Octant is intended for desktop use"
-    description="Octant is not optimized for use on mobile devices. Please check us out on a bigger screen!"
+    description="We are currently optimizing our mobile experience. In the meantime, please view on a larger screen for the best experience."
     severity="error"
     onClose={() => setDismissed(true)} />
 }
