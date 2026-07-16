@@ -1,5 +1,6 @@
 import { FullscreenLoader } from "@components/FullscreenLoader";
 import { FlowLayout } from "@components/layout/FlowLayout";
+import { MobileWarn } from "@components/MobileWarn";
 import { StepperNav } from "@components/StepperNav";
 import { useInitOctant } from "@utils/initialization/useInitOctant";
 import { Redirect, Route, Switch } from "wouter";
@@ -17,6 +18,8 @@ import { Settings } from "./pages/Settings/Settings";
 import { SettingsUpdateToasts } from "./pages/Settings/SettingsUpdateToasts";
 import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
+
+
 function App() {
   const initializing = useInitOctant();
 
@@ -26,6 +29,7 @@ function App() {
 
   return (
     <>
+      <MobileWarn />
       <Switch>
         <Route path={FLOW_ROUTES}>
           <Switch>
