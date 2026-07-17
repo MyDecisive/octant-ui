@@ -51,7 +51,23 @@ export function Splash() {
             {copy.header}
           </Stack>
         }
-        description={copy.subheader}
+        description={
+          isDemo ? (
+            <Stack className="splash-demo-description" gap={2}>
+              {Array.isArray(copy.subheader) &&
+                copy.subheader.map((paragraph, index) => (
+                  <Typography
+                    key={`splash-demo-description-${index}`}
+                    variant="body1"
+                  >
+                    {paragraph}
+                  </Typography>
+                ))}
+            </Stack>
+          ) : (
+            copy.subheader
+          )
+        }
       />
       <Stack direction="column" gap={2}>
         {ROWS.map(({ Icon, text }, index) => (

@@ -8,6 +8,13 @@
   align-self: flex-start;
 }
 
+.splash-demo-description.MuiStack-root {
+  border: 1px solid var(--mdai-purple);
+  border-radius: 8px;
+  background: var(--mdai-light-purple);
+  padding: calc(var(--mdai-spacing-unit) * 2);
+}
+
 img.octobuddy-logo {
   height: 30px;
 }
