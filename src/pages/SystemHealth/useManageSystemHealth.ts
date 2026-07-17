@@ -3,11 +3,11 @@ import { ASYNC_STATUS } from "@constants/enums";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
 import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
-import { formatLastRun } from "@utils/formatTimestamp";
 import { useConnectionValidation } from "@utils/useConnectionValidation";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
+import { lastRun } from "@copy/global";
 
 function smarthubStatusToHealthWidgetProps(
   installed: boolean | null,
@@ -74,7 +74,7 @@ export function useManageSystemHealth() {
     await Promise.all([verifyInstall(connectionName), revalidateConnection()]);
   }, [connectionName, revalidateConnection, verifyInstall]);
 
-  const displayTimestamp = useMemo(() => formatLastRun(timestamp), [timestamp]);
+  const displayTimestamp = useMemo(() => lastRun(timestamp), [timestamp]);
 
   const healthWidgetProps = useMemo(
     () => ({
