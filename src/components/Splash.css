@@ -9,9 +9,9 @@
 }
 
 .splash-demo-description.MuiStack-root {
-  border: 1px solid #9c27b0;
+  border: 1px solid var(--mdai-purple);
   border-radius: 8px;
-  background: rgba(156, 39, 176, 0.12);
+  background: var(--mdai-light-purple);
   padding: calc(var(--mdai-spacing-unit) * 2);
 }
 

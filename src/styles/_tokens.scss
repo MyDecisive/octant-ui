@@ -1,4 +1,5 @@
 $purple: #8e24aa;
+$light-purple: #f3e5f5;
 $light-grey: #ededed;
 $grey-700: #616161;
 $border: #0000003b;
@@ -9,6 +10,7 @@ $text-primary: #ffffff;
   --mdai-spacing-unit: 8px;
 
   --mdai-purple: #{$purple};
+  --mdai-light-purple: #{$light-purple};
   --mdai-light-grey: #{$light-grey};
   --mdai-grey-700: #{$grey-700};
   --mdai-border: #{$border};
