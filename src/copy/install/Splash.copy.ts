@@ -1,6 +1,6 @@
 type SplashConfig = {
   header: string;
-  subheader: string;
+  subheader: string | string[];
   rocket: string;
   gear: string;
   wire: string;
@@ -26,8 +26,10 @@ export const DemoSplashCopy = {
   // SS-01
   header: "Welcome to Octant UI Demo",
   // SS-02
-  subheader:
-    "This is a backless demo. It will walk you through the ux of Octant. In your environment, Octant would generate and manage the full lifecycle of the SmartHub platform for you.",
+  subheader: [
+    "This is a risk-free demo. It will walk you through the UX of Octant without touching your cluster.",
+    "In your environment, Octant would generate and manage the full lifecycle of the SmartHub platform for you.",
+  ],
   // SS-03
   rocket: "See how you'd connect your cluster.",
   // SS-04
