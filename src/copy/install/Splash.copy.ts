@@ -31,9 +31,9 @@ export const DemoSplashCopy = {
     "In your environment, Octant would generate and manage the full lifecycle of the SmartHub platform for you.",
   ],
   // SS-03
-  rocket: "See how you'd connect your cluster.",
+  rocket: "See how to connect your cluster.",
   // SS-04
-  gear: "See how you'd deploy SmartHub.",
+  gear: "See how to deploy SmartHub.",
   // SS-05
   wire: "Watch how you would take control over your data and spend.",
   // SS-06
