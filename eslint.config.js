@@ -26,6 +26,15 @@ export default defineConfig([
       "perfectionist/sort-exports": "off",
       "perfectionist/sort-named-exports": "off",
       "perfectionist/sort-modules": "off",
+      // TODO: remove these "warn" rules after autofixing the code base
+      "perfectionist/sort-objects": "warn",
+      "perfectionist/sort-object-types": "warn",
+      "perfectionist/sort-union-types": "warn",
+      "perfectionist/sort-interfaces": "warn",
+      "perfectionist/sort-intersection-types": "warn",
+      "perfectionist/sort-switch-case": "warn",
+      "perfectionist/sort-array-includes": "warn",
+      "perfectionist/sort-jsx-props": "warn",
     },
     languageOptions: {
       ecmaVersion: 2020,
