@@ -18,8 +18,6 @@ import { Settings } from "./pages/Settings/Settings";
 import { SettingsUpdateToasts } from "./pages/Settings/SettingsUpdateToasts";
 import { SystemHealthPage } from "./pages/SystemHealth/SystemHealth";
 
-
-
 function App() {
   const initializing = useInitOctant();
 
@@ -35,14 +33,14 @@ function App() {
           <Switch>
             <InstallAndConnectProvider>
               <FlowLayout>
-                <Route path={ROUTES.SPLASH} component={Splash} />
-                <Route path={ROUTES.INSTALL_STEP} component={StepperNav} />
+                <Route component={Splash} path={ROUTES.SPLASH} />
+                <Route component={StepperNav} path={ROUTES.INSTALL_STEP} />
                 {INSTALL_AND_CONNECT.map(({ Component, path }, index) => {
                   return (
                     <Route
+                      component={Component}
                       key={`flow-step-${index.toLocaleString()}`}
                       path={path}
-                      component={Component}
                     />
                   );
                 })}
@@ -61,8 +59,8 @@ function App() {
                 <ClarityPage />
               </ClarityProvider>
             </Route>
-            <Route path={ROUTES.SYSTEMHEALTH} component={SystemHealthPage} />
-            <Route path={ROUTES.SETTINGS} component={Settings} />
+            <Route component={SystemHealthPage} path={ROUTES.SYSTEMHEALTH} />
+            <Route component={Settings} path={ROUTES.SETTINGS} />
             <Redirect to={ROUTES.ERROR} />
           </Switch>
         </Route>
