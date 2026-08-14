@@ -5,7 +5,7 @@ import {
   DeploymentType,
   ManifestOutFormat,
 } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
-import { toMLTTypes } from "@utils/toMltTypes";
+import { toMLTTypes } from "@utils/toMLTTypes";
 import { connectionServiceClient } from "../services/connection";
 
 function getManifestBlobPart(data: Uint8Array | string) {
