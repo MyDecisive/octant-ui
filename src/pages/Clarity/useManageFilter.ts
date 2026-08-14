@@ -5,7 +5,7 @@ import {
   type GetFilterResponse,
 } from "@mydecisiveai/octant-client";
 import { useClarityStore, type ClarityState } from "@store/clarity/store";
-import { toFilterType } from "@utils/toFilterTypes";
+import { toFilterType } from "@utils/toFilterType";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { filterServiceClient } from "../../services/filter";

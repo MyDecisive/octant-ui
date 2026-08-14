@@ -4,7 +4,7 @@ import { IntegrationType } from "@mydecisiveai/octant-client";
 import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/type_pb";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
-import { toMLTTypes } from "@utils/toMltTypes";
+import { toMLTTypes } from "@utils/toMLTTypes";
 import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../components/DeployCollectorForm";
