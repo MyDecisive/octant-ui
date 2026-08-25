@@ -5,6 +5,7 @@ import {
   MLTType,
   UpdateFilterResponse_Status,
 } from "@mydecisiveai/octant-client";
+import { delay } from "@utils/delay";
 import { getMockConnectionTelemetryTypes } from "./connection.mock";
 
 function filterTypeIsConfigured(connectionName: string, type: FilterType) {
@@ -42,11 +43,11 @@ export const mockTransport = createRouterTransport(({ service }) => {
     },
     updateFilter: async function* (...args) {
       console.log("FilterService.updateFilter ", args);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await delay(1000);
       yield { status: UpdateFilterResponse_Status.VALUE_UPDATED };
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await delay(1000);
       yield { status: UpdateFilterResponse_Status.WAIT_PROPAGATION };
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await delay(1000);
       yield { status: UpdateFilterResponse_Status.COMPLETED };
     },
   });

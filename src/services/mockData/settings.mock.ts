@@ -3,11 +3,8 @@ import {
   SettingService,
   UpdateResponse_Status,
 } from "@mydecisiveai/octant-client";
+import { delay } from "@utils/delay";
 import { setMockConnectionTelemetryTypes } from "./connection.mock";
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 export const mockTransport = createRouterTransport(({ service }) => {
   service(SettingService, {

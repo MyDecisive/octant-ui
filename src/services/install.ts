@@ -4,6 +4,7 @@ import {
   InstallStatus,
   type GetInstallStatusResponse,
 } from "@mydecisiveai/octant-client";
+import { delay } from "@utils/delay";
 import { transport } from "./transport";
 
 const mockTransport = createRouterTransport(({ service }) => {
@@ -14,11 +15,11 @@ const mockTransport = createRouterTransport(({ service }) => {
     },
     getInstallStatus: async function* (...args) {
       console.log("InstallService.getInstallStatus", args);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await delay(1000);
       yield { installStatus: InstallStatus.INSTALLING, details: [] };
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await delay(1000);
       yield { installStatus: InstallStatus.INSTALLING, details: [] };
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await delay(1000);
       yield { installStatus: InstallStatus.INSTALLED, details: [] };
     },
   });
