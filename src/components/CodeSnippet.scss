@@ -2,37 +2,42 @@
 
 .code-snippet-container {
   position: relative;
-  color: $text-primary;
-  border-radius: spacing();
-  background: #454545;
+
   overflow: scroll;
   align-items: flex-start;
-  max-height: 100vh;
+
   min-width: 0;
+  max-height: 100vh;
   padding: spacing();
+  border-radius: spacing();
+
   font-size: 0.75rem;
+  color: $text-primary;
+
+  background: #454545;
 }
 
 .code-snippet-container .copy-button.MuiIconButton-root {
   position: absolute;
+  z-index: 1;
   top: spacing();
   right: spacing();
-  z-index: 1;
 }
 
 .code-snippet-content {
+  scrollbar-width: none;
+
+  overflow: auto;
+
   width: 100%;
-  max-height: 100%;
   min-width: 0;
   min-height: 0;
-  overflow-x: auto;
-  overflow-y: auto;
-  scrollbar-width: none;
+  max-height: 100%;
 }
 
 .code-snippet-content:hover {
+  scrollbar-color: rgb(255 255 255 / 45%) transparent;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.45) transparent;
 }
 
 .code-snippet-content pre {
@@ -40,7 +45,7 @@
 }
 
 .code-snippet-copy-button .MuiTypography-root {
+  line-height: 1;
   color: $light-grey;
   white-space: nowrap;
-  line-height: 1;
 }
