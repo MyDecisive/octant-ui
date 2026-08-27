@@ -1,3 +1,5 @@
+import { INPUT_VALIDATION_ERRORS } from "@copy/global";
+
 const protocolRegex = /^[a-z][a-z\d+.-]*:\/\//i;
 const hostnameRegex =
   /^(localhost|(?:[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?\.)+[a-z]{2,63})$/i;
@@ -21,10 +23,12 @@ export function validateUrlInput(value: string) {
   if (
     url &&
     (url.protocol === "http:" || url.protocol === "https:") &&
+    !url.username &&
+    !url.password &&
     hostnameRegex.test(url.hostname)
   ) {
     return undefined;
   }
 
-  return "Enter a valid URL. Expected format: http://www.abc.com or localhost:8080";
+  return INPUT_VALIDATION_ERRORS.URL;
 }

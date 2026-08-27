@@ -30,10 +30,10 @@ npm run lint
 - Components used in multiple places should be located in `src/components/`
 - Components only used by a single flow should be in that flow's subdirectory in `src/flows/`. See existing file structure for examples.
 
-### CSS
+### Styling
 
-- Scope styles to their component to avoid unintended side effects. Component style files should be named to match the component they apply to. See existing css files for examples.
-- Prefer CSS custom properties (variables) for colors, spacing, and typography to maintain consistency.
+- Scope styles to their component to avoid unintended side effects. Component style files should be named to match the component they apply to. See existing style files for examples.
+- Prefer SCSS custom properties (variables) for colors, spacing, and typography to maintain consistency.
 - Avoid inline styles
 - Class names should be descriptive and follow a consistent convention.
 
