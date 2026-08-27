@@ -53,6 +53,7 @@ export default defineConfig(({ mode }) => {
         "@constants": path.resolve(__dirname, "./src/constants"),
         "@copy": path.resolve(__dirname, "./src/copy"),
         "@fieldValidation": path.resolve(__dirname, "./src/fieldValidation"),
+        "@hooks": path.resolve(__dirname, "./src/hooks"),
         "@services": path.resolve(__dirname, "./src/services"),
         "@store": path.resolve(__dirname, "./src/store"),
         "@app-types": path.resolve(__dirname, "./src/types"),

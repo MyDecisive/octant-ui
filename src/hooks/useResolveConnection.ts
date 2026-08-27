@@ -2,7 +2,7 @@ import { ConnectError } from "@connectrpc/connect";
 import { useOctantStore } from "@store/octantStore";
 import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { connectionServiceClient } from "../../services/connection";
+import { connectionServiceClient } from "@services/connection";
 import type { AsyncStatus } from "@app-types/enums";
 import { ASYNC_STATUS } from "@constants/enums";
 

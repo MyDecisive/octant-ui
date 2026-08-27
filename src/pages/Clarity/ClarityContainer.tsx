@@ -2,7 +2,7 @@ import { FullscreenLoader } from "@components/FullscreenLoader";
 import { PageContainer } from "@components/layout/PageContainer";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
-import { useInitClarity } from "@utils/initialization/useInitClarity";
+import { useInitClarity } from "@hooks/useInitClarity";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/routing";
 

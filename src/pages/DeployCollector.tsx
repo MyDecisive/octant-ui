@@ -5,7 +5,7 @@ import { DeploymentType } from "@mydecisiveai/octant-client/dist/octant/v1alpha/
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useOctantStore } from "@store/octantStore";
 import { toMLTTypes } from "@utils/toMLTTypes";
-import { useAdvanceInstallAndConnect } from "@utils/useAdvanceInstallAndConnect";
+import { useAdvanceInstallAndConnect } from "../hooks/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../components/DeployCollectorForm";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
@@ -15,21 +15,21 @@ import { getSubmittedCollectorValue } from "../utils/maskedValues";
 
 export function DeployCollector() {
   const advanceInstallFlow = useAdvanceInstallAndConnect();
-  const { telemetryTypes, siteHost, apiKey, connectionName, namespace } =
+  const { apiKey, connectionName, namespace, siteHost, telemetryTypes } =
     useInstallAndConnectStore(
       useShallow(
         ({
-          telemetryTypes,
-          siteHost = "",
           apiKey = "",
           connectionName,
           namespace,
-        }) => ({
+          siteHost = "",
           telemetryTypes,
-          siteHost,
+        }) => ({
           apiKey,
           connectionName,
           namespace,
+          siteHost,
+          telemetryTypes,
         }),
       ),
     );
@@ -46,28 +46,28 @@ export function DeployCollector() {
 
       if (submittedSiteHost && submittedApiKey) {
         await dDogServiceClient.saveDatadogIntegration({
-          siteHost: submittedSiteHost,
           apiKey: submittedApiKey,
           name: connectionName,
+          siteHost: submittedSiteHost,
         });
       }
 
       const connection: UIConnectionData = {
+        deployment: {
+          integrationName: connectionName!,
+          type: DeploymentType.ARGO_SIDELOAD,
+        },
+        destinations: [
+          {
+            integrationName: connectionName!,
+            type: IntegrationType.DATADOG,
+          },
+        ],
         scope: {
           connectionName: connectionName!,
           namespace: namespace!,
         },
         telemetryTypes: toMLTTypes(telemetryTypes),
-        deployment: {
-          type: DeploymentType.ARGO_SIDELOAD,
-          integrationName: connectionName!,
-        },
-        destinations: [
-          {
-            type: IntegrationType.DATADOG,
-            integrationName: connectionName!,
-          },
-        ],
       };
 
       await connectionServiceClient.createConnection({
@@ -75,7 +75,7 @@ export function DeployCollector() {
       });
 
       setOctantState("connection", connection);
-      setPartialState({ telemetryTypes, siteHost, apiKey });
+      setPartialState({ apiKey, siteHost, telemetryTypes });
 
       return true;
     } catch {
@@ -86,17 +86,15 @@ export function DeployCollector() {
 
   return (
     <DeployCollectorForm
-      telemetryTypes={telemetryTypes}
-      siteHost={siteHost}
       apiKey={apiKey}
       connectionName={connectionName}
-      onTelemetryTypesChange={(checked) =>
-        setFormField("telemetryTypes", checked)
-      }
+      onApiKeyChange={(nextApiKey) => setFormField("apiKey", nextApiKey)}
       onSiteHostChange={(nextSiteHost) =>
         setFormField("siteHost", nextSiteHost)
       }
-      onApiKeyChange={(nextApiKey) => setFormField("apiKey", nextApiKey)}
+      onTelemetryTypesChange={(checked) =>
+        setFormField("telemetryTypes", checked)
+      }
       renderSubmitAction={({ canSubmit, validate }) => (
         <AsyncButton
           asyncFunction={() => {
@@ -104,11 +102,13 @@ export function DeployCollector() {
             return handleDeployButtonClick();
           }}
           canAsync={canSubmit}
-          text={copy.cta.initial}
           loadingText={copy.cta.activated}
           onSuccess={advanceInstallFlow}
+          text={copy.cta.initial}
         />
       )}
+      siteHost={siteHost}
+      telemetryTypes={telemetryTypes}
     />
   );
 }

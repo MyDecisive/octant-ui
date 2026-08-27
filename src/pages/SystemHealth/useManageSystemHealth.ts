@@ -3,7 +3,7 @@ import { ASYNC_STATUS } from "@constants/enums";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import { useOctantStore } from "@store/octantStore";
 import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
-import { useConnectionValidation } from "@utils/useConnectionValidation";
+import { useConnectionValidation } from "../../hooks/useConnectionValidation";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
@@ -23,18 +23,18 @@ function smarthubStatusToHealthWidgetProps(
 
   if (installed === false) {
     return {
-      status: "error",
       fix: {
-        label: "How to fix",
-        description:
-          "SmartHub could not be detected in the configured cluster. Review the installation steps and cluster configuration.",
         actions: [
           {
-            text: "See Docs",
             href: "https://docs.mydecisive.ai/",
+            text: "See Docs",
           },
         ],
+        description:
+          "SmartHub could not be detected in the configured cluster. Review the installation steps and cluster configuration.",
+        label: "How to fix",
       },
+      status: "error",
     };
   }
 
@@ -78,11 +78,11 @@ export function useManageSystemHealth() {
 
   const healthWidgetProps = useMemo(
     () => ({
-      title: copy.connection,
       timestamp: displayTimestamp,
+      title: copy.connection,
       ...connectionStatusToHealthWidgetProps({
-        loading,
         connectionStatus,
+        loading,
         preferLoading: true,
       }),
     }),
@@ -91,9 +91,9 @@ export function useManageSystemHealth() {
 
   const smarthubWidgetProps = useMemo(
     () => ({
-      title: "SmartHub Infrastructure",
-      timestamp: displayTimestamp,
       simple: true,
+      timestamp: displayTimestamp,
+      title: "SmartHub Infrastructure",
       ...smarthubStatusToHealthWidgetProps(hubInstalled ?? null, hubLoading),
     }),
     [displayTimestamp, hubInstalled, hubLoading],

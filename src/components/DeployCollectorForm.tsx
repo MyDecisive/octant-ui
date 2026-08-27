@@ -9,7 +9,7 @@ import { ViewTitle } from "@components/ViewTitle";
 import Typography from "@mui/material/Typography";
 import { useState, type ReactNode } from "react";
 import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
-import { useFormValidation } from "../fieldValidation/useFormValidation";
+import { useFormValidation } from "../hooks/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";
 import { validateTelemetryTypesSelection } from "../fieldValidation/validateTelemetryTypesSelection";
 import { validateUrlInput } from "../fieldValidation/validateUrlInput";
