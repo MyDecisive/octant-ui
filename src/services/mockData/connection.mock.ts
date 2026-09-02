@@ -7,6 +7,7 @@ import {
   IntegrationType,
   MLTType,
 } from "@mydecisiveai/octant-client";
+import { delay } from "@utils/delay";
 
 type MockConnectionData = MessageInitShape<typeof ConnectionDataSchema>;
 
@@ -129,7 +130,7 @@ export const mockTransport = createRouterTransport(({ service }) => {
     },
     generateManifests: async function* (...args) {
       console.log("ConnectionService.generateManifests", args);
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await delay(500);
       const mockContent = new TextEncoder().encode("mock-manifest-content");
       yield {
         data: mockContent,
