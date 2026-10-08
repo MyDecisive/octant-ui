@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(npx eslint *)",
+      "Bash(npx stylelint *)",
+      "Bash(npx prettier *)",
+      "Bash(npx tsc -b)",
+      "Bash(npx vitest run *)"
+    ],
+    "ask": [
+      "Bash(npm install*)",
+      "Bash(npm i *)",
+      "Bash(npm ci*)",
+      "Bash(npm uninstall *)",
+      "Bash(npm update*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push*)",
+      "Bash(git pull*)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git branch *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(git reset *)",
+      "Bash(git restore *)",
+      "Bash(git stash*)",
+      "Bash(git clean *)",
+      "Bash(git rm *)",
+      "Bash(git mv *)",
+      "Bash(git tag *)",
+      "Bash(rm *)",
+      "Bash(npm run build*)",
+      "Bash(npm run docker-build*)",
+      "Bash(npm run predeploy*)",
+      "Bash(npm run deploy*)",
+      "Bash(npm run local-all*)",
+      "Bash(npx vite build*)"
+    ],
+    "deny": [
+      "Edit(/.env)",
+      "Edit(/dist/**)",
+      "Edit(/deployment/**)",
+      "Edit(/storybook-static/**)",
+      "Edit(/.github/**)",
+      "Edit(/.storybook/**)",
+      "Edit(/demo/**)",
+      "Edit(/Makefile)",
+      "Edit(/Dockerfile)",
+      "Edit(/LICENSE)",
+      "Edit(/node_modules/**)"
+    ]
+  }
+}
