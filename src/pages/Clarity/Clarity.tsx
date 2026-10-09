@@ -8,7 +8,7 @@ import { useClarityStore } from "@store/clarity/store";
 import { timeframeLabels } from "@utils/timeframeToPickerOptions";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
+import { ClarityCopy as cc } from "@copy/Clarity/Clarity.copy";
 import "./Clarity.css";
 import { ClarityTabs } from "./ClarityTabs";
 import { summaryColumns } from "./constants";

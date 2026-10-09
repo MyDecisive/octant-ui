@@ -20,7 +20,7 @@ import { useFetchManifestsAndDownload } from "../../hooks/useFetchManifestsAndDo
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../../components/DeployCollectorForm";
-import { SettingsCopy as copy } from "../../copy/settings/Settings.copy";
+import { SettingsCopy as copy } from "@copy/Settings/Settings.copy";
 import { dDogServiceClient } from "../../services/ddog";
 import { createForwardDataSnippets } from "../UpdateAgent/createForwardDataSnippets";
 import "./Settings.css";

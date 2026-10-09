@@ -15,7 +15,7 @@ import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useAdvanceInstallAndConnect } from "../hooks/useAdvanceInstallAndConnect";
 import { useState } from "react";
 import { ERROR_MODAL_ACT, ERROR_SEVERITY } from "../constants/enums";
-import { SmarthubCopy as copy } from "../copy/install/SetupSmarthub.copy";
+import { SmarthubCopy as copy } from "@copy/SetupSmarthub.copy";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { validateRequired } from "../fieldValidation/validateRequired";
 import { installServiceClient } from "../services/install";

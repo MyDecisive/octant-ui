@@ -7,6 +7,7 @@ type DeployArgoConfig = {
   ctaAlt: string;
 };
 
+// TODO: [copy] rename export to match the file and page name, e.g. ArgoInstallCopy
 export const DeployArgoCopy = {
   // IC1-01
   header: "Deploy via ArgoCD",

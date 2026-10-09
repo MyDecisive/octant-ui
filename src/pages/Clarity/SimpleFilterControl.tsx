@@ -1,7 +1,7 @@
 import type { UIFilterType } from "@app-types/enums";
 import { FILTER_TYPES } from "@constants/enums";
 import { UNITS_BY_DATA_TYPE } from "@copy/global";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
+import { ClarityCopy } from "@copy/Clarity/Clarity.copy";
 import { RatioFilterControl } from "./RatioFilterControl/RatioFilterControl";
 import { RatioFilterControlEmptyState } from "./RatioFilterControl/RatioFilterControlEmptyState";
 import { useManageFilter } from "./useManageFilter";

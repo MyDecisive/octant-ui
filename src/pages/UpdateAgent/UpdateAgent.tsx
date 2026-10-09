@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
-import { UpdateAgentCopy as copy } from "../../copy/install/UpdateAgent.copy";
+import { UpdateAgentCopy as copy } from "@copy/UpdateAgent/UpdateAgent.copy";
 import { createForwardDataSnippets } from "./createForwardDataSnippets";
 
 export function UpdateAgent() {

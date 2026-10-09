@@ -8,7 +8,7 @@ import {
   TimeframeStatusResponse_Code,
   type TimeframeStatusResponse_Status,
 } from "@mydecisiveai/octant-client";
-import { ClarityCopy as cc } from "../../copy/clarity/Clarity.copy";
+import { ClarityCopy as cc } from "@copy/Clarity/Clarity.copy";
 
 function makeStatus(
   timeframe: Timeframe,

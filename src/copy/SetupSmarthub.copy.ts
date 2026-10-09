@@ -63,6 +63,7 @@ const installErrorModal: ErrorModalContent = {
   showNetworkError: true,
 };
 
+// TODO: [copy] rename export to match the file and page name, e.g. SetupSmarthubCopy
 export const SmarthubCopy = {
   // IC3-01
   header: "Deploy SmartHub",

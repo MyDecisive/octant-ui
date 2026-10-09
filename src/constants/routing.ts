@@ -1,4 +1,5 @@
 import type { InstallAndConnectFormFields } from "@store/installAndConnectStore";
+// TODO: add a `@pages` alias (vite.config.ts, tsconfig.app.json, .prettierrc) and use it for these imports
 import { ArgoInstall } from "../pages/ArgoInstall";
 import { ConnectToCluster } from "../pages/ConnectToCluster";
 import { DeployCollector } from "../pages/DeployCollector";

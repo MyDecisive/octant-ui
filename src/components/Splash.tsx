@@ -12,7 +12,7 @@ import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
 import Octobuddy from "../assets/logo.svg?react";
 import { ROUTES } from "../constants/routing";
-import { DemoSplashCopy, SplashCopy } from "../copy/install/Splash.copy";
+import { DemoSplashCopy, SplashCopy } from "@copy/Splash.copy";
 import "./Splash.css";
 
 const copy = isDemo ? DemoSplashCopy : SplashCopy;

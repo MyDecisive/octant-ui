@@ -8,7 +8,7 @@ import { toMLTTypes } from "@utils/toMLTTypes";
 import { useAdvanceInstallAndConnect } from "../hooks/useAdvanceInstallAndConnect";
 import { useShallow } from "zustand/shallow";
 import { DeployCollectorForm } from "../components/DeployCollectorForm";
-import { DeployCollectorCopy as copy } from "../copy/install/DeployCollector.copy";
+import { DeployCollectorCopy as copy } from "@copy/DeployCollector.copy";
 import { connectionServiceClient } from "../services/connection";
 import { dDogServiceClient } from "../services/ddog";
 import { getSubmittedCollectorValue } from "../utils/maskedValues";

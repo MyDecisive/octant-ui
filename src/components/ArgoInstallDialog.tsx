@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
 import { ROUTES } from "../constants/routing";
-import { DeployArgoCopy as copy } from "../copy/install/ArgoInstall.copy";
+import { DeployArgoCopy as copy } from "@copy/ArgoInstall.copy";
 
 export function ArgoInstallDialog() {
   const [location] = useLocation();
