@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import type { ComponentProps, ReactNode } from "react";
 import { useLocation } from "wouter";
 import { ROUTES } from "../../constants/routing";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
+import { ClarityCopy } from "@copy/Clarity/Clarity.copy";
 
 type EmptyStateCardProps = ComponentProps<typeof NoConnectionCard>;
 

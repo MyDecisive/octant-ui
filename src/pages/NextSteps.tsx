@@ -8,7 +8,7 @@ import Chip from "@mui/material/Chip";
 import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { useLocation } from "wouter";
 import { useShallow } from "zustand/shallow";
-import { NextStepsCopy as copy } from "../copy/install/NextSteps.copy";
+import { NextStepsCopy as copy } from "@copy/NextSteps.copy";
 import { useFetchManifestsAndDownload } from "../hooks/useFetchManifestsAndDownload";
 
 export function NextSteps() {

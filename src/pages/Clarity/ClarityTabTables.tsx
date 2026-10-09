@@ -8,7 +8,7 @@ import type { UIFilterType } from "@app-types/enums";
 import { Table } from "@components/Table/Table";
 import { FILTER_TYPES } from "@constants/enums";
 import type { Overall } from "@mydecisiveai/octant-client";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
+import { ClarityCopy } from "@copy/Clarity/Clarity.copy";
 import { logsColumns, traceColumns } from "./constants";
 import { TabsEmptyState } from "./TabsEmptyStates";
 

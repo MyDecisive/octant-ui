@@ -7,7 +7,7 @@ import { useState, type ChangeEventHandler } from "react";
 import { Accordion } from "@components/Accordion";
 import { SliderControl } from "@components/formInputs/SliderControl";
 import { Switch } from "@mui/material";
-import { ClarityCopy } from "../../../copy/clarity/Clarity.copy";
+import { ClarityCopy } from "@copy/Clarity/Clarity.copy";
 import { MetricRow } from "./MetricRow";
 import "./RatioFilterControl.css";
 import { RatioFilterControlTitle } from "./RatioFilterControlTitle";

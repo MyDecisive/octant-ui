@@ -1,5 +1,5 @@
 import { isDemo } from "@constants/env";
-import { IxCDemoPrefillCopy } from "@copy/install/IxCDemoPrefill";
+import { IxCDemoPrefillCopy } from "@copy/IxCDemoPrefill";
 import { useHubInstallStore } from "@store/hubInstallStore";
 import {
   createInstallAndConnectStore,

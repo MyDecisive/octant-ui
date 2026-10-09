@@ -9,7 +9,7 @@ import { useInstallAndConnectStore } from "@store/installAndConnectStore";
 import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHealthWidgetProps";
 import { useConnectionValidation } from "../hooks/useConnectionValidation";
 import { useShallow } from "zustand/shallow";
-import { VerifyConnection as copy } from "../copy/install/VerifyConnection.copy";
+import { VerifyConnection as copy } from "@copy/VerifyConnection.copy";
 
 export function VerifyConnection() {
   const { connectionName, namespace } = useInstallAndConnectStore(

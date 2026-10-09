@@ -6,7 +6,8 @@ import { connectionStatusToHealthWidgetProps } from "@utils/connectionStatusToHe
 import { useConnectionValidation } from "../../hooks/useConnectionValidation";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
-import { VerifyConnection as copy } from "../../copy/install/VerifyConnection.copy";
+// TODO: [copy] give SystemHealth its own copy file (src/copy/SystemHealth/SystemHealth.copy.ts) instead of borrowing from VerifyConnection
+import { VerifyConnection as copy } from "@copy/VerifyConnection.copy";
 import { lastRun } from "@copy/global";
 
 function smarthubStatusToHealthWidgetProps(

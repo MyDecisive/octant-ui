@@ -8,6 +8,7 @@ type VerifyConnectionConfig = {
   };
 };
 
+// TODO: [copy] rename export to VerifyConnectionCopy; it currently shares its name with the page component
 export const VerifyConnection = {
   // IC6-01
   header: "Testing data flow in our SmartHub",

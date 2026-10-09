@@ -4,7 +4,7 @@ import { createColumnDefinitionsForDataTable } from "@components/Table/createCol
 import type { GridColDef } from "@mui/x-data-grid";
 import { formatNumber } from "@utils/formatNumber";
 import { createElement } from "react";
-import { ClarityCopy } from "../../copy/clarity/Clarity.copy";
+import { ClarityCopy } from "@copy/Clarity/Clarity.copy";
 
 const formatCurrency = (value: number | undefined) =>
   formatNumber(value, { minimumDecimalPlaces: 2, prefix: "$" });

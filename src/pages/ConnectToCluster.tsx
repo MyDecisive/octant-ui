@@ -9,7 +9,7 @@ import { isMaskedValue } from "@utils/maskedValues";
 import { useAdvanceInstallAndConnect } from "../hooks/useAdvanceInstallAndConnect";
 import { useState, type ChangeEventHandler } from "react";
 import { useShallow } from "zustand/shallow";
-import { ConnectToClusterCopy as copy } from "../copy/install/ConnectToCluster.copy";
+import { ConnectToClusterCopy as copy } from "@copy/ConnectToCluster.copy";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { validateMinLength } from "../fieldValidation/validateMinLength";
 import { validateRequired } from "../fieldValidation/validateRequired";
